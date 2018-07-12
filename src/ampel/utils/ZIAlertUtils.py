@@ -36,7 +36,7 @@ class ZIAlertUtils:
 
 
 	@staticmethod
-	def to_transientview(file_path=None, content=None):
+	def to_transientview(file_path=None, content=None, science_records=None):
 		"""
 		Creates and returns an instance of ampel.base.LightCurve using a ZTF IPAC alert.
 		"""
@@ -49,7 +49,8 @@ class ZIAlertUtils:
 		return TransientView(
 			alert_content['objectId'], ZIAlertUtils.tran_flags, now, now, 
 			[{'dt': now, 'tier': 0, 'loadedBy': 'ZIAlertUtils'}],
-			lightcurves=[lc], upperlimits=lc.ulo_list, photopoints=lc.ppo_list
+			lightcurves=[lc], upperlimits=lc.ulo_list, photopoints=lc.ppo_list,
+			t2records=science_records
 		)
 
 
