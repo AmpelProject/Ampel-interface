@@ -12,6 +12,7 @@ from ampel.base.abstract.AmpelABC import AmpelABC, abstractmethod
 class AbsAlertFilter(metaclass=AmpelABC):
 
 
+	resources = tuple()
 	@abstractmethod
 	def __init__(self, on_match_t2_units, base_config=None, run_config=None, logger=None):
 		pass

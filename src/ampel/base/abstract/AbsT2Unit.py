@@ -13,6 +13,7 @@ class AbsT2Unit(metaclass=AmpelABC):
 	"""
 	"""
 
+	resources = tuple()
 	@abstractmethod
 	def __init__(self, logger, base_config=None):
 		pass
