@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 14.12.2017
-# Last Modified Date: 04.07.2018
+# Last Modified Date: 24.07.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
@@ -47,7 +47,9 @@ class AmpelAlert(Frozen):
 			al = next(fastavro.reader(fo), None)
 
 		if al.get('prv_candidates') is None:
-			return AmpelAlert(al['objectId'], tuple(MappingProxyType(al['candidate'])), None)
+			return AmpelAlert(
+				al['objectId'], tuple([MappingProxyType(al['candidate'])]), None
+			)
 		else:
 			pps = [MappingProxyType(d) for d in al['prv_candidates'] if d.get('candid') is not None]
 			pps.insert(0,  MappingProxyType(al['candidate']))
@@ -86,7 +88,7 @@ class AmpelAlert(Frozen):
 	@classmethod
 	def has_flags(cls, arg_flags):
 		"""
-			ex: AmpelAlert.has_flags(AmpelFlags.INST_ZTF)
+		ex: AmpelAlert.has_flags(AmpelFlags.INST_ZTF)
 		"""
 		return arg_flags in cls.flags
 
