@@ -17,4 +17,4 @@ class AmpelMetaFlags(type):
 		for k,v in d.items():
 			if not k.endswith('__'):
 				flags.append((k,v))
-		return IntFlag(name, flags)
+		return IntFlag(name, flags, module=d['__module__'])

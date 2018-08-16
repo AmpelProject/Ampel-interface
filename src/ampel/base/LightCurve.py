@@ -54,7 +54,7 @@ class LightCurve(Frozen):
 		if read_only:
 			self.ppo_list = tuple(el for el in ppo_list)
 			self.ulo_list = tuple(el for el in ulo_list) if ulo_list is not None else []
-			self.is_frozen = True
+			self.__isfrozen = True
 		else:
 			self.ppo_list = ppo_list
 			self.ulo_list = ulo_list if ulo_list is not None else []
@@ -66,6 +66,9 @@ class LightCurve(Frozen):
 				(len(self.ppo_list), len(self.ulo_list))
 			)
 
+	def serialize(self):
+		fields = ["id", "ppo_list", "ulo_list", "info"]
+		return {k: getattr(self, k) for k in fields}
 
 	def get_values(self, field_name, filters=None, upper_limits=False):
 		"""

@@ -7,33 +7,24 @@
 # Last Modified Date: 04.07.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from ampel.base.Frozen import Frozen
-from bson import ObjectId
+from dataclasses import dataclass
+from typing import List, Dict
+from bson import Binary
 
-class ScienceRecord(Frozen):
+@dataclass(frozen=True)
+class ScienceRecord:
 	"""
+	tran_id: transient id
+	t2_unit_id: T2 unit id
+	compound_id: Compound id
+	results: T2 unit return values
+	info: extra info
 	"""
-
-	def __init__(self, tran_id, t2_unit_id, compound_id, results, info=None, read_only=True):
-		"""
-		tran_id: transient id (string or int)
-		t2_unit_id: T2 unit id (string)
-		compound_id: instance of bson.Binary (subtype 5)
-		results: list of dict instances,
-		info: dict instance
-		read_only: true->freeze this instance
-		"""
-
-		self.tran_id = tran_id
-		self.t2_unit_id = t2_unit_id
-		self.compound_id = compound_id
-		self.results = results
-		self.info = info
-
-		# Check wether to freeze this instance.
-		if read_only:
-			self.__isfrozen = True
-
+	tran_id: int
+	t2_unit_id: str
+	compound_id: Binary
+	results: List[Dict]
+	info: dict = None
 
 	def get_results(self):
 		""" """

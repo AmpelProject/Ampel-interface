@@ -60,6 +60,8 @@ class PhotoData(Frozen):
 		else:
 			self.content = content
 
+	def serialize(self):
+		return {"content": self.content, "flags": self.flags}
 
 	def get_value(self, field_name):
 		"""

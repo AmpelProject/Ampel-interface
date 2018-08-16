@@ -50,6 +50,11 @@ class TransientView(Frozen):
 		self.channel = channel
 		self.__isfrozen = True
 
+	def serialize(self):
+		fields = ["tran_id", "flags", "created", "modified",
+		    "journal", "latest_state", "photopoints", "upperlimits",
+		    "compounds", "lightcurves", "t2records", "channel"]
+		return {k: getattr(self, k) for k in fields}
 
 	def print_info(self):
 		""" """
