@@ -4,12 +4,13 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 04.07.2018
+# Last Modified Date: 16.08.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from dataclasses import dataclass
 from typing import List, Dict
 from bson import Binary
+
 
 @dataclass(frozen=True)
 class ScienceRecord:
@@ -42,4 +43,5 @@ class ScienceRecord:
 
 
 	def has_error(self):
-		return self.info.get('hasError')
+		""" """
+		return self.info.get('hasError', False)
