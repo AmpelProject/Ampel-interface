@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : ampel/utils/ZIAlertUtils.py
+# File              : Ampel-base/src/ampel/utils/ZIAlertUtils.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 24.06.2018
-# Last Modified Date: 04.07.2018
+# Last Modified Date: 17.08.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import logging, fastavro, tarfile, os
@@ -18,10 +18,12 @@ from ampel.base.PlainUpperLimit import PlainUpperLimit
 
 class ZIAlertUtils:
 
+
 	# pylint: disable=no-member
 	photo_flags = PhotoFlags.INST_ZTF|PhotoFlags.SRC_IPAC
 	# pylint: disable=no-member
 	tran_flags = TransientFlags.INST_ZTF|TransientFlags.SRC_IPAC
+
 
 	@staticmethod
 	def to_lightcurve(file_path=None, content=None):
@@ -90,9 +92,21 @@ class ZIAlertUtils:
 	@staticmethod
 	def _shape(alert_content):
 		""" """
+		alert_content['candidate']['_id'] = alert_content['candidate'].pop('candid')
 		if alert_content.get('prv_candidates') is not None:
-			pps = [el for el in alert_content['prv_candidates'] if el.get('candid') is not None]
-			pps.insert(0,  alert_content['candidate'])
-			return pps, [el for el in alert_content['prv_candidates'] if el.get('candid') is None]
+			pps = [alert_content['candidate']]
+			uls = []
+			for el in alert_content['prv_candidates']:
+				if el.get('candid') is not None:
+					el['_id'] = el.pop('candid')
+					pps.append(el)
+				else:
+					el['_id'] = int("%i%s%i" % (
+						(2457754.5 - el['jd']) * 1000000, 
+						str(el['pid'])[8:10], 
+						round(el['diffmaglim'] * 1000)
+					))
+					uls.append(el)
+			return pps, uls
 		else:
 			return [alert_content['candidate']], None
