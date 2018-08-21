@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 04.07.2018
+# Last Modified Date: 21.08.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
@@ -29,7 +29,7 @@ class TransientView(Frozen):
 	"""
 
 	def __init__(self, 
-		tran_id, flags, created, modified, journal, latest_state=None,
+		tran_id, flags, journal, latest_state=None,
 		photopoints=None, upperlimits=None, compounds=None, 
 		lightcurves=None, t2records=None, channel=None, logger=None
 	):
@@ -38,8 +38,6 @@ class TransientView(Frozen):
 		self.logger = LoggingUtils.get_logger() if logger is None else logger
 		self.tran_id = tran_id
 		self.flags = flags
-		self.created = created
-		self.modified = modified
 		self.journal = journal
 		self.latest_state = latest_state
 		self.photopoints = photopoints
@@ -50,11 +48,16 @@ class TransientView(Frozen):
 		self.channel = channel
 		self.__isfrozen = True
 
+
 	def serialize(self):
-		fields = ["tran_id", "flags", "created", "modified",
-		    "journal", "latest_state", "photopoints", "upperlimits",
-		    "compounds", "lightcurves", "t2records", "channel"]
-		return {k: getattr(self, k) for k in fields}
+		""" """
+		return {
+			k: getattr(self, k) for k in [
+				"tran_id", "flags", "journal", "latest_state", "photopoints", 
+				"upperlimits", "compounds", "lightcurves", "t2records", "channel"
+			]
+		}
+
 
 	def print_info(self):
 		""" """
