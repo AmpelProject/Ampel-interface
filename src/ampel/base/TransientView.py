@@ -7,11 +7,11 @@
 # Last Modified Date: 22.08.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
+import warnings
 from datetime import datetime
 from bson.binary import Binary
 
 from ampel.base.Frozen import Frozen
-from ampel.pipeline.logging.LoggingUtils import LoggingUtils
 
 class TransientView(Frozen):
 	"""
@@ -29,11 +29,10 @@ class TransientView(Frozen):
 	def __init__(self, 
 		tran_id, flags, journal, latest_state=None,
 		photopoints=None, upperlimits=None, compounds=None, 
-		lightcurves=None, t2records=None, channel=None, logger=None
+		lightcurves=None, t2records=None, channel=None
 	):
 		"""
 		"""
-		self.logger = LoggingUtils.get_logger() if logger is None else logger
 		self.tran_id = tran_id
 		self.flags = flags
 		self.journal = journal
@@ -62,20 +61,24 @@ class TransientView(Frozen):
 		return self.flags
 
 
-	def get_latest_lightcurve(self):
+	def get_latest_lightcurve(self, logger=None):
 		""" 
 		"""
+		if logger is None:
+			warn = warnings.warn
+		else:
+			warn = logger.warn
 		if self.latest_state is None:
-			self.logger.warn('Request for latest lightcurve cannot complete (latest state not set)')
+			warn('Request for latest lightcurve cannot complete (latest state not set)')
 			return None
 
 		if len(self.lightcurves) == 0:
-			self.logger.warn('Request for latest lightcurve cannot complete (No lightcurve was loaded)')
+			warn('Request for latest lightcurve cannot complete (No lightcurve was loaded)')
 			return None
 
 		res = next(filter(lambda x: x.id == self.latest_state, self.lightcurves), None)
 		if res is None:
-			self.logger.warn(
+			warn(
 				'Request for latest lightcurve cannot complete (Lightcurve %s not found)' % 
 				self.latest_state		
 			)
