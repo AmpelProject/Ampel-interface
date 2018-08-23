@@ -232,3 +232,36 @@ class TransientView(Frozen):
 			return datetime.fromtimestamp(entry['dt']).strftime(
 				'%d/%m/%Y %H:%M:%S' if format_time is True else format_time
 			)
+
+
+	def print_info(self):
+		"""
+		Prints "Content: PP: %i, UL: %i, CP: %i, LC: %i, SR: %i"
+		Abbreviations: 
+		- PP: photometric point 
+		- UL: upper limit
+		- CP: compound (set of pp/ul ids)
+		- LC: light curve
+		- SR: science record (output of T2 modules)
+
+		:returns: None
+		"""
+		self.logger.info(
+			"TransientView content: %s" % 
+			TransientView.content_summary(self)
+		)
+
+
+	@staticmethod
+	def content_summary(tran_view):
+		"""
+		:param tran_view: instance of ampel.base.TransientView
+		:returns: str
+		"""
+		return "PP: %i, UL: %i, CP: %i, LC: %i, SR: %i" % (
+			len(tran_view.photopoints) if tran_view.photopoints is not None else 0, 
+			len(tran_view.upperlimits) if tran_view.upperlimits is not None else 0, 
+			len(tran_view.compounds) if tran_view.compounds is not None else 0, 
+			len(tran_view.lightcurves) if tran_view.lightcurves is not None else 0, 
+			len(tran_view.t2records) if tran_view.t2records is not None else 0
+		)
