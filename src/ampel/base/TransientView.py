@@ -95,7 +95,6 @@ class TransientView(Frozen):
 	def get_latest_state(self, to_hex=False):
 		""" """
 		if self.latest_state is None:
-			self.logger.warn('Request for latest state cannot complete (not set)')
 			return None
 
 		return self.latest_state.hex() if to_hex else self.latest_state
@@ -234,8 +233,9 @@ class TransientView(Frozen):
 			)
 
 
-	def print_info(self):
+	def print_info(self, logger):
 		"""
+		:param logger: instance of logging.Logger
 		Prints "Content: PP: %i, UL: %i, CP: %i, LC: %i, SR: %i"
 		Abbreviations: 
 		- PP: photometric point 
@@ -246,7 +246,7 @@ class TransientView(Frozen):
 
 		:returns: None
 		"""
-		self.logger.info(
+		logger.info(
 			"TransientView content: %s" % 
 			TransientView.content_summary(self)
 		)
