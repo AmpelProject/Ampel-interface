@@ -10,18 +10,23 @@
 import warnings
 from datetime import datetime
 from bson.binary import Binary
+from typing import Dict, Optional
 
 from ampel.base.Frozen import Frozen
+from ampel.base.LightCurve import LightCurve
+from ampel.base.PlainPhotoPoint import PlainPhotoPoint
+from ampel.base.PlainUpperLimit import PlainUpperLimit
 
 class TransientView(Frozen):
 	"""
-	Container class referencing:
-	-> possibly various instances of objects:
-		* ampel.base.PlainPhotoPoint
-		* ampel.base.PlainUpperLimit
-		* ampel.base.Compound
-		* ampel.base.LightCurve
-		* ampel.base.T2Record
+	Container class referencing various instances of objects:
+	
+	- :py:class:`ampel.base.PlainPhotoPoint.PlainPhotoPoint`
+	- :py:class:`ampel.base.PlainUpperLimit.PlainUpperLimit`
+	- :py:class:`ampel.base.Compound.Compound`
+	- :py:class:`ampel.base.LightCurve.LightCurve`
+	- :py:class:`ampel.base.ScienceRecord.ScienceRecord`
+	
 	Instances of this class are provided to T3 modules and are typically 
 	generated using a TransientData instance created by DBContentLoader.
 	"""
@@ -96,22 +101,16 @@ class TransientView(Frozen):
 		return self.latest_state.hex() if to_hex else self.latest_state
 
 
-	def get_photopoints(self):
+	def get_photopoints(self) -> Optional[Dict[int,PlainPhotoPoint]]:
 		"""
-		Returns a dict instance with 
-			-> key: photopoint id
-			-> value: instance of ampel.base.PlainPhotoPoint
-		Returns None if PhotoPoints were not loaded
+		:returns: a dict of photopoint ids and photopoints, or None if photopoints were not loaded
 		"""
 		return self.photopoints
 	
 
-	def get_upperlimits(self):
+	def get_upperlimits(self) -> Optional[Dict[int,PlainUpperLimit]]:
 		"""
-		Returns a dict instance with 
-			-> key: photopoint id
-			-> value: instance of ampel.base.PlainUpperLimit
-		Returns None if UpperLimits were not loaded
+		:returns: a dict of upper limit ids and upper limits, or None if upper limits were not loaded
 		"""
 		return self.upperlimits
 

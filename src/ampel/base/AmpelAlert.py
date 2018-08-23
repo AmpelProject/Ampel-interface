@@ -57,7 +57,6 @@ class AmpelAlert(Frozen):
 				al['objectId'], tuple(pps), 
 				tuple(MappingProxyType(d) for d in al['prv_candidates'] if d.get('candid') is None)
 			)
-        
 
 	@classmethod
 	def add_class_flags(cls, arg_flags):
@@ -73,13 +72,15 @@ class AmpelAlert(Frozen):
 	def set_alert_keywords(cls, alert_keywords):
 		"""
 		Set using ampel config values. For ZTF IPAC alerts:
-		alert_keywords = {
-			"transient_id" : "objectId",
-			"photopoint_id" : "candid",
-			"obs_date" : "jd",
-			"filter_id" : "fid",
-			"mag" : "magpsf"
-		}
+			.. code-block:: python
+			
+				alert_keywords = {
+					"transient_id" : "objectId",
+					"photopoint_id" : "candid",
+					"obs_date" : "jd",
+					"filter_id" : "fid",
+					"mag" : "magpsf"
+				}
 		"""
 		cls.alert_keywords = alert_keywords
 		cls.alert_kws_set = set(alert_keywords.keys())

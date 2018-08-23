@@ -135,14 +135,19 @@ class LightCurve(Frozen):
 		"brightest": returns (ra, dec)
 		"latest": returns (ra, dec)
 
-		examples: 
-		instance.get_pos(
-			"brightest", {'attribute': 'alFlags', 'operator': 'in', 'value': PhotoFlags.ZTF_G}
-		)
-		-> returns the position of the brightest PhotoPoint in the ZTF G band
-
-		instance.get_pos("lastest", {'attribute': 'magpsf', 'operator': '<', 'value': 18})
-		-> returns the position of the latest PhotoPoint in time with a magnitude brighter than 18
+		examples::
+			
+			instance.get_pos(
+				"brightest", {'attribute': 'alFlags', 'operator': 'in', 'value': PhotoFlags.ZTF_G}
+			)
+		
+		returns the position of the brightest PhotoPoint in the ZTF G band
+		
+		::
+			
+			instance.get_pos("lastest", {'attribute': 'magpsf', 'operator': '<', 'value': 18})
+		
+		returns the position of the latest PhotoPoint in time with a magnitude brighter than 18
 		(or an empty array if no PhotoPoint matches this criteria)
 		"""
 
