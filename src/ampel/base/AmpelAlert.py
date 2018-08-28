@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 14.12.2017
-# Last Modified Date: 24.07.2018
+# Last Modified Date: 28.08.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
@@ -72,15 +72,15 @@ class AmpelAlert(Frozen):
 	def set_alert_keywords(cls, alert_keywords):
 		"""
 		Set using ampel config values. For ZTF IPAC alerts:
-			.. code-block:: python
-			
-				alert_keywords = {
-					"transient_id" : "objectId",
-					"photopoint_id" : "candid",
-					"obs_date" : "jd",
-					"filter_id" : "fid",
-					"mag" : "magpsf"
-				}
+		.. code-block:: python
+		
+			alert_keywords = {
+				"transient_id" : "objectId",
+				"photopoint_id" : "candid",
+				"obs_date" : "jd",
+				"filter_id" : "fid",
+				"mag" : "magpsf"
+			}
 		"""
 		cls.alert_keywords = alert_keywords
 		cls.alert_kws_set = set(alert_keywords.keys())
@@ -98,9 +98,9 @@ class AmpelAlert(Frozen):
 		""" 
 		AmpelAlert constructor
 		Parameters:
-		alertid: unique identifier of the alert (for ZTF: candid of most recent photopoint)
-		tran_id: the astronomical transient object ID, for ZTF IPAC alerts 'objectId'
-		list_of_pps: a flat list of photopoint dictionaries. 
+		:param alertid: unique identifier of the alert (for ZTF: candid of most recent photopoint)
+		:param tran_id: the astronomical transient object ID, for ZTF IPAC alerts 'objectId'
+		:param list_of_pps: a flat list of photopoint dictionaries. 
 		Ampel makes sure that each dictionary contains an alFlags key 
 		"""
 		self.tran_id = tran_id
@@ -118,10 +118,11 @@ class AmpelAlert(Frozen):
 		if param_name in AmpelAlert.alert_keywords:
 			param_name = AmpelAlert.alert_keywords[param_name]
 
-		return tuple(
-			el[param_name] 
-			for el in self._get_photo_objs(filters, upper_limits) if param_name in el
-		)
+		photo_objs = self._get_photo_objs(filters, upper_limits)
+		if photo_objs is None:
+			return None
+
+		return tuple(el[param_name] for el in photo_objs if param_name in el)
 
 
 	def get_tuples(self, param1, param2, filters=None, upper_limits=False):
@@ -134,15 +135,19 @@ class AmpelAlert(Frozen):
 		if param2 in AmpelAlert.alert_keywords:
 			param2 = AmpelAlert.alert_keywords[param2]
 
+		photo_objs = self._get_photo_objs(filters, upper_limits)
+		if photo_objs is None:
+			return None
+
 		return tuple(
 			(el[param1], el[param2]) 
-			for el in self._get_photo_objs(filters, upper_limits) if param1 in el and param2 in el
+			for el in photo_objs if param1 in el and param2 in el
 		)
 
 
 	def get_ntuples(self, params, filters=None, upper_limits=False):
 		"""
-		params: list of strings
+		:param params: list of strings
 		ex: instance.get_ntuples(["fid", "obs_date", "mag"])
 		"""
 		# If any of the provided parameter matches defined keyword mappings
@@ -151,14 +156,19 @@ class AmpelAlert(Frozen):
 				if param in AmpelAlert.alert_keywords:
 					params[i] = AmpelAlert.alert_keywords[param]
 	
+		photo_objs = self._get_photo_objs(filters, upper_limits)
+		if photo_objs is None:
+			return None
+
 		return tuple(
 			tuple(el[param] for param in params) 
-			for el in self._get_photo_objs(filters, upper_limits) if all(param in el for param in params)
+			for el in photo_objs if all(param in el for param in params)
 		)
 
 
 	def _get_photo_objs(self, filters, upper_limits):
-		
+		""" """
+
 		# Filter photopoints if filter was provided
 		if filters is None:
 			return self.uls if upper_limits else self.pps
