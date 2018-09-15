@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 27.12.2017
-# Last Modified Date: 04.07.2018
+# Last Modified Date: 15.09.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import inspect
@@ -21,8 +21,7 @@ def abstractmethod(func):
 class AmpelABC(type):
 	"""
 	Metaclass that implements similar functionalities to python standart 
-	ABC module (Abstract Base Class) while additionaly checking method 
-	signatures and enforcing the definition of the class variable 'version'.
+	ABC module (Abstract Base Class) while additionaly checking method signatures.
 	As a consequence, a child class that extends a parent class whose 
 	metaclass is AmpelABC, will not be able to implement the abstract methods 
 	of the parent class with different method arguments.
@@ -37,7 +36,8 @@ class AmpelABC(type):
 		Forbids instantiation of abstract classes.
 		The function generated in this function is included
 		in the abstract base class.
-		Parameter is the abstract base *class*
+		:param abclass: the abstract base *class*
+		:returns: the method __new__
 		"""
 		def __new__(mcs, *args, **kwargs):
 			if (mcs is abclass):
@@ -49,21 +49,17 @@ class AmpelABC(type):
 	@staticmethod
 	def generate__init_subclass__(abclass):
 		"""
-		__init_subclass__() was added to Python 3.6 allowing customisation of class creation.
+		__init_subclass__() was added to Python 3.6 and allows customisation of class creation.
 		It is a method of a parent class called by the child class during class creation.
-		The function generate__init_subclass__ generates a __init_subclass__ function 
+		The function generate__init_subclass__ generates an __init_subclass__ function 
 		that checks if the signatures of the abstract methods of the parent object
 		are equal to the signatures of the child object.
 
-		A NotImplementedError exception is throwed if the child object:
-			* Does not implement an abstract method
-			* Does not define a class variable named 'version' 
-
-		A ValueError exception is throwed if the child object:
-			* Does implement an abstract method with a divergent signature
-			* The class variable 'version' is not a float
-
-		Parameter is the abstract base *class*
+		:param abclass: the abstract base *class*
+		:raises NotImplementedError: if the child object does not implement a required abstract method
+		:rases ValueError exception: if the child object does implement an abstract method 
+		with a divergent signature
+		:returns: the method __init_subclass__
 		"""
 
 		def __init_subclass__(cls):
@@ -90,21 +86,6 @@ class AmpelABC(type):
 						"() has a wrong signature, please check defined arguments"
 					)
 	
-				# Retrieve class variable version
-				child_version = getattr(cls, "version", None)
-
-				if child_version is None:
-					raise NotImplementedError(
-						"Please define a class variable named 'version' in %s" % cls
-					)
-				
-				if type(child_version) is not float:
-					raise NotImplementedError(
-						"Class variable 'version' must be float (now: %s)" % 
-						type(child_version)
-					)
-
-
 		return __init_subclass__
 
 
