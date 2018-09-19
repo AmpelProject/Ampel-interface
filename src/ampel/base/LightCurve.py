@@ -68,7 +68,9 @@ class LightCurve(Frozen):
 
 	def serialize(self):
 		fields = ["id", "ppo_list", "ulo_list", "info"]
-		return {k: getattr(self, k) for k in fields}
+		rep = {k: getattr(self, k) for k in fields}
+		rep['compound_id'] = rep.pop('id')
+		return rep
 
 	def get_values(self, field_name, filters=None, upper_limits=False):
 		"""
