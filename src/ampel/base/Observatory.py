@@ -27,16 +27,16 @@ def to_time(time):
 
 def get_times(trange, dt_min):
 	"""
-		Returns an astropy.Time object of time values spaced with resoltion dt 
-		in the given time range.
+	Returns an astropy.Time object of time values spaced with resoltion dt 
+	in the given time range.
 	
-		NOTE: trange[1] is not included in the result.
+	NOTE: trange[1] is not included in the result.
 	
-		:param iterable trange: list of 2 elements specifying the time range (UTC). 
-								Each of them can be either a `str` or `astropy.time.Time`.
-		:param float dt_min: resolution for the time grid in minutes.
-		:returns: astropy.Time object with the time values. 
-		:rtype: astropy.time.Time
+	:param iterable trange: list of 2 elements specifying the time range (UTC). 
+	Each of them can be either a `str` or `astropy.time.Time`.
+	:param float dt_min: resolution for the time grid in minutes.
+	:returns: astropy.Time object with the time values. 
+	:rtype: astropy.time.Time
 	"""
 	
 	tstart, tend = to_time(trange[0]), to_time(trange[1])
@@ -56,6 +56,7 @@ class Observatory():
 	Example usage:
 	--------------
 		
+	
 	>>> from Observatory import Observatory
 		
 	>>> ztf = Observatory('ZTF', 33.3483717, -116.85972959, 1680.)
@@ -219,7 +220,7 @@ class Observatory():
 		If simple iterable each element must be an angle in radians.
 		:type zeniths:  np.array (or array-like) of floats or astropy.coordinates.angles.Angle/
  		:returns: array of airmass values correspondin to the zenith angles.
- 		:type: array-like
+ 		:rtype: array-like
 		"""
 		
 		Re				= 6378136*u.m
