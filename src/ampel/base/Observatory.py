@@ -34,8 +34,8 @@ def get_times(trange, dt_min):
 	
 		:param iterable trange: list of 2 elements specifying the time range (UTC). 
 								Each of them can be either a `str` or `astropy.time.Time`.
-		:param flaot dt_min: resolution for the time grid in minutes.
-		:return: astropy.Time object with the time values. 
+		:param float dt_min: resolution for the time grid in minutes.
+		:returns: astropy.Time object with the time values. 
 		:rtype: astropy.time.Time
 	"""
 	
@@ -47,29 +47,29 @@ def get_times(trange, dt_min):
 
 class Observatory():
 	"""
-		Class to represent an astronomical observatory, providing methods to
-		compute visibility of the source at that position.
+	Class to represent an astronomical observatory, providing methods to
+	compute visibility of the source at that position.
 		
-		NOTE:
-			all times and computations are rounded to the minute.
+	NOTE:
+	all times and computations are rounded to the minute.
 		
-		Example usage:
-		--------------
+	Example usage:
+	--------------
 		
-		>>> from Observatory import Observatory
+	>>> from Observatory import Observatory
 		
-		>>> ztf = Observatory('ZTF', 33.3483717, -116.85972959, 1680.)
-		INFO:root:computing visibility of source at (ra: 23.462100, dec: 30.659942) from observatory ZTF
+	>>> ztf = Observatory('ZTF', 33.3483717, -116.85972959, 1680.)
+	INFO:root:computing visibility of source at (ra: 23.462100, dec: 30.659942) from observatory ZTF
 		
-		>>> ra, dec = 23.4621, 30.6599417	#M33 coordinates
-		>>> ztf.compute_visibility(ra, dec, ('2018-09-19', '2018-09-20'), airmass_th=1.2)
-		INFO:root:using visibility constraints:
-							-Time resolution: 5.00 min
-							-Airmass limit: 1.20
-							-Sun altitude: -12.00 deg
-							-Moon distance: 30.00 deg
-		INFO:root:computed dark times (sun_alt: -12.00) between 2018-09-19 00:00:00.000 and 2018-09-19 23:55:00.000. Total of 9.92 hours of dark
-		INFO:root:source is visible for a total of 5.583 hours. Took 7.82e-01 sec.
+	>>> ra, dec = 23.4621, 30.6599417	#M33 coordinates
+	>>> ztf.compute_visibility(ra, dec, ('2018-09-19', '2018-09-20'), airmass_th=1.2)
+	INFO:root:using visibility constraints:
+		-Time resolution: 5.00 min
+		-Airmass limit: 1.20
+		-Sun altitude: -12.00 deg
+		-Moon distance: 30.00 deg
+	INFO:root:computed dark times (sun_alt: -12.00) between 2018-09-19 00:00:00.000 and 2018-09-19 23:55:00.000. Total of 9.92 hours of dark
+	INFO:root:source is visible for a total of 5.583 hours. Took 7.82e-01 sec.
 	
 	"""
 	
@@ -77,14 +77,13 @@ class Observatory():
 	
 	def __init__(self, name, latitude, longitude, altitude=0, logger=None):
 		"""
-			Init the observatory.
-			
-			:param str name: name of observatory
-			:param float latitude: geographic latitude of observatory, in degrees.
-			:param float longitude: geographic longitude of observatory, in degrees.
-									longitudes are measured increasing to the east, 
-									so west longitudes are negative.
-			:param fload altitude: altitude of observatory above reference ellipsoid, in meters.
+		Init the observatory.
+		
+		:param str name: name of observatory
+		:param float latitude: geographic latitude of observatory, in degrees.
+		:param float longitude: geographic longitude of observatory, in degrees.
+		longitudes are measured increasing to the east, so west longitudes are negative.
+		:param fload altitude: altitude of observatory above reference ellipsoid, in meters.
 		"""
 		
 		self.logger = logger if logger is not None else logging.getLogger()
@@ -103,15 +102,15 @@ class Observatory():
 
 	def set_atmosphere(self, pressure, temperature, rel_humidity, wlength):
 		"""
-			set the properties of the atmosphere (and the average wlength of the 
-			filter) needed to compute atmospheric refraction at the location of the
-			observatory.
+		set the properties of the atmosphere (and the average wlength of the 
+		filter) needed to compute atmospheric refraction at the location of the
+		observatory.
 			
-			:param float pressure: Pascals, atmospheric pressure.
-			:param float temperature: degree celsius, temperature
-			:param float: relative humidity
-			:param float wlength: nanometers, wavelength for wich the refraction is computed. Should be
-								  close to the average wlength of the filters used.
+		:param float pressure: Pascals, atmospheric pressure.
+		:param float temperature: degree celsius, temperature
+		:param float: relative humidity
+		:param float wlength: nanometers, wavelength for wich the refraction is computed. Should be
+		close to the average wlength of the filters used.
 		"""
 		self.pressure		= pressure * u.Pa
 		self.temperature	= temperature*u.deg_C
@@ -129,13 +128,13 @@ class Observatory():
 
 	def get_alt_az(self, obstime=None):
 		"""
-			compute the Altitude-Azimuth coordinate frame for the observatory.
+		compute the Altitude-Azimuth coordinate frame for the observatory.
 			
-			If atmospheric parameters have been set for this observatory (via the set_atmosphere
-			method), the visibility will include atmospheric refraction.
+		If atmospheric parameters have been set for this observatory (via the set_atmosphere
+		method), the visibility will include atmospheric refraction.
 			
-			:param obstime: (optional)times for which the Alt-Az frame is computed.
-			:type obstime: astropy.Time or None
+		:param obstime: (optional)times for which the Alt-Az frame is computed.
+		:type obstime: astropy.Time, None
 		"""
 		obs_altaz=AltAz(location=self.location, obstime=obstime)
 		if self.has_atmo:
@@ -148,15 +147,15 @@ class Observatory():
 
 	def compute_sun_moon(self, trange, which='sun', dt_min=5):
 		"""
-			compute the position of the sun/moon from the location of the observatory
-			between the specified time interval.
+		compute the position of the sun/moon from the location of the observatory
+		between the specified time interval.
 			
-			:param iterable trange: list of 2 elements specifying the time range (UTC). 
+		:param iterable trange: list of 2 elements specifying the time range (UTC). 
 									Each of them can be either a `str` or `astropy.time.Time`.
-			:param str which: celestial body to 'move'. Either 'sun' or 'moon'
-			:param float dt_min: time resolution in minues.
-			:return: position of the sun/moon as observed from this location at the given time.
-			:rtype astropy.coordinates.SkyCoord:
+		:param str which: celestial body to 'move'. Either 'sun' or 'moon'
+		:param float dt_min: time resolution in minues.
+		:returns: position of the sun/moon as observed from this location at the given time.
+		:rtype astropy.coordinates.SkyCoord:
 		"""
 		start = time.time()
 		
@@ -179,22 +178,22 @@ class Observatory():
 
 	def get_dark_times(self, trange, dt_min=5, sun_alt_th=-12, return_mask=False):
 		"""
-			return and array of astropy Time objects for which the sun, at the 
-			location of the observatory is below the given altitude threshold.
+		return and array of astropy Time objects for which the sun, at the 
+		location of the observatory is below the given altitude threshold.
 			
-			If atmospheric parameters have been set for this observatory (via the set_atmosphere
-			method), the visibility will include atmospheric refraction.
+		If atmospheric parameters have been set for this observatory (via the set_atmosphere
+		method), the visibility will include atmospheric refraction.
 			
-			:param itearble trange: list of 2 elements specifying the time range (UTC).
+		:param itearble trange: list of 2 elements specifying the time range (UTC).
 									Each of them can be either a `str` or `astropy.time.Time`.
-			:param float dt_min: minutes, time resolution of the computation.
-			:param float sun_alt_th: degrees, altitude of the sun defining the twilight.
-			:parm bool return_mask: weather to return also the binary mask used on the time vector.
-			:return: astropy.Time object with values corresponding to the 'dark time'.
-								if return_mask is True, returns (dark_times, mask) where mask is 
-								np array of boolean specifiying which positions in the time vector
-								are included in dark_times
-			:rtype: astropy.time.Time or tuple (depening on return_mask)
+		:param float dt_min: minutes, time resolution of the computation.
+		:param float sun_alt_th: degrees, altitude of the sun defining the twilight.
+		:param bool return_mask: weather to return also the binary mask used on the time vector.
+		:returns: astropy.Time object with values corresponding to the 'dark time'.
+		if return_mask is True, returns (dark_times, mask) where mask is 
+		np array of boolean specifiying which positions in the time vector
+		are included in dark_times
+		:rtype: astropy.time.Time or tuple (depening on return_mask)
 		"""
 		
 		times = get_times(trange, dt_min)
@@ -210,17 +209,17 @@ class Observatory():
 
 	def compute_airmass(self, zeniths):
 		"""
-			compute the airmass (elevated observer in a spherical bubble) of the 
-			objects whose zenith time series is given.
+		compute the airmass (elevated observer in a spherical bubble) of the 
+		objects whose zenith time series is given.
 			
-			there are a lot of formulas for this, see e.g:
-			https://en.wikipedia.org/wiki/Air_mass_(astronomy)
+		there are a lot of formulas for this, see e.g:
+		https://en.wikipedia.org/wiki/Air_mass_(astronomy)
 			
-			:param zeniths: set of zenith angles for which the airmass has to be computed. 
-							If simple iterable each element must be an angle in radians.
-			:type zeniths:  np.array (or array-like) of floats or astropy.coordinates.angles.Angle/
- 			:return: array of airmass values correspondin to the zenith angles.
- 			:type: array-like
+		:param zeniths: set of zenith angles for which the airmass has to be computed. 
+		If simple iterable each element must be an angle in radians.
+		:type zeniths:  np.array (or array-like) of floats or astropy.coordinates.angles.Angle/
+ 		:returns: array of airmass values correspondin to the zenith angles.
+ 		:type: array-like
 		"""
 		
 		Re				= 6378136*u.m
@@ -234,29 +233,29 @@ class Observatory():
 
 	def compute_visibility(self, ra, dec, trange, dt_min=5, airmass_th=2, sun_alt_th=-12, min_moon_dist=30):
 		"""
-			compute visibility of a given sky location from the position of the obseravtory
-			and between times tstart and tstop.
+		compute visibility of a given sky location from the position of the obseravtory
+		and between times tstart and tstop.
 			
-			If atmospheric parameters have been set for this observatory (via the set_atmosphere
-			method), the visibility will include atmospheric refraction.
+		If atmospheric parameters have been set for this observatory (via the set_atmosphere
+		method), the visibility will include atmospheric refraction.
 			
-			If moon_dist is given, also the apparent motion of the moon as seen by the
-			observatory will be computed and used to make a cut on the distance to the moon.
-			NOTE that this will need to download a 10MB file from the internet to get a 
-			precise location of the moon (the first time only).
+		If moon_dist is given, also the apparent motion of the moon as seen by the
+		observatory will be computed and used to make a cut on the distance to the moon.
+		NOTE that this will need to download a 10MB file from the internet to get a 
+		precise location of the moon (the first time only).
 			
-			:param float ra: Right Ascension of target location (J2000), degrees
-			:param float dec: declination of target location (J2000), degrees
-			:param iterable trange: list of 2 elements specifying the time range (UTC).
-									Each of them can be either a `str` or `astropy.time.Time`.
-			:param float dt_min: minutes, time resolution of the computation.
-			:param float airmass_th: maximum airmass.
-			:param float sun_alt_th: degrees, altitude of the sun defining the twilight.
-			:param min_moon_dist: degrees, minimum distance of object from the Moon. If None, 
-								  saves up time not computing the position of the Moon
-			:type min_moon_dist: float or None
-			:return: time values for which the conditions on which the visibility are satisfied.
-			:rtype: astropy.time.Time
+		:param float ra: Right Ascension of target location (J2000), degrees
+		:param float dec: declination of target location (J2000), degrees
+		:param iterable trange: list of 2 elements specifying the time range (UTC).
+		Each of them can be either a `str` or `astropy.time.Time`.
+		:param float dt_min: minutes, time resolution of the computation.
+		:param float airmass_th: maximum airmass.
+		:param float sun_alt_th: degrees, altitude of the sun defining the twilight.
+		:param min_moon_dist: degrees, minimum distance of object from the Moon. If None, 
+		saves up time not computing the position of the Moon
+		:type min_moon_dist: float or None
+		:returns: time values for which the conditions on which the visibility are satisfied.
+		:rtype: astropy.time.Time
 		"""
 		start = time.time()
 		
