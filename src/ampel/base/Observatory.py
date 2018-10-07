@@ -56,22 +56,22 @@ class Observatory():
 	Example usage:
 	--------------
 		
+	.. sourcecode:: python
 	
-	>>> from Observatory import Observatory
-		
-	>>> ztf = Observatory('ZTF', 33.3483717, -116.85972959, 1680.)
-	INFO:root:computing visibility of source at (ra: 23.462100, dec: 30.659942) from observatory ZTF
-		
-	>>> ra, dec = 23.4621, 30.6599417	#M33 coordinates
-	>>> ztf.compute_visibility(ra, dec, ('2018-09-19', '2018-09-20'), airmass_th=1.2)
-	INFO:root:using visibility constraints:
-		-Time resolution: 5.00 min
-		-Airmass limit: 1.20
-		-Sun altitude: -12.00 deg
-		-Moon distance: 30.00 deg
-	INFO:root:computed dark times (sun_alt: -12.00) between 2018-09-19 00:00:00.000 and 2018-09-19 23:55:00.000. Total of 9.92 hours of dark
-	INFO:root:source is visible for a total of 5.583 hours. Took 7.82e-01 sec.
-	
+		>>> from Observatory import Observatory
+
+		>>> ztf = Observatory('ZTF', 33.3483717, -116.85972959, 1680.)
+		INFO:root:computing visibility of source at (ra: 23.462100, dec: 30.659942) from observatory ZTF
+
+		>>> ra, dec = 23.4621, 30.6599417	#M33 coordinates
+		>>> ztf.compute_visibility(ra, dec, ('2018-09-19', '2018-09-20'), airmass_th=1.2)
+		INFO:root:using visibility constraints:
+			-Time resolution: 5.00 min
+			-Airmass limit: 1.20
+			-Sun altitude: -12.00 deg
+			-Moon distance: 30.00 deg
+		INFO:root:computed dark times (sun_alt: -12.00) between 2018-09-19 00:00:00.000 and 2018-09-19 23:55:00.000. Total of 9.92 hours of dark
+		INFO:root:source is visible for a total of 5.583 hours. Took 7.82e-01 sec.
 	"""
 	
 	version = 0.1
@@ -113,6 +113,7 @@ class Observatory():
 		:param float wlength: nanometers, wavelength for wich the refraction is computed. Should be
 		close to the average wlength of the filters used.
 		"""
+		
 		self.pressure		= pressure * u.Pa
 		self.temperature	= temperature*u.deg_C
 		self.rel_humidity	= rel_humidity
@@ -152,7 +153,7 @@ class Observatory():
 		between the specified time interval.
 			
 		:param iterable trange: list of 2 elements specifying the time range (UTC). 
-									Each of them can be either a `str` or `astropy.time.Time`.
+		Each of them can be either a `str` or `astropy.time.Time`.
 		:param str which: celestial body to 'move'. Either 'sun' or 'moon'
 		:param float dt_min: time resolution in minues.
 		:returns: position of the sun/moon as observed from this location at the given time.
@@ -186,7 +187,7 @@ class Observatory():
 		method), the visibility will include atmospheric refraction.
 			
 		:param itearble trange: list of 2 elements specifying the time range (UTC).
-									Each of them can be either a `str` or `astropy.time.Time`.
+		Each of them can be either a `str` or `astropy.time.Time`.
 		:param float dt_min: minutes, time resolution of the computation.
 		:param float sun_alt_th: degrees, altitude of the sun defining the twilight.
 		:param bool return_mask: weather to return also the binary mask used on the time vector.
