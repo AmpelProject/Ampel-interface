@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 14.12.2017
-# Last Modified Date: 28.08.2018
+# Last Modified Date: 14.09.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
@@ -59,13 +59,13 @@ class AmpelAlert(Frozen):
 			)
 
 	@classmethod
-	def add_class_flags(cls, arg_flags):
+	def set_class_flags(cls, arg_flags):
 		"""
 		Set alert flags (ampel.base.flags.AmpelFlags) of this alert.
 		Typically: observing instrument, alert issuer.
-		For example: AmpelFlags.INST_ZTF | AmpelFlags.SRC_IPAC
+		For example: AmpelFlags.INST_ZTF|AmpelFlags.SRC_IPAC
 		"""
-		cls.flags |= arg_flags
+		cls.flags = arg_flags
 
 
 	@classmethod
