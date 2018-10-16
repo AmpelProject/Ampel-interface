@@ -12,6 +12,6 @@ from pydantic.dataclasses import dataclass
 
 @dataclass
 class JournalUpdate:
-	tranId: Union[int, List[int]]
+	tran_id: Union[int, List[int]]
 	content: Dict[str, Any]
 	ext: bool = False

@@ -13,6 +13,6 @@ from datetime import datetime
 @dataclass
 class GlobalInfo:
 	event: str
-	lastRun: datetime
-	processedAlerts: int = None
-	adminMsg: str = None
+	last_run: datetime = None
+	processed_alerts: int = None
+	admin_msg: str = None
