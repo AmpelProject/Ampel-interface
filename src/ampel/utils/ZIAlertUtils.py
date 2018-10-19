@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-base/src/ampel/utils/ZIAlertUtils.py
+# File              : ampel/utils/ZIAlertUtils.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 24.06.2018
-# Last Modified Date: 17.08.2018
+# Last Modified Date: 19.10.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-import logging, fastavro, tarfile, os
-from datetime import datetime
+import logging, fastavro, tarfile, os, time
 from ampel.base.flags.PhotoFlags import PhotoFlags
 from ampel.base.flags.TransientFlags import TransientFlags
 from ampel.base.LightCurve import LightCurve
@@ -16,8 +15,8 @@ from ampel.base.TransientView import TransientView
 from ampel.base.PlainPhotoPoint import PlainPhotoPoint
 from ampel.base.PlainUpperLimit import PlainUpperLimit
 
-class ZIAlertUtils:
 
+class ZIAlertUtils:
 
 	# pylint: disable=no-member
 	photo_flags = PhotoFlags.INST_ZTF|PhotoFlags.SRC_IPAC
@@ -43,16 +42,16 @@ class ZIAlertUtils:
 		Creates and returns an instance of ampel.base.LightCurve using a ZTF IPAC alert.
 		"""
 		alert_content = ZIAlertUtils._get_alert_content(file_path, content)
-		now = datetime.utcnow().timestamp()
+		now = time.time()
 		lc = ZIAlertUtils._create_lc(
 			*ZIAlertUtils._shape(alert_content), now
 		)
 
 		return TransientView(
-			alert_content['objectId'], ZIAlertUtils.tran_flags, now, now, 
+			alert_content['objectId'], ZIAlertUtils.tran_flags, 
 			[{'dt': now, 'tier': 0, 'loadedBy': 'ZIAlertUtils'}],
-			lightcurves=[lc], upperlimits=lc.ulo_list, photopoints=lc.ppo_list,
-			t2records=science_records
+			now, photopoints=lc.ppo_list, upperlimits=lc.ulo_list,
+			compounds=None, lightcurves=[lc], t2records=science_records
 		)
 
 
@@ -63,7 +62,7 @@ class ZIAlertUtils:
 			os.urandom(16), 
 			[PlainPhotoPoint(el, ZIAlertUtils.photo_flags, read_only=True) for el in pps], 
 			[PlainUpperLimit(el, ZIAlertUtils.photo_flags, read_only=True) for el in uls] if uls else None, 
-			info={'tier': 0, 'added': datetime.utcnow().timestamp() if now is None else now}, 
+			info={'tier': 0, 'added': time.time() if now is None else now}, 
 			read_only=True
 		)
 
