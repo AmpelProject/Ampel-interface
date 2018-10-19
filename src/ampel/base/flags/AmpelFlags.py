@@ -11,25 +11,21 @@ from enum import IntFlag
 
 class AmpelFlags(IntFlag):
 	"""
-	General Ampel flags (20)
+	General Ampel flags
 	"""
-	INST_ZTF                 = 1
+	INST_ZTF                 = 1 # 2**0
 	SRC_IPAC                 = 2
 	SRC_AMPEL                = 4
-	RESERVED2                = 8
-	RESERVED3                = 16
-	RESERVED4                = 32
-	RESERVED5                = 64
-	RESERVED6                = 126
-	RESERVED7                = 256
-	RESERVED8                = 512
-	RESERVED9                = 1024
-	RESERVED10               = 2048
-	RESERVED11               = 4096
-	RESERVED12               = 8192
-	RESERVED13               = 16384
-	RESERVED14               = 32768
-	RESERVED15               = 65536
-	RESERVED16               = 131072
-	RESERVED17               = 262144
-	RESERVED18               = 524288
+	RESERVED1                = 8
+	RESERVED2                = 16
+	RESERVED3                = 32
+	RESERVED4                = 64
+	RESERVED5                = 126
+	RESERVED6                = 256
+	RESERVED7                = 512
+	RESERVED8                = 1024
+	RESERVED9                = 2048
+	RESERVED10               = 4096
+	RESERVED11               = 8192
+	RESERVED12               = 16384
+	RESERVED13               = 32768 # 2**15
