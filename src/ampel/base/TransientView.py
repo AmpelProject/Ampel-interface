@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : src/ampel/base/TransientView.py
+# File              : ampel/base/TransientView.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 22.08.2018
+# Last Modified Date: 13.11.2018
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import warnings
@@ -32,13 +32,14 @@ class TransientView(Frozen):
 	"""
 
 	def __init__(self, 
-		tran_id, flags, journal, latest_state=None,
+		tran_id, flags, journal, tran_names=None, latest_state=None,
 		photopoints=None, upperlimits=None, compounds=None, 
 		lightcurves=None, t2records=None, channel=None
 	):
 		"""
 		"""
 		self.tran_id = tran_id
+		self.tran_names = tran_names
 		self.flags = flags
 		self.journal = journal
 		self.latest_state = latest_state
@@ -55,7 +56,7 @@ class TransientView(Frozen):
 		""" """
 		return {
 			k: getattr(self, k) for k in [
-				"tran_id", "flags", "journal", "latest_state", "photopoints", 
+				"tran_id", "tran_names", "flags", "journal", "latest_state", "photopoints", 
 				"upperlimits", "compounds", "lightcurves", "t2records", "channel"
 			]
 		}
