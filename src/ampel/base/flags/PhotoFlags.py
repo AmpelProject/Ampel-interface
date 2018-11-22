@@ -27,7 +27,7 @@ class PhotoFlags(metaclass=AmpelMetaFlags):
 	ZTF_PUBLIC                = 67108864
 	ZTF_HIGH_CADENCE          = 134217728
 
-	SUPERSEEDED               = 268435456
+	SUPERSEDED                = 268435456
 	HAS_HUMBOLDT_ZP           = 536870912
 
 	IMAGE_BAD_CALIBRATION     = 1073741824
