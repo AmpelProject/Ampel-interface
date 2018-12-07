@@ -22,6 +22,7 @@ class AmpelEncoder(json.JSONEncoder):
 		"""
 		self.lossy = lossy
 		json.JSONEncoder.__init__(self, *args, **kwargs)
+		self.bson_options = bson.json_util.STRICT_JSON_OPTIONS
 
 	def default(self, obj, fallthrough=False):
 		"""
@@ -55,7 +56,7 @@ class AmpelEncoder(json.JSONEncoder):
 		else:
 			# convert remaining Mongo types
 			try:
-				return bson.json_util.default(obj)
+				return bson.json_util.default(obj, self.bson_options)
 			except TypeError:
 				if fallthrough:
 					return obj
@@ -83,11 +84,11 @@ class AmpelEncoder(json.JSONEncoder):
 		else:
 			return None
 
-def object_hook(dct):
+def object_hook(dct, options=bson.json_util.STRICT_JSON_OPTIONS):
 	"""
 	Deserialize an object serialized by AmpelEncoder
 	"""
-	obj = bson.json_util.object_hook(dct)
+	obj = bson.json_util.object_hook(dct, options)
 	if type(obj) != type(dct):
 		return obj
 	elif "__jsonclass__" in dct:
