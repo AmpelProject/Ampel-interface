@@ -164,14 +164,14 @@ class TransientView(Frozen):
 			if t2_unit_id is None:
 				return next(
 					filter(
-						lambda x: x.compound_id == self.latest_state, 
+						lambda x: self.latest_state in x.compound_id,
 						self.t2records
 					), None
 				)
 			else:
 				return next(
 					filter(
-						lambda x: x.compound_id == self.latest_state and x.t2_unit_id == t2_unit_id, 
+						lambda x: self.latest_state in x.compound_id and x.t2_unit_id == t2_unit_id,
 						self.t2records
 					), None
 				)
@@ -182,7 +182,7 @@ class TransientView(Frozen):
 			else:
 				return tuple(
 					filter(
-						lambda x: x.compound_id == self.latest_state, 
+						lambda x: x.t2_unit_id == t2_unit_id,
 						self.t2records
 					)
 				)
