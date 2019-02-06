@@ -216,7 +216,11 @@ class TransientView(Frozen):
 		if len(entries) == 0:
 			return None
 
-		return entries[-1] if latest else entries
+		if not latest:
+			return entries
+		else:
+			return sorted(entries, key=lambda x: x['dt'])[-1]
+#		return entries[-1] if latest else entries
 
 
 	def get_time_created(self, format_time=None):
