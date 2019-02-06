@@ -188,11 +188,20 @@ class TransientView(Frozen):
 				)
 
 
-	def get_journal_entries(self, tier=None, t3JobName=None, latest=False):
-		""" 
+	def get_journal_entries(self, tier=None, t3JobName=None, filterFunc=None, latest=False):
 		"""
-		if tier is None and t3JobName is None:
+			return journal entries corresponding to a given tier, job, or fulfilling
+			some user defined criteria.
+			
+			:param tier: string, filter according to je.get('tier') == tier 
+			:param t3JobName: string, filter to get('t3JobName') == t3JobName
+			:param filteFunc: callable: je --> bool, used to filter according to filteFunc(je).
+			:param latest: bool, return just the last entry in the journal.
+		"""
+		if tier is None and t3JobName is None and filterFunc is None:
 			entries = self.journal
+		elif not filterFunc is None:
+			entries = tuple(filter(filterFunc, self.journal))
 		else:
 			if None in (tier, t3JobName):
 				entries = (
