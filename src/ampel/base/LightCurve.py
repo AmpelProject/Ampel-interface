@@ -161,7 +161,7 @@ class LightCurve(Frozen):
 		if ret == "mean": 
 			ras = [pp.get_value("ra") for pp in pps]
 			decs = [pp.get_value("dec") for pp in pps]
-			return (ras/len(ras), decs/len(decs))
+			return (sum(ras)/len(ras), sum(decs)/len(decs))
 
 		elif ret == "brightest": 
 			mags = list(pps)
