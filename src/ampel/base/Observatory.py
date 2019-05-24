@@ -17,9 +17,9 @@ import logging
 logging.basicConfig(level = logging.INFO)
 
 def to_time(time):
-	if type(time) == str:
+	if isinstance(time, str):
 		return Time(time)
-	elif type(time) == astropy.time.core.Time:
+	elif isinstance(Time):
 		return time
 	else:
 		raise TypeError("times can be either `str` or `astropy.time.Time` objects, not %s"
