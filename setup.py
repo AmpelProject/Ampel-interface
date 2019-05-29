@@ -1,12 +1,19 @@
-from setuptools import setup
-setup(name='ampel-base',
-      version='0.5.1',
-      package_dir={'':'src'},
-      packages=[
-          'ampel.base',
-          'ampel.base.abstract',
-          'ampel.base.dev',
-          'ampel.base.flags',
-          'ampel.utils',
-      ]
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# File              : Ampel-interface/setup.py
+# License           : BSD-3-Clause
+# Author            : jvs
+# Date              : Unspecified
+# Last Modified Date: 30.01.2020
+# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+
+from setuptools import setup, find_namespace_packages
+
+setup(
+	name='ampel-interface',
+	version='0.7',
+	packages=find_namespace_packages(),
+	package_data = {
+		'conf': ['*.conf', '**/*.conf', '**/**/*.conf']
+	}
 )
