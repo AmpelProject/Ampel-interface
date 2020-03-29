@@ -1,47 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : ampel/base/ScienceRecord.py
+# File              : Ampel-interface/ampel/content/T2Record.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 16.08.2018
+# Last Modified Date: 10.03.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from dataclasses import dataclass
-from typing import List, Dict
-from bson import Binary
+from typing import Sequence, Union, Optional, TypedDict, Dict
+from ampel.types import ChannelId, StockId
 
+class T2Record(TypedDict, total=False):
 
-@dataclass(frozen=True)
-class ScienceRecord:
-	"""
-	tran_id: transient id
-	t2_unit_id: T2 unit id
-	compound_id: Compound id
-	results: T2 unit return values
-	info: extra info
-	"""
-	tran_id: int
-	t2_unit_id: str
-	compound_id: Binary
-	results: List[Dict]
-	info: dict = None
-
-	def get_results(self):
-		""" """
-		return self.results
-
-
-	def get_t2_unit_id(self):
-		""" """
-		return self.t2_unit_id
-
-
-	def get_compound_id(self):
-		""" """
-		return self.compound_id
-
-
-	def has_error(self):
-		""" """
-		return self.info.get('hasError', False)
+	_id: bytes
+	unit: Union[int, str] # int to enable future potential hash optimizations
+	stock: Union[StockId, Sequence[StockId]]
+	link: Union[bytes, Sequence[bytes]]
+	tag: Optional[Sequence[Union[int, str]]]
+	channel: Sequence[ChannelId]
+	col: Optional[str]
+	run: Union[int, Sequence[int]]
+	status: int
+	config: Union[int, Dict]
+	result: Optional[Sequence[dict]] # value(s) returned by t2 unit execution(s)
