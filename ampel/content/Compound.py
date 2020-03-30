@@ -1,17 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# File              : Ampel-interface/ampel/content/Compound.py
+# License           : BSD-3-Clause
+# Author            : vb <vbrinnel@physik.hu-berlin.de>
+# Date              : Unspecified
+# Last Modified Date: 04.03.2020
+# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from dataclasses import dataclass
-from typing import Any
+from typing import Sequence, Optional, Literal, TypedDict, Union
+from ampel.types import StockId, ChannelId, DataPointId
 
-@dataclass(frozen=True)
-class Compound:
-	id: Any
-	comp: Any = None
-	added: Any = None
-	alDocType: Any = None
-	alFlags: Any = None
-	lastJD: Any = None
-	len: int = None
-	ppId: Any = None
-	tier: int = None
-	tranId: Any = None
-	flavors: Any = None
+class CompoundElement(TypedDict, total=False):
+	id: DataPointId
+	tag: Optional[Sequence[Union[int, str]]]
+	excl: Optional[Union[int, str]] # exclusion reason
+
+class Compound(TypedDict, total=False):
+
+	_id: bytes
+	tag: Optional[Sequence[Union[int, str]]]
+	stock: Union[StockId, Sequence[StockId]]
+	channel: Union[ChannelId, Sequence[ChannelId]]
+	data: Sequence[Union[DataPointId, CompoundElement]]
+	tier: Literal[0, 1, 2, 3]
+	run: Union[int, Sequence[int]]
+	added: float
+	len: int
