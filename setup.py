@@ -1,12 +1,7 @@
-from setuptools import setup
-setup(name='ampel-base',
-      version='0.5.1',
+from setuptools import setup, find_namespace_packages
+
+setup(name='ampel-interface',
+      version='0.6',
       package_dir={'':'src'},
-      packages=[
-          'ampel.base',
-          'ampel.base.abstract',
-          'ampel.base.dev',
-          'ampel.base.flags',
-          'ampel.utils',
-      ]
+      packages=find_namespace_packages('src')
 )
