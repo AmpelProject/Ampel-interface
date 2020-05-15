@@ -5,10 +5,17 @@ import bson.json_util
 from importlib import import_module
 from enum import IntFlag
 from types import MappingProxyType
+from functools import partial
 
-def load(fileobj):
+def load(fileobj, ignore_missing_modules=True):
 	for line in fileobj:
-		yield json.loads(line, object_hook=object_hook)
+		yield json.loads(
+			line,
+			object_hook=partial(
+				object_hook,
+				ignore_missing_modules=ignore_missing_modules
+			)
+		)
 
 class AmpelEncoder(json.JSONEncoder):
 	"""
@@ -84,7 +91,11 @@ class AmpelEncoder(json.JSONEncoder):
 		else:
 			return None
 
-def object_hook(dct, options=bson.json_util.STRICT_JSON_OPTIONS):
+def object_hook(
+    dct,
+    options=bson.json_util.STRICT_JSON_OPTIONS,
+    ignore_missing_modules=True
+):
 	"""
 	Deserialize an object serialized by AmpelEncoder
 	"""
@@ -94,7 +105,13 @@ def object_hook(dct, options=bson.json_util.STRICT_JSON_OPTIONS):
 	elif "__jsonclass__" in dct:
 		ctor = dct.pop("__jsonclass__")
 		parts = ctor[0].split('.')
-		mod = import_module('.'.join(parts[:-1]))
+		try:
+			mod = import_module('.'.join(parts[:-1]))
+		except ModuleNotFoundError:
+			if ignore_missing_modules:
+				return None
+			else:
+				raise
 		klass = getattr(mod, parts[-1])
 		# Here we treat the jsonrpc-style attrs as keyword args. This does not
 		# necessarily conform to the 1.0 spec, but it's deprecated anyhow.
