@@ -11,29 +11,6 @@ import inspect
 from typing import Type, Callable
 
 
-def raise_error(cls, *args, **kwargs) -> None:
-	"""
-	Abstract classes cannot be instantiated
-	:raises: TypeError
-	"""
-	raise TypeError(
-		f"Class {cls.__name__} is abstract and can thus not be instantiated"
-	)
-
-
-def __std_new__(mcs, *arg, **kwargs) -> Callable:
-	""" Standard class creation """
-	cls = None
-	for el in mcs.__mro__:
-		# stop at first built-in type ('object' by defaut, or say 'dict' for example if
-		# the abstract subclass inherits from a python primitive type.
-		# Avoids this kind of error: TypeError: object.__new__(MyDict) is not safe, use dict.__new__()
-		if '__new__' in el.__dict__ and type(el.__dict__['__new__']).__name__ == "builtin_function_or_method":
-			cls = el
-			break
-	return cls.__new__(mcs)
-
-
 class AmpelABC:
 	"""
 	This class works similar to the python standart ABC module (Abstract Base Class) but can additionaly
@@ -48,7 +25,8 @@ class AmpelABC:
 
 	active = True
 
-	def __init_subclass__(cls, **kwargs):
+	@classmethod
+	def __init_subclass__(cls, abstract: bool = False, **kwargs) -> None:
 		"""
 		Creates the corresponding class
 		Note: all checks can be deactivated by setting AmpelABC.active = False
@@ -61,8 +39,8 @@ class AmpelABC:
 		"""
 
 		# Class is abstract
-		if kwargs.get('abstract'):
-			setattr(cls, '__new__', raise_error)
+		if abstract:
+			setattr(cls, '__new__', _raise_error)
 			if cls.active:
 				cls.check_methods(cls, "force_check")
 		else:
@@ -137,3 +115,26 @@ class AmpelABC:
 					f"'{method_name}' to match those defined by the corresponding "
 					f"abstract method in class {value[0].__name__}"
 				)
+
+
+def _raise_error(cls, *args, **kwargs) -> None:
+	"""
+	Abstract classes cannot be instantiated
+	:raises: TypeError
+	"""
+	raise TypeError(
+		f"Class {cls.__name__} is abstract and can thus not be instantiated"
+	)
+
+
+def __std_new__(mcs, *arg, **kwargs) -> Callable:
+	""" Standard class creation """
+	cls = None
+	for el in mcs.__mro__:
+		# stop at first built-in type ('object' by defaut, or say 'dict' for example if
+		# the abstract subclass inherits from a python primitive type.
+		# Avoids this kind of error: TypeError: object.__new__(MyDict) is not safe, use dict.__new__()
+		if '__new__' in el.__dict__ and type(el.__dict__['__new__']).__name__ == "builtin_function_or_method":
+			cls = el
+			break
+	return cls.__new__(mcs)
