@@ -152,10 +152,14 @@ class TransientView(Frozen):
 
 	def get_science_records(self, t2_unit_id=None, latest=False):
 		""" 
-		Returns an instance or a tuple of instances of ampel.base.ScienceRecord 
+		Returns an instance or a tuple of instances of ampel.base.ScienceRecord or None
 		t2_unit_id: string. Limit returned science record(s) to the one with the provided t2 unit id
 		latest: boolean. Whether to return the latest science record(s) or not
 		"""
+		
+		if not self.t2records:
+			return None
+		
 		if latest:
 
 			if self.latest_state is None:
