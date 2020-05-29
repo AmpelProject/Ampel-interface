@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Any, Sequence, Union, Optional, Dict, TypedDict
-from ampel.types import StockId, ChannelId
+from ampel.type import StockId, ChannelId
 
 
 class StockRecord(TypedDict):

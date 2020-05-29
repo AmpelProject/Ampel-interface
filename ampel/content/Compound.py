@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Optional, Literal, TypedDict, Union
-from ampel.types import StockId, ChannelId, DataPointId
+from ampel.type import StockId, ChannelId, DataPointId
 
 class CompoundElement(TypedDict, total=False):
 	id: DataPointId

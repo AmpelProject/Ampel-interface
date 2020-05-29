@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Any, Sequence, Union, Optional, Dict, TypedDict
-from ampel.types import StockId, DataPointId, ChannelId
+from ampel.type import StockId, DataPointId, ChannelId
 
 
 class DataPoint(TypedDict, total=False):
