@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abc/AmpelABC.py
+# File              : Ampel-interface/ampel/base/AmpelABC.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 27.12.2017
-# Last Modified Date: 17.02.2020
+# Last Modified Date: 17.05.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import inspect
@@ -13,23 +13,25 @@ from typing import Type, Callable
 
 class AmpelABC:
 	"""
-	This class works similar to the python standart ABC module (Abstract Base Class) but can additionaly
+	This class resembles python's standart ABC module (Abstract Base Class) but can additionaly
 	check method signatures. As a consequence, a subclass that inherits AmpelABC, will not be able to
 	implement methods declared as abstract by the parent class using different method arguments.
 	Notes:
 	- Multi-level and multiple inheritance are supported.
 	- Overriding abstractmethod is supported (if subclass itself is abstract)
 	- This class relies on the module 'inspect'
-	- Setting AmpelABC.active = False deactivates all checks
+	- Setting AmpelABC._abcheck = False deactivates all checks
+	- If a sub-classes implements __init_subclass__ for some reason, \
+		super().__init_subclass__(**kwargs) must be called within the (class) method.
 	"""
 
-	active = True
+	_abcheck = True
 
 	@classmethod
 	def __init_subclass__(cls, abstract: bool = False, **kwargs) -> None:
 		"""
 		Creates the corresponding class
-		Note: all checks can be deactivated by setting AmpelABC.active = False
+		Note: all checks can be deactivated by setting AmpelABC._abcheck = False
 
 		:raises NotImplementedError: if an abstract method is not implemented by the child class
 		:raises TypeError: if decorator flag check_signature was set for an abstract method but \
@@ -38,11 +40,14 @@ class AmpelABC:
 		omits to call to the super method.
 		"""
 
+		# https://github.com/python/mypy/issues/5887
+		super().__init_subclass__(**kwargs) # type: ignore
+
 		# Class is abstract
 		if abstract:
 			setattr(cls, '__new__', _raise_error)
-			if cls.active:
-				cls.check_methods(cls, "force_check")
+			if cls._abcheck:
+				cls._check_methods(cls, "force_check")
 		else:
 			setattr(cls, '__new__', __std_new__)
 			for method_name, method in cls.__dict__.items():
@@ -52,14 +57,13 @@ class AmpelABC:
 						f"since {cls.__name__} is not an abstract class"
 					)
 
-			if cls.active:
-				cls.check_methods(cls, "abstract_method")
-				cls.check_methods(cls, "default_method")
-
+			if cls._abcheck:
+				cls._check_methods(cls, "abstract_method")
+				cls._check_methods(cls, "default_method")
 
 
 	@staticmethod
-	def check_methods(Klass: Type, func_attr: str) -> None:
+	def _check_methods(Klass: Type, func_attr: str) -> None:
 
 		# Gather abstract methods (marked by the decorator @abstractmethod)
 		abs_methods = {
@@ -88,7 +92,8 @@ class AmpelABC:
 				)
 
 			if hasattr(value[1], "check_super_call"):
-				if f"super().{method_name}" not in inspect.getsource(func):
+				src = inspect.getsource(func)
+				if not (f"super().{method_name}" in src or f".{method_name}(self" in src):
 					raise ValueError(
 						f"Method {method_name} from class {Klass.__name__} "
 						f"must call super().{method_name}(...)"
@@ -131,8 +136,8 @@ def __std_new__(mcs, *arg, **kwargs) -> Callable:
 	""" Standard class creation """
 	cls = None
 	for el in mcs.__mro__:
-		# stop at first built-in type ('object' by defaut, or say 'dict' for example if
-		# the abstract subclass inherits from a python primitive type.
+		# stop at first built-in type ('object' usually, but it can be 'dict'
+		# for example if # the abstract subclass inherits from a python primitive type.
 		# Avoids this kind of error: TypeError: object.__new__(MyDict) is not safe, use dict.__new__()
 		if '__new__' in el.__dict__ and type(el.__dict__['__new__']).__name__ == "builtin_function_or_method":
 			cls = el
