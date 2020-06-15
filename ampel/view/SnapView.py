@@ -4,41 +4,56 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 12.02.2020
+# Last Modified Date: 09.06.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from dataclasses import dataclass
 from typing import Dict, Optional, Union, Any, Literal, Sequence
 
-from ampel.types import StockId
+from ampel.type import StockId
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.content.T2Record import T2Record
 from ampel.content.StockRecord import StockRecord
 from ampel.content.LogRecord import LogRecord
-from ampel.view.BaseView import BaseView
 
 
-@dataclass(frozen=True)
-class SnapView(BaseView):
+class SnapView:
 	"""
 	View of a given ampel object (with unique stock id).
-	This class links various instances, mostly from ampel.content,
-	possibly originating from different ampel tiers.
-	It can also contain external/composite objects in the dict called 'extra'
+	This class references various instances of objects from
+	package ampel.content, originating from different ampel tiers.
+	It can also contain external/composite objects embedded in the dict called 'extra'
 	(such as spectra or ampel.view.LightCurve instances for ex.)
-	The config parameters of a T3 process determines which information are present or not.
-	Typically, instances of this class (or of a sub-class such as TransientView) are provided to T3 modules.
+	The config parameter of a T3 process determines which information are included.
+	Typically, instances of this class (or of subclass such as TransientView) are provided to T3 units.
 	"""
 
-	id: StockId
-	stock: Optional[StockRecord] = None
-	t0: Optional[Sequence[DataPoint]] = None
-	t1: Optional[Sequence[Compound]] = None
-	t2: Optional[Sequence[T2Record]] = None
-	logs: Optional[Sequence[LogRecord]] = None
-	extra: Optional[Dict[str, Any]] = None
+	__slots__ = "id", "stock", "t0", "t1", "t2", "logs", "extra"
+
+
+	def __init__(self,
+		id: StockId,
+		stock: Optional[StockRecord] = None,
+		t0: Optional[Sequence[DataPoint]] = None,
+		t1: Optional[Sequence[Compound]] = None,
+		t2: Optional[Sequence[T2Record]] = None,
+		logs: Optional[Sequence[LogRecord]] = None,
+		extra: Optional[Dict[str, Any]] = None
+	):
+		self.stock = stock
+		self.t0 = t0
+		self.t1 = t1
+		self.t2 = t2
+		self.logs = logs
+		self.extra = extra
+		self.id = id
+
+
+	def __setattr__(self, k, v):
+		if hasattr(self, "id"):
+			raise ValueError("SnapView is read only")
+		object.__setattr__(self, k, v)
 
 
 	def get_t2_records(self,
@@ -92,7 +107,7 @@ class SnapView(BaseView):
 			entries = tuple(j for j in entries if j['name'] == process_name)
 
 		if latest:
-			return sorted(entries, key=lambda x: x['dt'])[-1]
+			return sorted(entries, key=lambda x: x['ts'])[-1]
 
 		return entries
 
@@ -124,9 +139,9 @@ class SnapView(BaseView):
 	) -> Union[float, str, datetime]:
 		""" """
 		if output == 'raw':
-			return entry['dt']
+			return entry['ts']
 
-		dt = datetime.fromtimestamp(entry['dt'])
+		dt = datetime.fromtimestamp(entry['ts'])
 
 		if output == 'datetime':
 			return dt
