@@ -10,7 +10,7 @@
 import yaml, json
 from typing import Dict, List, Union, Optional, Type, Literal, Any, Iterable, overload, get_origin
 from ampel.type import JT, JSONTypes
-from ampel.util.Freeze import Freeze
+from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
 
@@ -67,7 +67,7 @@ class AmpelConfig:
 		if config is None or not config:
 			raise ValueError("Please provide a config")
 
-		self._config: Dict = Freeze.recursive_freeze(config) if freeze else config
+		self._config: Dict = recursive_freeze(config) if freeze else config
 
 		if 'general' in config and 'check_types' in config['general']:
 			self._check_types = config['general']['check_types']
@@ -197,7 +197,7 @@ class AmpelConfig:
 
 	def freeze(self) -> None:
 		if not self.is_frozen():
-			self._config = Freeze.recursive_freeze(self._config)
+			self._config = recursive_freeze(self._config)
 
 
 	def is_frozen(self) -> bool:
