@@ -8,15 +8,14 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Generic, TypeVar, ClassVar, Type, Iterable
-from ampel.abc import abstractmethod
-from ampel.types import StockId, ChannelId
+from ampel.base import abstractmethod, AmpelABC, DataUnit
+from ampel.type import StockId, ChannelId
 from ampel.content.DataPoint import DataPoint
-from ampel.abstract.AbsDataUnit import AbsDataUnit
 from ampel.ingest.CompoundBluePrint import CompoundBluePrint
 
 T = TypeVar("T", bound=CompoundBluePrint)
 
-class AbsT1Unit(Generic[T], AbsDataUnit, abstract=True):
+class AbsT1Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 
 	BluePrintClass: ClassVar[Type] = CompoundBluePrint
 
