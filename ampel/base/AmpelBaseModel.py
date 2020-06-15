@@ -1,0 +1,150 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# File              : Ampel-interface/ampel/base/AmpelBaseModel.py
+# License           : BSD-3-Clause
+# Author            : vb <vbrinnel@physik.hu-berlin.de>
+# Date              : 07.10.2019
+# Last Modified Date: 15.06.2020
+# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+
+from copy import deepcopy
+from types import MemberDescriptorType
+from pydantic import BaseModel, validate_model, create_model
+from typing import Dict, Any, ClassVar, Set, get_origin, get_args, Union, Type
+
+from ampel.config.AmpelConfig import AmpelConfig
+from ampel.model.StrictModel import StrictModel
+
+
+class AmpelBaseModel:
+	"""
+	Top level class that uses pydantic's BaseModel to validate data.
+	This class supports setting slots values through constructor parameters (they will be type checked as well).
+
+	Type checking can be deactivated globaly through the AmpelConfig._check_types parameter:
+
+		In []: class B(AmpelBaseModel):
+			...:     a: List[int] = []
+
+		In []: %timeit B(a=[11])
+		8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+
+		In []: AmpelConfig._check_types=False
+
+		In []: %timeit B(a=[11])
+		1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
+	"""
+
+	_model: Type[BaseModel]
+	_annots: ClassVar[Dict[str, Any]] = {}
+	_defaults: ClassVar[Dict[str, Any]] = {}
+	_slot_defaults: ClassVar[Dict[str, Any]] = {}
+	_aks: ClassVar[Set[str]] = set() # annotation keys
+	_sks: ClassVar[Set[str]] = set() # slots keys
+
+
+	@classmethod
+	def __init_subclass__(cls, **kwargs) -> None:
+		"""
+		Combines annotations & default values of this class with the one defined in sub-classes.
+		Has similarities with the newly introduced typing.get_type_hints() function.
+		"""
+		super().__init_subclass__(**kwargs) # type: ignore
+
+		joined_ann = {
+			k: v for k, v in cls._annots.items()
+			if not (k[0] == '_' or 'ClassVar' in str(v))
+		}
+		joined_defaults = cls._defaults.copy()
+		joined_sks = cls._sks.copy()
+		joined_aks = cls._aks.copy()
+
+		if ann := getattr(cls, '__annotations__', None):
+			NoneType = type(None)
+			defs = getattr(cls, '__dict__', {})
+			for k, v in ann.items():
+				if k == '__slots__' or k[0] == '_' or 'ClassVar' in str(v):
+					continue
+				joined_ann[k] = v # update merged annotations
+				joined_aks.add(k) # update set of known attribute names
+				if k in defs:
+					if type(defs[k]) is MemberDescriptorType: # is a slot
+						if k in cls._slot_defaults:
+							joined_defaults[k] = cls._slot_defaults[k]
+						continue
+					joined_defaults[k] = cls.__dict__[k]
+				# if Optional[] with no default
+				elif get_origin(v) is Union and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
+					joined_defaults[k] = None
+				elif k in cls._slot_defaults:
+					joined_defaults[k] = cls._slot_defaults[k]
+
+		if slots := getattr(cls, '__slots__', None):
+			joined_sks.update(slots)
+
+		for el in (
+			('_annots', joined_ann), ('_defaults', joined_defaults),
+			('_aks', joined_aks), ('_sks', joined_sks), ('_model', None)
+		):
+			setattr(cls, el[0], el[1])
+
+
+	@classmethod
+	def _create_model(cls):
+		defs = cls._defaults
+		cls._model = create_model(
+			cls.__name__,
+			__config__ = StrictModel.__config__,
+			**{
+				k: (v, defs[k] if k in defs else ...)
+				for k, v in cls._annots.items()
+			} # type: ignore[arg-type]
+		)
+
+
+	def __init__(self, **kwargs) -> None:
+
+		cls = self.__class__
+
+		if cls._model is None:
+			self._create_model()
+
+		# Check types (default behavior)
+		if AmpelConfig._check_types:
+
+			vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
+
+			# pydantic ValidationError
+			if e := vres[2]:
+				raise e
+
+			# Note: coercion could be checked/deactived by AmpelConfig flag as well
+			kwargs.update(vres[0])
+
+		d = self.__dict__
+		sa = self.__setattr__
+		sks = cls._sks
+		aks = cls._aks
+		NoneType = type(None)
+
+		# Set default attributes
+		for k, v in cls._model.__field_defaults__.items():
+			if k in cls._slot_defaults:
+				continue
+			if k not in kwargs:
+				# no need to copy primitive types
+				if isinstance(v, (int, float, str, NoneType, bool)): # type: ignore
+					d[k] = v
+				else:
+					d[k] = deepcopy(v)
+			else:
+				d[k] = kwargs[k]
+
+		for k, v in cls._slot_defaults.items():
+			if k not in kwargs:
+				sa(k, v)
+
+		# Set kwargs attributes
+		for k in kwargs:
+			if k in sks or k in aks:
+				sa(k, kwargs[k])
