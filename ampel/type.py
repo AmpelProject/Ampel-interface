@@ -13,6 +13,7 @@ from typing import Union, TypeVar, Set, Tuple, FrozenSet, List, KeysView, Values
 from ampel.struct.JournalExtra import JournalExtra
 
 StockId = Union[int, bytes, str]
+type_stock_id = (int, Int64, bytes, str)
 ChannelId = Union[int, str]
 Tag = Union[int, str]
 DataPointId = int
