@@ -30,6 +30,9 @@ class DataUnit(AmpelBaseModel):
 		self.resource = resource
 		AmpelBaseModel.__init__(self, **kwargs)
 
+		if hasattr(self, "post_init"):
+			self.post_init() # type: ignore
+
 
 	def get_version(self) -> Optional[Union[str, float]]:
 		return self.version
