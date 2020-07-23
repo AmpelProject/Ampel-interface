@@ -21,7 +21,7 @@ class Compound(TypedDict, total=False):
 	tag: Optional[Sequence[Union[int, str]]]
 	stock: Union[StockId, Sequence[StockId]]
 	channel: Union[ChannelId, Sequence[ChannelId]]
-	data: Sequence[Union[DataPointId, CompoundElement]]
+	body: Sequence[Union[DataPointId, CompoundElement]]
 	tier: Literal[0, 1, 2, 3]
 	run: Union[int, Sequence[int]]
 	added: float
