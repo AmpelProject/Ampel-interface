@@ -16,6 +16,7 @@ from ampel.content.Compound import Compound
 from ampel.content.T2Record import T2Record
 from ampel.content.StockRecord import StockRecord
 from ampel.content.LogRecord import LogRecord
+from ampel.content.JournalRecord import JournalRecord
 
 
 class SnapView:
@@ -29,7 +30,7 @@ class SnapView:
 	Typically, instances of this class (or of subclass such as TransientView) are provided to T3 units.
 	"""
 
-	__slots__ = "id", "stock", "t0", "t1", "t2", "logs", "extra"
+	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra"
 
 
 	def __init__(self,
@@ -38,14 +39,14 @@ class SnapView:
 		t0: Optional[Sequence[DataPoint]] = None,
 		t1: Optional[Sequence[Compound]] = None,
 		t2: Optional[Sequence[T2Record]] = None,
-		logs: Optional[Sequence[LogRecord]] = None,
+		log: Optional[Sequence[LogRecord]] = None,
 		extra: Optional[Dict[str, Any]] = None
 	):
 		self.stock = stock
 		self.t0 = t0
 		self.t1 = t1
 		self.t2 = t2
-		self.logs = logs
+		self.log = log
 		self.extra = extra
 		self.id = id
 
@@ -54,6 +55,10 @@ class SnapView:
 		if hasattr(self, "id"):
 			raise ValueError("SnapView is read only")
 		object.__setattr__(self, k, v)
+
+
+	def serialize(self) -> Dict:
+		return {k: getattr(self, k) for k in self.__slots__}
 
 
 	def get_t2_records(self,
@@ -88,7 +93,7 @@ class SnapView:
 		tier: Optional[Literal[0, 1, 2, 3]] = None,
 		process_name: Optional[str] = None,
 		latest: bool = False
-	) -> Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]]:
+	) -> Optional[Union[JournalRecord, Sequence[JournalRecord]]]:
 		"""
 		:param process_name: return only journal entries associated with a given process name
 		:param last: return only the latest entry in the journal (the latest in time)
@@ -104,7 +109,7 @@ class SnapView:
 			entries = tuple(j for j in self.stock['journal'] if j['tier'] == tier)
 
 		if process_name:
-			entries = tuple(j for j in entries if j['name'] == process_name)
+			entries = tuple(j for j in entries if j['process'] == process_name)
 
 		if latest:
 			return sorted(entries, key=lambda x: x['ts'])[-1]
@@ -134,7 +139,7 @@ class SnapView:
 
 	@classmethod
 	def _get_time(cls,
-		entry: Dict[str, Any],
+		entry: JournalRecord,
 		output: Optional[Union[bool, str]] = None
 	) -> Union[float, str, datetime]:
 		""" """
@@ -151,7 +156,7 @@ class SnapView:
 
 	@staticmethod
 	def content_summary(view: 'SnapView') -> str:
-		""" """
+
 		return "DP: %i, CP: %i, T2: %i" % (
 			len(view.t0) if view.t0 else 0,
 			len(view.t1) if view.t1 else 0,
