@@ -116,6 +116,13 @@ class AmpelBaseModel:
 
 			# pydantic ValidationError
 			if e := vres[2]:
+				# https://github.com/samuelcolvin/pydantic/issues/784
+				print("")
+				print("#" * 60)
+				print("Offending values:")
+				for k, v in kwargs.items():
+					print(f"{k}: {v}")
+				print("#" * 60)
 				raise e
 
 			# Note: coercion could be checked/deactived by AmpelConfig flag as well
