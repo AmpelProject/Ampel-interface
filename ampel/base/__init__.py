@@ -10,4 +10,5 @@
 # flake8: noqa: F401
 from .AmpelABC import AmpelABC
 from .DataUnit import DataUnit
+from .AmpelBaseModel import AmpelBaseModel
 from .decorator import abstractmethod, defaultmethod
