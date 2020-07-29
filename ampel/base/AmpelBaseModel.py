@@ -101,6 +101,16 @@ class AmpelBaseModel:
 			} # type: ignore[arg-type]
 		)
 
+	@classmethod
+	def validate(cls, **kwargs) -> None:
+		"""
+		Validate kwargs against the fields of cls
+		"""
+		if cls._model is None:
+			cls._create_model()
+		values, fields, errors = validate_model(cls._model, kwargs) # type: ignore[arg-type]
+		if errors:
+			raise errors
 
 	def __init__(self, **kwargs) -> None:
 
