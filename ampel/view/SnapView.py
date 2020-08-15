@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 09.06.2020
+# Last Modified Date: 15.08.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
@@ -30,7 +30,7 @@ class SnapView:
 	Typically, instances of this class (or of subclass such as TransientView) are provided to T3 units.
 	"""
 
-	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra"
+	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra", "_frozen"
 
 
 	def __init__(self,
@@ -40,7 +40,8 @@ class SnapView:
 		t1: Optional[Sequence[Compound]] = None,
 		t2: Optional[Sequence[T2Record]] = None,
 		log: Optional[Sequence[LogRecord]] = None,
-		extra: Optional[Dict[str, Any]] = None
+		extra: Optional[Dict[str, Any]] = None,
+		freeze: bool = True
 	):
 		self.stock = stock
 		self.t0 = t0
@@ -49,10 +50,16 @@ class SnapView:
 		self.log = log
 		self.extra = extra
 		self.id = id
+		self._frozen = freeze
+
+
+	def freeze(self, k, v):
+		if not hasattr(self, "_frozen"):
+			self._frozen = True
 
 
 	def __setattr__(self, k, v):
-		if hasattr(self, "id"):
+		if hasattr(self, "_frozen"):
 			raise ValueError("SnapView is read only")
 		object.__setattr__(self, k, v)
 
