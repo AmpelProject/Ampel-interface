@@ -7,13 +7,14 @@
 # Last Modified Date: 14.08.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
-from typing import Any
+from typing import Any, Generic, TypeVar, Union
 
 from ampel.base import abstractmethod, AmpelABC
 from ampel.model.StrictModel import StrictModel
 
+T = TypeVar('T')
 
-class Secret(AmpelABC, StrictModel, abstract=True):
+class Secret(Generic[T], AmpelABC, StrictModel, abstract=True):
     """
     A wrapper for a piece of sensitive data, e.g. a password or access token.
     """
@@ -21,7 +22,7 @@ class Secret(AmpelABC, StrictModel, abstract=True):
     key: str
 
     @abstractmethod
-    def get(self) -> Any:
+    def get(self) -> T:
         """
         Resolve the secret and return its value.
         """

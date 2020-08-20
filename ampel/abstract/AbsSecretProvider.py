@@ -7,9 +7,11 @@
 # Last Modified Date: 14.08.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
+from typing import Any, TypeVar
 from ampel.base import abstractmethod, AmpelABC
 from ampel.model.Secret import Secret
 
+T = TypeVar('T')
 
 class AbsSecretProvider(AmpelABC, abstract=True):
     """
@@ -18,7 +20,7 @@ class AbsSecretProvider(AmpelABC, abstract=True):
     """
 
     @abstractmethod
-    def get(self, key: str) -> Secret:
+    def get(self, key: str, type_: T) -> Secret[T]:
         """
         Fetch a secret by key. May raise an exception if the key is not known.
         """
