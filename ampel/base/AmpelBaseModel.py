@@ -59,25 +59,26 @@ class AmpelBaseModel:
 		joined_sks = cls._sks.copy()
 		joined_aks = cls._aks.copy()
 
-		if ann := getattr(cls, '__annotations__', None):
-			NoneType = type(None)
-			defs = getattr(cls, '__dict__', {})
-			for k, v in ann.items():
-				if k == '__slots__' or k[0] == '_' or 'ClassVar' in str(v):
-					continue
-				joined_ann[k] = v # update merged annotations
-				joined_aks.add(k) # update set of known attribute names
-				if k in defs:
-					if type(defs[k]) is MemberDescriptorType: # is a slot
-						if k in cls._slot_defaults:
-							joined_defaults[k] = cls._slot_defaults[k]
+		for base in reversed(cls.mro()):
+			if ann := getattr(base, '__annotations__', None):
+				NoneType = type(None)
+				defs = getattr(base, '__dict__', {})
+				for k, v in ann.items():
+					if k == '__slots__' or k[0] == '_' or 'ClassVar' in str(v):
 						continue
-					joined_defaults[k] = cls.__dict__[k]
-				# if Optional[] with no default
-				elif get_origin(v) is Union and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
-					joined_defaults[k] = None
-				elif k in cls._slot_defaults:
-					joined_defaults[k] = cls._slot_defaults[k]
+					joined_ann[k] = v # update merged annotations
+					joined_aks.add(k) # update set of known attribute names
+					if k in defs:
+						if type(defs[k]) is MemberDescriptorType: # is a slot
+							if k in cls._slot_defaults:
+								joined_defaults[k] = cls._slot_defaults[k]
+							continue
+						joined_defaults[k] = base.__dict__[k]
+					# if Optional[] with no default
+					elif get_origin(v) is Union and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
+						joined_defaults[k] = None
+					elif k in cls._slot_defaults:
+						joined_defaults[k] = cls._slot_defaults[k]
 
 		if slots := getattr(cls, '__slots__', None):
 			joined_sks.update(slots)
