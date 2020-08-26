@@ -1,8 +1,10 @@
-FROM python:3.8.5-alpine
+FROM python:3.8.5
 
-RUN apk add bash gcc musl-dev && \
+RUN apt-get install bash gcc && \
     pip install mypy==0.782
+
+ADD .jenkins/Ampel-core /Ampel-core
+RUN pip install -r /Ampel-core/requirements.txt /Ampel-core
 
 ADD requirements.txt /
 RUN pip install -r /requirements.txt
-

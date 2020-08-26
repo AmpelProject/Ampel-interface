@@ -1,10 +1,12 @@
 pipeline {
   agent none
   stages {
-    stage('prepare') {
+    stage('dependencies') {
       agent any
       steps {
-          sh 'cp requirements.txt .jenkins/'
+          dir(path: '.jenkins/Ampel-core') {
+            git(url: 'https://github.com/AmpelProject/Ampel-core', credentialsId: 'github')
+          }
       }
     }
     stage('build') {
