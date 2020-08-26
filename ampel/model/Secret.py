@@ -27,6 +27,3 @@ class Secret(Generic[T], AmpelABC, StrictModel, abstract=True):
         Resolve the secret and return its value.
         """
         ...
-
-    def __str__(self) -> str:
-        return str(self.get())
