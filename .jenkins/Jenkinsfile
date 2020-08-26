@@ -1,17 +1,20 @@
 pipeline {
-  agent any
+  agent none
   stages {
-    stage('mypy') {
+    stage('prepare') {
+      agent any
       steps {
-        script {
-          docker.image("cytopia/mypy").inside(
-            " -v ${workspace}:/workspace"
-          ) {
-              sh '#!/bin/sh\n rm /workspace/*.xml || true'
-              sh '#!/bin/sh\n pip install -r /workspace/requirements.txt'
-              sh '#!/bin/sh\n cd /workspace; mypy ampel --junit-xml mypy.xml'
-          }
+          sh 'cp requirements.txt .jenkins/'
+      }
+    }
+    stage('build') {
+      agent {
+        dockerfile {
+          filename '.jenkins/Dockerfile.build'
         }
+      }
+      steps {
+        sh 'mypy ampel --junit-xml mypy.xml'
       }
       post {
         always {
