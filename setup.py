@@ -14,6 +14,7 @@ setup(
 	version='0.7',
 	packages=find_namespace_packages(),
 	package_data = {
+		'': ['py.typed'],
 		'conf': ['*.conf', '**/*.conf', '**/**/*.conf']
 	}
 )
