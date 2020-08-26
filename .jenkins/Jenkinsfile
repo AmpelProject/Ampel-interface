@@ -1,14 +1,17 @@
 pipeline {
-  agent { docker { image 'cytopia/mypy:latest' } }
+  agent any
   stages {
-    stage('build') {
+    stage('mypy') {
       steps {
-        sh '#!/bin/sh\n pip install -r requirements.txt'
-      }
-    }
-    stage('test') {
-      steps {
-        sh '#!/bin/sh\n mypy ampel --junit-xml mypy.xml'
+        script {
+          docker.image("cytopia/mypy").inside(
+            " -v ${workspace}:/workspace"
+          ) {
+              sh '#!/bin/sh\n rm /workspace/*.xml || true'
+              sh '#!/bin/sh\n pip install -r /workspace/requirements.txt'
+              sh '#!/bin/sh\n cd /workspace; mypy ampel --junit-xml mypy.xml'
+          }
+        }
       }
       post {
         always {
