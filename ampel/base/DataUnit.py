@@ -19,6 +19,8 @@ class DataUnit(AmpelBaseModel):
 	require: Optional[Tuple[str, ...]] = None
 	version: Optional[Union[str, float]] = None
 
+	logger: 'AmpelLogger'
+
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
 	# private: Optional[str] = None
@@ -41,11 +43,10 @@ class DataUnit(AmpelBaseModel):
 
 
 	def __init__(self,
-		logger: 'AmpelLogger', resource: Optional[Dict[str, Any]] = None, **kwargs
+		resource: Optional[Dict[str, Any]] = None, **kwargs
 	) -> None:
-		self.logger = logger
-		self.resource = resource
 		AmpelBaseModel.__init__(self, **kwargs)
+		self.resource = resource
 
 		if hasattr(self, "post_init"):
 			self.post_init() # type: ignore
