@@ -22,7 +22,7 @@ class T2Record(TypedDict, total=False):
 
 	# Compound index
 	unit: Union[int, str] # unit id can be hashed for performance reason
-	config: int
+	config: Optional[int]
 	link: Union[T2Links, Sequence[T2Links]]
 
 	# Non-indexed values
