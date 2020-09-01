@@ -7,10 +7,9 @@
 # Last Modified Date: 24.08.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
-from typing import Tuple, Dict, Any, Optional, Union, TYPE_CHECKING
+from typing import Tuple, Dict, Any, Optional, Union
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-if TYPE_CHECKING:
-	from ampel.log.AmpelLogger import AmpelLogger
+from ampel.log.AmpelLogger import AmpelLogger
 
 
 class DataUnit(AmpelBaseModel):
@@ -19,7 +18,7 @@ class DataUnit(AmpelBaseModel):
 	require: Optional[Tuple[str, ...]] = None
 	version: Optional[Union[str, float]] = None
 
-	logger: 'AmpelLogger'
+	logger: AmpelLogger
 
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
