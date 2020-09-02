@@ -15,6 +15,7 @@ class DataPoint(TypedDict, total=False):
 	_id: DataPointId
 	tag: Sequence[Union[int, str]]
 	stock: Optional[Union[StockId, Sequence[StockId]]]
+	channel: Optional[Union[ChannelId, Sequence[ChannelId]]]
 	excl: Optional[Sequence[ChannelId]]
 	extra: Optional[Dict[str, Any]]
 	policy: Optional[Dict[str, Any]]
