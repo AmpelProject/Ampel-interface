@@ -8,7 +8,9 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Literal, Sequence
+from typing import (
+	Dict, Optional, Union, Any, Literal, Sequence, overload, Callable
+)
 
 from ampel.type import StockId
 from ampel.content.DataPoint import DataPoint
@@ -95,16 +97,33 @@ class SnapView:
 
 		return self.t2
 
+	@overload
+	def get_journal_entries(self,
+		tier: Optional[Literal[0, 1, 2, 3]] = None,
+		process_name: Optional[str] = None,
+		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
+		latest: None = ...
+	) -> Optional[Sequence[JournalRecord]]: ...
+
+	@overload
+	def get_journal_entries(self,
+		tier: Optional[Literal[0, 1, 2, 3]] = None,
+		process_name: Optional[str] = None,
+		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
+		latest: bool = False
+	) -> Optional[JournalRecord]: ...
 
 	def get_journal_entries(self,
 		tier: Optional[Literal[0, 1, 2, 3]] = None,
 		process_name: Optional[str] = None,
-		latest: bool = False
+		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
+		latest: Optional[bool] = False
 	) -> Optional[Union[JournalRecord, Sequence[JournalRecord]]]:
 		"""
 		:param process_name: return only journal entries associated with a given process name
 		:param last: return only the latest entry in the journal (the latest in time)
-		Returns journal entries corresponding to a given tier and/or job.
+		Returns journal entries corresponding to a given tier and/or job,
+		sorted by timestamp.
 		"""
 
 		if not self.stock:
@@ -113,15 +132,17 @@ class SnapView:
 		entries = self.stock['journal']
 
 		if tier:
-			entries = tuple(j for j in self.stock['journal'] if j['tier'] == tier)
+			entries = tuple(j for j in entries if j['tier'] == tier)
 
 		if process_name:
 			entries = tuple(j for j in entries if j['process'] == process_name)
 
-		if latest:
-			return sorted(entries, key=lambda x: x['ts'])[-1]
+		if filter_func:
+			entries = tuple(j for j in entries if filter_func(j))
 
-		return entries
+		entries = sorted(entries, key=lambda x: x['ts'])
+
+		return entries[-1] if latest else entries
 
 
 	def get_time_created(self,
