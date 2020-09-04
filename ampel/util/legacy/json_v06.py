@@ -12,6 +12,9 @@ from ampel.view.LightCurve import LightCurve  # type: ignore[import]
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.view.TransientView import TransientView
 
+from ampel.ztf.legacy_utils import to_ztf_id
+from ampel.ztf.utils import to_ampel_id
+
 legacy_classes: Dict[str, Callable[[str, Tuple, Dict[str, Any]], Any]] = {}
 
 
@@ -142,20 +145,21 @@ def t2(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> T2Record:
 
 @upgrade("ampel.base.TransientView.TransientView")
 def tview(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> TransientView:
+    # translate legacy id
+    ampel_id = to_ampel_id(to_ztf_id(kwargs["tran_id"]))
     return TransientView(
-        {
-            "id": kwargs["tran_id"],  # FIXME: translate old stockIds?
-            "extra": {},
-            "stock": {
-                "_id": kwargs["tran_id"],
-                "tag": kwargs["flags"],
-                "name": kwargs["tran_names"],
-                "journal": kwargs["journal"],
-                "channel": kwargs["channel"],
-            },
-            "t0": kwargs["photopoints"] + kwargs["upperlimits"],
-            "t2": kwargs["t2records"],
-        }
+        id=ampel_id,
+        extra={},
+        stock={
+            "_id": ampel_id,
+            "tag": kwargs["flags"],
+            "name": kwargs["tran_names"],
+            "journal": kwargs["journal"],
+            "channel": kwargs["channel"],
+        },
+        t0=kwargs["photopoints"] + kwargs["upperlimits"],
+        t1=kwargs["compounds"],
+        t2=kwargs["t2records"],
     )
 
 
