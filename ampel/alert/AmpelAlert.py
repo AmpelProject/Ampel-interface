@@ -51,7 +51,7 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Any]:
-		""" ex: get_values("mag") """
+		""" ex: get_values("magpsf") """
 
 		if not data:
 			data = self.dps
@@ -67,7 +67,7 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Tuple[Any, Any]]:
-		""" ex: get_tuples("obs_date", "mag") """
+		""" ex: get_tuples("jd", "magpsf") """
 
 		if not data:
 			data = self.dps
@@ -86,7 +86,7 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Tuple]:
-		""" ex: get_ntuples(["fid", "obs_date", "mag"]) """
+		""" ex: get_ntuples(["fid", "jd", "magpsf"]) """
 
 		if not data:
 			data = self.dps
