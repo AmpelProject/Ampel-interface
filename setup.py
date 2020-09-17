@@ -16,5 +16,6 @@ setup(
 	package_data = {
 		'': ['py.typed'],
 		'conf': ['*.conf', '**/*.conf', '**/**/*.conf']
-	}
+	},
+	install_requires = ['pydantic==1.4']
 )
