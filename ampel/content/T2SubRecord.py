@@ -13,23 +13,35 @@ from ampel.type import ChannelId
 
 class T2SubRecord(TypedDict, total=False):
 	"""
-	Dict crafted by T2Processor based on return value from t2 base unit
-	(which can be either a T2RunState in case of errors or a T2UnitResult dict)
+	Dict crafted by :class:`~ampel.t2.T2Processor.T2Processor` based on return
+	value from t2 base unit, which can be either
+	
+	- a BSON serializable-dict,
+	- a tuple of dict, :class:`~ampel.struct.JournalExtra.JournalExtra`,
+	- or, if an error occurred, a :class:`~ampel.t2.T2RunState.T2RunState`.
+	
+	This is a dict containing 1 or more of the following items:
 	"""
 	# str is allowed to enable digest based version info
 	version: Optional[Union[str, float]]
+	#: UNIX epoch when :meth:`run` was invoked
 	ts: Union[float, int]
+	#: Duration of :meth:`run`, in seconds
 	duration: Union[float, int]
+	#: Identifier of the :class:`~ampel.t2.T2Processor.T2Processor` invocation
+	#: that created this
 	run: int
 
-	# Usually not set but required for "tied" t2 units
+	#: Usually not set but required for "tied" t2 units
 	channel: Union[ChannelId, Sequence[ChannelId]]
 
-	# An integer 'error' can be returned by t2 units instead of a payload dict
-	# Usually a T2RunState member but let's not be too restrictive here
+	#: An integer 'error' can be returned by t2 units instead of a payload dict.
+	#: This will usually be a member of :class:`~ampel.t2.T2RunState.T2RunState`.
 	error: int
+	#: Human-readable explanation of the error reason.
 	msg: str
 
-	# Whether the t2 result contained a journal update
+	#: True if the t2 result contained a :class:`~ampel.struct.JournalExtra.JournalExtra`
 	jup: bool
+	#: Payload returned by :meth:`run`.
 	result: Dict[str, Any]

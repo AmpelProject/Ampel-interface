@@ -22,15 +22,18 @@ class AbsT3Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	Inherit this class if your unit is compatible with multiple type of views,
 	that is if you access only SnapView fields or perform dedicated isinstance checks.
 
-	:param context: a dictionary containing context information,
-	which can be requested in the process configuration.
-	Examples of context information are:
-	- Date and time the current process was last run
-	- Number of alerts processed since then
-
-	Note: custom context information can be added to this dict by
-	implementing a class inheriting AbsT3ContextAppender
-	and adding the custom unit to the process configuration
+	:param context:
+	  a dictionary containing context information, which can be
+	  requested in the process configuration. Examples of context information are:
+	  
+	    - Date and time the current process was last run
+	    - Number of alerts processed since then
+	  
+	  .. note::
+	    Custom context information can be added to this dict by
+	    implementing a subclass of
+	    :class:`~ampel.t3.context.AbsT3RunContextAppender.AbsT3RunContextAppender`
+	    and adding the custom unit to the process configuration
 	"""
 
 	context: Optional[Dict[str, Any]]

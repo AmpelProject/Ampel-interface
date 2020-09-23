@@ -20,6 +20,7 @@ class AbsPointT2Unit(AmpelABC, DataUnit, abstract=True):
 	The parameter ingest (used by the ingester) supports the key/value 'eligible'.
 	If customized, the alert ingester will not create a T2 document for each datapoint
 	of a given transient, but only for the one fulfilling the selection criteria below:
+	
 	- Either the "first" or the current "last" one
 	- The one selected by the function "slice" whose 3 integer arguments are to be provided
 	"""

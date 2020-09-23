@@ -15,21 +15,37 @@ T2Links = Union[bytes, DataPointId, StockId]
 
 
 class T2Record(TypedDict, total=False):
+	"""
+	Specification of a calculation based on a :class:`~ampel.content.StockRecord.StockRecord`,
+	:class:`~ampel.content.DataPoint.DataPoint`, or :class:`~ampel.content.Compound.Compound`.
+	
+	This is a dict containing 1 or more of the following items:
+	"""
 
 	# Indexed values
+	#: Database key
 	_id: bytes
+	#: Stock associated with the input data 
 	stock: Union[StockId, Sequence[StockId]]
 
 	# Compound index
-	unit: Union[int, str] # unit id can be hashed for performance reason
+	#: Name of the unit to be run. This may be hashed for performance reasons.
+	unit: Union[int, str]
+	#: Configuration hash, if unit defaults were overridden. The underlying
+	#: values can be resolved with
+	#: :meth:`UnitLoader.get_init_config() <ampel.core.UnitLoader.UnitLoader.get_init_config>`
 	config: Optional[int]
+	#: References to input data
 	link: Union[T2Links, Sequence[T2Links]]
 
 	# Non-indexed values
 	tag: Optional[Sequence[Tag]]
 	channel: Sequence[ChannelId]
+	#: Name of the database collection holding the input data
 	col: Optional[str]
-	run: Union[int, Sequence[int]] # positive, ever increasing integer
-	# Usually a T2RunState member but let's not be too restrictive here
+	#: Identifier of the process that created this record
+	run: Union[int, Sequence[int]]
+	#: A member of :class:`~ampel.t2.T2RunState.T2RunState`
 	status: int
-	body: Optional[Sequence[T2SubRecord]] # value(s) returned by t2 unit execution(s)
+	#: value(s) returned by T2 unit execution(s)
+	body: Optional[Sequence[T2SubRecord]]

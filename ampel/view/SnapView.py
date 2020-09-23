@@ -24,16 +24,26 @@ from ampel.content.JournalRecord import JournalRecord
 class SnapView:
 	"""
 	View of a given ampel object (with unique stock id).
+	
 	This class references various instances of objects from
 	package ampel.content, originating from different ampel tiers.
-	It can also contain external/composite objects embedded in the dict called 'extra'
-	(such as spectra or ampel.view.LightCurve instances for ex.)
+	It can also contain external/composite objects embedded in the dict called 'extra',
+	for example spectra or cutout images.
 	The config parameter of a T3 process determines which information are included.
-	Typically, instances of this class (or of subclass such as TransientView) are provided to T3 units.
+	Instances of this class (or of subclass such as
+	:class:`~ampel.view.TransientView.TransientView`) are provided to
+	:meth:`AbsT3Unit.add() <ampel.abstract.AbsT3Unit.AbsT3Unit.add>`.
+	
 	"""
 
 	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra", "_frozen"
 
+	stock: Optional[StockRecord] #: Stock record, if loaded
+	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
+	t1: Optional[Sequence[Compound]] #: Compounds, if loaded
+	t2: Optional[Sequence[T2Record]] #: T2 records, if loaded
+	log: Optional[Sequence[LogRecord]] #: Event logs, if loaded
+	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.t3.complement.AbsT3DataAppender.AbsT3DataAppender`
 
 	def __init__(self,
 		id: StockId,
@@ -75,8 +85,11 @@ class SnapView:
 		compound_id: Optional[bytes] = None
 	) -> Optional[Sequence[T2Record]]:
 		"""
+		Get a subset of T2 records.
+		
 		:param unit_id: limits the returned science record(s) to the one with the provided t2 unit id
 		:param compound_id: whether to return the latest science record(s) or not (default: False)
+		
 		"""
 
 		if self.t2 is None:
@@ -120,10 +133,15 @@ class SnapView:
 		latest: Optional[bool] = False
 	) -> Optional[Union[JournalRecord, Sequence[JournalRecord]]]:
 		"""
+		Get a subset of journal entries.
+		
+		:param tier: return only journal entries associated with the given tier
 		:param process_name: return only journal entries associated with a given process name
-		:param last: return only the latest entry in the journal (the latest in time)
-		Returns journal entries corresponding to a given tier and/or job,
-		sorted by timestamp.
+		:param latest: return only the latest entry in the journal (the latest in time)
+		
+		:returns:
+			journal entries corresponding to a given tier and/or job,
+			sorted by timestamp.
 		"""
 
 		if not self.stock:

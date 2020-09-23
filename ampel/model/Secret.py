@@ -19,7 +19,7 @@ class Secret(Generic[T], AmpelABC, StrictModel, abstract=True):
     A wrapper for a piece of sensitive data, e.g. a password or access token.
     """
 
-    key: str
+    key: str #: The name of the secret.
 
     @abstractmethod
     def get(self) -> T:

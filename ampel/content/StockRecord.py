@@ -13,11 +13,27 @@ from ampel.content.JournalRecord import JournalRecord
 
 
 class StockRecord(TypedDict):
-
+	"""
+	An object being observed.
+	
+	The stock record ties together data from various sources, selected by
+	various channels, but all related to the same underlying object. Each
+	channel has a different view of the stock. From the perspective of a given
+	channel, the stock is created the first time one of its datapoints is
+	selected by the channel. Likewise, it is modified whenever a new datapoint
+	is selected by the channel.
+	
+	This is a dict containing 1 or more of the following items:
+	"""
 	_id: StockId
 	tag: Optional[Sequence[Union[int, str]]]
+	#: Channels that have selected datapoints for this stock
 	channel: Optional[Sequence[ChannelId]]
+	#: Records of activity on the stock
 	journal: Sequence[JournalRecord]
+	#: Names associated with the stock
 	name: Optional[Sequence[Union[int, str]]]
+	#: Last modification time (UNIX epoch) in each channel
 	modified: Dict[str, Any]
+	#: Creation time (UNIX epoch) in each channel
 	created: Dict[str, Any]

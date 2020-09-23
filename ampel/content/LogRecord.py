@@ -11,7 +11,12 @@ from typing import Sequence, Union, Optional, Any, Dict, TypedDict
 from ampel.type import ChannelId, StockId
 
 class LogRecord(TypedDict, total=False):
+	"""
+	A message produced by an Ampel unit during processing.
 
+	This is a dict containing 1 or more of the following items:
+	"""
+	#: database key
 	_id: bytes
 	flag: int
 	run: Union[int, Sequence[int]]

@@ -15,7 +15,7 @@ Tag = Union[int, str]
 
 class JournalExtra:
 	"""
-	Structure potentialy returned by ampel units to customize
+	Structure potentialy returned by Ampel units to customize
 	the transient journal entry created after a process is run.
 	"""
 

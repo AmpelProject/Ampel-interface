@@ -11,7 +11,11 @@ from typing import Sequence, Union, Optional, Literal, Any, Dict, TypedDict, Lis
 from ampel.type import ChannelId, Tag
 
 class JournalRecord(TypedDict, total=False):
-
+	"""
+	A record of activity on a stock.
+	
+	This is a dict containing 1 or more of the following items:
+	"""
 	tier: Literal[0, 1, 2, 3]
 	ts: Union[int, float]
 	channel: Union[ChannelId, Sequence[ChannelId]]

@@ -35,9 +35,9 @@ class AmpelAlert:
 	__slots__ = 'id', 'stock_id', 'dps', 'new'
 	__setattr__ = __ro__
 
-	id: int
-	stock_id: StockId
-	dps: Sequence[Dict]
+	id: int #: unique identifier for this alert
+	stock_id: StockId #: stock this alert belongs to
+	dps: Sequence[Dict] #: datapoints
 
 
 	def __init__(self, id: Union[int, str], stock_id: StockId, dps: Sequence[Dict]) -> None:
@@ -51,7 +51,11 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Any]:
-		""" ex: get_values("magpsf") """
+		"""
+		Example:
+			
+			get_values("magpsf")
+		"""
 
 		if not data:
 			data = self.dps
@@ -67,7 +71,11 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Tuple[Any, Any]]:
-		""" ex: get_tuples("jd", "magpsf") """
+		"""
+		Example::
+			
+			get_tuples("jd", "magpsf")
+		"""
 
 		if not data:
 			data = self.dps
@@ -86,7 +94,11 @@ class AmpelAlert:
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
 		data: Optional[Sequence[Dict]] = None
 	) -> List[Tuple]:
-		""" ex: get_ntuples(["fid", "jd", "magpsf"]) """
+		"""
+		Example:
+			
+			get_ntuples(["fid", "jd", "magpsf"])
+		"""
 
 		if not data:
 			data = self.dps

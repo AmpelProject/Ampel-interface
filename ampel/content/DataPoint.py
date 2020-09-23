@@ -10,8 +10,12 @@
 from typing import Any, Sequence, Union, Optional, Dict, TypedDict
 from ampel.type import StockId, DataPointId, ChannelId
 
-
 class DataPoint(TypedDict, total=False):
+	"""
+	A single data point.
+	
+	This is a dict containing 1 or more of the following items:
+	"""
 	_id: DataPointId
 	tag: Sequence[Union[int, str]]
 	stock: Optional[Union[StockId, Sequence[StockId]]]
