@@ -7,15 +7,16 @@
 # Last Modified Date: 24.08.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
-from typing import Tuple, Dict, Any, Optional, Union
+from typing import Tuple, Dict, Any, Optional, Union, ClassVar
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.log.AmpelLogger import AmpelLogger
 
 
 class DataUnit(AmpelBaseModel):
 
-	# Named resources required by this unit.
-	require: Optional[Tuple[str, ...]] = None
+	#: Named resources required by this unit.
+	#: These are passed on to subclasses.
+	require: ClassVar[Optional[Tuple[str, ...]]] = None
 	version: Optional[Union[str, float]] = None
 
 	logger: AmpelLogger
@@ -45,7 +46,8 @@ class DataUnit(AmpelBaseModel):
 		resource: Optional[Dict[str, Any]] = None, **kwargs
 	) -> None:
 		AmpelBaseModel.__init__(self, **kwargs)
-		self.resource = resource
+		#: Named resources configured for this unit. The keys are the elements of :attr:`require`.
+		self.resource: Optional[Dict[str, Any]] = resource
 
 		if hasattr(self, "post_init"):
 			self.post_init() # type: ignore
