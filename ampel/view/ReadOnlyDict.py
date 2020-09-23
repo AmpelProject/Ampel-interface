@@ -9,8 +9,10 @@
 
 
 class ReadOnlyDict(dict):
+	"""A dict whose items can't be changed."""
 
 	def __readonly__(self, *args, **kwargs):
+		""":raises RuntimeError: whenever called"""
 		raise RuntimeError("Cannot modify ReadOnlyDict")
 
 	__setitem__ = __readonly__

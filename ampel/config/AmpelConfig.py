@@ -15,7 +15,7 @@ from ampel.view.ReadOnlyDict import ReadOnlyDict
 
 
 class AmpelConfig:
-	""" Class holding the central ampel configuration """
+	"""Container for the central Ampel configuration"""
 
 	_config: Dict
 	_check_types: int = 1
@@ -143,10 +143,18 @@ class AmpelConfig:
 	) -> Union[JSONTypes, Optional[JT]]:
 		"""
 		Optional arguments:
+		
 		:param ret_type: expected return type (str, int, Dict, List, ...).
 		:param entry: sub-config element will be returned.
-
-		Ex: get("channel.HU_RANDOM") or get(['foo', 'bar', 'baz'])
+		
+		Examples::
+			
+			get("channel.HU_RANDOM")
+		
+		::
+			
+			get(['foo', 'bar', 'baz'])
+		
 		:raise ValueError: if the retrieved value has not the expected type
 		"""
 
