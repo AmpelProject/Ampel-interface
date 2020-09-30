@@ -24,3 +24,6 @@ class ReadOnlyDict(dict):
 	setdefault = __readonly__
 
 	del __readonly__
+
+	def __reduce__(self):
+		return type(self), (dict(self),)
