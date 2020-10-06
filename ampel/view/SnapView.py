@@ -65,13 +65,13 @@ class SnapView:
 		self._frozen = freeze
 
 
-	def freeze(self, k, v):
-		if not hasattr(self, "_frozen"):
+	def freeze(self):
+		if not self._frozen:
 			self._frozen = True
 
 
 	def __setattr__(self, k, v):
-		if hasattr(self, "_frozen"):
+		if getattr(self, "_frozen", False):
 			raise ValueError("SnapView is read only")
 		object.__setattr__(self, k, v)
 
