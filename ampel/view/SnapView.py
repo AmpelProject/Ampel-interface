@@ -149,13 +149,13 @@ class SnapView:
 
 		entries = self.stock['journal']
 
-		if tier:
+		if tier is not None:
 			entries = tuple(j for j in entries if j['tier'] == tier)
 
-		if process_name:
+		if process_name is not None:
 			entries = tuple(j for j in entries if j['process'] == process_name)
 
-		if filter_func:
+		if filter_func is not None:
 			entries = tuple(j for j in entries if filter_func(j))
 
 		entries = sorted(entries, key=lambda x: x['ts'])
