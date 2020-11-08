@@ -46,6 +46,10 @@ class AmpelAlert:
 		osa(self, 'dps', dps)
 
 
+	def __reduce__(self):
+		return (type(self), (self.id, self.stock_id, self.dps))
+
+
 	def get_values(self,
 		key: str,
 		filters: Optional[Sequence[Dict[str, Any]]] = None,
