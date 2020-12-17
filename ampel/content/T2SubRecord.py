@@ -33,7 +33,7 @@ class T2SubRecord(TypedDict, total=False):
 	run: int
 
 	#: Usually not set but required for "tied" t2 units
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	channel: Sequence[ChannelId]
 
 	#: An integer 'error' can be returned by t2 units instead of a payload dict.
 	#: This will usually be a member of :class:`~ampel.t2.T2RunState.T2RunState`.
