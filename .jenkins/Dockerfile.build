@@ -1,10 +1,13 @@
 FROM python:3.8.5
 
-RUN apt-get install bash gcc && \
-    pip install mypy==0.782
+RUN apt-get install bash && \
+    pip install mypy==0.770 mypy2junit
 
-ADD .jenkins/Ampel-core /Ampel-core
-RUN pip install -r /Ampel-core/requirements.txt /Ampel-core
+ADD .jenkins/run_mypy.sh /bin
 
-ADD requirements.txt /
-RUN pip install -r /requirements.txt
+ADD .jenkins /build/.jenkins
+
+ADD setup.py /build/setup.py
+ADD ampel /build/ampel
+RUN cd /build && pip install -e . -e .jenkins/Ampel-core
+

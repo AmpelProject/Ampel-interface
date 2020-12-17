@@ -16,7 +16,7 @@ pipeline {
         }
       }
       steps {
-        sh 'mypy ampel --junit-xml mypy.xml'
+        sh 'run_mypy.sh ampel'
       }
       post {
         always {
