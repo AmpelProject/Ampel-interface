@@ -12,7 +12,7 @@ from typing import (
 	Dict, Optional, Union, Any, Literal, Sequence, overload, Callable
 )
 
-from ampel.type import StockId
+from ampel.type import StockId, ChannelId
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.content.T2Record import T2Record
@@ -109,6 +109,36 @@ class SnapView:
 			return tuple(rec for rec in self.t2 if rec['unit'] == unit_id)
 
 		return self.t2
+
+
+	def get_t2_result(self,
+		unit_id: Union[int, str],
+		channel: Optional[ChannelId] = None,
+		compound_id: Optional[bytes] = None
+	) -> Optional[Dict[str,Any]]:
+		"""
+		Get the latest result from the given unit.
+		
+		:param unit_id: target unit id
+		:param channel: restrict to specific channel, e.g. from a tied T2 record
+		:param compound_id: restrict to a specific state
+		"""
+
+		# from the records that match the unit and compound selection, return
+		# the last subrecord that has a result and matches the target channel
+		for t2 in reversed(self.get_t2_records(unit_id, compound_id) or []):
+			if channel is not None and not channel in t2["channel"]:
+				continue
+			for subrecord in reversed(t2.get("body") or []):
+				if (
+					channel is not None
+					and subrecord.get("channel") is not None
+					and channel not in subrecord["channel"]
+				):
+					continue
+				elif (result := subrecord.get("result")) is not None:
+					return result
+		return None
 
 
 	def get_journal_entries(self,
