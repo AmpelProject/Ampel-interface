@@ -110,28 +110,12 @@ class SnapView:
 
 		return self.t2
 
-	@overload
-	def get_journal_entries(self,
-		tier: Optional[Literal[0, 1, 2, 3]] = None,
-		process_name: Optional[str] = None,
-		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
-		latest: None = ...
-	) -> Optional[Sequence[JournalRecord]]: ...
-
-	@overload
-	def get_journal_entries(self,
-		tier: Optional[Literal[0, 1, 2, 3]] = None,
-		process_name: Optional[str] = None,
-		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
-		latest: bool = False
-	) -> Optional[JournalRecord]: ...
 
 	def get_journal_entries(self,
 		tier: Optional[Literal[0, 1, 2, 3]] = None,
 		process_name: Optional[str] = None,
 		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
-		latest: Optional[bool] = False
-	) -> Optional[Union[JournalRecord, Sequence[JournalRecord]]]:
+	) -> Optional[Sequence[JournalRecord]]:
 		"""
 		Get a subset of journal entries.
 		
@@ -158,9 +142,7 @@ class SnapView:
 		if filter_func is not None:
 			entries = tuple(j for j in entries if filter_func(j))
 
-		entries = sorted(entries, key=lambda x: x['ts'])
-
-		return entries[-1] if latest else entries
+		return sorted(entries, key=lambda x: x['ts'])
 
 
 	def get_time_created(self,
