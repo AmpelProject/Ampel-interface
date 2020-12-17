@@ -20,7 +20,7 @@ pipeline {
       }
       post {
         always {
-          junit 'mypy.xml'
+          junit 'mypy.*.xml'
         }
       }
     }
