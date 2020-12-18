@@ -5,9 +5,7 @@ RUN apt-get install bash && \
 
 ADD .jenkins/run_mypy.sh /bin
 
-ADD .jenkins /build/.jenkins
-
 ADD setup.py /build/setup.py
 ADD ampel /build/ampel
-RUN cd /build && pip install -e . -e .jenkins/Ampel-core
+RUN cd /build && pip install -e .
 
