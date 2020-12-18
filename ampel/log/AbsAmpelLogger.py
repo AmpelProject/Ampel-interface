@@ -51,3 +51,14 @@ class AbsAmpelLogger(AmpelABC, abstract=True):
 		**kwargs
 	):
 		...
+
+	@abstractmethod
+	def log(self,
+		lvl: int, msg: Optional[Union[str, Dict[str, Any]]], *args,
+		exc_info: Optional[Union[bool, Exception]] = None,
+		channel: Optional[Union[ChannelId, List[ChannelId]]] = None,
+		stock: Optional[StockId] = None,
+		extra: Optional[Dict[str, Any]] = None,
+		**kwargs
+	):
+		...
