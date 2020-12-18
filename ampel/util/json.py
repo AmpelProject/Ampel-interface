@@ -1,4 +1,10 @@
 
+# mypy 0.770 fails with:
+# ampel/util/json.py:20: error: Name 'json.JSONEncoder' is not defined
+# FIXME remove when namespace packages are properly supported, see
+# https://github.com/python/mypy/issues/5759
+# type: ignore
+
 import inspect
 import json
 import bson.json_util
@@ -17,7 +23,7 @@ def load(fileobj, ignore_missing_modules=True):
 			)
 		)
 
-class AmpelEncoder(json.JSONEncoder):
+class AmpelEncoder(_json.JSONEncoder):
 	"""
 	Serialize objects in a mix of:
 	a) JSONRPC 1.0-like class hinting for custom Ampel types
@@ -28,7 +34,7 @@ class AmpelEncoder(json.JSONEncoder):
 		if lossy, cast mappingproxy to dict, set and tuple to list, etc
 		"""
 		self.lossy = lossy
-		json.JSONEncoder.__init__(self, *args, **kwargs)
+		super().__init__(*args, **kwargs)
 		self.bson_options = bson.json_util.STRICT_JSON_OPTIONS
 
 	def default(self, obj, fallthrough=False):
