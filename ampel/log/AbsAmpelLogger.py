@@ -7,8 +7,10 @@
 # Last Modified Date: 18.12.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
-from ampel.base import abstractmethod, AmpelABC
 from typing import Dict, Optional, Union, Any, List
+
+from ampel.base.AmpelABC import AmpelABC
+from ampel.base.decorator import abstractmethod
 from ampel.type import ChannelId, StockId
 
 class AbsAmpelLogger(AmpelABC, abstract=True):
