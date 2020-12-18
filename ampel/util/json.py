@@ -23,7 +23,7 @@ def load(fileobj, ignore_missing_modules=True):
 			)
 		)
 
-class AmpelEncoder(_json.JSONEncoder):
+class AmpelEncoder(json.JSONEncoder):
 	"""
 	Serialize objects in a mix of:
 	a) JSONRPC 1.0-like class hinting for custom Ampel types
