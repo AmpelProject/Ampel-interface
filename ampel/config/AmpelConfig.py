@@ -32,7 +32,7 @@ class AmpelConfig:
 		if pwd_file_path or pwds:
 
 			try:
-				from ampel.util.crypto import aes_recursive_decrypt
+				from ampel.util.crypto import aes_recursive_decrypt # type: ignore[import]
 			except Exception:
 				print("ampel-core is required for this feature")
 				return None # type: ignore
