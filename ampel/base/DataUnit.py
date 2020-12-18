@@ -4,12 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.10.2019
-# Last Modified Date: 24.08.2020
+# Last Modified Date: 18.12.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
 from typing import Tuple, Dict, Any, Optional, Union, ClassVar
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from ampel.log.AmpelLogger import AmpelLogger
+from ampel.log.AbsAmpelLogger import AbsAmpelLogger
 
 
 class DataUnit(AmpelBaseModel):
@@ -19,7 +19,8 @@ class DataUnit(AmpelBaseModel):
 	require: ClassVar[Optional[Tuple[str, ...]]] = None
 	version: Optional[Union[str, float]] = None
 
-	logger: AmpelLogger
+	#: Logging handle, provided at runtime.
+	logger: AbsAmpelLogger
 
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
