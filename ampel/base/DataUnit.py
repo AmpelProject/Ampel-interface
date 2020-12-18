@@ -8,8 +8,8 @@
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
 from typing import Tuple, Dict, Any, Optional, Union, ClassVar
+from ampel.abstract.AbsAmpelLogger import AbsAmpelLogger
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from ampel.log.AbsAmpelLogger import AbsAmpelLogger
 
 
 class DataUnit(AmpelBaseModel):
