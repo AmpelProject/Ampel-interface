@@ -3,17 +3,17 @@
 from importlib import import_module
 from typing import Any, Callable, Dict, List, Tuple
 
-import bson.json_util
+import bson.json_util  # type: ignore[import]
 
 from ampel.content.Compound import Compound
 from ampel.content.DataPoint import DataPoint
 from ampel.content.T2Record import T2Record
 from ampel.view.LightCurve import LightCurve  # type: ignore[import]
 from ampel.view.ReadOnlyDict import ReadOnlyDict
-from ampel.view.TransientView import TransientView
+from ampel.view.TransientView import TransientView  # type: ignore[import]
 
-from ampel.ztf.legacy_utils import to_ztf_id
-from ampel.ztf.utils import to_ampel_id
+from ampel.ztf.legacy_utils import to_ztf_id  # type: ignore[import]
+from ampel.ztf.utils import to_ampel_id  # type: ignore[import]
 
 legacy_classes: Dict[str, Callable[[str, Tuple, Dict[str, Any]], Any]] = {}
 
