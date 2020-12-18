@@ -72,13 +72,6 @@ class AmpelConfig:
 		if 'general' in config and 'check_types' in config['general']:
 			self._check_types = config['general']['check_types']
 
-		# try to automatically register aux units
-		try:
-			from ampel.core.UnitLoader import UnitLoader
-			UnitLoader.aux_defs = config['unit'].get('aux')
-		except Exception:
-			print("UnitLoader auxiliary units auto-registration failed")
-
 	# Overloads for method call without 'entry'
 
 	@overload
