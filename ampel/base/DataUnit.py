@@ -8,7 +8,7 @@
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
 from typing import Tuple, Dict, Any, Optional, Union, ClassVar
-from ampel.abstract.AbsAmpelLogger import AbsAmpelLogger
+from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
@@ -20,7 +20,7 @@ class DataUnit(AmpelBaseModel):
 	version: Optional[Union[str, float]] = None
 
 	#: Logging handle, provided at runtime.
-	logger: AbsAmpelLogger
+	logger: LoggerProtocol
 
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
