@@ -9,6 +9,9 @@
 
 from typing import Dict, Optional, Union, Any, Protocol, runtime_checkable
 
+if TYPE_CHECKING:
+	from ampel.protocol.LoggingHandlerProtocol import LoggingHandlerProtocol
+
 @runtime_checkable
 class LoggerProtocol(Protocol):
 
@@ -38,4 +41,10 @@ class LoggerProtocol(Protocol):
 		exc_info: Optional[Union[bool, Exception]] = None,
 		extra: Optional[Dict[str, Any]] = None,
 	):
+		...
+
+	def add_handler(self, handler: "LoggingHandlerProtocol"):
+		...
+
+	def remove_handler(self, handler: "LoggingHandlerProtocol"):
 		...
