@@ -7,7 +7,7 @@
 # Last Modified Date: 18.12.2020
 # Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
 
-from typing import Dict, Optional, Union, Any, Protocol, runtime_checkable
+from typing import Dict, Optional, Union, Any, Protocol, runtime_checkable, TYPE_CHECKING
 
 if TYPE_CHECKING:
 	from ampel.protocol.LoggingHandlerProtocol import LoggingHandlerProtocol
