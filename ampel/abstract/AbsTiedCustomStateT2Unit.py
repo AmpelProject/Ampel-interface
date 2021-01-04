@@ -17,8 +17,13 @@ from ampel.content.T2Record import T2Record
 
 
 class AbsTiedCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
-	""" Generic top level abstract class for t2 units """
+	"""
+	Generic abstract class for state T2 units that depend on other T2 units.
+	
+	Known sub-classes: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`
+	"""
 
+	#: Prerequisite T2s. Their output `T2Records <ampel.content.T2Record.T2Record>`_ will be supplied as arguments to :meth:`run`.
 	dependency: Optional[Union[Dependency, Sequence[Dependency]]]
 
 	# Note1: we want to enforce the implementation of an abstract *class method*
@@ -26,6 +31,7 @@ class AbsTiedCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	@staticmethod
 	@abstractmethod(force=True)
 	def build(compound: Compound, datapoints: Iterable[DataPoint]) -> T:
+		"""Build state type from compound and the datapoints it references"""
 		...
 
 
