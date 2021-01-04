@@ -9,8 +9,7 @@
 
 from typing import Union, Iterable, Sequence, TypedDict, Optional, Dict, Any
 from ampel.type import T2UnitResult
-from ampel.base import abstractmethod
-from ampel.abstract.AbsStateT2Unit import AbsStateT2Unit
+from ampel.base import abstractmethod, AmpelABC, DataUnit
 from ampel.content.Compound import Compound
 from ampel.content.DataPoint import DataPoint
 from ampel.content.T2Record import T2Record
@@ -21,10 +20,9 @@ class Dependency(TypedDict):
 	config: Optional[Dict[str, Any]]
 
 
-class AbsTiedStateT2Unit(AbsStateT2Unit, abstract=True):
+class AbsTiedStateT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Generic top level abstract class for t2 units
-	Known sub-class: AbsTiedLightCurveT2
+	Generic abstract class for T2 units that depend on other T2 units.
 	"""
 
 	dependency: Optional[Union[Dependency, Sequence[Dependency]]]
