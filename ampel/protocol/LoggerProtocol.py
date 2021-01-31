@@ -43,8 +43,8 @@ class LoggerProtocol(Protocol):
 	):
 		...
 
-	def add_handler(self, handler: "LoggingHandlerProtocol"):
+	def addHandler(self, handler: "LoggingHandlerProtocol"):
 		...
 
-	def remove_handler(self, handler: "LoggingHandlerProtocol"):
+	def removeHandler(self, handler: "LoggingHandlerProtocol"):
 		...
