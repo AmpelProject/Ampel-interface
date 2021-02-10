@@ -16,11 +16,11 @@ from ampel.content.DataPoint import DataPoint
 
 class AbsCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	"""
-	Generic top level abstract class for t2 units
+	Generic top level abstract class for custom state t2 units.
 	Known sub-class: ampel.abstract.AbsLightCurveT2Unit
 	"""
 
-	# Note1: we want to enforce the implementation of an abstract *class method*
+	# We want to enforce the implementation of an abstract *class method*
 	# and hence have purposely omitted the first reflective argument
 	@staticmethod
 	@abstractmethod(force=True)

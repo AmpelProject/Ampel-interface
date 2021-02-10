@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 28.12.2019
-# Last Modified Date: 08.06.2020
+# Last Modified Date: 09.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Iterable
@@ -16,8 +16,7 @@ from ampel.content.DataPoint import DataPoint
 
 class AbsStateT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Generic top level abstract class for t2 units
-	Known sub-class: AbsLightCurveT2Unit
+	Top level abstract class for t2 units associated with state/compound documents.
 	"""
 
 	@abstractmethod
