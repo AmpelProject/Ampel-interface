@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 03.04.2020
-# Last Modified Date: 09.02.2021
+# Last Modified Date: 11.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Generic, Iterable, Sequence, Dict, Any, Union, Optional
@@ -13,7 +13,7 @@ from ampel.base import abstractmethod
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
-from ampel.content.T2Record import T2Record
+from ampel.view.T2DocView import T2DocView
 
 
 class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
@@ -59,7 +59,7 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 		"""
 
 	@abstractmethod
-	def run(self, arg: T, t2_records: Sequence[T2Record]) -> T2UnitResult:
+	def run(self, arg: T, t2_records: Sequence[T2DocView]) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 		Notes: dict must have string keys and values must be bson encodable
