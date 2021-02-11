@@ -7,7 +7,7 @@
 # Last Modified Date: 08.06.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Iterable, Generic, Union, Sequence, Optional
+from typing import Generic, Union, Sequence, Optional
 from ampel.type import T, T2UnitResult
 from ampel.base import abstractmethod, AmpelABC, DataUnit
 from ampel.abstract.AbsTiedStateT2Unit import Dependency
@@ -30,7 +30,7 @@ class AbsTiedCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	# and hence have purposely omitted the first reflective argument
 	@staticmethod
 	@abstractmethod(force=True)
-	def build(compound: Compound, datapoints: Iterable[DataPoint]) -> T:
+	def build(compound: Compound, datapoints: Sequence[DataPoint]) -> T:
 		"""Build state type from compound and the datapoints it references"""
 		...
 
