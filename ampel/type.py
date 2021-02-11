@@ -10,7 +10,9 @@
 from bson.int64 import Int64
 from collections.abc import ValuesView as values_view, KeysView as keys_view
 from typing import Union, TypeVar, Set, Tuple, FrozenSet, List, KeysView, ValuesView, Literal, Dict, Any, Optional
-from ampel.struct.JournalExtra import JournalExtra
+from ampel.struct.T2BroadUnitResult import T2BroadUnitResult
+from ampel.struct.JournalTweak import JournalTweak
+
 
 StockId = Union[int, bytes, str]
 type_stock_id = (int, Int64, bytes, str)
@@ -19,8 +21,8 @@ Tag = Union[int, str]
 DataPointId = int
 datapoint_id = (int, Int64)
 
-T2UnitResult = Union[int, Dict[str, Any], Tuple[Dict[str, Any], JournalExtra]]
-T3AddResult = Optional[Union[JournalExtra, Dict[StockId, JournalExtra]]]
+T2UnitResult = Union[int, T2BroadUnitResult, Dict[str, Any]]
+T3AddResult = Optional[Union[JournalTweak, Dict[StockId, JournalTweak]]]
 
 AmpelMainCol = Literal['stock', 't0', 't1', 't2']
 
