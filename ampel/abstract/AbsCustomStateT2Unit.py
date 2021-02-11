@@ -4,10 +4,10 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 28.12.2019
-# Last Modified Date: 08.06.2020
+# Last Modified Date: 11.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Generic
+from typing import Iterable, Generic
 from ampel.type import T, T2UnitResult
 from ampel.base import abstractmethod, AmpelABC, DataUnit
 from ampel.content.Compound import Compound
@@ -24,7 +24,7 @@ class AbsCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	# and hence have purposely omitted the first reflective argument
 	@staticmethod
 	@abstractmethod(force=True)
-	def build(compound: Compound, datapoints: Sequence[DataPoint]) -> T:
+	def build(compound: Compound, datapoints: Iterable[DataPoint]) -> T:
 		...
 
 
