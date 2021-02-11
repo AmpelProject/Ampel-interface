@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 11.03.2020
-# Last Modified Date: 09.02.2021
+# Last Modified Date: 11.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Dict, Any, Union, Optional
@@ -13,7 +13,7 @@ from ampel.type import T2UnitResult
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
-from ampel.content.T2Record import T2Record
+from ampel.view.T2DocView import T2DocView
 
 
 class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
@@ -53,7 +53,7 @@ class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	def run(self,
 		compound: Compound,
 		datapoints: Sequence[DataPoint],
-		t2_records: Sequence[T2Record]
+		t2_records: Sequence[T2DocView]
 	) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
