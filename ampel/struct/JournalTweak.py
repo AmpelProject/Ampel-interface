@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/struct/JournalExtra.py
+# File              : Ampel-interface/ampel/struct/JournalTweak.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 15.10.2018
@@ -13,7 +13,7 @@ from typing import Dict, Optional, Sequence, Union, Any
 Tag = Union[int, str]
 
 
-class JournalExtra:
+class JournalTweak:
 	"""
 	Structure potentialy returned by Ampel units to customize
 	the transient journal entry created after a process is run.
