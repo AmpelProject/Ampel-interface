@@ -7,22 +7,22 @@
 # Last Modified Date: 08.06.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, Optional, Literal, Any, Dict, TypedDict, List
+from typing import Sequence, Union, Literal, Any, Dict, TypedDict, List
 from ampel.type import ChannelId, Tag
 
 class JournalRecord(TypedDict, total=False):
 	"""
 	A record of activity on a stock.
-	
+
 	This is a dict containing 1 or more of the following items:
 	"""
 	tier: Literal[0, 1, 2, 3]
 	ts: Union[int, float]
 	channel: Union[ChannelId, Sequence[ChannelId]]
 	process: Union[int, str]
-	tag: Optional[Union[Tag, Sequence[Tag]]]
-	status: Optional[int]
-	unit: Optional[Union[int, str]]
-	doc: Optional[Union[int, bytes]]
+	tag: Union[Tag, Sequence[Tag]]
+	status: int
+	unit: Union[int, str]
+	doc: Union[int, bytes]
 	run: Union[int, List[int]]
-	extra: Optional[Dict[str, Any]]
+	extra: Dict[str, Any]
