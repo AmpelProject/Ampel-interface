@@ -8,6 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Union, Optional, TypedDict
+from bson import ObjectId
 from ampel.type import ChannelId, StockId, DataPointId, Tag
 from ampel.content.T2Record import T2Record
 
@@ -23,7 +24,7 @@ class T2Document(TypedDict, total=False):
 	"""
 
 	#: Database primary id
-	_id: bytes
+	_id: ObjectId
 
 	#: Stock id associated with the data
 	#: (multiple stock ids disabled for simplicity for now)
