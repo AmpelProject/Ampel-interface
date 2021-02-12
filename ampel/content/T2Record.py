@@ -4,10 +4,10 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 11.02.2021
+# Last Modified Date: 12.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, TypedDict, Dict, Any
+from typing import Union, TypedDict, Dict, List, Any
 
 
 class T2Record(TypedDict, total=False):
@@ -46,4 +46,4 @@ class T2Record(TypedDict, total=False):
 	jup: bool
 
 	#: Payload returned by :meth:`run`.
-	result: Dict[str, Any]
+	result: Union[Dict[str, Any], List[Dict[str, Any]]]
