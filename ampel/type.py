@@ -21,7 +21,7 @@ Tag = Union[int, str]
 DataPointId = int
 datapoint_id = (int, Int64)
 
-T2UnitResult = Union[int, T2BroadUnitResult, Dict[str, Any]]
+T2UnitResult = Union[int, T2BroadUnitResult, Dict[str, Any], List[Dict[str, Any]]]
 T3AddResult = Optional[Union[JournalTweak, Dict[StockId, JournalTweak]]]
 
 AmpelMainCol = Literal['stock', 't0', 't1', 't2']
