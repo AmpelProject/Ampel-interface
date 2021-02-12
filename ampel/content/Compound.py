@@ -4,33 +4,33 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : Unspecified
-# Last Modified Date: 04.03.2020
+# Last Modified Date: 13.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Optional, Literal, TypedDict, Union
+from typing import Sequence, Literal, TypedDict, Union
 from ampel.type import StockId, ChannelId, DataPointId
 
 class CompoundElement(TypedDict, total=False):
 	"""
 	Annotated reference to a :class:`~ampel.content.DataPoint.DataPoint`
-	
+
 	This is a dict containing 1 or more of the following items:
 	"""
 	id: DataPointId
-	tag: Optional[Sequence[Union[int, str]]]
-	excl: Optional[Union[int, str]] #: exclusion reason
+	tag: Sequence[Union[int, str]]
+	excl: Union[int, str] #: exclusion reason
 
 class Compound(TypedDict, total=False):
 	"""
 	A symbolic collection of :class:`~ampel.content.DataPoint.DataPoint`,
 	representing the state of a stock at a given point in time as viewed
 	through one or more channels.
-	
+
 	This is a dict containing 1 or more of the following items:
 	"""
 	#: unique identifier (database key)
 	_id: bytes
-	tag: Optional[Sequence[Union[int, str]]]
+	tag: Sequence[Union[int, str]]
 	#: stock that datapoints belong to
 	stock: Union[StockId, Sequence[StockId]]
 	#: channel(s) that selected the datapoints
