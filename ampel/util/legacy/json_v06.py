@@ -13,7 +13,7 @@ from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.view.TransientView import TransientView  # type: ignore[import]
 
 from ampel.ztf.legacy_utils import to_ztf_id  # type: ignore[import]
-from ampel.ztf.utils import to_ampel_id  # type: ignore[import]
+from ampel.ztf.util.ZTFIdMapper import to_ampel_id  # type: ignore[import]
 
 legacy_classes: Dict[str, Callable[[str, Tuple, Dict[str, Any]], Any]] = {}
 
