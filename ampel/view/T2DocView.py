@@ -89,7 +89,11 @@ class T2DocView:
 
 		for el in reversed(self.body): # type: ignore # inadequate mypy inference
 			if 'result' in el and el['status'] >= 0:
-				return el['result']
+				result = el['result']
+				if isinstance(result, dict):
+					return result
+				elif isinstance(result, list) and len(result):
+					return result[-1]
 
 		return None
 
