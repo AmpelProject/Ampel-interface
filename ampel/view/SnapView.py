@@ -4,18 +4,16 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 15.08.2020
+# Last Modified Date: 16.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import (
-	Dict, Optional, Union, Any, Literal, Sequence, overload, Callable
-)
+from typing import Dict, Optional, Union, Any, Literal, Sequence, Callable
 
-from ampel.type import StockId, ChannelId
+from ampel.type import StockId
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
-from ampel.content.T2Record import T2Record
+from ampel.content.T2Document import T2Document
 from ampel.content.StockRecord import StockRecord
 from ampel.content.LogRecord import LogRecord
 from ampel.content.JournalRecord import JournalRecord
@@ -24,7 +22,7 @@ from ampel.content.JournalRecord import JournalRecord
 class SnapView:
 	"""
 	View of a given ampel object (with unique stock id).
-	
+
 	This class references various instances of objects from
 	package ampel.content, originating from different ampel tiers.
 	It can also contain external/composite objects embedded in the dict called 'extra',
@@ -33,7 +31,7 @@ class SnapView:
 	Instances of this class (or of subclass such as
 	:class:`~ampel.view.TransientView.TransientView`) are provided to
 	:meth:`AbsT3Unit.add() <ampel.abstract.AbsT3Unit.AbsT3Unit.add>`.
-	
+
 	"""
 
 	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra", "_frozen"
@@ -41,7 +39,7 @@ class SnapView:
 	stock: Optional[StockRecord] #: Stock record, if loaded
 	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
 	t1: Optional[Sequence[Compound]] #: Compounds, if loaded
-	t2: Optional[Sequence[T2Record]] #: T2 records, if loaded
+	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
 	log: Optional[Sequence[LogRecord]] #: Event logs, if loaded
 	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.t3.complement.AbsT3DataAppender.AbsT3DataAppender`
 
@@ -50,7 +48,7 @@ class SnapView:
 		stock: Optional[StockRecord] = None,
 		t0: Optional[Sequence[DataPoint]] = None,
 		t1: Optional[Sequence[Compound]] = None,
-		t2: Optional[Sequence[T2Record]] = None,
+		t2: Optional[Sequence[T2Document]] = None,
 		log: Optional[Sequence[LogRecord]] = None,
 		extra: Optional[Dict[str, Any]] = None,
 		freeze: bool = True
@@ -80,16 +78,16 @@ class SnapView:
 		return {k: getattr(self, k) for k in self.__slots__}
 
 
-	def get_t2_records(self,
+	def get_t2_docs(self,
 		unit_id: Optional[Union[int, str]] = None,
 		compound_id: Optional[bytes] = None
-	) -> Optional[Sequence[T2Record]]:
+	) -> Optional[Sequence[T2Document]]:
 		"""
-		Get a subset of T2 records.
-		
+		Get a subset of T2 documents.
+
 		:param unit_id: limits the returned science record(s) to the one with the provided t2 unit id
 		:param compound_id: whether to return the latest science record(s) or not (default: False)
-		
+
 		"""
 
 		if self.t2 is None:
@@ -113,30 +111,20 @@ class SnapView:
 
 	def get_t2_result(self,
 		unit_id: Union[int, str],
-		channel: Optional[ChannelId] = None,
 		compound_id: Optional[bytes] = None
-	) -> Optional[Dict[str,Any]]:
+	) -> Optional[Dict[str, Any]]:
 		"""
 		Get the latest result from the given unit.
-		
+
 		:param unit_id: target unit id
-		:param channel: restrict to specific channel, e.g. from a tied T2 record
 		:param compound_id: restrict to a specific state
 		"""
 
-		# from the records that match the unit and compound selection, return
-		# the last subrecord that has a result and matches the target channel
-		for t2 in reversed(self.get_t2_records(unit_id, compound_id) or []):
-			if channel is not None and not channel in t2["channel"]:
-				continue
+		# from the records that match the unit and compound selection,
+		# return the last record that has a result
+		for t2 in reversed(self.get_t2_docs(unit_id, compound_id) or []):
 			for subrecord in reversed(t2.get("body") or []):
-				if (
-					channel is not None
-					and subrecord.get("channel") is not None
-					and channel not in subrecord["channel"]
-				):
-					continue
-				elif (result := subrecord.get("result")) is not None:
+				if (result := subrecord.get("result")) is not None:
 					return result
 		return None
 
@@ -144,15 +132,15 @@ class SnapView:
 	def get_journal_entries(self,
 		tier: Optional[Literal[0, 1, 2, 3]] = None,
 		process_name: Optional[str] = None,
-		filter_func: Optional[Callable[[JournalRecord],bool]] = None,
+		filter_func: Optional[Callable[[JournalRecord], bool]] = None,
 	) -> Optional[Sequence[JournalRecord]]:
 		"""
 		Get a subset of journal entries.
-		
+
 		:param tier: return only journal entries associated with the given tier
 		:param process_name: return only journal entries associated with a given process name
 		:param latest: return only the latest entry in the journal (the latest in time)
-		
+
 		:returns:
 			journal entries corresponding to a given tier and/or job,
 			sorted by timestamp.
