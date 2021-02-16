@@ -7,7 +7,7 @@ import bson.json_util  # type: ignore[import]
 
 from ampel.content.Compound import Compound
 from ampel.content.DataPoint import DataPoint
-from ampel.content.T2Record import T2Record
+from ampel.content.T2Document import T2Document
 from ampel.view.LightCurve import LightCurve  # type: ignore[import]
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.view.TransientView import TransientView  # type: ignore[import]
@@ -122,8 +122,8 @@ def comp(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> Compound:
 
 
 @upgrade("ampel.base.ScienceRecord.ScienceRecord")
-def t2(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> T2Record:
-    return T2Record(
+def t2(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> T2Document:
+    return T2Document(
         {
             "_id": bytes(),
             "stock": kwargs["tran_id"],  # FIXME: translate old stockIds?
