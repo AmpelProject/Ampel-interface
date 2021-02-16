@@ -59,7 +59,7 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 		"""
 
 	@abstractmethod
-	def run(self, arg: T, t2_records: Sequence[T2DocView]) -> T2UnitResult:
+	def run(self, arg: T, t2_views: Sequence[T2DocView]) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 		Notes: dict must have string keys and values must be bson encodable

@@ -53,7 +53,7 @@ class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	def run(self,
 		compound: Compound,
 		datapoints: Sequence[DataPoint],
-		t2_records: Sequence[T2DocView]
+		t2_views: Sequence[T2DocView]
 	) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
