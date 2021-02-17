@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 27.12.2017
-# Last Modified Date: 17.05.2020
+# Last Modified Date: 17.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import inspect
@@ -103,22 +103,49 @@ class AmpelABC:
 			if hasattr(value[1], "var_args"):
 				continue
 
-			# Get method signatures
-			abstract_sig = inspect.signature(value[1])
-			impl_sig = inspect.signature(
-				getattr(Klass, method_name)
-			)
+			# Get implemented method signature
+			if method_name in Klass.__dict__:
+				impl = Klass.__dict__[method_name]
+			else:
+				for K in reversed(Klass.mro()):
+					if method_name in K.__dict__:
+						impl = K.__dict__[method_name]
+						break
+
+			# Get abstract method signatures
+			if isinstance(value[1], classmethod):
+				abstract_sig = inspect.signature(value[1].__func__)
+				if isinstance(impl, classmethod):
+					impl = impl.__func__
+				else:
+					raise TypeError(f"@classmethod missing for '{Klass.__name__}.{method_name}(...)'")
+			elif isinstance(value[1], staticmethod):
+				abstract_sig = inspect.signature(value[1].__func__)
+				if isinstance(impl, staticmethod):
+					impl = impl.__func__
+				else:
+					raise TypeError(f"@staticmethod missing for '{Klass.__name__}.{method_name}(...)'")
+			else:
+				abstract_sig = inspect.signature(value[1])
+
+			impl_sig_keys = list(inspect.signature(impl).parameters.keys())
+
+			# Manually at cls for bound methods
+			if (inspect.ismethod(impl)):
+				impl_sig_keys.insert(0, 'cls')
 
 			if (
-				len(abstract_sig.parameters) != len(impl_sig.parameters) or
+				len(abstract_sig.parameters) != len(impl_sig_keys) or
 				hasattr(value[1], "check_signature") and
 				# important cast because odict_keys(['a', 'b']) == odict_keys(['b', 'a']) is True
-				list(abstract_sig.parameters.keys()) != list(impl_sig.parameters.keys())
+				list(abstract_sig.parameters.keys()) != list(impl_sig_keys)
 			):
 				raise TypeError(
 					f"Wrong method signature. Please change the arguments of method "
 					f"'{method_name}' to match those defined by the corresponding "
-					f"abstract method in class {value[0].__name__}"
+					f"abstract method in class {value[0].__name__}\n"
+					f"Required: {list(abstract_sig.parameters.keys())}\n"
+					f"Implemented: {impl_sig_keys}\n"
 				)
 
 
