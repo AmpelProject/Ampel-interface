@@ -44,3 +44,65 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 		If None, all unit names are accepted.
 		ex: return ["T2CatalogMatch"]
 		"""
+
+	def get_t2_dependencies(self) -> Sequence[UnitModel]:
+		"""
+		In []:
+		...: import logging
+		...: class A(AbsTiedT2Unit):
+		...:     @classmethod
+		...:     def get_tied_unit_names(cls):
+		...:         return ['T2Unit1']
+
+		In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit1", "config": 123})
+		In []: a.get_t2_dependencies()
+		Out[]: [UnitModel(unit='T2TTT', config=123, override=None)]
+
+		In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit2", "config": 123})
+		---------------------------------------------------------------------------
+		BadConfig: Unit T2Unit2 is not compatible with tied unit A
+
+		In []:
+		...: class B(AbsTiedT2Unit):
+		...:     t2_dependency: Sequence[StateT2Dependency]
+		...:     @classmethod
+		...:     def get_tied_unit_names(cls):
+		...:         return ['T2Unit1', 'T2Unit2']
+
+		In []: b = B(logger=logging.getLogger(), t2_dependency=[{"unit": "T2Unit1", "config": 123}])
+		In []: b.get_t2_dependencies()
+		Out[]:
+		[StateT2Dependency(unit='T2Unit1', config=123, override=None, link_override=None),
+		UnitModel(unit='T2Unit2', config=None, override=None)]
+		"""
+
+		# No config, use defaults
+		if self.t2_dependency is None:
+			return [UnitModel(unit=el) for el in self.get_tied_unit_names()]
+
+		# For mypy which otherwise complains later
+		tied_unit_names = self.get_tied_unit_names()
+
+		# Cast to sequence if need be
+		t2_deps = [self.t2_dependency] if isinstance(self.t2_dependency, UnitModel) else self.t2_dependency
+
+		# No restriction (meaning underlying t2 is capable of dealing with all kind of T2DocViews) - use config
+		if tied_unit_names is None:
+			return t2_deps
+
+		ret = []
+
+		# Check config using defined restrictions and potentialy complete
+		for tied_unit_name in tied_unit_names:
+
+			# Customization means also, that we can request multiple t2 views
+			# of the same t2 unit with different config
+			custom_dependencies = [el for el in t2_deps if el.unit == tied_unit_name]
+
+			if not custom_dependencies:
+				ret.append(UnitModel(unit=tied_unit_name))
+				continue
+
+			ret.extend(custom_dependencies)
+
+		return ret
