@@ -180,6 +180,7 @@ def photopoint(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> DataPoint:
 @upgrade("ampel.base.LightCurve.LightCurve")
 def lightcurve(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> LightCurve:
     return LightCurve(
+        stock_id=bytes(kwargs["stock_id"]),
         compound_id=bytes(kwargs["compound_id"]),
         photopoints=kwargs["ppo_list"],
         upperlimits=kwargs["ulo_list"],
