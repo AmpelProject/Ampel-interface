@@ -11,12 +11,13 @@ from setuptools import setup, find_namespace_packages
 
 setup(
 	name='ampel-interface',
-	version='0.7',
+	version='0.7.1a0',
 	packages=find_namespace_packages(),
 	package_data = {
 		'': ['py.typed'],
 		'conf': ['*.conf', '**/*.conf', '**/**/*.conf']
 	},
+	python_requires='>=3.8',
 	install_requires = [
 		'pydantic==1.4',
 		'pymongo>=3.10,<4.0'
