@@ -4,13 +4,14 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 11.03.2020
-# Last Modified Date: 11.02.2021
+# Last Modified Date: 16.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Dict, Any, Union, Optional
 from ampel.base import abstractmethod
 from ampel.type import T2UnitResult
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
+from ampel.model.StateT2Dependency import StateT2Dependency
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.view.T2DocView import T2DocView
@@ -22,6 +23,8 @@ class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	Run method features the additional parameter 't2_records' which should contain
 	prerequisite T2 results (`T2Records <ampel.content.T2Record.T2Record>`)
 	"""
+
+	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
 
 	@staticmethod
 	@abstractmethod(force=True)
