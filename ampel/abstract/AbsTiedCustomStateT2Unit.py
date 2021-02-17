@@ -4,13 +4,14 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 03.04.2020
-# Last Modified Date: 11.02.2021
+# Last Modified Date: 16.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Generic, Iterable, Sequence, Dict, Any, Union, Optional
 from ampel.type import T, T2UnitResult
 from ampel.base import abstractmethod
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
+from ampel.model.StateT2Dependency import StateT2Dependency
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.view.T2DocView import T2DocView
@@ -24,6 +25,8 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 
 	Known sub-classes: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`
 	"""
+
+	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
 
 	# Note: we want to enforce the implementation of an abstract *class method*
 	# and hence have purposely omitted the first reflective argument
