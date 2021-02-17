@@ -4,13 +4,11 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.02.2021
-# Last Modified Date: 13.02.2021
+# Last Modified Date: 17.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import List, Optional, Dict, Any, Type
-from pydantic import validator
+from typing import List, Optional, Dict, Any, Type, Union
 from ampel.type import StockId
-from ampel.core import UnitLoader
 from ampel.model.StrictModel import StrictModel
 from ampel.abstract.AbsIdMapper import AbsIdMapper
 
@@ -101,15 +99,9 @@ class PlotProperties(StrictModel):
 	width: Optional[int]
 	height: Optional[int]
 	compress: Optional[int]
-	id_mapper: Optional[Type[AbsIdMapper]]
+	id_mapper: Optional[Union[str, Type[AbsIdMapper]]]
 	disk_save: Optional[str] # Local folder path
 
-
-	@validator('id_mapper', pre=True)
-	def load_id_mapper(cls, v) -> Type[AbsIdMapper]:
-		if isinstance(v, str):
-			return UnitLoader.get_aux_class(v, sub_type=AbsIdMapper)
-		return v
 
 	# TODO: implement other validators ?:
 	# - for title and file_name: if FormatModel.arg_keys then format_str must contain '%s'
@@ -142,6 +134,10 @@ class PlotProperties(StrictModel):
 
 		if self.id_mapper is None:
 			return str(ampel_id)
+
+		if isinstance(self.id_mapper, str):
+			from ampel.core import UnitLoader
+			self.id_mapper = UnitLoader.get_aux_class(self.id_mapper, sub_type=AbsIdMapper)
 
 		return self.id_mapper.to_ext_id(ampel_id)
 
