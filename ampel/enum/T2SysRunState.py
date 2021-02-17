@@ -35,6 +35,7 @@ class T2SysRunState(IntEnum): # cannot subclass T2RunState unfortunately
 	UNKNOWN_LINK              = -9
 	UNKNOWN_CONFIG            = -10
 	MISSING_DEPENDENCY        = -11
+	BAD_DEPENDENCY_CONFIG     = -12
 
 	# Copied from T2RunState
 	# -> python does not support enum inheritance
