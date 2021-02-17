@@ -11,6 +11,7 @@ from typing import List, Optional, Dict, Any, Type, Union
 from ampel.type import StockId
 from ampel.model.StrictModel import StrictModel
 from ampel.abstract.AbsIdMapper import AbsIdMapper
+from ampel.base.AuxUnitRegister import AuxUnitRegister
 
 
 class FormatModel(StrictModel):
@@ -136,8 +137,7 @@ class PlotProperties(StrictModel):
 			return str(ampel_id)
 
 		if isinstance(self.id_mapper, str):
-			from ampel.core import UnitLoader
-			self.id_mapper = UnitLoader.get_aux_class(self.id_mapper, sub_type=AbsIdMapper)
+			self.id_mapper = AuxUnitRegister.get_aux_class(self.id_mapper, sub_type=AbsIdMapper)
 
 		return self.id_mapper.to_ext_id(ampel_id)
 
