@@ -17,7 +17,10 @@ setup(
 		'': ['py.typed'],
 		'conf': ['*.conf', '**/*.conf', '**/**/*.conf']
 	},
-	install_requires = ['pydantic==1.4'],
+	install_requires = [
+		'pydantic==1.4',
+		'pymongo>=3.10,<4.0'
+	],
 	extras_require = {
 		"testing": [
 			"pytest>=6.2.1,<6.3",
