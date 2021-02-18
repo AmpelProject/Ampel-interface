@@ -95,6 +95,7 @@ class PlotProperties(StrictModel):
 
 	file_name: FormatModel
 	title: Optional[FormatModel]
+	fig_include_title: Optional[bool]
 	fig_text: Optional[FormatModel] # for matplotlib
 	tags: Optional[List[str]]
 	width: Optional[int]
