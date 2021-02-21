@@ -26,7 +26,7 @@ def gendocstring(klass):
 	~~~~~~~~~~~~~
 	
 		from pydantic import BaseModel
-		from ampel.utils.docstringutils import gendocstring
+		from ampel.util.docstringutils import gendocstring
 	
 		@gendocstring
 		class MyConfig(BaseModel):
