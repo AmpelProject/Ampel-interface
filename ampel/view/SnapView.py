@@ -14,7 +14,7 @@ from ampel.type import StockId
 from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.content.T2Document import T2Document
-from ampel.content.StockRecord import StockRecord
+from ampel.content.StockDocument import StockDocument
 from ampel.content.LogRecord import LogRecord
 from ampel.content.JournalRecord import JournalRecord
 
@@ -36,7 +36,7 @@ class SnapView:
 
 	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra", "_frozen"
 
-	stock: Optional[StockRecord] #: Stock record, if loaded
+	stock: Optional[StockDocument] #: Stock record, if loaded
 	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
 	t1: Optional[Sequence[Compound]] #: Compounds, if loaded
 	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
@@ -45,7 +45,7 @@ class SnapView:
 
 	def __init__(self,
 		id: StockId,
-		stock: Optional[StockRecord] = None,
+		stock: Optional[StockDocument] = None,
 		t0: Optional[Sequence[DataPoint]] = None,
 		t1: Optional[Sequence[Compound]] = None,
 		t2: Optional[Sequence[T2Document]] = None,

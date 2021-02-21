@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/content/StockRecord.py
+# File              : Ampel-interface/ampel/content/StockDocument.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 28.12.2019
-# Last Modified Date: 17.06.2020
+# Last Modified Date: 21.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Any, Sequence, Union, Optional, Dict, TypedDict
@@ -12,17 +12,17 @@ from ampel.type import StockId, ChannelId
 from ampel.content.JournalRecord import JournalRecord
 
 
-class StockRecord(TypedDict):
+class StockDocument(TypedDict):
 	"""
 	An object being observed.
-	
+
 	The stock record ties together data from various sources, selected by
 	various channels, but all related to the same underlying object. Each
 	channel has a different view of the stock. From the perspective of a given
 	channel, the stock is created the first time one of its datapoints is
 	selected by the channel. Likewise, it is modified whenever a new datapoint
 	is selected by the channel.
-	
+
 	This is a dict containing 1 or more of the following items:
 	"""
 	_id: StockId

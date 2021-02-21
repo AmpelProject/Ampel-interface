@@ -19,7 +19,7 @@ class T2Document(TypedDict, total=False):
 	"""
 	Specifications for tier2 documents stored as BSON structures in the ampel DB.
 	Calculations of the associated t2 unit is performed based on ampel data referenced by the attribute 'link'.
-	Linked input data type can be either :class:`~ampel.content.StockRecord.StockRecord`,
+	Linked input data type can be either :class:`~ampel.content.StockDocument.StockDocument`,
 	:class:`~ampel.content.DataPoint.DataPoint`, or :class:`~ampel.content.Compound.Compound`.
 	"""
 
