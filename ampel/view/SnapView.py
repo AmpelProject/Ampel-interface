@@ -15,7 +15,7 @@ from ampel.content.DataPoint import DataPoint
 from ampel.content.Compound import Compound
 from ampel.content.T2Document import T2Document
 from ampel.content.StockDocument import StockDocument
-from ampel.content.LogRecord import LogRecord
+from ampel.content.LogDocument import LogDocument
 from ampel.content.JournalRecord import JournalRecord
 
 
@@ -40,7 +40,7 @@ class SnapView:
 	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
 	t1: Optional[Sequence[Compound]] #: Compounds, if loaded
 	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
-	log: Optional[Sequence[LogRecord]] #: Event logs, if loaded
+	log: Optional[Sequence[LogDocument]] #: Event logs, if loaded
 	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.t3.complement.AbsT3DataAppender.AbsT3DataAppender`
 
 	def __init__(self,
@@ -49,7 +49,7 @@ class SnapView:
 		t0: Optional[Sequence[DataPoint]] = None,
 		t1: Optional[Sequence[Compound]] = None,
 		t2: Optional[Sequence[T2Document]] = None,
-		log: Optional[Sequence[LogRecord]] = None,
+		log: Optional[Sequence[LogDocument]] = None,
 		extra: Optional[Dict[str, Any]] = None,
 		freeze: bool = True
 	):
