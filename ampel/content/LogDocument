@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/content/LogRecord.py
+# File              : Ampel-interface/ampel/content/LogDocument.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 14.02.2020
@@ -10,7 +10,7 @@
 from typing import Sequence, Union, Optional, Any, Dict, TypedDict
 from ampel.type import ChannelId, StockId
 
-class LogRecord(TypedDict, total=False):
+class LogDocument(TypedDict, total=False):
 	"""
 	A message produced by an Ampel unit during processing.
 
