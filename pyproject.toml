@@ -26,11 +26,16 @@ packages = [
 python = "^3.8"
 pydantic = "~1.4"
 pymongo = "^3.10"
+Sphinx = {version = "^3.5.1", optional = true}
+sphinx-autodoc-typehints = {version = "^1.11.1", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"
 pytest-cov = "^2.11.1"
 mypy = "^0.800"
+
+[tool.poetry.extras]
+docs = ["Sphinx", "sphinx-autodoc-typehints"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
