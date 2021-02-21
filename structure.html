@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Structure &#8212; Ampel-interface 0.7.0a0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api.html" />
+    <link rel="prev" title="Indices and tables" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Indices and tables"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Ampel-interface 0.7.0a0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Structure</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="structure">
+<h1>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="units">
+<span id="structure-units"></span><h2>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h2>
+<p>Nearly all of Ampel’s functionality is implemented in <cite>units</cite>. A <cite>unit</cite> is a class that:</p>
+<ul class="simple">
+<li><p>Inherits from <a class="reference internal" href="api.html#ampel.base.AmpelBaseModel.AmpelBaseModel" title="ampel.base.AmpelBaseModel.AmpelBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmpelBaseModel</span></code></a>, and uses annotations to declare the allowed types and default values of is instance variables (which are also keyword arguments to its constructor), and</p></li>
+<li><p>Is registered in the <cite>unit</cite> section of the Ampel configuration file.</p></li>
+</ul>
+<p>The configuration of a unit is specified by a <a class="reference internal" href="api.html#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitModel</span></code></a>. When <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitLoader</span></code> uses a <a class="reference internal" href="api.html#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitModel</span></code></a> to instantiate a unit, it:</p>
+<ul class="simple">
+<li><p>Looks up the unit class in the Ampel configuration</p></li>
+<li><p>Checks that it is a subclass of the requested type</p></li>
+<li><p>Resolves the configuration if it is an alias, and updates it with the contents of <cite>override</cite></p></li>
+<li><p>Finally, instantiates the class with the entries of the combined configuration dict as keyword arguments.</p></li>
+</ul>
+<p>For some classes, the configuration dict includes more items than are specified directly in the <a class="reference internal" href="api.html#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitModel</span></code></a>:</p>
+<ul>
+<li><p>Subclasses of <a class="reference internal" href="api.html#ampel.base.DataUnit.DataUnit" title="ampel.base.DataUnit.DataUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataUnit</span></code></a> have the following additional properties:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#ampel.base.DataUnit.DataUnit.resource" title="ampel.base.DataUnit.DataUnit.resource"><code class="xref py py-attr docutils literal notranslate"><span class="pre">resource</span></code></a>, a subset of the <cite>resources</cite> section of the Ampel configuration. The keys are specified by entries in the class variable <a class="reference internal" href="api.html#ampel.base.DataUnit.DataUnit.require" title="ampel.base.DataUnit.DataUnit.require"><code class="xref py py-attr docutils literal notranslate"><span class="pre">require</span></code></a>. This can be used to specify the URLs of local services like catalog databases. <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitLoader</span></code> will raise an exception if no corresponding entry exists in the <cite>resources</cite> section.</p></li>
+<li><p><a class="reference internal" href="api.html#ampel.base.DataUnit.DataUnit.logger" title="ampel.base.DataUnit.DataUnit.logger"><code class="xref py py-attr docutils literal notranslate"><span class="pre">logger</span></code></a>, an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">AmpelLogger</span></code>.</p></li>
+</ul>
+<p>All T0, T2, and T3 units are <a class="reference internal" href="api.html#ampel.base.DataUnit.DataUnit" title="ampel.base.DataUnit.DataUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataUnits</span></code></a>.</p>
+</li>
+<li><p>Subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">AdminUnit</span></code> has one additional property:</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">context</span></code>, the complete Ampel configuration, Mongo database connection, etc.</p></li>
+</ul>
+<p>Contributed plugins will not typically provide these.</p>
+</li>
+<li><p>All subclasses of <a class="reference internal" href="api.html#ampel.base.AmpelBaseModel.AmpelBaseModel" title="ampel.base.AmpelBaseModel.AmpelBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AmpelBaseModel</span></code></a> can have <a class="reference internal" href="api.html#ampel.model.Secret.Secret" title="ampel.model.Secret.Secret"><code class="xref py py-class docutils literal notranslate"><span class="pre">Secret</span></code></a> fields:</p>
+<ul>
+<li><p>If any of the unit’s fields are of type <a class="reference internal" href="api.html#ampel.model.Secret.Secret" title="ampel.model.Secret.Secret"><code class="xref py py-class docutils literal notranslate"><span class="pre">Secret</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitLoader</span></code> will look up its value from the configured <a class="reference internal" href="api.html#ampel.abstract.AbsSecretProvider.AbsSecretProvider" title="ampel.abstract.AbsSecretProvider.AbsSecretProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbsSecretProvider</span></code></a>.</p></li>
+<li><p>Use <a class="reference internal" href="api.html#ampel.model.Secret.Secret" title="ampel.model.Secret.Secret"><code class="xref py py-class docutils literal notranslate"><span class="pre">Secret</span></code></a> fields for sensitive information like passwords or bearer tokens.</p></li>
+<li><p><a class="reference internal" href="api.html#ampel.model.Secret.Secret" title="ampel.model.Secret.Secret"><code class="xref py py-class docutils literal notranslate"><span class="pre">Secret</span></code></a> fields can have a default value of the form <code class="docutils literal notranslate"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;name_of_secret&quot;}</span></code>, specifying the name of the secret to use by default. If there is no default, the unit configuration must specify a value.</p></li>
+<li><p>When running parts of Ampel manually, you will usually provide the <a class="reference internal" href="api.html#ampel.abstract.AbsSecretProvider.AbsSecretProvider" title="ampel.abstract.AbsSecretProvider.AbsSecretProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbsSecretProvider</span></code></a> as the <cite>secrets</cite> argument to <code class="xref py py-class docutils literal notranslate"><span class="pre">AmpelContext</span></code>, for example via <code class="xref py py-class docutils literal notranslate"><span class="pre">DictSecretProvider.load()</span></code>. For example, using <code class="xref py py-class docutils literal notranslate"><span class="pre">DevAmpelContext</span></code> to override some of the configuration parameters from <code class="docutils literal notranslate"><span class="pre">config.yml</span></code>, and taking secrets from <code class="docutils literal notranslate"><span class="pre">secrets.yaml</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ampel.dev.DevAmpelContext</span> <span class="kn">import</span> <span class="n">DevAmpelContext</span>
+<span class="kn">from</span> <span class="nn">ampel.dev.DictSecretProvider</span> <span class="kn">import</span> <span class="n">DictSecretProvider</span>
+<span class="kn">from</span> <span class="nn">ampel.model.UnitModel</span> <span class="kn">import</span> <span class="n">UnitModel</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="n">DevAmpelContext</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="s1">&#39;config.yml&#39;</span><span class="p">,</span>
+    <span class="n">secrets</span><span class="o">=</span><span class="n">DictSecretProvider</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;secrets.yaml&#39;</span><span class="p">),</span>
+    <span class="n">db_prefix</span><span class="o">=</span><span class="s1">&#39;AmpelSmokeTest&#39;</span><span class="p">,</span>
+    <span class="n">custom_conf</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;resource.catsHTM&#39;</span><span class="p">:</span> <span class="s1">&#39;tcp://127.0.0.1:27020&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;resource.extcats&#39;</span><span class="p">:</span> <span class="s1">&#39;mongodb://localhost:27018&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;resource.mongo&#39;</span><span class="p">:</span> <span class="s1">&#39;mongodb://localhost:27019&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">context</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">secrets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_of_secret&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="tiers">
+<span id="structure-tiers"></span><h2>Tiers<a class="headerlink" href="#tiers" title="Permalink to this headline">¶</a></h2>
+<p>Data processing is divided into 4 tiers.</p>
+<div class="section" id="tier-0-add">
+<span id="structure-t0"></span><h3>Tier 0: Add<a class="headerlink" href="#tier-0-add" title="Permalink to this headline">¶</a></h3>
+<p>Ingest (or reject) incoming <a class="reference internal" href="api.html#ampel.content.DataPoint.DataPoint" title="ampel.content.DataPoint.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoints</span></code></a>.</p>
+</div>
+<div class="section" id="tier-1-combine">
+<span id="structure-t1"></span><h3>Tier 1: Combine<a class="headerlink" href="#tier-1-combine" title="Permalink to this headline">¶</a></h3>
+<p>Creates <a class="reference internal" href="api.html#ampel.content.Compound.Compound" title="ampel.content.Compound.Compound"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compounds</span></code></a> documents, sometimes referred to as ‘states’, based on collections of <a class="reference internal" href="api.html#ampel.content.DataPoint.DataPoint" title="ampel.content.DataPoint.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoints</span></code></a>.</p>
+</div>
+<div class="section" id="tier-2-compute">
+<span id="structure-t2"></span><h3>Tier 2: Compute<a class="headerlink" href="#tier-2-compute" title="Permalink to this headline">¶</a></h3>
+<p>Compute derived quantities from newly added <code class="xref py py-class docutils literal notranslate"><span class="pre">StockRecords</span></code>, <a class="reference internal" href="api.html#ampel.content.DataPoint.DataPoint" title="ampel.content.DataPoint.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoints</span></code></a>, and <a class="reference internal" href="api.html#ampel.content.Compound.Compound" title="ampel.content.Compound.Compound"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compounds</span></code></a>.</p>
+</div>
+<div class="section" id="tier-3-react">
+<span id="structure-t3"></span><h3>Tier 3: React<a class="headerlink" href="#tier-3-react" title="Permalink to this headline">¶</a></h3>
+<p>Perform action based on collections of Ampel objects.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ampel.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Indices and tables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API reference</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Indices and tables"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Ampel-interface 0.7.0a0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Structure</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+    </div>
+  </body>
+</html>

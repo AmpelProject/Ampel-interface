@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ampel.content.T2Record &#8212; Ampel-interface 0.7.0a0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Ampel-interface 0.7.0a0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.content.T2Record</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ampel.content.T2Record</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># File              : Ampel-interface/ampel/content/T2Record.py</span>
+<span class="c1"># License           : BSD-3-Clause</span>
+<span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+<span class="c1"># Date              : 13.01.2018</span>
+<span class="c1"># Last Modified Date: 12.02.2021</span>
+<span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
+
+
+<div class="viewcode-block" id="T2Record"><a class="viewcode-back" href="../../../api.html#ampel.content.T2Record.T2Record">[docs]</a><span class="k">class</span> <span class="nc">T2Record</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Dict crafted by :class:`~ampel.t2.T2Processor.T2Processor` based on return</span>
+<span class="sd">	value from t2 base unit, which can be either:</span>
+<span class="sd">	- a BSON serializable-dict,</span>
+<span class="sd">	- a :class:`~ampel.struct.T2BroadUnitResult.T2BroadUnitResult`,</span>
+<span class="sd">	- a standardized status: :class:`~ampel.t2.T2RunState.T2RunState` (negative number).</span>
+<span class="sd">	- a positive number as unit-specific status</span>
+
+<span class="sd">	This is a dict containing 1 or more of the following items:</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1"># str is allowed to enable digest based version info</span>
+	<span class="n">version</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
+	<span class="c1">#: UNIX epoch when :meth:`run` was invoked</span>
+	<span class="n">ts</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+	<span class="c1">#: Duration of :meth:`run`, in seconds</span>
+	<span class="n">duration</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+	<span class="c1">#: Identifier of the :class:`~ampel.t2.T2Processor.T2Processor` invocation</span>
+	<span class="c1">#: that created this</span>
+	<span class="n">run</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: An integer &#39;status&#39; can be returned by t2 units instead of a payload dict.</span>
+	<span class="c1">#: Negative numbers shall be of :class:`~ampel.t2.T2RunState.T2RunState`</span>
+	<span class="c1">#: Positive numbers are for T2-unit-specific status</span>
+	<span class="n">status</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: Human-readable explanation of the reason for a potential error.</span>
+	<span class="n">msg</span><span class="p">:</span> <span class="nb">str</span>
+
+	<span class="c1">#: True if the t2 result contained a :class:`~ampel.struct.JournalTweak.JournalTweak`</span>
+	<span class="n">jup</span><span class="p">:</span> <span class="nb">bool</span>
+
+	<span class="c1">#: Payload returned by :meth:`run`.</span>
+	<span class="n">result</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/ampel.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Ampel-interface 0.7.0a0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.content.T2Record</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+    </div>
+  </body>
+</html>
