@@ -13,7 +13,7 @@ from typing import Union, TypedDict, Dict, List, Any
 class T2Record(TypedDict, total=False):
 	"""
 	Dict crafted by :class:`~ampel.t2.T2Processor.T2Processor` based on return
-	value from t2 base unit, which can be either
+	value from t2 base unit, which can be either:
 	- a BSON serializable-dict,
 	- a :class:`~ampel.struct.T2BroadUnitResult.T2BroadUnitResult`,
 	- a standardized status: :class:`~ampel.t2.T2RunState.T2RunState` (negative number).
