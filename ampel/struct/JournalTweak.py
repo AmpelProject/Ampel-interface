@@ -21,6 +21,13 @@ class JournalTweak:
 
 	__slots__ = "tag", "status", "extra"
 
+	#: status code of the executed process
+	status: Optional[int]
+	#: journal entry tag(s)
+	tag: Optional[Union[Tag, Sequence[Tag]]]
+	#: if provided, will be included as-is under the journal root key 'extra'
+	extra: Optional[Dict[str, Any]]
+
 	def __init__(self,
 		status: Optional[int] = None,
 		tag: Optional[Union[Tag, Sequence[Tag]]] = None,

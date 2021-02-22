@@ -47,33 +47,39 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 
 	def get_t2_dependencies(self) -> Sequence[UnitModel]:
 		"""
-		In []:
-		...: import logging
-		...: class A(AbsTiedT2Unit):
-		...:     @classmethod
-		...:     def get_tied_unit_names(cls):
-		...:         return ['T2Unit1']
+		Get the dependencies of this instance, raising an exception if the
+		configured values are incompatible with the expectations from :func:`get_tied_unit_names`.
+	
+		Examples::
+		  
+		  In []:
+		  ...: import logging
+		  ...: class A(AbsTiedT2Unit):
+		  ...:     @classmethod
+		  ...:     def get_tied_unit_names(cls):
+		  ...:         return ['T2Unit1']
 
-		In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit1", "config": 123})
-		In []: a.get_t2_dependencies()
-		Out[]: [UnitModel(unit='T2TTT', config=123, override=None)]
+		  In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit1", "config": 123})
+		  In []: a.get_t2_dependencies()
+		  Out[]: [UnitModel(unit='T2Unit1, config=123, override=None)]
 
-		In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit2", "config": 123})
-		---------------------------------------------------------------------------
-		BadConfig: Unit T2Unit2 is not compatible with tied unit A
+		  In []: a = A(logger=logging.getLogger(), t2_dependency={"unit": "T2Unit2", "config": 123})
+		  BadConfig: Unit T2Unit2 is not compatible with tied unit A
 
-		In []:
-		...: class B(AbsTiedT2Unit):
-		...:     t2_dependency: Sequence[StateT2Dependency]
-		...:     @classmethod
-		...:     def get_tied_unit_names(cls):
-		...:         return ['T2Unit1', 'T2Unit2']
-
-		In []: b = B(logger=logging.getLogger(), t2_dependency=[{"unit": "T2Unit1", "config": 123}])
-		In []: b.get_t2_dependencies()
-		Out[]:
-		[StateT2Dependency(unit='T2Unit1', config=123, override=None, link_override=None),
-		UnitModel(unit='T2Unit2', config=None, override=None)]
+		::
+		  
+		  In []:
+		  ...: class B(AbsTiedT2Unit):
+		  ...:     t2_dependency: Sequence[StateT2Dependency]
+		  ...:     @classmethod
+		  ...:     def get_tied_unit_names(cls):
+		  ...:         return ['T2Unit1', 'T2Unit2']
+  
+		  In []: b = B(logger=logging.getLogger(), t2_dependency=[{"unit": "T2Unit1", "config": 123}])
+		  In []: b.get_t2_dependencies()
+		  Out[]:
+		  [StateT2Dependency(unit='T2Unit1', config=123, override=None, link_override=None),
+		  UnitModel(unit='T2Unit2', config=None, override=None)]
 		"""
 
 		# No config, use defaults

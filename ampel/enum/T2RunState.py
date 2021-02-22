@@ -14,8 +14,9 @@ class T2RunState(IntEnum):
 	"""
 	Status values usable by T2 units (along with any positive value)
 	Potential state of:
-		- :class:`~ampel.content.T2Document.T2Document`
-		- :class:`~ampel.content.T2Record.T2Record`
+	
+	- :class:`~ampel.content.T2Document.T2Document`
+	- :class:`~ampel.content.T2Record.T2Record`
 	"""
 
 	COMPLETED                 = 0

@@ -50,7 +50,7 @@ class T2Document(TypedDict, total=False):
 	#: Identifier of the process that created this record
 	run: Union[int, Sequence[int]]
 
-	#: A member of :class:`~ampel.t2.T2RunState.T2RunState`
+	#: A member of :class:`~ampel.enum.T2RunState.T2RunState`
 	status: int
 
 	#: value(s) returned by T2 unit execution(s)
