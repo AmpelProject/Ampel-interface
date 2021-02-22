@@ -82,33 +82,39 @@
 
 <div class="viewcode-block" id="AbsTiedT2Unit.get_t2_dependencies"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.get_t2_dependencies">[docs]</a>	<span class="k">def</span> <span class="nf">get_t2_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">UnitModel</span><span class="p">]:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		In []:</span>
-<span class="sd">		...: import logging</span>
-<span class="sd">		...: class A(AbsTiedT2Unit):</span>
-<span class="sd">		...:     @classmethod</span>
-<span class="sd">		...:     def get_tied_unit_names(cls):</span>
-<span class="sd">		...:         return [&#39;T2Unit1&#39;]</span>
+<span class="sd">		Get the dependencies of this instance, raising an exception if the</span>
+<span class="sd">		configured values are incompatible with the expectations from :func:`get_tied_unit_names`.</span>
+<span class="sd">	</span>
+<span class="sd">		Examples::</span>
+<span class="sd">		  </span>
+<span class="sd">		  In []:</span>
+<span class="sd">		  ...: import logging</span>
+<span class="sd">		  ...: class A(AbsTiedT2Unit):</span>
+<span class="sd">		  ...:     @classmethod</span>
+<span class="sd">		  ...:     def get_tied_unit_names(cls):</span>
+<span class="sd">		  ...:         return [&#39;T2Unit1&#39;]</span>
 
-<span class="sd">		In []: a = A(logger=logging.getLogger(), t2_dependency={&quot;unit&quot;: &quot;T2Unit1&quot;, &quot;config&quot;: 123})</span>
-<span class="sd">		In []: a.get_t2_dependencies()</span>
-<span class="sd">		Out[]: [UnitModel(unit=&#39;T2TTT&#39;, config=123, override=None)]</span>
+<span class="sd">		  In []: a = A(logger=logging.getLogger(), t2_dependency={&quot;unit&quot;: &quot;T2Unit1&quot;, &quot;config&quot;: 123})</span>
+<span class="sd">		  In []: a.get_t2_dependencies()</span>
+<span class="sd">		  Out[]: [UnitModel(unit=&#39;T2Unit1, config=123, override=None)]</span>
 
-<span class="sd">		In []: a = A(logger=logging.getLogger(), t2_dependency={&quot;unit&quot;: &quot;T2Unit2&quot;, &quot;config&quot;: 123})</span>
-<span class="sd">		---------------------------------------------------------------------------</span>
-<span class="sd">		BadConfig: Unit T2Unit2 is not compatible with tied unit A</span>
+<span class="sd">		  In []: a = A(logger=logging.getLogger(), t2_dependency={&quot;unit&quot;: &quot;T2Unit2&quot;, &quot;config&quot;: 123})</span>
+<span class="sd">		  BadConfig: Unit T2Unit2 is not compatible with tied unit A</span>
 
-<span class="sd">		In []:</span>
-<span class="sd">		...: class B(AbsTiedT2Unit):</span>
-<span class="sd">		...:     t2_dependency: Sequence[StateT2Dependency]</span>
-<span class="sd">		...:     @classmethod</span>
-<span class="sd">		...:     def get_tied_unit_names(cls):</span>
-<span class="sd">		...:         return [&#39;T2Unit1&#39;, &#39;T2Unit2&#39;]</span>
-
-<span class="sd">		In []: b = B(logger=logging.getLogger(), t2_dependency=[{&quot;unit&quot;: &quot;T2Unit1&quot;, &quot;config&quot;: 123}])</span>
-<span class="sd">		In []: b.get_t2_dependencies()</span>
-<span class="sd">		Out[]:</span>
-<span class="sd">		[StateT2Dependency(unit=&#39;T2Unit1&#39;, config=123, override=None, link_override=None),</span>
-<span class="sd">		UnitModel(unit=&#39;T2Unit2&#39;, config=None, override=None)]</span>
+<span class="sd">		::</span>
+<span class="sd">		  </span>
+<span class="sd">		  In []:</span>
+<span class="sd">		  ...: class B(AbsTiedT2Unit):</span>
+<span class="sd">		  ...:     t2_dependency: Sequence[StateT2Dependency]</span>
+<span class="sd">		  ...:     @classmethod</span>
+<span class="sd">		  ...:     def get_tied_unit_names(cls):</span>
+<span class="sd">		  ...:         return [&#39;T2Unit1&#39;, &#39;T2Unit2&#39;]</span>
+<span class="sd">  </span>
+<span class="sd">		  In []: b = B(logger=logging.getLogger(), t2_dependency=[{&quot;unit&quot;: &quot;T2Unit1&quot;, &quot;config&quot;: 123}])</span>
+<span class="sd">		  In []: b.get_t2_dependencies()</span>
+<span class="sd">		  Out[]:</span>
+<span class="sd">		  [StateT2Dependency(unit=&#39;T2Unit1&#39;, config=123, override=None, link_override=None),</span>
+<span class="sd">		  UnitModel(unit=&#39;T2Unit2&#39;, config=None, override=None)]</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 
 		<span class="c1"># No config, use defaults</span>

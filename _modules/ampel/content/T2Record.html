@@ -49,9 +49,10 @@
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Dict crafted by :class:`~ampel.t2.T2Processor.T2Processor` based on return</span>
 <span class="sd">	value from t2 base unit, which can be either:</span>
+
 <span class="sd">	- a BSON serializable-dict,</span>
 <span class="sd">	- a :class:`~ampel.struct.T2BroadUnitResult.T2BroadUnitResult`,</span>
-<span class="sd">	- a standardized status: :class:`~ampel.t2.T2RunState.T2RunState` (negative number).</span>
+<span class="sd">	- a standardized status: :class:`~ampel.enum.T2RunState.T2RunState` (negative number).</span>
 <span class="sd">	- a positive number as unit-specific status</span>
 
 <span class="sd">	This is a dict containing 1 or more of the following items:</span>
@@ -70,7 +71,7 @@
 	<span class="n">run</span><span class="p">:</span> <span class="nb">int</span>
 
 	<span class="c1">#: An integer &#39;status&#39; can be returned by t2 units instead of a payload dict.</span>
-	<span class="c1">#: Negative numbers shall be of :class:`~ampel.t2.T2RunState.T2RunState`</span>
+	<span class="c1">#: Negative numbers shall be of :class:`~ampel.enum.T2RunState.T2RunState`</span>
 	<span class="c1">#: Positive numbers are for T2-unit-specific status</span>
 	<span class="n">status</span><span class="p">:</span> <span class="nb">int</span>
 

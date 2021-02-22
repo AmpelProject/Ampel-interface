@@ -49,17 +49,29 @@
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	A record of activity on a stock.</span>
 
+<span class="sd">	.. seealso:: :class:`~ampel.struct.JournalTweak.JournalTweak`</span>
+
 <span class="sd">	This is a dict containing 1 or more of the following items:</span>
 <span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1">#: Tier of the associated process</span>
 	<span class="n">tier</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+	<span class="c1">#: UNIX epoch of the activity</span>
 	<span class="n">ts</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+	<span class="c1">#: Channels associated with the activity</span>
 	<span class="n">channel</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]]</span>
+	<span class="c1">#: Name of the associated process</span>
 	<span class="n">process</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+	<span class="c1">#: Free-form labels</span>
 	<span class="n">tag</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tag</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]</span>
+	<span class="c1">#: Status code of the associated process</span>
 	<span class="n">status</span><span class="p">:</span> <span class="nb">int</span>
+	<span class="c1">#: id of the unit associated with this record</span>
 	<span class="n">unit</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+	<span class="c1">#: id of the document associated with the invocation</span>
 	<span class="n">doc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+	<span class="c1">#: run(s) associated with this record</span>
 	<span class="n">run</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+	<span class="c1">#: Free-form information</span>
 	<span class="n">extra</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
 </pre></div>
 

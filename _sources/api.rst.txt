@@ -95,6 +95,16 @@ Data classes
   :members:
   :undoc-members:
 
+.. autoclass:: ampel.struct.T2BroadUnitResult.T2BroadUnitResult
+  :members:
+  :undoc-members:
+  :private-members:
+
+.. autoclass:: ampel.enum.T2RunState.T2RunState
+  :members:
+  :undoc-members:
+  :private-members:
+
 .. autoclass:: ampel.view.SnapView.SnapView
   :members:
 
