@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.02.2021
-# Last Modified Date: 17.02.2021
+# Last Modified Date: 22.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import List, Optional, Dict, Any, Type, Union
@@ -103,6 +103,7 @@ class PlotProperties(StrictModel):
 	compress: Optional[int]
 	id_mapper: Optional[Union[str, Type[AbsIdMapper]]]
 	disk_save: Optional[str] # Local folder path
+	mpl_kwargs: Optional[Dict[str, Any]]
 
 
 	# TODO: implement other validators ?:
