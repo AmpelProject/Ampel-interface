@@ -37,8 +37,8 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 					raise BadConfig(f"Unit %s is not compatible with tied unit {self.__class__.__name__}" % t2_dep.unit)
 
 
-	@abstractmethod
 	@classmethod
+	@abstractmethod
 	def get_tied_unit_names(cls) -> Optional[List[str]]:
 		"""
 		If None, all unit names are accepted.
