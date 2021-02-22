@@ -56,7 +56,7 @@ of a given transient, but only for the one fulfilling the selection criteria bel
 </ul>
 <dl class="py method">
 <dt id="ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.run" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returned object should contain computed science results to be saved into the DB.
 Notes: dict must have only string keys and values must be bson encodable</p>
 <dl class="field-list simple">
@@ -75,7 +75,7 @@ Notes: dict must have only string keys and values must be bson encodable</p>
 <p>Top level abstract class for t2 units bound to transient doc</p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStockT2Unit.html#AbsStockT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.run" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStockT2Unit.html#AbsStockT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returned object should contain computed science results to be saved into the DB.
 Note: dict must have only string keys</p>
 <dl class="field-list simple">
@@ -94,7 +94,7 @@ Note: dict must have only string keys</p>
 <p>Top level abstract class for T2 units depending on other T2 units.</p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.get_tied_unit_names">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_tied_unit_names</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedT2Unit.html#AbsTiedT2Unit.get_tied_unit_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.get_tied_unit_names" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_tied_unit_names</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedT2Unit.html#AbsTiedT2Unit.get_tied_unit_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.get_tied_unit_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>If None, all unit names are accepted.
 ex: return [“T2CatalogMatch”]</p>
 <dl class="field-list simple">
@@ -157,7 +157,7 @@ Run method features the additional parameter ‘t2_records’ which should conta
 prerequisite T2 results (<cite>T2Records &lt;ampel.content.T2Record.T2Record&gt;</cite>)</p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
 and if ‘link_override’ is defined in there.</p>
 <p>T2Processor needs to retrieve the T2Records of units tied with this unit.
@@ -181,7 +181,7 @@ than the one registered as ‘link’ in the T2Record (which is the _id of a com
 
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.run" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returned object should contain computed science results to be saved into the DB.
 Notes: dict must have only string keys and values must be bson encodable</p>
 <dl class="field-list simple">
@@ -203,7 +203,7 @@ prerequisite T2 results (<cite>T2Records &lt;ampel.content.T2Record.T2Record&gt;
 <p>Known sub-classes: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbsTiedLightCurveT2Unit</span></code></p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">build</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">build</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates the parametrized type using compound and datapoints.
 For example, AbsTiedCustomStateT2Unit[LightCurve] would return a LighCurve instance</p>
 <dl class="field-list simple">
@@ -215,7 +215,7 @@ For example, AbsTiedCustomStateT2Unit[LightCurve] would return a LighCurve insta
 
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
 and if ‘link_override’ is defined in there.</p>
 <p>T2Processor needs to retrieve the T2Records of units tied with this unit.
@@ -239,7 +239,7 @@ than the one registered as ‘link’ in the T2Record (which is the _id of a com
 
 <dl class="py method">
 <dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.run" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returned object should contain computed science results to be saved into the DB.
 Notes: dict must have string keys and values must be bson encodable</p>
 <dl class="field-list simple">
@@ -280,7 +280,7 @@ and adding the custom unit to the process configuration</p>
 </dl>
 <dl class="py method">
 <dt id="ampel.abstract.AbsT3Unit.AbsT3Unit.add">
-<code class="sig-name descname"><span class="pre">add</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT3Unit.html#AbsT3Unit.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT3Unit.AbsT3Unit.add" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">add</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT3Unit.html#AbsT3Unit.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT3Unit.AbsT3Unit.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementing T3 units get SnapView (or subclasses of SnapView) instances via this method</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -396,7 +396,7 @@ These are passed on to subclasses.</p>
 JSON file, or a complete key manager like Vault.</p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsSecretProvider.AbsSecretProvider.get">
-<code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsSecretProvider.html#AbsSecretProvider.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsSecretProvider.AbsSecretProvider.get" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsSecretProvider.html#AbsSecretProvider.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsSecretProvider.AbsSecretProvider.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch a secret by key. May raise an exception if the key is not known.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -914,47 +914,6 @@ associated with the current invocation of this unit</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="ampel.enum.T2RunState.T2RunState">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.enum.T2RunState.</span></code><code class="sig-name descname"><span class="pre">T2RunState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/enum/T2RunState.html#T2RunState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState" title="Permalink to this definition">¶</a></dt>
-<dd><p>Status values usable by T2 units (along with any positive value)
-Potential state of:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Document</span></code></a></p></li>
-<li><p><a class="reference internal" href="#ampel.content.T2Record.T2Record" title="ampel.content.T2Record.T2Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Record</span></code></a></p></li>
-</ul>
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.COMPLETED">
-<code class="sig-name descname"><span class="pre">COMPLETED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.COMPLETED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.ERROR">
-<code class="sig-name descname"><span class="pre">ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1000</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.ERROR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.MISSING_INFO">
-<code class="sig-name descname"><span class="pre">MISSING_INFO</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1001</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.MISSING_INFO" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.UNEXPECTED_DEPENDENCY">
-<code class="sig-name descname"><span class="pre">UNEXPECTED_DEPENDENCY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1002</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.UNEXPECTED_DEPENDENCY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.RERUN_REQUESTED">
-<code class="sig-name descname"><span class="pre">RERUN_REQUESTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1003</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.RERUN_REQUESTED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.enum.T2RunState.T2RunState.OUTDATED_CODE">
-<code class="sig-name descname"><span class="pre">OUTDATED_CODE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1004</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.OUTDATED_CODE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="ampel.view.SnapView.SnapView">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.view.SnapView.</span></code><code class="sig-name descname"><span class="pre">SnapView</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/view/SnapView.html#SnapView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.view.SnapView.SnapView" title="Permalink to this definition">¶</a></dt>
 <dd><p>View of a given ampel object (with unique stock id).</p>
@@ -1137,6 +1096,154 @@ sorted by timestamp.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="enums">
+<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.enum.T2SysRunState.</span></code><code class="sig-name descname"><span class="pre">T2SysRunState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/enum/T2SysRunState.html#T2SysRunState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status values between 0 and -1000 are reserved for the ampel system.
+(Typically set by ingesters or T2Processor)</p>
+<dl class="simple">
+<dt>Potential state of:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Document</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ampel.content.T2Record.T2Record" title="ampel.content.T2Record.T2Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Record</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.COMPLETED">
+<code class="sig-name descname"><span class="pre">COMPLETED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.COMPLETED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.NEW">
+<code class="sig-name descname"><span class="pre">NEW</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.NEW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.NEW_PRIO">
+<code class="sig-name descname"><span class="pre">NEW_PRIO</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-2</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.NEW_PRIO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.RUNNING">
+<code class="sig-name descname"><span class="pre">RUNNING</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-3</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.RUNNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.PENDING_DEPENDENCY">
+<code class="sig-name descname"><span class="pre">PENDING_DEPENDENCY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-4</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.PENDING_DEPENDENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.EXCEPTION">
+<code class="sig-name descname"><span class="pre">EXCEPTION</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-5</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.EXCEPTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.QUEUED">
+<code class="sig-name descname"><span class="pre">QUEUED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-6</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.QUEUED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.EXPORTED">
+<code class="sig-name descname"><span class="pre">EXPORTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-7</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.EXPORTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.TOO_MANY_TRIALS">
+<code class="sig-name descname"><span class="pre">TOO_MANY_TRIALS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-8</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.TOO_MANY_TRIALS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.UNKNOWN_LINK">
+<code class="sig-name descname"><span class="pre">UNKNOWN_LINK</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-9</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.UNKNOWN_LINK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.UNKNOWN_CONFIG">
+<code class="sig-name descname"><span class="pre">UNKNOWN_CONFIG</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-10</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.UNKNOWN_CONFIG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.MISSING_DEPENDENCY">
+<code class="sig-name descname"><span class="pre">MISSING_DEPENDENCY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-11</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.MISSING_DEPENDENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.BAD_DEPENDENCY_CONFIG">
+<code class="sig-name descname"><span class="pre">BAD_DEPENDENCY_CONFIG</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-12</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.BAD_DEPENDENCY_CONFIG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.ERROR">
+<code class="sig-name descname"><span class="pre">ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1000</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.MISSING_INFO">
+<code class="sig-name descname"><span class="pre">MISSING_INFO</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1001</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.MISSING_INFO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.UNEXPECTED_DEPENDENCY">
+<code class="sig-name descname"><span class="pre">UNEXPECTED_DEPENDENCY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1002</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.UNEXPECTED_DEPENDENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.RERUN_REQUESTED">
+<code class="sig-name descname"><span class="pre">RERUN_REQUESTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1003</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.RERUN_REQUESTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2SysRunState.T2SysRunState.OUTDATED_CODE">
+<code class="sig-name descname"><span class="pre">OUTDATED_CODE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1004</span></em><a class="headerlink" href="#ampel.enum.T2SysRunState.T2SysRunState.OUTDATED_CODE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="ampel.enum.T2RunState.T2RunState">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.enum.T2RunState.</span></code><code class="sig-name descname"><span class="pre">T2RunState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/enum/T2RunState.html#T2RunState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status values usable by T2 units (along with any positive value)
+Potential state of:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Document</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ampel.content.T2Record.T2Record" title="ampel.content.T2Record.T2Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Record</span></code></a></p></li>
+</ul>
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.COMPLETED">
+<code class="sig-name descname"><span class="pre">COMPLETED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.COMPLETED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.ERROR">
+<code class="sig-name descname"><span class="pre">ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1000</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.MISSING_INFO">
+<code class="sig-name descname"><span class="pre">MISSING_INFO</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1001</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.MISSING_INFO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.UNEXPECTED_DEPENDENCY">
+<code class="sig-name descname"><span class="pre">UNEXPECTED_DEPENDENCY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1002</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.UNEXPECTED_DEPENDENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.RERUN_REQUESTED">
+<code class="sig-name descname"><span class="pre">RERUN_REQUESTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1003</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.RERUN_REQUESTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.enum.T2RunState.T2RunState.OUTDATED_CODE">
+<code class="sig-name descname"><span class="pre">OUTDATED_CODE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1004</span></em><a class="headerlink" href="#ampel.enum.T2RunState.T2RunState.OUTDATED_CODE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="data-models">
 <h2>Data models<a class="headerlink" href="#data-models" title="Permalink to this headline">¶</a></h2>
 <p>These models are used to parse and validate the configuration of the Ampel system.</p>
@@ -1153,7 +1260,7 @@ sorted by timestamp.</p>
 
 <dl class="py method">
 <dt id="ampel.model.Secret.Secret.get">
-<code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/Secret.html#Secret.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.Secret.Secret.get" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/Secret.html#Secret.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.Secret.Secret.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve the secret and return its value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
