@@ -19,14 +19,14 @@ class UnitModel(StrictModel):
 
 	#: Name of registered unit class, or class itself
 	unit: Union[str, Type[AmpelBaseModel]]
+
 	#: - None: no config (use class defaults)
 	#: - dict: config 'as is'
 	#: - str: a corresponding alias key in the AmpelConfig must match the provided string
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
-
 	config: Optional[Union[int, str, Dict[str, Any]]]
-	#: Values to override in the config
 
+	#: Values to override in the config
 	override: Optional[Dict[str, Any]]
 
 

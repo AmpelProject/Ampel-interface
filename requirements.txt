@@ -1,4 +1,0 @@
-pydantic==1.4
-pymongo>=3.10,<4.0
-version_query
-
