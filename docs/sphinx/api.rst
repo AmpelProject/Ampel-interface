@@ -100,16 +100,23 @@ Data classes
   :undoc-members:
   :private-members:
 
-.. autoclass:: ampel.enum.T2RunState.T2RunState
-  :members:
-  :undoc-members:
-  :private-members:
-
 .. autoclass:: ampel.view.SnapView.SnapView
   :members:
 
 .. autoclass:: ampel.view.ReadOnlyDict.ReadOnlyDict
   :members:
+  :private-members:
+
+Enums
+-----
+
+.. autoclass:: ampel.enum.T2SysRunState.T2SysRunState
+  :members:
+  :undoc-members:
+
+.. autoclass:: ampel.enum.T2RunState.T2RunState
+  :members:
+  :undoc-members:
   :private-members:
 
 Data models
