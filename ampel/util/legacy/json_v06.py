@@ -7,13 +7,13 @@ import bson.json_util  # type: ignore[import]
 
 from ampel.content.Compound import Compound
 from ampel.content.DataPoint import DataPoint
-from ampel.content.T2Record import T2Record
+from ampel.content.T2Document import T2Document
 from ampel.view.LightCurve import LightCurve  # type: ignore[import]
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.view.TransientView import TransientView  # type: ignore[import]
 
 from ampel.ztf.legacy_utils import to_ztf_id  # type: ignore[import]
-from ampel.ztf.utils import to_ampel_id  # type: ignore[import]
+from ampel.ztf.util.ZTFIdMapper import to_ampel_id  # type: ignore[import]
 
 legacy_classes: Dict[str, Callable[[str, Tuple, Dict[str, Any]], Any]] = {}
 
@@ -122,8 +122,8 @@ def comp(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> Compound:
 
 
 @upgrade("ampel.base.ScienceRecord.ScienceRecord")
-def t2(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> T2Record:
-    return T2Record(
+def t2(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> T2Document:
+    return T2Document(
         {
             "_id": bytes(),
             "stock": kwargs["tran_id"],  # FIXME: translate old stockIds?
@@ -180,6 +180,7 @@ def photopoint(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> DataPoint:
 @upgrade("ampel.base.LightCurve.LightCurve")
 def lightcurve(ctor: str, args: Tuple, kwargs: Dict[str, Any]) -> LightCurve:
     return LightCurve(
+        stock_id=bytes(kwargs["stock_id"]),
         compound_id=bytes(kwargs["compound_id"]),
         photopoints=kwargs["ppo_list"],
         upperlimits=kwargs["ulo_list"],

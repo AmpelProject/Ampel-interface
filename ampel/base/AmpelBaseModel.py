@@ -21,18 +21,20 @@ class AmpelBaseModel:
 	Top level class that uses pydantic's BaseModel to validate data.
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
 
-	Type checking can be deactivated globaly through the AmpelConfig._check_types parameter:
+	Type checking can be deactivated globaly through the
+	:attr:`AmpelConfig._check_types <ampel.config.AmpelConfig.AmpelConfig._check_types>`
+	parameter, which will speed up instantiation significantly::
+	
+	  In []: class B(AmpelBaseModel):
+	    ...:     a: List[int] = []
 
-		In []: class B(AmpelBaseModel):
-			...:     a: List[int] = []
+	  In []: %timeit B(a=[11])
+	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 
-		In []: %timeit B(a=[11])
-		8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+	  In []: AmpelConfig._check_types=False
 
-		In []: AmpelConfig._check_types=False
-
-		In []: %timeit B(a=[11])
-		1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
+	  In []: %timeit B(a=[11])
+	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
 	"""
 
 	_model: Type[BaseModel]

@@ -9,7 +9,7 @@
 
 from ampel.type import T2UnitResult
 from ampel.base import abstractmethod, AmpelABC, DataUnit
-from ampel.content.StockRecord import StockRecord
+from ampel.content.StockDocument import StockDocument
 
 
 class AbsStockT2Unit(AmpelABC, DataUnit, abstract=True):
@@ -17,7 +17,7 @@ class AbsStockT2Unit(AmpelABC, DataUnit, abstract=True):
 
 
 	@abstractmethod
-	def run(self, stock_record: StockRecord) -> T2UnitResult:
+	def run(self, stock_doc: StockDocument) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 		Note: dict must have only string keys
