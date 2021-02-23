@@ -14,7 +14,7 @@ from ampel.model.UnitModel import UnitModel
 
 class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Top level abstract class for T2 units depending on other T2 units.
+	A T2 unit that depends on the results of other T2 units.
 	"""
 
 	t2_dependency: Union[UnitModel, Sequence[UnitModel]]

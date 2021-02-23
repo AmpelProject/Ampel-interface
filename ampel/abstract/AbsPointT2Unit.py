@@ -15,17 +15,30 @@ from ampel.content.DataPoint import DataPoint
 
 class AbsPointT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Top level abstract class for t2 units bound to datapoint(s)
-
-	The parameter ingest (used by the ingester) supports the key/value 'eligible'.
-	If customized, the alert ingester will not create a T2 document for each datapoint
-	of a given transient, but only for the one fulfilling the selection criteria below:
-	
-	- Either the "first" or the current "last" one
-	- The one selected by the function "slice" whose 3 integer arguments are to be provided
+	A T2 unit bound to a :class:`~ampel.content.DataPoint.DataPoint`
 	"""
 
 	# See EligibleModel docstring for more info
+	#: Which :class:`~ampel.content.DataPoint.DataPoint` to create
+	#: :class:`T2 documents <ampel.content.T2Document.T2Document>` for
+	#:
+	#: "first"
+	#:   first datapoint for a stock
+	#: "last"
+	#:   most recent datapoint for a stock
+	#: "all"
+	#:   every datapoint
+	#: :class:`tuple`
+	#:   :class:`slice` of datapoints
+	#:
+	#: For example::
+	#:   
+	#:   {"eligible": (1, -2, 5)}
+	#:
+	#: will create documents bound to every 5th datapoint starting from the 2nd
+	#: and ending with the 3rd-to-last
+	#:
+	#: If unspecified, a T2 document will be created for each datapoint.
 	ingest: Optional[Dict[
 		Literal['eligible'],
 		Union[
@@ -39,5 +52,6 @@ class AbsPointT2Unit(AmpelABC, DataUnit, abstract=True):
 	def run(self, datapoint: DataPoint) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have only string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

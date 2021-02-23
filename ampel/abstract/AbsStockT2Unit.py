@@ -13,12 +13,15 @@ from ampel.content.StockDocument import StockDocument
 
 
 class AbsStockT2Unit(AmpelABC, DataUnit, abstract=True):
-	""" Top level abstract class for t2 units bound to transient doc """
+	"""
+	A T2 unit bound to a :class:`~ampel.content.StockDocument.StockDocument`
+	"""
 
 
 	@abstractmethod
 	def run(self, stock_doc: StockDocument) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Note: dict must have only string keys
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

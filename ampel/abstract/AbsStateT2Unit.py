@@ -16,12 +16,13 @@ from ampel.content.DataPoint import DataPoint
 
 class AbsStateT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Top level abstract class for t2 units associated with state/compound documents.
+	A T2 unit bound to a :class:`~ampel.content.Compound.Compound` (state of a stock)
 	"""
 
 	@abstractmethod
 	def run(self, compound: Compound, datapoints: Iterable[DataPoint]) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have only string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

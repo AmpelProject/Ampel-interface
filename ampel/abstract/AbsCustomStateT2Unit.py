@@ -16,8 +16,9 @@ from ampel.content.DataPoint import DataPoint
 
 class AbsCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	"""
-	Generic top level abstract class for custom state t2 units.
-	Known sub-class: ampel.abstract.AbsLightCurveT2Unit
+	A T2 unit bound to a custom type *constructed* from a :class:`compound <ampel.content.Compound.Compound>`
+
+	Known subclass: :class:`~ampel.abstract.AbsLightCurveT2Unit.AbsLightCurveT2Unit`
 	"""
 
 	# We want to enforce the implementation of an abstract *class method*
@@ -25,6 +26,11 @@ class AbsCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	@staticmethod
 	@abstractmethod(force=True)
 	def build(compound: Compound, datapoints: Iterable[DataPoint]) -> T:
+		"""
+		Create the parametrized type using compound and datapoints.
+		For example, AbsCustomStateT2Unit[LightCurve] would return a
+		:class:`~ampel.view.LightCurve.LightCurve` instance.
+		"""
 		...
 
 
@@ -32,5 +38,6 @@ class AbsCustomStateT2Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 	def run(self, arg: T) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have only string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

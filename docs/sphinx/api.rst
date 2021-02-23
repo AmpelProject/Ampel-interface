@@ -17,6 +17,14 @@ Processing units
   :show-inheritance:
   :members:
 
+.. autoclass:: ampel.abstract.AbsStateT2Unit.AbsStateT2Unit
+  :show-inheritance:
+  :members:
+
+.. autoclass:: ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit
+  :show-inheritance:
+  :members:
+
 .. autoclass:: ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit
   :show-inheritance:
   :members:

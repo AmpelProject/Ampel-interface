@@ -22,5 +22,6 @@ class AbsTiedStockT2Unit(AbsTiedT2Unit, abstract=True):
 	def run(self, stock: StockDocument, t2_view: Sequence[T2DocView]) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have only string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""
