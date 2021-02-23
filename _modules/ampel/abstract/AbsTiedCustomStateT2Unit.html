@@ -54,11 +54,10 @@
 
 <div class="viewcode-block" id="AbsTiedCustomStateT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedCustomStateT2Unit</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">AbsTiedT2Unit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Generic abstract class for state T2 units that depend on other T2 units.</span>
-<span class="sd">	Run method features the additional parameter &#39;t2_records&#39; which should contain</span>
-<span class="sd">	prerequisite T2 results (`T2Records &lt;ampel.content.T2Record.T2Record&gt;`)</span>
+<span class="sd">	A T2 unit bound to a custom type *constructed* from a :class:`compound &lt;ampel.content.Compound.Compound&gt;`,</span>
+<span class="sd">	as well as the results of other T2 units.</span>
 
-<span class="sd">	Known sub-classes: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`</span>
+<span class="sd">	Known subclass: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="n">t2_dependency</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">StateT2Dependency</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StateT2Dependency</span><span class="p">]]]</span> <span class="c1"># type: ignore[assignment] # yes, we override</span>
@@ -69,8 +68,9 @@
 	<span class="nd">@abstractmethod</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 	<span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="n">compound</span><span class="p">:</span> <span class="n">Compound</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Creates the parametrized type using compound and datapoints.</span>
-<span class="sd">		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a LighCurve instance</span>
+<span class="sd">		Create the parametrized type using compound and datapoints.</span>
+<span class="sd">		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a</span>
+<span class="sd">		:class:`~ampel.view.LightCurve.LightCurve` instance.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="o">...</span></div>
 
@@ -100,7 +100,8 @@
 	<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">t2_views</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T2DocView</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T2UnitResult</span><span class="p">:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
-<span class="sd">		Notes: dict must have string keys and values must be bson encodable</span>
+
+<span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
 <span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 

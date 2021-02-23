@@ -50,17 +50,30 @@
 
 <div class="viewcode-block" id="AbsPointT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsPointT2Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">DataUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Top level abstract class for t2 units bound to datapoint(s)</span>
-
-<span class="sd">	The parameter ingest (used by the ingester) supports the key/value &#39;eligible&#39;.</span>
-<span class="sd">	If customized, the alert ingester will not create a T2 document for each datapoint</span>
-<span class="sd">	of a given transient, but only for the one fulfilling the selection criteria below:</span>
-<span class="sd">	</span>
-<span class="sd">	- Either the &quot;first&quot; or the current &quot;last&quot; one</span>
-<span class="sd">	- The one selected by the function &quot;slice&quot; whose 3 integer arguments are to be provided</span>
+<span class="sd">	A T2 unit bound to a :class:`~ampel.content.DataPoint.DataPoint`</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="c1"># See EligibleModel docstring for more info</span>
+	<span class="c1">#: Which :class:`~ampel.content.DataPoint.DataPoint` to create</span>
+	<span class="c1">#: :class:`T2 documents &lt;ampel.content.T2Document.T2Document&gt;` for</span>
+	<span class="c1">#:</span>
+	<span class="c1">#: &quot;first&quot;</span>
+	<span class="c1">#:   first datapoint for a stock</span>
+	<span class="c1">#: &quot;last&quot;</span>
+	<span class="c1">#:   most recent datapoint for a stock</span>
+	<span class="c1">#: &quot;all&quot;</span>
+	<span class="c1">#:   every datapoint</span>
+	<span class="c1">#: :class:`tuple`</span>
+	<span class="c1">#:   :class:`slice` of datapoints</span>
+	<span class="c1">#:</span>
+	<span class="c1">#: For example::</span>
+	<span class="c1">#:   </span>
+	<span class="c1">#:   {&quot;eligible&quot;: (1, -2, 5)}</span>
+	<span class="c1">#:</span>
+	<span class="c1">#: will create documents bound to every 5th datapoint starting from the 2nd</span>
+	<span class="c1">#: and ending with the 3rd-to-last</span>
+	<span class="c1">#:</span>
+	<span class="c1">#: If unspecified, a T2 document will be created for each datapoint.</span>
 	<span class="n">ingest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span>
 		<span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;eligible&#39;</span><span class="p">],</span>
 		<span class="n">Union</span><span class="p">[</span>
@@ -74,7 +87,8 @@
 	<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapoint</span><span class="p">:</span> <span class="n">DataPoint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T2UnitResult</span><span class="p">:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
-<span class="sd">		Notes: dict must have only string keys and values must be bson encodable</span>
+
+<span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
 <span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 

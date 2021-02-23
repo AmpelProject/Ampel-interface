@@ -54,9 +54,8 @@
 
 <div class="viewcode-block" id="AbsTiedStateT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedStateT2Unit</span><span class="p">(</span><span class="n">AbsTiedT2Unit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Abstract class for state T2 units depending on other T2 units.</span>
-<span class="sd">	Run method features the additional parameter &#39;t2_records&#39; which should contain</span>
-<span class="sd">	prerequisite T2 results (`T2Records &lt;ampel.content.T2Record.T2Record&gt;`)</span>
+<span class="sd">	A T2 unit bound to a :class:`~ampel.content.Compound.Compound` (state of a stock),</span>
+<span class="sd">	as well as the results of other T2 units</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="n">t2_dependency</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">StateT2Dependency</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StateT2Dependency</span><span class="p">]]]</span> <span class="c1"># type: ignore[assignment] # yes, we override</span>
@@ -95,7 +94,8 @@
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T2UnitResult</span><span class="p">:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
-<span class="sd">		Notes: dict must have only string keys and values must be bson encodable</span>
+
+<span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
 <span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 
