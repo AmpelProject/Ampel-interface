@@ -16,9 +16,12 @@ class CompoundElement(TypedDict, total=False):
 
 	This is a dict containing 1 or more of the following items:
 	"""
+	#: id of a document in the T0 collection
 	id: DataPointId
+	#: tags for the datapoint
 	tag: Sequence[Union[int, str]]
-	excl: Union[int, str] #: exclusion reason
+	#: exclusion reason
+	excl: Union[int, str]
 
 class Compound(TypedDict, total=False):
 	"""
