@@ -9,6 +9,14 @@ core.
 Processing units
 ----------------
 
+.. autoclass:: ampel.abstract.AbsT0Unit.AbsT0Unit
+  :show-inheritance:
+  :members:
+
+.. autoclass:: ampel.abstract.AbsT1Unit.AbsT1Unit
+  :show-inheritance:
+  :members:
+
 .. autoclass:: ampel.abstract.AbsPointT2Unit.AbsPointT2Unit
   :show-inheritance:
   :members:
@@ -67,10 +75,8 @@ Data classes
   :undoc-members:
   :private-members:
 
-.. autoclass:: ampel.content.DataPoint.DataPoint
+.. autoclass:: ampel.ingest.CompoundBluePrint.CompoundBluePrint
   :members:
-  :undoc-members:
-  :private-members:
 
 .. autoclass:: ampel.content.Compound.Compound
   :members:
