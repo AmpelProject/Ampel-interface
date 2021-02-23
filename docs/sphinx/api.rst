@@ -51,6 +51,9 @@ Context and configuration
 Data classes
 ------------
 
+.. autoclass:: ampel.alert.AmpelAlert.AmpelAlert
+  :members:
+
 .. autoclass:: ampel.content.StockDocument.StockDocument
   :members:
   :undoc-members:
