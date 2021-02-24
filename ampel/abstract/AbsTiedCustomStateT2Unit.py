@@ -19,11 +19,10 @@ from ampel.view.T2DocView import T2DocView
 
 class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 	"""
-	Generic abstract class for state T2 units that depend on other T2 units.
-	Run method features the additional parameter 't2_records' which should contain
-	prerequisite T2 results (`T2Records <ampel.content.T2Record.T2Record>`)
+	A T2 unit bound to a custom type *constructed* from a :class:`compound <ampel.content.Compound.Compound>`,
+	as well as the results of other T2 units.
 
-	Known sub-classes: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`
+	Known subclass: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`
 	"""
 
 	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
@@ -34,8 +33,9 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 	@abstractmethod(force=True)
 	def build(compound: Compound, datapoints: Iterable[DataPoint]) -> T:
 		"""
-		Creates the parametrized type using compound and datapoints.
-		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a LighCurve instance
+		Create the parametrized type using compound and datapoints.
+		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a
+		:class:`~ampel.view.LightCurve.LightCurve` instance.
 		"""
 		...
 
@@ -65,5 +65,6 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 	def run(self, arg: T, t2_views: Sequence[T2DocView]) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

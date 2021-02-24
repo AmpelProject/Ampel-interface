@@ -14,7 +14,7 @@ from ampel.model.UnitModel import UnitModel
 
 class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 	"""
-	Top level abstract class for T2 units depending on other T2 units.
+	A T2 unit that depends on the results of other T2 units.
 	"""
 
 	t2_dependency: Union[UnitModel, Sequence[UnitModel]]
@@ -37,8 +37,8 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 					raise BadConfig(f"Unit %s is not compatible with tied unit {self.__class__.__name__}" % t2_dep.unit)
 
 
-	@abstractmethod
 	@classmethod
+	@abstractmethod
 	def get_tied_unit_names(cls) -> Optional[List[str]]:
 		"""
 		If None, all unit names are accepted.

@@ -16,6 +16,9 @@ from ampel.ingest.CompoundBluePrint import CompoundBluePrint
 T = TypeVar("T", bound=CompoundBluePrint)
 
 class AbsT1Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
+	"""
+	A unit that combines datapoints into states
+	"""
 
 	BluePrintClass: ClassVar[Type] = CompoundBluePrint
 
@@ -25,4 +28,8 @@ class AbsT1Unit(Generic[T], AmpelABC, DataUnit, abstract=True):
 		datapoints: Sequence[DataPoint],
 		channels: Iterable[ChannelId]
 	) -> T:
+		"""
+		Combine datapoints into views for each channel, coalescing equivalent
+		views where possible.
+		"""
 		...

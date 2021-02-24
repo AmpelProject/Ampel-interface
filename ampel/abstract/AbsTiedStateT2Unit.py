@@ -19,9 +19,8 @@ from ampel.view.T2DocView import T2DocView
 
 class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	"""
-	Abstract class for state T2 units depending on other T2 units.
-	Run method features the additional parameter 't2_records' which should contain
-	prerequisite T2 results (`T2Records <ampel.content.T2Record.T2Record>`)
+	A T2 unit bound to a :class:`~ampel.content.Compound.Compound` (state of a stock),
+	as well as the results of other T2 units
 	"""
 
 	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
@@ -60,5 +59,6 @@ class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	) -> T2UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
-		Notes: dict must have only string keys and values must be bson encodable
+
+		.. note:: the returned dict must have only string keys and be BSON-encodable
 		"""

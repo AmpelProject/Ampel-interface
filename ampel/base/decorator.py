@@ -43,6 +43,8 @@ def abstractmethod(func=None, check_signature=False, force=False, var_args: bool
 		func.var_args = True
 
 	func.abstract_method = True
+	# emulate abc.abstractmethod to inform autodoc of abstract methods
+	func.__isabstractmethod__ = True
 	return func
 
 

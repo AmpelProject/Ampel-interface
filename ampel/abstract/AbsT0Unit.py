@@ -13,7 +13,13 @@ from ampel.content.DataPoint import DataPoint
 
 
 class AbsT0Unit(AmpelABC, DataUnit, abstract=True):
+	"""
+	A unit that creates :class:`datapoints <ampel.content.DataPoint.DataPoint>` for Ampel
+	"""
 
 	@abstractmethod
 	def ampelize(self, arg: Any) -> List[DataPoint]:
+		"""
+		Convert an external object to Ampel format
+		"""
 		...
