@@ -21,20 +21,20 @@ class CompoundBluePrint:
 	as viewed through a set of channels.
 
 	Different channels may select different subsets of the datapoints associated
-	with a stock. In addition, some datapoints may be part of the view, but
+	with a stock. In addition, some datapoints may be part of a channel's selection, but
 	explicitly excluded by a policy, for example one that requires significant
 	detections above the noise level.
 
-	This leads to two different identifiers for a view:
+	This leads to two different identifiers for a subselection:
 
 	strict id:
-	  The hash of all the datapoints the view contains
+	  The hash of all the datapoints the subselection contains
 	effective id:
 	  The hash of only the datapoints that were not marked excluded
 
 	Only one :class:`~ampel.content.Compound.Compound` will be created for each
-	effective view. This allows downstream calculations that operate on equivalent
-	views to be performed only once. The variants corresponding to each distinct
+	*effective* subselection. This allows downstream calculations that operate on equivalent
+	subselections to be performed only once. The variants corresponding to each distinct
 	strict id may be included as metadata in subclasses of
 	:class:`~ampel.content.Compound.Compound`.
 	"""
