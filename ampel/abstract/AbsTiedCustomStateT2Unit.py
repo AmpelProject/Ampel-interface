@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 03.04.2020
-# Last Modified Date: 16.02.2021
+# Last Modified Date: 25.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Generic, Iterable, Sequence, Dict, Any, Union, Optional
@@ -25,7 +25,7 @@ class AbsTiedCustomStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 	Known subclass: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`
 	"""
 
-	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
+	t2_dependency: Optional[Sequence[StateT2Dependency]] # type: ignore[assignment] # yes, we override
 
 	# Note: we want to enforce the implementation of an abstract *class method*
 	# and hence have purposely omitted the first reflective argument
