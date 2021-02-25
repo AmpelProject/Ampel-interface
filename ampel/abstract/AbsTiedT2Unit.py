@@ -7,7 +7,7 @@
 # Last Modified Date: 17.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import List, Sequence, Union, Optional
+from typing import List, Sequence, Optional
 from ampel.base import abstractmethod, AmpelABC, DataUnit, BadConfig
 from ampel.model.UnitModel import UnitModel
 
@@ -17,7 +17,7 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 	A T2 unit that depends on the results of other T2 units.
 	"""
 
-	t2_dependency: Union[UnitModel, Sequence[UnitModel]]
+	t2_dependency: Sequence[UnitModel]
 
 	def __init__(self, **kwargs):
 		"""
@@ -89,12 +89,9 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 		# For mypy which otherwise complains later
 		tied_unit_names = self.get_tied_unit_names()
 
-		# Cast to sequence if need be
-		t2_deps = [self.t2_dependency] if isinstance(self.t2_dependency, UnitModel) else self.t2_dependency
-
 		# No restriction (meaning underlying t2 is capable of dealing with all kind of T2DocViews) - use config
 		if tied_unit_names is None:
-			return t2_deps
+			return self.t2_dependency
 
 		ret = []
 
@@ -103,7 +100,7 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 
 			# Customization means also, that we can request multiple t2 views
 			# of the same t2 unit with different config
-			custom_dependencies = [el for el in t2_deps if el.unit == tied_unit_name]
+			custom_dependencies = [el for el in self.t2_dependency if el.unit == tied_unit_name]
 
 			if not custom_dependencies:
 				ret.append(UnitModel(unit=tied_unit_name))
