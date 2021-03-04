@@ -148,6 +148,12 @@ class AmpelBaseModel:
 		NoneType = type(None)
 
 		# Set default attributes
+		cls._model.__field_defaults__ = {
+			k: cls._model.__fields__[k].get_default()
+			for k in cls._model.__fields__
+			if cls._model.__fields__[k].get_default()
+		}
+
 		for k, v in cls._model.__field_defaults__.items():
 			if k in cls._slot_defaults:
 				continue
