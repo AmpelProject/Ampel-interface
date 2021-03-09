@@ -23,7 +23,7 @@ class AbsTiedStateT2Unit(AbsTiedT2Unit, abstract=True):
 	as well as the results of other T2 units
 	"""
 
-	t2_dependency: Optional[Union[StateT2Dependency, Sequence[StateT2Dependency]]] # type: ignore[assignment] # yes, we override
+	t2_dependency: Optional[Sequence[StateT2Dependency]] # type: ignore[assignment] # yes, we override
 
 	@staticmethod
 	@abstractmethod(force=True)
