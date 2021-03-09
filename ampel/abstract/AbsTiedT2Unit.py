@@ -34,7 +34,7 @@ class AbsTiedT2Unit(AmpelABC, DataUnit, abstract=True):
 			v = self.t2_dependency
 			for t2_dep in ([v] if isinstance(v, UnitModel) else v):
 				if t2_dep.unit not in self.get_tied_unit_names():
-					raise BadConfig(f"Unit %s is not compatible with tied unit {self.__class__.__name__}" % t2_dep.unit)
+					raise BadConfig(f"Unit '{t2_dep.unit}' is not compatible with tied unit {self.__class__.__name__}")
 
 
 	@classmethod
