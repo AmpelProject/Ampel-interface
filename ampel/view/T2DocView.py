@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Sequence, Literal, overload
+from typing import Dict, Optional, Union, Any, Sequence, Literal, List, overload
 from ampel.type import StockId
 from ampel.content.T2Document import T2Link
 from ampel.content.T2Record import T2Record
@@ -78,7 +78,7 @@ class T2DocView:
 		return self.body is not None and len(self.body) > 0
 
 
-	def get_payload(self) -> Optional[Dict[str, Any]]:
+	def get_payload(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
 		"""
 		:returns: The payload (key: 'result') of the first T2Record found with status >= 0
 		from the list of t2 records in reversed chronological order
@@ -89,11 +89,7 @@ class T2DocView:
 
 		for el in reversed(self.body): # type: ignore # inadequate mypy inference
 			if 'result' in el and el['status'] >= 0:
-				result = el['result']
-				if isinstance(result, dict):
-					return result
-				elif isinstance(result, list) and len(result):
-					return result[-1]
+				return el['result']
 
 		return None
 
