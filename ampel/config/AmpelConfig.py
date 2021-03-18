@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import yaml, json
-from typing import Dict, List, Union, Optional, Type, Literal, Any, Iterable, overload, get_origin
+from typing import Dict, List, Sequence, Union, Optional, Type, Literal, Any, Iterable, overload, get_origin
 from ampel.type import JT, JSONTypes
 from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
@@ -67,7 +67,10 @@ class AmpelConfig:
 		if config is None or not config:
 			raise ValueError("Please provide a config")
 
-		self._config: Dict = recursive_freeze(config) if freeze else config
+		self._config: Dict = (
+			recursive_freeze(_stringify_keys(config))
+			if freeze else _stringify_keys(config)
+		)
 
 		if 'general' in config and 'check_types' in config['general']:
 			self._check_types = config['general']['check_types']
@@ -157,18 +160,15 @@ class AmpelConfig:
 		if isinstance(entry, str):
 			entry = entry.split(".")
 
-		# check for int elements encoded as str
-		array: List[Union[int, str]] = [
-			(el if not el.isdigit() else int(el)) for el in entry
-		]
-
 		ret = self._config
-		for el in array:
-			if el not in ret:
+		for el in entry:
+			# allow int elements encoded as str if target is not a dict
+			k = int(el) if not isinstance(ret, dict) else el
+			if k not in ret:
 				if raise_exc:
 					raise ValueError(f"Config element '{entry}' not found")
 				return None
-			ret = ret[el]
+			ret = ret[k]
 
 		if ret_type:
 
@@ -203,3 +203,15 @@ class AmpelConfig:
 
 	def is_frozen(self) -> bool:
 		return isinstance(self._config, ReadOnlyDict)
+
+
+def _stringify_keys(item):
+	"""
+	Recursively convert all dict keys to str
+	"""
+	if isinstance(item, dict):
+		return {str(k): _stringify_keys(v) for k,v in item.items()}
+	elif isinstance(item, list):
+		return [_stringify_keys(v) for v in item]
+	else:
+		return item
