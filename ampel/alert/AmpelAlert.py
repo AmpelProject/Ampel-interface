@@ -151,5 +151,5 @@ class AmpelAlert:
 		i.e not the 'raw' datapoints associated with in self.datapoints
 		"""
 		if len(datapoints) > 1:
-			return datapoints[1:]
+			return datapoints[:-1]
 		return None
