@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.view.SnapView &#8212; ampel-interface 0.7.1-alpha.8 documentation</title>
+    <title>ampel.view.SnapView &#8212; ampel-interface 0.7.1-alpha.9 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1-alpha.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1-alpha.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.view.SnapView</a></li> 
       </ul>
@@ -159,7 +159,7 @@
 		<span class="c1"># return the last record that has a result</span>
 		<span class="k">for</span> <span class="n">t2</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_t2_docs</span><span class="p">(</span><span class="n">unit_id</span><span class="p">,</span> <span class="n">compound_id</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]):</span>
 			<span class="k">for</span> <span class="n">subrecord</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">t2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]):</span>
-				<span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">subrecord</span> <span class="ow">and</span> <span class="n">subrecord</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">subrecord</span> <span class="ow">and</span> <span class="n">subrecord</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
 					<span class="n">result</span> <span class="o">=</span> <span class="n">subrecord</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
 					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
 						<span class="k">return</span> <span class="n">result</span>
@@ -278,7 +278,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1-alpha.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1-alpha.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.view.SnapView</a></li> 
       </ul>
