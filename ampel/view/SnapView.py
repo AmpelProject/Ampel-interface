@@ -124,7 +124,7 @@ class SnapView:
 		# return the last record that has a result
 		for t2 in reversed(self.get_t2_docs(unit_id, compound_id) or []):
 			for subrecord in reversed(t2.get("body") or []):
-				if "result" in subrecord and subrecord["status"] >= 0:
+				if "result" in subrecord and subrecord.get("status", 0) >= 0:
 					result = subrecord["result"]
 					if isinstance(result, dict):
 						return result
