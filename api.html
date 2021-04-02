@@ -1209,32 +1209,39 @@ the transient journal entry created after a process is run.</p>
 
 <dl class="py class">
 <dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.struct.T2BroadUnitResult.</span></code><code class="sig-name descname"><span class="pre">T2BroadUnitResult</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">t2_rec_payload</span></em>, <em class="sig-param"><span class="pre">t2_doc_status=&lt;T2RunState.COMPLETED:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">t2_record_status=&lt;T2RunState.COMPLETED:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">stock_journal_tweak=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/struct/T2BroadUnitResult.html#T2BroadUnitResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.struct.T2BroadUnitResult.</span></code><code class="sig-name descname"><span class="pre">T2BroadUnitResult</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rec_payload</span></em>, <em class="sig-param"><span class="pre">rec_status=&lt;T2RunState.COMPLETED:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">doc_status=&lt;T2RunState.COMPLETED:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">doc_tag=None</span></em>, <em class="sig-param"><span class="pre">stock_journal_tweak=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/struct/T2BroadUnitResult.html#T2BroadUnitResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Structure potentialy returned by Ampel T2 units to customize:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#ampel.content.T2Document.T2Document.status" title="ampel.content.T2Document.T2Document.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">T2Document.status</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ampel.content.T2Document.T2Document.tag" title="ampel.content.T2Document.T2Document.tag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">T2Document.tag</span></code></a></p></li>
 <li><p><a class="reference internal" href="#ampel.content.T2Record.T2Record.status" title="ampel.content.T2Record.T2Record.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">T2Record.status</span></code></a></p></li>
-<li><p>given keys (tag, status, extra) of the journal entry, from the associated transient document, 
+<li><p>given keys (tag, status, extra) of the journal entry, from the associated transient document,
 created after a process is run (see <a class="reference internal" href="#ampel.content.JournalRecord.JournalRecord" title="ampel.content.JournalRecord.JournalRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">JournalRecord</span></code></a>)</p></li>
 </ul>
 <dl class="py attribute">
-<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_rec_payload">
-<code class="sig-name descname"><span class="pre">t2_rec_payload</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_rec_payload" title="Permalink to this definition">¶</a></dt>
+<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.rec_payload">
+<code class="sig-name descname"><span class="pre">rec_payload</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.rec_payload" title="Permalink to this definition">¶</a></dt>
 <dd><p>result of unit invocation</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_doc_status">
-<code class="sig-name descname"><span class="pre">t2_doc_status</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_doc_status" title="Permalink to this definition">¶</a></dt>
+<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.rec_status">
+<code class="sig-name descname"><span class="pre">rec_status</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.rec_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>integer status of the associated <a class="reference internal" href="#ampel.content.T2Record.T2Record" title="ampel.content.T2Record.T2Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Record</span></code></a>
+with the current invocation of this unit</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.doc_status">
+<code class="sig-name descname"><span class="pre">doc_status</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.doc_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer status of the <a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Document</span></code></a>
 associated with all invocations of this unit</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_record_status">
-<code class="sig-name descname"><span class="pre">t2_record_status</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.t2_record_status" title="Permalink to this definition">¶</a></dt>
-<dd><p>integer status of the associated <a class="reference internal" href="#ampel.content.T2Record.T2Record" title="ampel.content.T2Record.T2Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Record</span></code></a>
-with the current invocation of this unit</p>
+<dt id="ampel.struct.T2BroadUnitResult.T2BroadUnitResult.doc_tag">
+<code class="sig-name descname"><span class="pre">doc_tag</span></code><a class="headerlink" href="#ampel.struct.T2BroadUnitResult.T2BroadUnitResult.doc_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>tag(s) to be added to <a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2Document</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">

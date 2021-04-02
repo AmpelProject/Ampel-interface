@@ -39,46 +39,55 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 11.02.2021</span>
-<span class="c1"># Last Modified Date: 17.02.2021</span>
+<span class="c1"># Last Modified Date: 02.04.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">ampel.enum.T2RunState</span> <span class="kn">import</span> <span class="n">T2RunState</span>
 <span class="kn">from</span> <span class="nn">ampel.struct.JournalTweak</span> <span class="kn">import</span> <span class="n">JournalTweak</span>
 
+<span class="n">Tag</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 
 <div class="viewcode-block" id="T2BroadUnitResult"><a class="viewcode-back" href="../../../api.html#ampel.struct.T2BroadUnitResult.T2BroadUnitResult">[docs]</a><span class="k">class</span> <span class="nc">T2BroadUnitResult</span><span class="p">:</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Structure potentialy returned by Ampel T2 units to customize:</span>
 <span class="sd">	</span>
 <span class="sd">	- :attr:`T2Document.status &lt;ampel.content.T2Document.T2Document.status&gt;`</span>
+<span class="sd">	- :attr:`T2Document.tag &lt;ampel.content.T2Document.T2Document.tag&gt;`</span>
 <span class="sd">	- :attr:`T2Record.status &lt;ampel.content.T2Record.T2Record.status&gt;`</span>
-<span class="sd">	- given keys (tag, status, extra) of the journal entry, from the associated transient document, </span>
+<span class="sd">	- given keys (tag, status, extra) of the journal entry, from the associated transient document,</span>
 <span class="sd">	  created after a process is run (see :class:`~ampel.content.JournalRecord.JournalRecord`)</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-	<span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;t2_rec_payload&quot;</span><span class="p">,</span> <span class="s2">&quot;t2_doc_status&quot;</span><span class="p">,</span> <span class="s2">&quot;t2_record_status&quot;</span><span class="p">,</span> <span class="s2">&quot;stock_journal_tweak&quot;</span>
+	<span class="vm">__slots__</span> <span class="o">=</span> <span class="s2">&quot;rec_payload&quot;</span><span class="p">,</span> <span class="s2">&quot;rec_status&quot;</span><span class="p">,</span> <span class="s2">&quot;doc_status&quot;</span><span class="p">,</span> <span class="s2">&quot;doc_tag&quot;</span><span class="p">,</span> <span class="s2">&quot;stock_journal_tweak&quot;</span>
 
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-		<span class="n">t2_rec_payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-		<span class="n">t2_doc_status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">T2RunState</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
-		<span class="n">t2_record_status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">T2RunState</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+		<span class="n">rec_payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+		<span class="n">rec_status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">T2RunState</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+		<span class="n">doc_status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">T2RunState</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+		<span class="n">doc_tag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tag</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">stock_journal_tweak</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JournalTweak</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		:param t2_doc_status: </span>
-<span class="sd">		:param t2_record_status: integer status of the t2 record (T2Record)</span>
+<span class="sd">		:param doc_status:</span>
+<span class="sd">		:param rec_status: integer status of the t2 record (T2Record)</span>
 <span class="sd">		:param stock_journal_tweak: enable the customization of given keys (tag, status, extra)</span>
 <span class="sd">		of the journal entry - from the associated transient document - created after a t2 process is run</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1">#: result of unit invocation</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">t2_rec_payload</span> <span class="o">=</span> <span class="n">t2_rec_payload</span>
-		<span class="c1">#: integer status of the :class:`~ampel.content.T2Document.T2Document`</span>
-		<span class="c1">#: associated with all invocations of this unit</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">t2_doc_status</span> <span class="o">=</span> <span class="n">t2_doc_status</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">rec_payload</span> <span class="o">=</span> <span class="n">rec_payload</span>
+
 		<span class="c1">#: integer status of the associated :class:`~ampel.content.T2Record.T2Record`</span>
 		<span class="c1">#: with the current invocation of this unit</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">t2_record_status</span> <span class="o">=</span> <span class="n">t2_record_status</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">rec_status</span> <span class="o">=</span> <span class="n">rec_status</span>
+
+		<span class="c1">#: integer status of the :class:`~ampel.content.T2Document.T2Document`</span>
+		<span class="c1">#: associated with all invocations of this unit</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">doc_status</span> <span class="o">=</span> <span class="n">doc_status</span>
+
+		<span class="c1">#: tag(s) to be added to :class:`~ampel.content.T2Document.T2Document`</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">doc_tag</span> <span class="o">=</span> <span class="n">doc_tag</span>
+
 		<span class="c1">#: extra items to add to the :class:`~ampel.content.JournalRecord.JournalRecord`</span>
 		<span class="c1">#: associated with the current invocation of this unit</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">stock_journal_tweak</span> <span class="o">=</span> <span class="n">stock_journal_tweak</span></div>
