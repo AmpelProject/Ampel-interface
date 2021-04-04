@@ -8,7 +8,6 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Dict, Any
-from pydantic import BaseModel
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
 
@@ -25,7 +24,7 @@ def recursive_freeze(arg: Any) -> Any:
 		return ReadOnlyDict(
 			{
 				recursive_freeze(k): recursive_freeze(v)
-				for k,v in arg.items()
+				for k, v in arg.items()
 			}
 		)
 
@@ -48,7 +47,7 @@ def recursive_unfreeze(arg: ReadOnlyDict) -> Dict:
 		return dict(
 			{
 				recursive_unfreeze(k): recursive_unfreeze(v)
-				for k,v in arg.items()
+				for k, v in arg.items()
 			}
 		)
 
@@ -61,14 +60,3 @@ def recursive_unfreeze(arg: ReadOnlyDict) -> Dict:
 		return set(arg)
 
 	return arg
-
-
-def recursive_lock(model: BaseModel) -> None:
-	"""
-	Locks a pydantic model instance
-	"""
-	model.Config.allow_mutation = False
-	for key in model.fields.keys():
-		value = getattr(model, key)
-		if isinstance(value, BaseModel):
-			recursive_lock(value)
