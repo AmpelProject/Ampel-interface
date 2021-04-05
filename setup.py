@@ -30,7 +30,7 @@ extras_require = \
 
 setup_kwargs = {
     'name': 'ampel-interface',
-    'version': '0.7.1a7',
+    'version': '0.7.1',
     'description': 'Base classes for the Ampel analysis platform',
     'long_description': '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
     'author': 'Valery Brinnel',
