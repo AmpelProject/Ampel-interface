@@ -4,16 +4,18 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 16.02.2021
+# Last Modified Date: 04.04.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
 from typing import Dict, Optional, Union, Any, Literal, Sequence, Callable
 
 from ampel.type import StockId
+from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.content.DataPoint import DataPoint
-from ampel.content.Compound import Compound
+from ampel.content.T1Document import T1Document
 from ampel.content.T2Document import T2Document
+from ampel.content.T3Document import T3Document
 from ampel.content.StockDocument import StockDocument
 from ampel.content.LogDocument import LogDocument
 from ampel.content.JournalRecord import JournalRecord
@@ -30,26 +32,34 @@ class SnapView:
 	The config parameter of a T3 process determines which information are included.
 	Instances of this class (or of subclass such as
 	:class:`~ampel.view.TransientView.TransientView`) are provided to
-	:meth:`AbsT3Unit.add() <ampel.abstract.AbsT3Unit.AbsT3Unit.add>`.
+	:meth:`AbsT3Unit.process() <ampel.abstract.AbsT3Unit.AbsT3Unit.process>`.
 
 	"""
 
-	__slots__ = "id", "stock", "t0", "t1", "t2", "log", "extra", "_frozen"
+	__slots__ = 'id', 'stock', 't0', 't1', 't2', 't3', 'logs', 'extra', '_frozen'
 
 	stock: Optional[StockDocument] #: Stock record, if loaded
 	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
-	t1: Optional[Sequence[Compound]] #: Compounds, if loaded
+	t1: Optional[Sequence[T1Document]] #: Compounds, if loaded
 	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
-	log: Optional[Sequence[LogDocument]] #: Event logs, if loaded
+	t3: Optional[Sequence[T3Document]] #: T3 documents, if loaded
+	logs: Optional[Sequence[LogDocument]] #: Logs, if added by T3 complement stage
 	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.t3.complement.AbsT3DataAppender.AbsT3DataAppender`
+
+
+	@classmethod
+	def of(cls, ampel_buffer: AmpelBuffer) -> 'SnapView':
+		return cls(**ampel_buffer)
+
 
 	def __init__(self,
 		id: StockId,
 		stock: Optional[StockDocument] = None,
 		t0: Optional[Sequence[DataPoint]] = None,
-		t1: Optional[Sequence[Compound]] = None,
+		t1: Optional[Sequence[T1Document]] = None,
 		t2: Optional[Sequence[T2Document]] = None,
-		log: Optional[Sequence[LogDocument]] = None,
+		t3: Optional[Sequence[T3Document]] = None,
+		logs: Optional[Sequence[LogDocument]] = None,
 		extra: Optional[Dict[str, Any]] = None,
 		freeze: bool = True
 	):
@@ -57,8 +67,9 @@ class SnapView:
 		self.t0 = t0
 		self.t1 = t1
 		self.t2 = t2
-		self.log = log
+		self.t3 = t3
 		self.extra = extra
+		self.logs = logs
 		self.id = id
 		self._frozen = freeze
 
@@ -69,8 +80,8 @@ class SnapView:
 
 
 	def __setattr__(self, k, v):
-		if getattr(self, "_frozen", False):
-			raise ValueError("SnapView is read only")
+		if getattr(self, '_frozen', False):
+			raise ValueError('SnapView is read only')
 		object.__setattr__(self, k, v)
 
 
@@ -123,9 +134,9 @@ class SnapView:
 		# from the records that match the unit and compound selection,
 		# return the last record that has a result
 		for t2 in reversed(self.get_t2_docs(unit_id, compound_id) or []):
-			for subrecord in reversed(t2.get("body") or []):
-				if "result" in subrecord and subrecord["status"] >= 0:
-					result = subrecord["result"]
+			for subrecord in reversed(t2.get('body') or []):
+				if 'data' in subrecord and subrecord['code'] >= 0:
+					result = subrecord['data']
 					if isinstance(result, dict):
 						return result
 					elif isinstance(result, list) and len(result):
@@ -207,7 +218,7 @@ class SnapView:
 	@staticmethod
 	def content_summary(view: 'SnapView') -> str:
 
-		return "DP: %i, CP: %i, T2: %i" % (
+		return 'DP: %i, CP: %i, T2: %i' % (
 			len(view.t0) if view.t0 else 0,
 			len(view.t1) if view.t1 else 0,
 			len(view.t2) if view.t2 else 0
