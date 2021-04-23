@@ -7,7 +7,12 @@
 # Last Modified Date: 08.06.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, Literal, Any, Dict, TypedDict, List
+import sys
+if sys.version_info.minor > 8:
+	from typing import TypedDict
+else:
+	from typing_extensions import TypedDict
+from typing import Sequence, Union, Literal, Any, Dict, List
 from ampel.type import ChannelId, Tag
 
 class JournalRecord(TypedDict, total=False):

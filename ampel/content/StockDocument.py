@@ -7,7 +7,12 @@
 # Last Modified Date: 21.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, Sequence, Union, Optional, Dict, TypedDict
+import sys
+if sys.version_info.minor > 8:
+	from typing import TypedDict
+else:
+	from typing_extensions import TypedDict
+from typing import Any, Sequence, Union, Optional, Dict
 from ampel.type import StockId, ChannelId
 from ampel.content.JournalRecord import JournalRecord
 

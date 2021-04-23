@@ -7,7 +7,12 @@
 # Last Modified Date: 12.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, TypedDict, Dict, List, Any
+import sys
+if sys.version_info.minor > 8:
+	from typing import TypedDict
+else:
+	from typing_extensions import TypedDict
+from typing import Union, Dict, List, Any
 
 
 class T2Record(TypedDict, total=False):

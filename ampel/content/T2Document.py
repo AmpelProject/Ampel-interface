@@ -7,7 +7,12 @@
 # Last Modified Date: 11.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, Optional, TypedDict
+import sys
+if sys.version_info.minor > 8:
+	from typing import TypedDict
+else:
+	from typing_extensions import TypedDict
+from typing import Sequence, Union, Optional
 from bson import ObjectId
 from ampel.type import ChannelId, StockId, DataPointId, Tag
 from ampel.content.T2Record import T2Record
