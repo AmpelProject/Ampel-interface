@@ -4,14 +4,13 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.10.2019
-# Last Modified Date: 15.06.2020
+# Last Modified Date: 12.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from copy import deepcopy
 from types import MemberDescriptorType
+from typing import get_origin, get_args, Union, Dict, Any, ClassVar, Set, Type
 from pydantic import BaseModel, validate_model, create_model
-from typing import Dict, Any, ClassVar, Set, get_origin, get_args, Union, Type
-
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.model.StrictModel import StrictModel
 
@@ -46,12 +45,12 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def __init_subclass__(cls, **kwargs) -> None:
+	def __init_subclass__(cls, *args, **kwargs) -> None:
 		"""
 		Combines annotations & default values of this class with the one defined in sub-classes.
 		Has similarities with the newly introduced typing.get_type_hints() function.
 		"""
-		super().__init_subclass__(**kwargs) # type: ignore
+		super().__init_subclass__(*args, **kwargs) # type: ignore
 
 		joined_ann = {
 			k: v for k, v in cls._annots.items()
@@ -115,12 +114,15 @@ class AmpelBaseModel:
 		if errors:
 			raise errors
 
+
 	def __init__(self, **kwargs) -> None:
 
 		cls = self.__class__
 
 		if cls._model is None:
 			self._create_model()
+			# might be needed in the future due to postponed annotations
+			# cls._model.update_forward_refs()
 
 		# Check types (default behavior)
 		if AmpelConfig._check_types:
