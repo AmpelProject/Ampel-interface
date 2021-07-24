@@ -7,31 +7,36 @@
 # Last Modified Date: 17.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Dict, Optional, Any, Union, Type
-from ampel.base.AmpelBaseModel import AmpelBaseModel
-from ampel.model.StrictModel import StrictModel
+from typing import Dict, Optional, Any, Union, Generic
+from ampel.types import T
+from ampel.secret.NamedSecret import NamedSecret
+from ampel.secret.AESecret import AESecret
+from ampel.model.StrictGenericModel import StrictGenericModel
 
 
-class UnitModel(StrictModel):
+class UnitModel(StrictGenericModel, Generic[T]):
 	"""
 	Specification of a processing unit.
+	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])
 	"""
 
-	#: Name of registered unit class, or class itself
-	unit: Union[str, Type[AmpelBaseModel]]
+	#: Name of ampel unit class
+	unit: T
 
 	#: - None: no config (use class defaults)
 	#: - dict: config 'as is'
 	#: - str: a corresponding alias key in the AmpelConfig must match the provided string
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
-	config: Optional[Union[int, str, Dict[str, Any]]]
+	config: Union[None, int, str, Dict[str, Any]]
+
+	secrets: Union[None, NamedSecret, AESecret]
 
 	#: Values to override in the config
 	override: Optional[Dict[str, Any]]
 
 
-	@property
-	def unit_name(self) -> str:
-		if isinstance(self.unit, str):
-			return self.unit
-		return self.unit.__name__
+	def dict(self, **kwargs):
+		ret = super().dict(**kwargs)
+		if 'secrets' in ret:
+			del ret['secrets']
+		return ret
