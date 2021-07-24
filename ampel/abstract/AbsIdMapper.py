@@ -8,9 +8,10 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import List, Union, overload
-from ampel.type import StrictIterable, StockId
-from ampel.base import abstractmethod, AmpelBaseModel
+from ampel.types import StrictIterable, StockId
 from ampel.base.AmpelABC import AmpelABC
+from ampel.base.decorator import abstractmethod
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
 class AbsIdMapper(AmpelABC, AmpelBaseModel, abstract=True):
