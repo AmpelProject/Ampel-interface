@@ -4,24 +4,26 @@
 # License           : BSD-3-Clause
 # Author            : Jakob van Santen <jakob.van.santen@desy.de>
 # Date              : 14.08.2020
-# Last Modified Date: 14.08.2020
-# Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
+# Last Modified Date: 21.06.2021
+# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, Type, TypeVar
-from ampel.base import abstractmethod, AmpelABC
-from ampel.model.Secret import Secret
+from ampel.abstract.Secret import Secret
+from ampel.base.AmpelABC import AmpelABC
+from ampel.base.decorator import abstractmethod
 
-T = TypeVar('T')
 
 class AbsSecretProvider(AmpelABC, abstract=True):
-    """
-    Interface to a secret store. This may be as simple as a dict loaded from a
-    JSON file, or a complete key manager like Vault.
-    """
+	"""
+	Interface to a secret store used to resolve secrets.
+	The underlying store may be as simple as a dict loaded from a JSON file
+	or a complete key manager like Vault.
+	"""
 
-    @abstractmethod
-    def get(self, key: str, value_type: Type[T]) -> Secret[T]:
-        """
-        Fetch a secret by key. May raise an exception if the key is not known.
-        """
-        ...
+	@abstractmethod
+	def tell(self, arg: Secret) -> bool:
+		"""
+		Potentially update an initialized Secret instance with
+		the actual sensitive information associable with it.
+		:returns: True if the Secret was told/resolved or False
+		if the provided Secret is unknown to this secret provider
+		"""
