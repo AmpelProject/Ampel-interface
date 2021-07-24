@@ -8,7 +8,6 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from pydantic import BaseModel, BaseConfig, Extra
-from typing import Any, Dict
 from ampel.config.AmpelConfig import AmpelConfig
 
 class StrictModel(BaseModel):
@@ -45,9 +44,3 @@ class StrictModel(BaseModel):
 			m = BaseModel.construct(**kwargs)
 			object.__setattr__(self, '__dict__', m.__dict__)
 			object.__setattr__(self, '__fields_set__', m.__fields_set__)
-
-
-	def dict(self, **kwargs) -> Dict[str, Any]:
-		if 'exclude_defaults' not in kwargs:
-			kwargs['exclude_defaults'] = True
-		return super().dict(**kwargs)
