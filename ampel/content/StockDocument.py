@@ -4,41 +4,48 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 28.12.2019
-# Last Modified Date: 21.02.2021
+# Last Modified Date: 05.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-import sys
-if sys.version_info.minor > 8:
-	from typing import TypedDict
-else:
-	from typing_extensions import TypedDict
-from typing import Any, Sequence, Union, Optional, Dict
-from ampel.type import StockId, ChannelId
+from typing import Any, Sequence, Union, Dict, TypedDict, Literal
+from ampel.types import StockId, ChannelId, Tag
 from ampel.content.JournalRecord import JournalRecord
 
 
-class StockDocument(TypedDict):
+class StockDocument(TypedDict, total=False):
 	"""
-	An object being observed.
-
 	The stock record ties together data from various sources, selected by
 	various channels, but all related to the same underlying object. Each
-	channel has a different view of the stock. From the perspective of a given
-	channel, the stock is created the first time one of its datapoints is
-	selected by the channel. Likewise, it is modified whenever a new datapoint
-	is selected by the channel.
+	channel has a different view of the stock.
+	From the perspective of a given channel, the stock is updated
+	whenever a linked document (T0, T1, T2) is updated.
 
-	This is a dict containing 1 or more of the following items:
+	A dict containing 1 or more of the following items:
 	"""
-	_id: StockId
-	tag: Optional[Sequence[Union[int, str]]]
-	#: Channels that have selected datapoints for this stock
-	channel: Optional[Sequence[ChannelId]]
-	#: Records of activity on the stock
+
+	#: The unique id associated with the stock. Integer most of the time
+	stock: StockId
+
+	#: Optional source origin (avoids potential stock collision between different data sources)
+	origin: int
+
+	#: Optional tag(s)
+	tag: Sequence[Tag]
+
+	#: Channels asscoiated with this stock
+	channel: Sequence[ChannelId]
+
+	#: Records of activity
 	journal: Sequence[JournalRecord]
-	#: Names associated with the stock
-	name: Optional[Sequence[Union[int, str]]]
-	#: Last modification time (UNIX epoch) in each channel
-	modified: Dict[str, Any]
+
 	#: Creation time (UNIX epoch) in each channel
-	created: Dict[str, Any]
+	ts: Dict[ChannelId, Dict[Literal['tied', 'upd'], float]]
+
+	#: Last update time for any channel
+	updated: Union[int, float]
+
+	#: External name(s) associated with the stock
+	name: Sequence[Union[int, str]]
+
+	#: Optional specific content
+	body: Dict[str, Any]
