@@ -4,13 +4,13 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 04.04.2021
+# Last Modified Date: 18.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
 from typing import Dict, Optional, Union, Any, Literal, Sequence, Callable
 
-from ampel.type import StockId
+from ampel.types import StockId, UBson
 from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.content.DataPoint import DataPoint
 from ampel.content.T1Document import T1Document
@@ -44,7 +44,7 @@ class SnapView:
 	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
 	t3: Optional[Sequence[T3Document]] #: T3 documents, if loaded
 	logs: Optional[Sequence[LogDocument]] #: Logs, if added by T3 complement stage
-	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.t3.complement.AbsT3DataAppender.AbsT3DataAppender`
+	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.abstract.AbsBufferComplement.AbsBufferComplement`
 
 
 	@classmethod
@@ -91,28 +91,28 @@ class SnapView:
 
 	def get_t2_docs(self,
 		unit_id: Optional[Union[int, str]] = None,
-		compound_id: Optional[bytes] = None
+		link_id: Optional[int] = None
 	) -> Optional[Sequence[T2Document]]:
 		"""
 		Get a subset of T2 documents.
 
 		:param unit_id: limits the returned science record(s) to the one with the provided t2 unit id
-		:param compound_id: whether to return the latest science record(s) or not (default: False)
+		:param link_id: whether to return the latest science record(s) or not (default: False)
 
 		"""
 
 		if self.t2 is None:
 			return None
 
-		if compound_id:
+		if link_id:
 
 			if unit_id:
 				return tuple(
 					rec for rec in self.t2
-					if rec['link'] == compound_id and rec['unit'] == unit_id
+					if rec['link'] == link_id and rec['unit'] == unit_id
 				)
 
-			return tuple(rec for rec in self.t2 if rec['link'] == compound_id)
+			return tuple(rec for rec in self.t2 if rec['link'] == link_id)
 
 		if unit_id:
 			return tuple(rec for rec in self.t2 if rec['unit'] == unit_id)
@@ -122,25 +122,24 @@ class SnapView:
 
 	def get_t2_result(self,
 		unit_id: Union[int, str],
-		compound_id: Optional[bytes] = None
-	) -> Optional[Dict[str, Any]]:
+		link_id: Optional[int] = None,
+		code: Optional[Union[int]] = None
+	) -> Optional[UBson]:
 		"""
-		Get the latest result from the given unit.
+		Get latest result from a given unit.
 
 		:param unit_id: target unit id
-		:param compound_id: restrict to a specific state
+		:param link_id: restrict to a specific state
 		"""
 
 		# from the records that match the unit and compound selection,
 		# return the last record that has a result
-		for t2 in reversed(self.get_t2_docs(unit_id, compound_id) or []):
+		for t2 in self.get_t2_docs(unit_id, link_id) or []:
+			if code is not None and t2['code'] != code:
+				continue
 			for subrecord in reversed(t2.get('body') or []):
-				if 'data' in subrecord and subrecord['code'] >= 0:
-					result = subrecord['data']
-					if isinstance(result, dict):
-						return result
-					elif isinstance(result, list) and len(result):
-						return result[-1]
+				if subrecord:
+					return subrecord
 		return None
 
 
@@ -188,7 +187,7 @@ class SnapView:
 		return self._get_time(self.stock['journal'][0], output)
 
 
-	def get_time_modified(self,
+	def get_time_updated(self,
 		output: Literal['raw', 'datetime', 'str'] = 'raw'
 	) -> Optional[Union[float, datetime, str]]:
 		""" """
