@@ -11,7 +11,7 @@ import collections
 from typing import List, Generic
 from pydantic import validator
 from pydantic.generics import GenericModel
-from ampel.type import T
+from ampel.types import T
 
 class FlatAnyOf(GenericModel, Generic[T]):
 	"""

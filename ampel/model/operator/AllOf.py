@@ -9,7 +9,7 @@
 
 from pydantic.generics import GenericModel
 from typing import List, Generic
-from ampel.type import T
+from ampel.types import T
 
 
 class AllOf(GenericModel, Generic[T]):
