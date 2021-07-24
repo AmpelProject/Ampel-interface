@@ -13,7 +13,7 @@ if sys.version_info.minor > 8:
 else:
 	from typing_extensions import TypedDict
 from typing import Sequence, Union, Any, Dict
-from ampel.type import ChannelId, StockId
+from ampel.types import ChannelId, StockId
 
 
 class ChannelLogEntry(TypedDict):

@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Union, Dict, Tuple, Type, Sequence, Literal, Any, Set
-from ampel.type import T, strict_iterable
+from ampel.types import T, strict_iterable
 from ampel.model.operator.AllOf import AllOf
 from ampel.model.operator.AnyOf import AnyOf
 from ampel.model.operator.OneOf import OneOf

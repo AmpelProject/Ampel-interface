@@ -9,7 +9,7 @@
 
 from typing import Sequence, Union, TypedDict, Dict, Any, Literal
 from ampel.enum.EventCode import EventCode
-from ampel.type import ChannelId
+from ampel.types import ChannelId
 
 
 class EventDocument(TypedDict, total=False):

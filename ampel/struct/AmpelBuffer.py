@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Optional, Dict, List, Any, TypedDict, Literal
-from ampel.type import StockId
+from ampel.types import StockId
 from ampel.content.StockDocument import StockDocument
 from ampel.content.DataPoint import DataPoint
 from ampel.content.T1Document import T1Document
