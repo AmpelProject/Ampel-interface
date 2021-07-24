@@ -4,14 +4,13 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 10.02.2021
-# Last Modified Date: 11.02.2021
+# Last Modified Date: 30.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Sequence, Literal, List, overload
-from ampel.type import StockId
-from ampel.content.T2Document import T2Link
-from ampel.content.T2Record import T2Record
+from typing import Dict, Optional, Union, Any, Sequence, Literal, overload
+from ampel.types import StockId, UBson, T2Link
+from ampel.content.MetaRecord import MetaRecord
 
 TYPE_POINT_T2 = 0 # linked with datapoints, that is with tier 0
 TYPE_STATE_T2 = 1 # linked with compounds, that is with tier 1
@@ -21,38 +20,39 @@ TYPE_STOCK_T2 = 3 # linked with stock document
 class T2DocView:
 	"""
 	View of a given T2Document (with unique stock id).
-	Note: not implementing a static constructor method accepting T2Record
-	as argument here to avoid a dependency on pymongo.
 	"""
 
-	__slots__ = "unit", "config", "link", "stock", "status", "created", "t2_type", "body", "_frozen"
+	__slots__ = 'unit', 'config', 'link', 'stock', 'code', 'meta', 'created', 't2_type', 'body', '_frozen'
 
-	stock: StockId
+	stock: Union[StockId, Sequence[StockId]]
 	unit: Union[int, str]
 	config: Optional[Dict[str, Any]]
-	link: Union[T2Link, Sequence[T2Link]]
-	status: int
+	link: T2Link
+	code: int
 	t2_type: int
 	created: float
-	body: Optional[Sequence[T2Record]]
+	meta: Sequence[MetaRecord]
+	body: Optional[Sequence[UBson]]
 
 
 	def __init__(self,
-		stock: StockId,
+		stock: Union[StockId, Sequence[StockId]],
 		unit: Union[int, str],
-		link: Union[T2Link, Sequence[T2Link]],
-		status: int,
+		link: T2Link,
+		code: int,
 		t2_type: int,
 		created: float,
+		meta: Sequence[MetaRecord],
 		config: Optional[Dict[str, Any]] = None,
-		body: Optional[Sequence[T2Record]] = None,
+		body: Optional[Sequence[UBson]] = None,
 		freeze: bool = True
 	):
 		self.stock = stock
 		self.unit = unit
 		self.link = link
-		self.status = status
+		self.code = code
 		self.body = body
+		self.meta = meta
 		self.config = config
 		self.created = created
 		self.t2_type = t2_type
@@ -74,28 +74,23 @@ class T2DocView:
 		return {k: getattr(self, k) for k in self.__slots__ if k != '_frozen'}
 
 
-	def has_payload(self) -> bool:
+	def has_content(self) -> bool:
 		return self.body is not None and len(self.body) > 0
 
 
-	def get_payload(self) -> Optional[Union[Dict[str, Any], List[Dict[str, Any]]]]:
+	def get_data(self) -> UBson:
 		"""
-		:returns: The payload (key: 'result') of the first T2Record found with status >= 0
-		from the list of t2 records in reversed chronological order
+		:returns: The content of the last array element of body associated with a meta code >= 0.
 		"""
-
-		if not self.has_payload():
+		if not self.has_content():
 			return None
 
-		for el in reversed(self.body): # type: ignore # inadequate mypy inference
-			if 'result' in el and el['status'] >= 0:
-				return el['result']
-
-		return None
+		idx = len([el for el in self.meta if el['tier'] == 2 and el['code'] >= 0]) - 1
+		return self.body[idx] if idx >= 0 else None # type: ignore[index] # mypy does not get has_content()
 
 
-	def get_records(self) -> Optional[Sequence[T2Record]]:
-		return self.body if self.has_payload() else None # type: ignore # inadequate mypy inference
+	def get_records(self) -> Optional[Sequence[UBson]]:
+		return self.body if self.has_content() else None # type: ignore # inadequate mypy inference
 
 
 	def is_point_type(self) -> bool:
@@ -125,17 +120,17 @@ class T2DocView:
 
 
 	@overload
-	def get_time_modified(self, to_string: Literal[False]) -> Optional[float]:
+	def get_time_updated(self, to_string: Literal[False]) -> Optional[float]:
 		...
 	@overload
-	def get_time_modified(self, to_string: Literal[True]) -> Optional[str]:
+	def get_time_updated(self, to_string: Literal[True]) -> Optional[str]:
 		...
-	def get_time_modified(self, to_string: bool = False) -> Optional[Union[float, str]]:
+	def get_time_updated(self, to_string: bool = False) -> Optional[Union[float, str]]:
 
-		if not self.has_payload():
+		if not self.has_content():
 			return None
 
-		ts = self.body[-1]['ts'] # type: ignore # inadequate mypy inference
+		ts = self.meta[-1]['ts']
 		if to_string:
 			dt = datetime.fromtimestamp(ts)
 			return dt.strftime('%d/%m/%Y %H:%M:%S')
