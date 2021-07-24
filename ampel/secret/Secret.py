@@ -1,29 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/model/Secret.py
+# File              : Ampel-interface/ampel/secret/Secret.py
 # License           : BSD-3-Clause
 # Author            : Jakob van Santen <jakob.van.santen@desy.de>
 # Date              : 14.08.2020
-# Last Modified Date: 14.08.2020
-# Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
+# Last Modified Date: 20.06.2021
+# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, Generic, TypeVar, Union
+from typing import Generic
+from ampel.types import T
+from ampel.base.decorator import abstractmethod
+from ampel.base.AmpelABC import AmpelABC
 
-from ampel.base import abstractmethod, AmpelABC
-from ampel.model.StrictModel import StrictModel
 
-T = TypeVar('T')
-
-class Secret(Generic[T], AmpelABC, StrictModel, abstract=True):
+class Secret(Generic[T], AmpelABC, abstract=True):
     """
     A wrapper for a piece of sensitive data, e.g. a password or access token.
     """
 
-    key: str #: The name of the secret.
-
     @abstractmethod
     def get(self) -> T:
-        """
-        Resolve the secret and return its value.
-        """
-        ...
+        """ Returns secret value """
+
+    @abstractmethod
+    def set(self, arg: T) -> None:
+        """ Sets secret value """
