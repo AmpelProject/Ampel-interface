@@ -4,13 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 26.01.2020
-# Last Modified Date: 05.02.2020
+# Last Modified Date: 25.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
 from typing import Dict, Tuple, List, Sequence, Optional, Any, Callable, Union
-from ampel.type import StockId
-from ampel.content.DataPoint import DataPoint
+from ampel.types import StockId
 
 osa = object.__setattr__
 
@@ -143,13 +142,3 @@ class AmpelAlert:
 			dicts = [d for d in dicts if f_attr in d and op(d[f_attr], f_val)]
 
 		return dicts
-
-
-	@staticmethod
-	def _prev_det_seq(datapoints: Sequence[DataPoint]) -> Optional[Sequence[DataPoint]]:
-		""" ampel.content.DataPoint are 'ampelized' dicts,
-		i.e not the 'raw' datapoints associated with in self.datapoints
-		"""
-		if len(datapoints) > 1:
-			return datapoints[1:]
-		return None
