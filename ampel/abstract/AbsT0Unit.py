@@ -4,22 +4,32 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.10.2019
-# Last Modified Date: 15.06.2020
+# Last Modified Date: 15.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, List
-from ampel.base import abstractmethod, AmpelABC, DataUnit
+from typing import Any, List, Optional
+from ampel.types import StockId
+from ampel.base.AmpelABC import AmpelABC
+from ampel.base.decorator import abstractmethod
+from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
 
 
-class AbsT0Unit(AmpelABC, DataUnit, abstract=True):
+class AbsT0Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 	A unit that creates :class:`datapoints <ampel.content.DataPoint.DataPoint>` for Ampel
+
+	Before new datapoint are inserted into the database, they are customized (or 'ampelized' if you will),
+	in order to later enable the use of short and flexible queries.
+	The cutomizations are light, most of the original information is kept.
+	For example, in the case of ZiT0DataPointShaper:
+		* The field candid is renamed in id
+		* A new field 'tag' is created
+		...
 	"""
 
 	@abstractmethod
-	def ampelize(self, arg: Any) -> List[DataPoint]:
+	def process(self, arg: Any, stock: Optional[StockId] = None) -> List[DataPoint]:
 		"""
 		Convert an external object to Ampel format
 		"""
-		...
