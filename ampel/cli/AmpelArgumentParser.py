@@ -352,11 +352,11 @@ class AmpelArgumentParser(ArgumentParser):
 
 
 	def notation_add_note_references(self):
-		self.notations.add(f"{self.spacer}References to a note are marked with [ ]")
+		self.notations.add(f"{self.spacer}Note references are marked with [ ]")
 
 
 	def notation_add_example_references(self):
-		self.notations.add(f"{self.spacer}References to an example are marked with | |")
+		self.notations.add(f"{self.spacer}Example references are marked with | |")
 
 
 	def notation_add_mutual_exclusivity(self):
