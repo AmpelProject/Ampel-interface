@@ -4,28 +4,26 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.12.2019
-# Last Modified Date: 13.02.2021
+# Last Modified Date: 17.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-import sys
-if sys.version_info.minor > 8:
-	from typing import TypedDict
-else:
-	from typing_extensions import TypedDict
-from typing import Any, Sequence, Union, Dict
-from ampel.type import StockId, DataPointId, ChannelId
+from typing import Any, TypedDict, Sequence, Union, Dict
+from ampel.types import StockId, DataPointId, ChannelId
+from ampel.content.MetaRecord import MetaRecord
+
 
 class DataPoint(TypedDict, total=False):
 	"""
 	A single data point.
 
-	This is a dict containing 1 or more of the following items:
+	A dict containing 1 or more of the following items:
 	"""
-	_id: DataPointId
-	tag: Sequence[Union[int, str]]
+
+	id: DataPointId
 	stock: Union[StockId, Sequence[StockId]]
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	origin: int
+	tag: Sequence[Union[int, str]]
+	channel: Sequence[ChannelId]
+	meta: Sequence[MetaRecord]
 	excl: Sequence[ChannelId]
-	extra: Dict[str, Any]
-	policy: Dict[str, Any]
 	body: Dict[str, Any]
