@@ -52,7 +52,7 @@ Processing units
 Base classes for processing units
 ---------------------------------
 
-.. autoclass:: ampel.base.DataUnit.DataUnit
+.. autoclass:: ampel.base.LogicalUnit.LogicalUnit
   :members:
 
 Context and configuration
@@ -108,7 +108,7 @@ Data classes
   :undoc-members:
   :private-members:
 
-.. autoclass:: ampel.struct.JournalTweak.JournalTweak
+.. autoclass:: ampel.struct.JournalAttributes.JournalAttributes
   :members:
   :undoc-members:
 

@@ -20,16 +20,16 @@ The configuration of a unit is specified by a :class:`~ampel.model.UnitModel.Uni
 
 For some classes, the configuration dict includes more items than are specified directly in the :class:`~ampel.model.UnitModel.UnitModel`:
 
-- Subclasses of :class:`~ampel.base.DataUnit.DataUnit` have the following additional properties:
+- Subclasses of :class:`~ampel.base.LogicalUnit.LogicalUnit` have the following additional properties:
 
-  - :attr:`~ampel.base.DataUnit.DataUnit.resource`, a subset of the `resources` section of the Ampel configuration. The keys are specified by entries in the class variable :attr:`~ampel.base.DataUnit.DataUnit.require`. This can be used to specify the URLs of local services like catalog databases. :class:`~ampel.core.UnitLoader.UnitLoader` will raise an exception if no corresponding entry exists in the `resources` section.
-  - :attr:`~ampel.base.DataUnit.DataUnit.logger`, an instance of :class:`~ampel.log.AmpelLogger.AmpelLogger`.
+  - :attr:`~ampel.base.LogicalUnit.LogicalUnit.resource`, a subset of the `resources` section of the Ampel configuration. The keys are specified by entries in the class variable :attr:`~ampel.base.LogicalUnit.LogicalUnit.require`. This can be used to specify the URLs of local services like catalog databases. :class:`~ampel.core.UnitLoader.UnitLoader` will raise an exception if no corresponding entry exists in the `resources` section.
+  - :attr:`~ampel.base.LogicalUnit.LogicalUnit.logger`, an instance of :class:`~ampel.log.AmpelLogger.AmpelLogger`.
 
-  All T0, T2, and T3 units are :class:`DataUnits <ampel.base.DataUnit.DataUnit>`.
+  All T0, T2, and T3 units are :class:`LogicalUnits <ampel.base.LogicalUnit.LogicalUnit>`.
 
-- Subclasses of :class:`~ampel.core.AdminUnit.AdminUnit` has one additional property:
+- Subclasses of :class:`~ampel.core.ContextUnit.ContextUnit` has one additional property:
   
-  - :attr:`~ampel.core.AdminUnit.AdminUnit.context`, the complete Ampel configuration, Mongo database connection, etc.
+  - :attr:`~ampel.core.ContextUnit.ContextUnit.context`, the complete Ampel configuration, Mongo database connection, etc.
 
   Contributed plugins will not typically provide these.
 

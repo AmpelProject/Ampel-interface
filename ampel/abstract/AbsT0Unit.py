@@ -22,7 +22,7 @@ class AbsT0Unit(AmpelABC, LogicalUnit, abstract=True):
 	Before new datapoint are inserted into the database, they are customized (or 'ampelized' if you will),
 	in order to later enable the use of short and flexible queries.
 	The cutomizations are light, most of the original information is kept.
-	For example, in the case of ZiT0DataPointShaper:
+	For example, in the case of ZiDataPointShaper:
 		* The field candid is renamed in id
 		* A new field 'tag' is created
 		...
