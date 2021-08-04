@@ -4,14 +4,16 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 22.10.2019
-# Last Modified Date: 18.04.2020
+# Last Modified Date: 04.08.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import yaml, json
-from typing import Dict, List, Union, Optional, Type, Literal, Any, Iterable, overload, get_origin
-from ampel.type import JT, JSONTypes
+from typing import Dict, List, Union, Optional, Type, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
+
+UJson = Union[None, str, int, float, bool, List[Any], Dict[str, Any]]
+JT = TypeVar('JT', None, str, int, float, bool, bytes, List[Any], Dict[str, Any])
 
 
 class AmpelConfig:
@@ -22,42 +24,9 @@ class AmpelConfig:
 
 
 	@classmethod
-	def new(cls,
-		config: Dict[str, Any],
-		pwd_file_path: Optional[str] = None,
-		pwds: Optional[Iterable[str]] = None,
-		freeze: bool = True
-	) -> 'AmpelConfig':
-
-		if pwd_file_path or pwds:
-
-			try:
-				from ampel.util.crypto import aes_recursive_decrypt # type: ignore[import]
-			except Exception:
-				print("ampel-core is required for this feature")
-				return None # type: ignore
-
-			if pwd_file_path:
-				with open(pwd_file_path, "r") as f:
-					pwds = [l.strip() for l in f.readlines()]
-
-			config['resource'] = aes_recursive_decrypt(
-				config['resource'], pwds # type: ignore[arg-type]
-			)
-
-		return cls(config, freeze)
-
-
-	@classmethod
-	def load(cls,
-		config_file_path: str,
-		pwd_file_path: Optional[str] = None,
-		pwds: Optional[Iterable[str]] = None,
-		freeze: bool = True
-	) -> 'AmpelConfig':
-
+	def load(cls, config_file_path: str, freeze: bool = True) -> 'AmpelConfig':
 		with open(config_file_path, "r") as f:
-			return cls.new(yaml.safe_load(f), pwd_file_path, pwds, freeze)
+			return cls(yaml.safe_load(f), freeze)
 
 
 	def __init__(self, config: Dict, freeze: bool = False) -> None:
@@ -66,6 +35,11 @@ class AmpelConfig:
 		"""
 		if config is None or not config:
 			raise ValueError("Please provide a config")
+
+		# Convert potentially stringified int keys (JSON compatibility) back to int
+		for s in ('channel', 'confid'):
+			for k in [el for el in config[s].keys() if isinstance(el, str) and el.isdigit()]:
+				config[s][int(k)] = config[s].pop(k)
 
 		self._config: Dict = recursive_freeze(config) if freeze else config
 
@@ -98,42 +72,42 @@ class AmpelConfig:
 	# Overloads for method call with 'entry' but without return type
 
 	@overload
-	def get(self, entry: Union[str, List[str]]) -> JSONTypes:
-		""" config.get('db') """
+	def get(self, entry: Union[str, List[str]]) -> UJson:
+		""" config.get('logging') """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: None) -> JSONTypes:
-		""" config.get('db', None) """
+	def get(self, entry: Union[str, List[str]], ret_type: None) -> UJson:
+		""" config.get('logging', None) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], *, raise_exc: bool) -> JSONTypes:
-		""" config.get('db', raise_exc=False/True) """
+	def get(self, entry: Union[str, List[str]], *, raise_exc: bool) -> UJson:
+		""" config.get('logging', raise_exc=False/True) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: None, *, raise_exc: bool) -> JSONTypes:
-		""" config.get('db', None, raise_exc=False/True) """
+	def get(self, entry: Union[str, List[str]], ret_type: None, *, raise_exc: bool) -> UJson:
+		""" config.get('logging', None, raise_exc=False/True) """
 
 
 	# Overloads for method call with 'entry' and return type
 
 	@overload
 	def get(self, entry: Union[str, List[str]], ret_type: Type[JT]) -> Optional[JT]:
-		""" config.get('db', dict) """
+		""" config.get('logging', dict) """
 
 	@overload
 	def get(self, entry: Union[str, List[str]], ret_type: Type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
-		""" config.get('db', dict, raise_exc=False) """
+		""" config.get('logging', dict, raise_exc=False) """
 
 	@overload
 	def get(self, entry: Union[str, List[str]], ret_type: Type[JT], *, raise_exc: Literal[True]) -> JT:
-		""" config.get('db', dict, raise_exc=True) """
+		""" config.get('logging', dict, raise_exc=True) """
 
 
 	def get(self, # type: ignore[misc]
 		entry: Optional[Union[str, List[str]]] = None,
 		ret_type: Optional[Type[JT]] = None,
 		*, raise_exc: bool = False
-	) -> Union[JSONTypes, Optional[JT]]:
+	) -> Union[UJson, Optional[JT]]:
 		"""
 		Optional arguments:
 		
@@ -157,16 +131,13 @@ class AmpelConfig:
 		if isinstance(entry, str):
 			entry = entry.split(".")
 
-		# check for int elements encoded as str
-		array: List[Union[int, str]] = [
-			(el if not el.isdigit() else int(el)) for el in entry
-		]
+		ret = self._config # pointer
 
-		ret = self._config
-		for el in array:
+		# Integerizes int path elements encoded as str
+		for el in [(el if not el.isdigit() else int(el)) for el in entry]:
 			if el not in ret:
 				if raise_exc:
-					raise ValueError(f"Config element '{entry}' not found")
+					raise ValueError(f'Config element \'{".".join(entry)}\' not found')
 				return None
 			ret = ret[el]
 
@@ -183,6 +154,14 @@ class AmpelConfig:
 				)
 
 		return ret
+
+
+	def get_conf_id(self, conf_id: int) -> Dict[str, Any]:
+
+		if conf_id not in self._config['confid']:
+			raise ValueError(f"Config with id {conf_id} not found")
+
+		return self._config['confid'][conf_id]
 
 
 	def print(self,
