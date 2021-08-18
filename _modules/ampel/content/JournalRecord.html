@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.content.JournalRecord &#8212; ampel-interface 0.7.1 documentation</title>
+    <title>ampel.content.JournalRecord &#8212; ampel-interface 0.8-alpha.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.JournalRecord</a></li> 
       </ul>
@@ -39,38 +39,47 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 12.12.2019</span>
-<span class="c1"># Last Modified Date: 08.06.2020</span>
+<span class="c1"># Last Modified Date: 22.06.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">ampel.type</span> <span class="kn">import</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">Tag</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">Tag</span>
+
 
 <div class="viewcode-block" id="JournalRecord"><a class="viewcode-back" href="../../../api.html#ampel.content.JournalRecord.JournalRecord">[docs]</a><span class="k">class</span> <span class="nc">JournalRecord</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	A record of activity on a stock.</span>
+<span class="sd">	A record of activity on a stock document.</span>
 
-<span class="sd">	.. seealso:: :class:`~ampel.struct.JournalTweak.JournalTweak`</span>
-
-<span class="sd">	This is a dict containing 1 or more of the following items:</span>
+<span class="sd">	.. seealso:: :class:`~ampel.struct.JournalAttributes.JournalAttributes`</span>
 <span class="sd">	&quot;&quot;&quot;</span>
+
 	<span class="c1">#: Tier of the associated process</span>
-	<span class="n">tier</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+	<span class="n">tier</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
 	<span class="c1">#: UNIX epoch of the activity</span>
 	<span class="n">ts</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
 	<span class="c1">#: Channels associated with the activity</span>
 	<span class="n">channel</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]]</span>
+
 	<span class="c1">#: Name of the associated process</span>
 	<span class="n">process</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
 	<span class="c1">#: Free-form labels</span>
 	<span class="n">tag</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tag</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]</span>
+
+	<span class="c1">#: Run(s) associated with this record</span>
+	<span class="n">run</span><span class="p">:</span> <span class="nb">int</span>
+
 	<span class="c1">#: Status code of the associated process</span>
-	<span class="n">status</span><span class="p">:</span> <span class="nb">int</span>
-	<span class="c1">#: id of the unit associated with this record</span>
-	<span class="n">unit</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-	<span class="c1">#: id of the document associated with the invocation</span>
-	<span class="n">doc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
-	<span class="c1">#: run(s) associated with this record</span>
-	<span class="n">run</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+	<span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: Duration of the process</span>
+	<span class="n">duration</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
+	<span class="c1">#: Trace ids</span>
+	<span class="n">traceid</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
 	<span class="c1">#: Free-form information</span>
 	<span class="n">extra</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
 </pre></div>
@@ -104,14 +113,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.JournalRecord</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.content.StockDocument &#8212; ampel-interface 0.7.1 documentation</title>
+    <title>ampel.content.StockDocument &#8212; ampel-interface 0.8-alpha.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.StockDocument</a></li> 
       </ul>
@@ -39,39 +39,51 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 28.12.2019</span>
-<span class="c1"># Last Modified Date: 21.02.2021</span>
+<span class="c1"># Last Modified Date: 05.05.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span>
-<span class="kn">from</span> <span class="nn">ampel.type</span> <span class="kn">import</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">ChannelId</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">Tag</span>
 <span class="kn">from</span> <span class="nn">ampel.content.JournalRecord</span> <span class="kn">import</span> <span class="n">JournalRecord</span>
 
 
-<div class="viewcode-block" id="StockDocument"><a class="viewcode-back" href="../../../api.html#ampel.content.StockDocument.StockDocument">[docs]</a><span class="k">class</span> <span class="nc">StockDocument</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<div class="viewcode-block" id="StockDocument"><a class="viewcode-back" href="../../../api.html#ampel.content.StockDocument.StockDocument">[docs]</a><span class="k">class</span> <span class="nc">StockDocument</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	An object being observed.</span>
-
 <span class="sd">	The stock record ties together data from various sources, selected by</span>
 <span class="sd">	various channels, but all related to the same underlying object. Each</span>
-<span class="sd">	channel has a different view of the stock. From the perspective of a given</span>
-<span class="sd">	channel, the stock is created the first time one of its datapoints is</span>
-<span class="sd">	selected by the channel. Likewise, it is modified whenever a new datapoint</span>
-<span class="sd">	is selected by the channel.</span>
+<span class="sd">	channel has a different view of the stock.</span>
+<span class="sd">	From the perspective of a given channel, the stock is updated</span>
+<span class="sd">	whenever a linked document (T0, T1, T2) is updated.</span>
 
-<span class="sd">	This is a dict containing 1 or more of the following items:</span>
+<span class="sd">	A dict containing 1 or more of the following items:</span>
 <span class="sd">	&quot;&quot;&quot;</span>
-	<span class="n">_id</span><span class="p">:</span> <span class="n">StockId</span>
-	<span class="n">tag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span>
-	<span class="c1">#: Channels that have selected datapoints for this stock</span>
-	<span class="n">channel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]]</span>
-	<span class="c1">#: Records of activity on the stock</span>
+
+	<span class="c1">#: The unique id associated with the stock. Integer most of the time</span>
+	<span class="n">stock</span><span class="p">:</span> <span class="n">StockId</span>
+
+	<span class="c1">#: Optional source origin (avoids potential stock collision between different data sources)</span>
+	<span class="n">origin</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: Optional tag(s)</span>
+	<span class="n">tag</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tag</span><span class="p">]</span>
+
+	<span class="c1">#: Channels asscoiated with this stock</span>
+	<span class="n">channel</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]</span>
+
+	<span class="c1">#: Records of activity</span>
 	<span class="n">journal</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">JournalRecord</span><span class="p">]</span>
-	<span class="c1">#: Names associated with the stock</span>
-	<span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span>
-	<span class="c1">#: Last modification time (UNIX epoch) in each channel</span>
-	<span class="n">modified</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
 	<span class="c1">#: Creation time (UNIX epoch) in each channel</span>
-	<span class="n">created</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
+	<span class="n">ts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;tied&#39;</span><span class="p">,</span> <span class="s1">&#39;upd&#39;</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span>
+
+	<span class="c1">#: Last update time for any channel</span>
+	<span class="n">updated</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
+	<span class="c1">#: External name(s) associated with the stock</span>
+	<span class="n">name</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+
+	<span class="c1">#: Optional specific content</span>
+	<span class="n">body</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -103,14 +115,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.StockDocument</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.content.LogDocument &#8212; ampel-interface 0.7.1 documentation</title>
+    <title>ampel.content.LogDocument &#8212; ampel-interface 0.8-alpha.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.LogDocument</a></li> 
       </ul>
@@ -39,26 +39,79 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 14.02.2020</span>
-<span class="c1"># Last Modified Date: 01.03.2020</span>
+<span class="c1"># Last Modified Date: 16.03.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span>
-<span class="kn">from</span> <span class="nn">ampel.type</span> <span class="kn">import</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">StockId</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+	<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="k">else</span><span class="p">:</span>
+	<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">StockId</span>
+
+
+<span class="k">class</span> <span class="nc">ChannelLogEntry</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Abbreviations:</span>
+<span class="sd">	s: stock, a: alert, f: flag, r: run, m: msg, c: channel</span>
+
+<span class="sd">	Used to save multiple channel specific messages into a single LogDocument</span>
+<span class="sd">	Example of a LogDocument embedding two ChannelLogEntry entries: {</span>
+<span class="sd">		&quot;_id&quot; : ObjectId(&quot;5be4aa6254048041edbac352&quot;),</span>
+<span class="sd">		&quot;s&quot; : NumberLong(1810101032122523),</span>
+<span class="sd">		&quot;a&quot; : NumberLong(404105201415015004),</span>
+<span class="sd">		&quot;f&quot; : 572784643,</span>
+<span class="sd">		&quot;r&quot; : 509,</span>
+<span class="sd">		&quot;m&quot; : [</span>
+<span class="sd">			{&quot;c&quot; : &quot;NO_FILTER&quot;, &quot;m&quot;: &quot;Alert accepted&quot;},</span>
+<span class="sd">			{&quot;c&quot; : &quot;HU_RANDOM&quot;, &quot;m&quot;: &quot;Alert accepted&quot;},</span>
+<span class="sd">		]</span>
+<span class="sd">	}</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1">#: channel</span>
+	<span class="n">c</span><span class="p">:</span> <span class="n">ChannelId</span>
+
+	<span class="c1">#: msg</span>
+	<span class="n">m</span><span class="p">:</span> <span class="nb">str</span>
+
 
 <div class="viewcode-block" id="LogDocument"><a class="viewcode-back" href="../../../api.html#ampel.content.LogDocument.LogDocument">[docs]</a><span class="k">class</span> <span class="nc">LogDocument</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	A message produced by an Ampel unit during processing.</span>
+<span class="sd">	Abbreviations:</span>
+<span class="sd">	s: stock, a: alert, f: flag, r: run, m: msg, c: channel</span>
 
-<span class="sd">	This is a dict containing 1 or more of the following items:</span>
+<span class="sd">	Example: {</span>
+<span class="sd">		&quot;_id&quot; : ObjectId(&quot;5be4aa6254048041edbac353&quot;),</span>
+<span class="sd">		&quot;s&quot; : NumberLong(1810101032122523),</span>
+<span class="sd">		&quot;a&quot; : NumberLong(404105201415015004),</span>
+<span class="sd">		&quot;f&quot; : 572784643,</span>
+<span class="sd">		&quot;r&quot; : 509,</span>
+<span class="sd">		&quot;c&quot; : &quot;NO_FILTER&quot;,</span>
+<span class="sd">		&quot;m&quot; : &quot;Alert accepted&quot;</span>
+<span class="sd">	}</span>
 <span class="sd">	&quot;&quot;&quot;</span>
+
 	<span class="c1">#: database key</span>
 	<span class="n">_id</span><span class="p">:</span> <span class="nb">bytes</span>
-	<span class="n">flag</span><span class="p">:</span> <span class="nb">int</span>
-	<span class="n">run</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
-	<span class="n">msg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span>
-	<span class="n">stock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">StockId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StockId</span><span class="p">]]]</span>
-	<span class="n">channel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]]]</span>
-	<span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+
+	<span class="c1">#: flag</span>
+	<span class="n">f</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: run id</span>
+	<span class="n">r</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+
+	<span class="c1">#: msg</span>
+	<span class="n">m</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ChannelLogEntry</span><span class="p">]</span>
+
+	<span class="c1">#: stock</span>
+	<span class="n">s</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">StockId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StockId</span><span class="p">]]</span>
+
+	<span class="c1">#: channel</span>
+	<span class="n">c</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]]</span>
+
+	<span class="c1">#: extra</span>
+	<span class="n">e</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -90,14 +143,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.LogDocument</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>

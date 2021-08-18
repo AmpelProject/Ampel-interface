@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.abstract.AbsT0Unit &#8212; ampel-interface 0.7.1 documentation</title>
+    <title>ampel.abstract.AbsT0Unit &#8212; ampel-interface 0.8-alpha.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsT0Unit</a></li> 
       </ul>
@@ -39,25 +39,35 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 07.10.2019</span>
-<span class="c1"># Last Modified Date: 15.06.2020</span>
+<span class="c1"># Last Modified Date: 15.05.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">ampel.base</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">AmpelABC</span><span class="p">,</span> <span class="n">DataUnit</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span>
+<span class="kn">from</span> <span class="nn">ampel.base.AmpelABC</span> <span class="kn">import</span> <span class="n">AmpelABC</span>
+<span class="kn">from</span> <span class="nn">ampel.base.decorator</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">ampel.base.LogicalUnit</span> <span class="kn">import</span> <span class="n">LogicalUnit</span>
 <span class="kn">from</span> <span class="nn">ampel.content.DataPoint</span> <span class="kn">import</span> <span class="n">DataPoint</span>
 
 
-<div class="viewcode-block" id="AbsT0Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsT0Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">DataUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="AbsT0Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsT0Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">LogicalUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	A unit that creates :class:`datapoints &lt;ampel.content.DataPoint.DataPoint&gt;` for Ampel</span>
+
+<span class="sd">	Before new datapoint are inserted into the database, they are customized (or &#39;ampelized&#39; if you will),</span>
+<span class="sd">	in order to later enable the use of short and flexible queries.</span>
+<span class="sd">	The cutomizations are light, most of the original information is kept.</span>
+<span class="sd">	For example, in the case of ZiDataPointShaper:</span>
+<span class="sd">		* The field candid is renamed in id</span>
+<span class="sd">		* A new field &#39;tag&#39; is created</span>
+<span class="sd">		...</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="AbsT0Unit.ampelize"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit.ampelize">[docs]</a>	<span class="nd">@abstractmethod</span>
-	<span class="k">def</span> <span class="nf">ampelize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">]:</span>
+<div class="viewcode-block" id="AbsT0Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
+	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">stock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StockId</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">]:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Convert an external object to Ampel format</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="o">...</span></div></div>
+<span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -89,14 +99,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8-alpha.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsT0Unit</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>
