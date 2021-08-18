@@ -149,25 +149,6 @@ class AmpelBaseModel:
 		aks = cls._aks
 		NoneType = type(None)
 
-		# Set default attributes
-		cls._model.__field_defaults__ = {
-			k: cls._model.__fields__[k].get_default()
-			for k in cls._model.__fields__
-			if cls._model.__fields__[k].get_default()
-		}
-
-		for k, v in cls._model.__field_defaults__.items():
-			if k in cls._slot_defaults:
-				continue
-			if k not in kwargs:
-				# no need to copy primitive types
-				if isinstance(v, (int, float, str, NoneType, bool)): # type: ignore
-					d[k] = v
-				else:
-					d[k] = deepcopy(v)
-			else:
-				d[k] = kwargs[k]
-
 		for k, v in cls._slot_defaults.items():
 			if k not in kwargs:
 				sa(k, v)
