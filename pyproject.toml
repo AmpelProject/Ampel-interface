@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.8-alpha.1"
+version = "0.8.0-alpha.0"
 description = "Base classes for the Ampel analysis platform"
 authors = [
     "Valery Brinnel"
