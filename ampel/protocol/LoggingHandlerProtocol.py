@@ -20,3 +20,10 @@ class LoggingHandlerProtocol(Protocol):
 
 	def flush(self) -> None:
 		...
+
+class AggregatingLoggingHandlerProtocol(LoggingHandlerProtocol):
+
+	aggregate_interval: float
+
+	def break_aggregation(self) -> None:
+		...
