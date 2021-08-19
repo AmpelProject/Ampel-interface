@@ -29,7 +29,7 @@ class UnitModel(StrictGenericModel, Generic[T]):
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
 	config: Union[None, int, str, Dict[str, Any]]
 
-	secrets: Union[None, NamedSecret, AESecret]
+	secrets: Union[None, Dict[str, Any]]
 
 	#: Values to override in the config
 	override: Optional[Dict[str, Any]]
