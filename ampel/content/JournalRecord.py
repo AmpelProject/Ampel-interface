@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.12.2019
-# Last Modified Date: 22.06.2021
+# Last Modified Date: 19.08.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Union, Literal, Any, Dict, TypedDict
@@ -44,6 +44,12 @@ class JournalRecord(TypedDict, total=False):
 
 	#: Trace ids
 	traceid: Dict[str, int]
+
+	#: id of the unit associated with this record
+	unit: Union[int, str]
+
+	#: id of the document associated with the invocation
+	doc: Union[int, bytes]
 
 	#: Free-form information
 	extra: Dict[str, Any]
