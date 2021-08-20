@@ -7,7 +7,7 @@
 # Last Modified Date: 22.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, List, Optional, Type
+from typing import Any, List, Optional, Type, overload
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
 from ampel.abstract.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
@@ -26,7 +26,15 @@ class AmpelVault:
 				return True
 		return False
 
-	def get_named_secret(self, label: str, ValueType: Type[T]=object) -> Optional[NamedSecret[T]]:
+	@overload
+	def get_named_secret(self, label: str) -> Optional[NamedSecret[Any]]:
+		...
+	
+	@overload
+	def get_named_secret(self, label: str, ValueType: Type[T]) -> Optional[NamedSecret[T]]:
+		...
+	
+	def get_named_secret(self, label, ValueType=object):
 		""" Returns a resolved NamedSecret using provided label """
 		ns: NamedSecret = NamedSecret(label=label)
 		if self.resolve_secret(ns, ValueType):
