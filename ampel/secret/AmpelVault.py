@@ -7,9 +7,9 @@
 # Last Modified Date: 22.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import List, Optional
+from typing import Any, List, Optional, Type
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
-from ampel.abstract.Secret import Secret
+from ampel.abstract.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
 
 
@@ -19,16 +19,16 @@ class AmpelVault:
 	def __init__(self, providers: List[AbsSecretProvider]) -> None:
 		self.providers = providers
 
-	def resolve_secret(self, secret: Secret) -> bool:
+	def resolve_secret(self, secret: Secret, ValueType: Type) -> bool:
 
 		for sp in self.providers:
-			if sp.tell(secret):
+			if sp.tell(secret, ValueType):
 				return True
 		return False
 
-	def get_named_secret(self, label: str) -> Optional[NamedSecret]:
+	def get_named_secret(self, label: str, ValueType: Type[T]=object) -> Optional[NamedSecret[T]]:
 		""" Returns a resolved NamedSecret using provided label """
 		ns: NamedSecret = NamedSecret(label=label)
-		if self.resolve_secret(ns):
+		if self.resolve_secret(ns, ValueType):
 			return ns
 		return None
