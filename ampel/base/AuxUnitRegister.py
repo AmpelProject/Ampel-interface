@@ -81,7 +81,7 @@ class AuxUnitRegister:
 				)
 
 		fqn = cls._defs[klass]['fqn']
-		ret = getattr(import_module(fqn), fqn.split('.')[-1])
+		ret = getattr(import_module(fqn), klass)
 
 		if sub_type:
 			check_class(ret, sub_type)
