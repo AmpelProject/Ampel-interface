@@ -50,6 +50,7 @@
 <span class="kn">from</span> <span class="nn">ampel.base.LogicalUnit</span> <span class="kn">import</span> <span class="n">LogicalUnit</span>
 <span class="kn">from</span> <span class="nn">ampel.struct.UnitResult</span> <span class="kn">import</span> <span class="n">UnitResult</span>
 <span class="kn">from</span> <span class="nn">ampel.struct.JournalAttributes</span> <span class="kn">import</span> <span class="n">JournalAttributes</span>
+<span class="kn">from</span> <span class="nn">ampel.abstract.T3Send</span> <span class="kn">import</span> <span class="n">T3Send</span>
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SnapView</span><span class="p">)</span>
 
@@ -77,10 +78,13 @@
 
 
 <div class="viewcode-block" id="AbsT3Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT3Unit.AbsT3Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
-	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">Generator</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">JournalAttributes</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">UBson</span><span class="p">,</span> <span class="n">UnitResult</span><span class="p">]:</span>
+	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">Generator</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T3Send</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">UBson</span><span class="p">,</span> <span class="n">UnitResult</span><span class="p">]:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Implementing T3 units receive SnapView instances (or subclasses of) via this method.</span>
-<span class="sd">		Use gen.send(JournalAttributes) to customize the journal of the stock document associated with a specific view.</span>
+<span class="sd">		Use gen.send(JournalAttributes) to customize the journal of the stock document associated</span>
+<span class="sd">		with the last view yielded by the generator. In addition, use gen.send(StockAttributes) to</span>
+<span class="sd">		customize the stock tags or name, or gen.send((StockId, JournalAttributes)) to customize</span>
+<span class="sd">		the journal for a view other than the most recent, e.g. when processing in batches.</span>
 <span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 
