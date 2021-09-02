@@ -15,6 +15,7 @@ from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.struct.UnitResult import UnitResult
 from ampel.struct.JournalAttributes import JournalAttributes
+from ampel.abstract.T3Send import T3Send
 
 T = TypeVar("T", bound=SnapView)
 
@@ -42,8 +43,11 @@ class AbsT3Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
 
 
 	@abstractmethod
-	def process(self, gen: Generator[T, JournalAttributes, None]) -> Union[UBson, UnitResult]:
+	def process(self, gen: Generator[T, T3Send, None]) -> Union[UBson, UnitResult]:
 		"""
 		Implementing T3 units receive SnapView instances (or subclasses of) via this method.
-		Use gen.send(JournalAttributes) to customize the journal of the stock document associated with a specific view.
+		Use gen.send(JournalAttributes) to customize the journal of the stock document associated
+		with the last view yielded by the generator. In addition, use gen.send(StockAttributes) to
+		customize the stock tags or name, or gen.send((StockId, JournalAttributes)) to customize
+		the journal for a view other than the most recent, e.g. when processing in batches.
 		"""
