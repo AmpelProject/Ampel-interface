@@ -15,31 +15,31 @@ from ampel.struct.JournalAttributes import JournalAttributes
 class StockAttributes:
 	"""
 	Structure potentialy used by Ampel units to customize
-	stock tags, names or journal entries.
+	journal entries along with stock tags or names.
 	"""
 
-	__slots__ = 'tag', 'journal', 'name'
+	__slots__ = 'journal', 'tag', 'name'
+
+	#: Journal entry customization (mandatory)
+	journal: JournalAttributes
 
 	#: Stock document tag(s)
 	tag: Optional[Union[Tag, Sequence[Tag]]]
-
-	#: Journal entry customization
-	journal: Optional[JournalAttributes]
 
 	#: stock external name(s) / reference id(s)
 	name: Optional[Union[str, Sequence[str]]]
 
 
 	def __init__(self,
+		journal: JournalAttributes,
 		tag: Optional[Union[Tag, Sequence[Tag]]] = None,
-		journal: Optional[JournalAttributes] = None,
 		name: Optional[Union[str, Sequence[str]]] = None
 	) -> None:
 		"""
-		:param tag: stock document tag(s)
 		:param journal: Journal entry customization
+		:param tag: stock document tag(s)
 		:param name: stock external name(s) / reference id(s)
 		"""
-		self.tag = tag
 		self.journal = journal
+		self.tag = tag
 		self.name = name
