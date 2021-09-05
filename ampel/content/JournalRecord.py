@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.12.2019
-# Last Modified Date: 19.08.2021
+# Last Modified Date: 05.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Union, Literal, Any, Dict, TypedDict
@@ -38,6 +38,9 @@ class JournalRecord(TypedDict, total=False):
 
 	#: Status code of the associated process
 	code: int
+
+	#: Action code(s) built from :class:`~ampel.enum.JournalActionCode.JournalActionCode`
+	action: int
 
 	#: Duration of the process
 	duration: Union[int, float]
