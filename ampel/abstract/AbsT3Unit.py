@@ -4,18 +4,16 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 23.02.2018
-# Last Modified Date: 17.06.2021
+# Last Modified Date: 05.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Union, TypeVar, ClassVar, Type, Generic, Generator
-from ampel.types import UBson
+from ampel.types import UBson, T3Send
 from ampel.view.SnapView import SnapView
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.struct.UnitResult import UnitResult
-from ampel.struct.JournalAttributes import JournalAttributes
-from ampel.abstract.T3Send import T3Send
 
 T = TypeVar("T", bound=SnapView)
 

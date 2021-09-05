@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 02.12.2019
-# Last Modified Date: 17.06.2021
+# Last Modified Date: 05.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from collections.abc import ValuesView as values_view, KeysView as keys_view
@@ -15,6 +15,8 @@ from typing import ( # type: ignore[attr-defined]
 
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import AmpelBaseModel
+	from ampel.struct.JournalAttributes import JournalAttributes
+	from ampel.struct.StockAttributes import StockAttributes
 
 T = TypeVar('T')
 StockId = Union[int, bytes, str]
@@ -23,6 +25,7 @@ DataPointId = int
 Tag = Union[int, str]
 UnitId = str
 T2Link = Union[StockId, DataPointId, int]
+T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
 UBson = Union[None, str, int, float, bool, bytes, List[Any], Dict[str, Any]]
 ubson = (str, int, float, bool, bytes, list, dict)
