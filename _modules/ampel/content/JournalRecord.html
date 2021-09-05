@@ -39,7 +39,7 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 12.12.2019</span>
-<span class="c1"># Last Modified Date: 19.08.2021</span>
+<span class="c1"># Last Modified Date: 05.09.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span>
@@ -73,6 +73,9 @@
 
 	<span class="c1">#: Status code of the associated process</span>
 	<span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
+
+	<span class="c1">#: Action code(s) built from :class:`~ampel.enum.JournalActionCode.JournalActionCode`</span>
+	<span class="n">action</span><span class="p">:</span> <span class="nb">int</span>
 
 	<span class="c1">#: Duration of the process</span>
 	<span class="n">duration</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
