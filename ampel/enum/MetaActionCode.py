@@ -17,7 +17,7 @@ class MetaActionCode(IntFlag):
 
 	UNIT                      = 1
 	CLI                       = 2
-	OTHER                     = 4
+	EXTRA_META                = 4
 	EXTRA_JOURNAL             = 8
 	SET_CODE                  = 16
 	ADD_TAG                   = 32

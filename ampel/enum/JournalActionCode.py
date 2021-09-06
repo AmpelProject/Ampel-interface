@@ -30,35 +30,36 @@ class JournalActionCode(IntFlag):
 	T1_ADD_TAG                = 1<<11
 	T1_PULL_TAG               = 1<<12
 	T1_SET_CODE               = 1<<13
-	T1_EXTRA_JOURNAL          = 1<<14
+	T1_EXTRA_META             = 1<<14
+	T1_EXTRA_JOURNAL          = 1<<15
 
 	# T2
-	T2_ADD_CHANNEL            = 1<<15
-	T2_PULL_CHANNEL           = 1<<16
-	T2_ADD_BODY               = 1<<17
-	T2_ADD_TAG                = 1<<18
-	T2_PULL_TAG               = 1<<19
-	T2_SET_CODE               = 1<<20
-	T2_EXTRA_JOURNAL          = 1<<21
-	T2_EXPORT_DOC             = 1<<22
-	T2_IMPORT_RESULT          = 1<<23
+	T2_ADD_CHANNEL            = 1<<16
+	T2_PULL_CHANNEL           = 1<<17
+	T2_ADD_BODY               = 1<<18
+	T2_ADD_TAG                = 1<<19
+	T2_PULL_TAG               = 1<<20
+	T2_SET_CODE               = 1<<21
+	T2_EXTRA_JOURNAL          = 1<<22
+	T2_EXPORT_DOC             = 1<<23
+	T2_IMPORT_RESULT          = 1<<24
 
 	# T3
-	T3_ADD_DOC                = 1<<24
+	T3_ADD_DOC                = 1<<25
 
 	# STOCK
-	STOCK_ADD_CHANNEL         = 1<<25
-	STOCK_PULL_CHANNEL        = 1<<26
-	STOCK_BUMP_UPD            = 1<<27
-	STOCK_ADD_TAG             = 1<<28
-	STOCK_PULL_TAG            = 1<<29
-	STOCK_ADD_NAME            = 1<<30
-	STOCK_PULL_NAME           = 1<<31
-	STOCK_SET_BODY            = 1<<32
+	STOCK_ADD_CHANNEL         = 1<<26
+	STOCK_PULL_CHANNEL        = 1<<27
+	STOCK_BUMP_UPD            = 1<<28
+	STOCK_ADD_TAG             = 1<<29
+	STOCK_PULL_TAG            = 1<<30
+	STOCK_ADD_NAME            = 1<<31
+	STOCK_PULL_NAME           = 1<<32
+	STOCK_SET_BODY            = 1<<33
 
 	# CLI / OPS
-	STOCK_RESET_BODY          = 1<<33
-	T1_RESET_CODE             = 1<<34
-	T1_RESET_BODY             = 1<<35
-	T2_RESET_CODE             = 1<<36
-	T2_RESET_BODY             = 1<<37
+	STOCK_RESET_BODY          = 1<<34
+	T1_RESET_CODE             = 1<<35
+	T1_RESET_BODY             = 1<<36
+	T2_RESET_CODE             = 1<<37
+	T2_RESET_BODY             = 1<<38
