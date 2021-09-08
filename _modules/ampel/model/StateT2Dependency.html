@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.view.ReadOnlyDict &#8212; ampel-interface 0.8.0-alpha.6 documentation</title>
+    <title>ampel.model.StateT2Dependency &#8212; ampel-interface 0.8.0-alpha.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -23,7 +23,7 @@
              accesskey="I">index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.0-alpha.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.view.ReadOnlyDict</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.model.StateT2Dependency</a></li> 
       </ul>
     </div>  
 
@@ -32,36 +32,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for ampel.view.ReadOnlyDict</h1><div class="highlight"><pre>
+  <h1>Source code for ampel.model.StateT2Dependency</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># File              : Ampel-interface/ampel/view/ReadOnlyDict.py</span>
+<span class="c1"># File              : Ampel-interface/ampel/model/StateT2Dependency.py</span>
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
-<span class="c1"># Date              : Unspecified</span>
-<span class="c1"># Last Modified Date: 16.04.2020</span>
+<span class="c1"># Date              : 06.02.2021</span>
+<span class="c1"># Last Modified Date: 17.02.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generic</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">T</span>
+<span class="kn">from</span> <span class="nn">ampel.model.UnitModel</span> <span class="kn">import</span> <span class="n">UnitModel</span>
 
-<div class="viewcode-block" id="ReadOnlyDict"><a class="viewcode-back" href="../../../api.html#ampel.view.ReadOnlyDict.ReadOnlyDict">[docs]</a><span class="k">class</span> <span class="nc">ReadOnlyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;A dict whose items can&#39;t be changed.&quot;&quot;&quot;</span>
-
-	<span class="k">def</span> <span class="nf">__readonly__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;:raises RuntimeError: whenever called&quot;&quot;&quot;</span>
-		<span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot modify ReadOnlyDict&quot;</span><span class="p">)</span>
-
-	<span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="fm">__delitem__</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">pop</span> <span class="o">=</span> <span class="n">__readonly__</span> <span class="c1"># type: ignore</span>
-	<span class="n">popitem</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">clear</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">update</span> <span class="o">=</span> <span class="n">__readonly__</span> <span class="c1"># type: ignore</span>
-	<span class="n">setdefault</span> <span class="o">=</span> <span class="n">__readonly__</span>
-
-	<span class="k">del</span> <span class="n">__readonly__</span>
-
-	<span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">),)</span></div>
+<span class="c1"># Note class inheritance order matters</span>
+<span class="c1"># &quot;TypeError: Cannot create a consistent method resolution&quot;</span>
+<span class="c1"># is raised if order is switched (possibly due to pydantic&#39;s metaclass)</span>
+<div class="viewcode-block" id="StateT2Dependency"><a class="viewcode-back" href="../../../api.html#ampel.model.StateT2Dependency.StateT2Dependency">[docs]</a><span class="k">class</span> <span class="nc">StateT2Dependency</span><span class="p">(</span><span class="n">UnitModel</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Used to specify how &quot;tied state t2&quot; units should select the associated required t2 document.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1">#: - None: the state associated with the root tied state T2 will be used (value of &#39;link&#39; in t2 doc)</span>
+	<span class="c1">#: - Dict: allows tied state T2 units to be bound with point t2 units.</span>
+	<span class="c1">#:   The value provided here must be understandable by</span>
+	<span class="c1">#:      :func:`AbsTiedStateT2Unit.get_link &lt;ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link&gt;`</span>
+	<span class="c1">#:   Ampel extensions such as Ampel-photometry accept more &#39;link_override&#39; options than vanilla Ampel.</span>
+	<span class="n">link_override</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -95,7 +92,7 @@
              >index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.0-alpha.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.view.ReadOnlyDict</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.model.StateT2Dependency</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
