@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Optional
-from ampel.abstract.Secret import Secret, T
+from ampel.secret.Secret import Secret, T
 from pydantic import BaseModel
 
 
