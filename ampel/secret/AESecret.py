@@ -9,7 +9,7 @@
 
 from typing import Optional
 from pydantic import BaseModel
-from ampel.abstract.Secret import Secret
+from ampel.secret.Secret import Secret
 
 
 class AESecret(Secret[str], BaseModel):

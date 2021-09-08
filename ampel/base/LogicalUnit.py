@@ -10,7 +10,7 @@
 from typing import Tuple, Dict, Any, Optional, ClassVar
 from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from ampel.abstract.Secret import Secret
+from ampel.secret.Secret import Secret
 
 
 class LogicalUnit(AmpelBaseModel):
