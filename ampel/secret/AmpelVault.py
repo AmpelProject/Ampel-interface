@@ -9,7 +9,7 @@
 
 from typing import Any, List, Optional, Type, overload
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
-from ampel.abstract.Secret import Secret, T
+from ampel.secret.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
 
 
