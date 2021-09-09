@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API reference &#8212; ampel-interface 0.8.0-alpha.6 documentation</title>
+    <title>API reference &#8212; ampel-interface 0.8.0-alpha.5 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="structure.html" title="Structure"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.0-alpha.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.0-alpha.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>  
@@ -42,325 +42,9 @@ as well as the data classes that are provided as input to those units by the
 core.</p>
 <div class="section" id="processing-units">
 <h2>Processing units<a class="headerlink" href="#processing-units" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="ampel.abstract.AbsT0Unit.AbsT0Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsT0Unit.</span></code><code class="sig-name descname"><span class="pre">AbsT0Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT0Unit.html#AbsT0Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT0Unit.AbsT0Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A unit that creates <code class="xref py py-class docutils literal notranslate"><span class="pre">datapoints</span></code> for Ampel</p>
-<p>Before new datapoint are inserted into the database, they are customized (or ‘ampelized’ if you will),
-in order to later enable the use of short and flexible queries.
-The cutomizations are light, most of the original information is kept.
-For example, in the case of ZiDataPointShaper:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>The field candid is renamed in id</p></li>
-<li><p>A new field ‘tag’ is created</p></li>
-</ul>
-<p>…</p>
-</div></blockquote>
-<dl class="py method">
-<dt id="ampel.abstract.AbsT0Unit.AbsT0Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT0Unit.html#AbsT0Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT0Unit.AbsT0Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert an external object to Ampel format</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsPointT2Unit.AbsPointT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsPointT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsPointT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A T2 unit bound to a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsStockT2Unit.AbsStockT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsStockT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsStockT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStockT2Unit.html#AbsStockT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A T2 unit bound to a <a class="reference internal" href="#ampel.content.StockDocument.StockDocument" title="ampel.content.StockDocument.StockDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockDocument</span></code></a></p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStockT2Unit.html#AbsStockT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsStateT2Unit.AbsStateT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsStateT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsStateT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStateT2Unit.html#AbsStateT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStateT2Unit.AbsStateT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A T2 unit bound to a <code class="xref py py-class docutils literal notranslate"><span class="pre">T1Document</span></code> (state of a stock)</p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsStateT2Unit.AbsStateT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsStateT2Unit.html#AbsStateT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsStateT2Unit.AbsStateT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsCustomStateT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsCustomStateT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsCustomStateT2Unit.html#AbsCustomStateT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.types.T</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A T2 unit bound to a custom type <em>constructed</em> from a <code class="xref py py-class docutils literal notranslate"><span class="pre">compound</span></code></p>
-<p>Known subclass: <a class="reference external" href="https://ampelproject.github.io/Ampel-photometry/api.html#ampel.abstract.AbsLightCurveT2Unit.AbsLightCurveT2Unit" title="(in ampel-photometry v0.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbsLightCurveT2Unit</span></code></a></p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit.build">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">build</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsCustomStateT2Unit.html#AbsCustomStateT2Unit.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit.build" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the parametrized type using compound and datapoints.
-For example, AbsCustomStateT2Unit[LightCurve] would return a
-<a class="reference external" href="https://ampelproject.github.io/Ampel-photometry/api.html#ampel.view.LightCurve.LightCurve" title="(in ampel-photometry v0.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightCurve</span></code></a> instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~T</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsCustomStateT2Unit.html#AbsCustomStateT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsCustomStateT2Unit.AbsCustomStateT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsTiedT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsTiedT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedT2Unit.html#AbsTiedT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>A T2 unit that depends on the results of other T2 units.</p>
-<dl class="py attribute">
-<dt id="ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.t2_dependency">
-<code class="sig-name descname"><span class="pre">t2_dependency</span></code><em class="property"><span class="pre">:</span> <span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><span class="pre">ampel.model.UnitModel.UnitModel</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit.t2_dependency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dependencies configuration for the underlying tied t2 unit
-Sub-class can add unit id constraints by parametrizing UnitModel</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsTiedStateT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsTiedStateT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.types.T</span></code>], <a class="reference internal" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit" title="ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit</span></code></a></p>
-<p>A T2 unit bound to a <code class="xref py py-class docutils literal notranslate"><span class="pre">T1Document</span></code> (state of a stock),
-as well as the results of other T2 units</p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
-and if ‘link_override’ is defined in there.</p>
-<p>T2Processor needs to retrieve the T2Records of units tied with this unit.
-If unspecified in config, t2 dependencies are resolved - for each unit defined in get_tied_unit_names() -
-using the db match query: {unit: &lt;unit_name&gt;, config: None, link: &lt;same link as root doc&gt;}.</p>
-<p>This behavior is overridable/customizable by adding the keyword ‘t2_dependency’ to the t2 config dict.
-The value of t2_dependency should be of type Union[T2Dependency, List[T2Dependency]].
-The parameter ‘link_override’ in T2Dependency allows to link this state T2 with a different value
-than the one registered as ‘link’ in the T2Record (which is the _id of a compound document for state t2s).</p>
-<p>This method thus enables to tie a state T2 with the result of a point t2
-(the returned link could be the id of the first datapoint contained in the compound)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the value of ‘link’ (tied t2 document) to be matched</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsTiedCustomStateT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsTiedCustomStateT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.types.T</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.abstract.AbsTiedCustomStateT2Unit.U</span></code>], <a class="reference internal" href="#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit" title="ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit</span></code></a></p>
-<p>A T2 unit bound to a custom type <em>constructed</em> from a <code class="xref py py-class docutils literal notranslate"><span class="pre">compound</span></code>,
-as well as the results of other T2 units.</p>
-<p>Known subclass: <a class="reference external" href="https://ampelproject.github.io/Ampel-photometry/api.html#ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit" title="(in ampel-photometry v0.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbsTiedLightCurveT2Unit</span></code></a></p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">build</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the parametrized type using compound and datapoints.
-For example, AbsTiedCustomStateT2Unit[LightCurve] would return a
-<a class="reference external" href="https://ampelproject.github.io/Ampel-photometry/api.html#ampel.view.LightCurve.LightCurve" title="(in ampel-photometry v0.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightCurve</span></code></a> instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~T</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
-and if ‘link_override’ is defined in there.</p>
-<p>T2Processor needs to retrieve the T2Records of units tied with this unit.
-If unspecified in config, t2 dependencies are resolved - for each unit defined in get_tied_unit_names() -
-using the db match query: {unit: &lt;unit_name&gt;, config: None, link: &lt;same link as root doc&gt;}.</p>
-<p>This behavior is overridable/customizable by adding the keyword ‘t2_dependency’ to the t2 config dict.
-The value of t2_dependency should be of type Union[T2Dependency, List[T2Dependency]].
-The parameter ‘link_override’ in T2Dependency allows to link this state T2 with a different value
-than the one registered as ‘link’ in the T2Record (which is the _id of a compound document for state t2s).</p>
-<p>This method thus enables to tie a state T2 with the result of a point t2
-(the returned link could be the id of the first datapoint contained in the compound)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the value of ‘link’ (tied t2 document) to be matched</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returned object should contain computed science results to be saved into the DB.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>the returned dict must have only string keys and be BSON-encodable</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsT3Unit.AbsT3Unit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsT3Unit.</span></code><code class="sig-name descname"><span class="pre">AbsT3Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT3Unit.html#AbsT3Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT3Unit.AbsT3Unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.abstract.AbsT3Unit.T</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
-<p>Generic abstract class for T3 units.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>session_info</strong> – <p>(defined in LogicalUnit)
-a dictionary containing session information, which can be
-requested in the process configuration. Examples of session information are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Date and time the current process was last run</p></li>
-<li><p>Number of alerts processed since then</p></li>
-</ul>
-</div></blockquote>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Custom session information can be added to this dict by implementing a subclass of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">AbsSessionInfo</span></code>
-and adding the custom unit to the process configuration</p>
-</div>
-</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="ampel.abstract.AbsT3Unit.AbsT3Unit.process">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsT3Unit.html#AbsT3Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsT3Unit.AbsT3Unit.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementing T3 units receive SnapView instances (or subclasses of) via this method.
-Use gen.send(JournalAttributes) to customize the journal of the stock document associated
-with the last view yielded by the generator. In addition, use gen.send(StockAttributes) to
-customize the stock tags or name, or gen.send((StockId, JournalAttributes)) to customize
-the journal for a view other than the most recent, e.g. when processing in batches.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">UnitResult</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="base-classes-for-processing-units">
 <h2>Base classes for processing units<a class="headerlink" href="#base-classes-for-processing-units" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="ampel.base.LogicalUnit.LogicalUnit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.base.LogicalUnit.</span></code><code class="sig-name descname"><span class="pre">LogicalUnit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/base/LogicalUnit.html#LogicalUnit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.base.LogicalUnit.LogicalUnit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logical as in: performing logic operations of ampel’s tier: add, combine, augment, synthetise.
-Base for standardized t0, t1, t2 and t3 units.
-Note that the defined parameters must all be serializable</p>
-<dl class="py attribute">
-<dt id="ampel.base.LogicalUnit.LogicalUnit.require">
-<code class="sig-name descname"><span class="pre">require</span></code><em class="property"><span class="pre">:</span> <span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#ampel.base.LogicalUnit.LogicalUnit.require" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resources requirements as class variable (passed on to and merged with subclasses).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.base.LogicalUnit.LogicalUnit.session_info">
-<code class="sig-name descname"><span class="pre">session_info</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#ampel.base.LogicalUnit.LogicalUnit.session_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>a dictionary containing session information, which can be requested in process configuration.
-Example of session information: date and time the current process was last run</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="context-and-configuration">
 <h2>Context and configuration<a class="headerlink" href="#context-and-configuration" title="Permalink to this headline">¶</a></h2>
@@ -417,25 +101,6 @@ Example of session information: date and time the current process was last run</
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], ~JT]</p>
 </dd>
 </dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.abstract.AbsSecretProvider.AbsSecretProvider">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsSecretProvider.</span></code><code class="sig-name descname"><span class="pre">AbsSecretProvider</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsSecretProvider.html#AbsSecretProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsSecretProvider.AbsSecretProvider" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface to a secret store used to resolve secrets.
-The underlying store may be as simple as a dict loaded from a JSON file
-or a complete key manager like Vault.</p>
-<dl class="py method">
-<dt id="ampel.abstract.AbsSecretProvider.AbsSecretProvider.tell">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">tell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ValueType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsSecretProvider.html#AbsSecretProvider.tell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsSecretProvider.AbsSecretProvider.tell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Potentially update an initialized Secret instance with
-the actual sensitive information associable with it.
-:rtype: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
-:returns: True if the Secret was told/resolved or False
-if the provided Secret is either unknown to this secret
-provider, or resolves to a value of the wrong type.</p>
 </dd></dl>
 
 </dd></dl>
@@ -858,7 +523,7 @@ for example spectra or cutout images.
 The config parameter of a T3 process determines which information are included.
 Instances of this class (or of subclass such as
 <a class="reference external" href="https://ampelproject.github.io/Ampel-photometry/api.html#ampel.view.TransientView.TransientView" title="(in ampel-photometry v0.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransientView</span></code></a>) are provided to
-<a class="reference internal" href="#ampel.abstract.AbsT3Unit.AbsT3Unit.process" title="ampel.abstract.AbsT3Unit.AbsT3Unit.process"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AbsT3Unit.process()</span></code></a>.</p>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">AbsT3Unit.process()</span></code>.</p>
 <dl class="py attribute">
 <dt id="ampel.view.SnapView.SnapView.stock">
 <code class="sig-name descname"><span class="pre">stock</span></code><a class="headerlink" href="#ampel.view.SnapView.SnapView.stock" title="Permalink to this definition">¶</a></dt>
@@ -1043,64 +708,6 @@ sorted by timestamp.</p>
 <h2>Data models<a class="headerlink" href="#data-models" title="Permalink to this headline">¶</a></h2>
 <p>These models are used to parse and validate the configuration of the Ampel system.</p>
 <dl class="py class">
-<dt id="ampel.model.UnitModel.UnitModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.model.UnitModel.</span></code><code class="sig-name descname"><span class="pre">UnitModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/UnitModel.html#UnitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.UnitModel.UnitModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specification of a processing unit.
-Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])</p>
-<dl class="py attribute">
-<dt id="ampel.model.UnitModel.UnitModel.unit">
-<code class="sig-name descname"><span class="pre">unit</span></code><em class="property"><span class="pre">:</span> <span class="pre">T</span></em><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of ampel unit class</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.model.UnitModel.UnitModel.config">
-<code class="sig-name descname"><span class="pre">config</span></code><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.config" title="Permalink to this definition">¶</a></dt>
-<dd><ul class="simple">
-<li><p>None: no config (use class defaults)</p></li>
-<li><p>dict: config ‘as is’</p></li>
-<li><p>str: a corresponding alias key in the AmpelConfig must match the provided string</p></li>
-<li><p>int: used internally for T2 units, a corresponding int key (AmpelConfig, base key ‘confid’) must match the provided integer</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="ampel.model.UnitModel.UnitModel.override">
-<code class="sig-name descname"><span class="pre">override</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.override" title="Permalink to this definition">¶</a></dt>
-<dd><p>Values to override in the config</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.model.UnitModel.UnitModel.dict">
-<code class="sig-name descname"><span class="pre">dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/UnitModel.html#UnitModel.dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="ampel.model.StateT2Dependency.StateT2Dependency">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.model.StateT2Dependency.</span></code><code class="sig-name descname"><span class="pre">StateT2Dependency</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/StateT2Dependency.html#StateT2Dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.model.UnitModel.UnitModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.types.T</span></code>]</p>
-<p>Used to specify how “tied state t2” units should select the associated required t2 document.</p>
-<dl class="py attribute">
-<dt id="ampel.model.StateT2Dependency.StateT2Dependency.link_override">
-<code class="sig-name descname"><span class="pre">link_override</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency.link_override" title="Permalink to this definition">¶</a></dt>
-<dd><ul>
-<li><p>None: the state associated with the root tied state T2 will be used (value of ‘link’ in t2 doc)</p></li>
-<li><p>Dict: allows tied state T2 units to be bound with point t2 units.
-The value provided here must be understandable by</p>
-<blockquote>
-<div><p><a class="reference internal" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link"><code class="xref py py-func docutils literal notranslate"><span class="pre">AbsTiedStateT2Unit.get_link</span></code></a></p>
-</div></blockquote>
-<p>Ampel extensions such as Ampel-photometry accept more ‘link_override’ options than vanilla Ampel.</p>
-</li>
-</ul>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="ampel.base.AmpelBaseModel.AmpelBaseModel">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.base.AmpelBaseModel.</span></code><code class="sig-name descname"><span class="pre">AmpelBaseModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/base/AmpelBaseModel.html#AmpelBaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.base.AmpelBaseModel.AmpelBaseModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Top level class that uses pydantic’s BaseModel to validate data.
@@ -1161,7 +768,7 @@ In []: %timeit B(a=[11])
         <li class="right" >
           <a href="structure.html" title="Structure"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.0-alpha.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.0-alpha.5 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>
