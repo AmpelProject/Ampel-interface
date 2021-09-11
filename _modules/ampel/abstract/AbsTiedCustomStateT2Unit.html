@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ampel.abstract.AbsTiedCustomStateT2Unit &#8212; ampel-interface 0.8.0-alpha.7 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.0-alpha.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsTiedCustomStateT2Unit</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ampel.abstract.AbsTiedCustomStateT2Unit</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># File              : Ampel-interface/ampel/abstract/AbsTiedCustomStateT2Unit.py</span>
+<span class="c1"># License           : BSD-3-Clause</span>
+<span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+<span class="c1"># Date              : 03.04.2020</span>
+<span class="c1"># Last Modified Date: 30.05.2021</span>
+<span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">UBson</span>
+<span class="kn">from</span> <span class="nn">ampel.struct.UnitResult</span> <span class="kn">import</span> <span class="n">UnitResult</span>
+<span class="kn">from</span> <span class="nn">ampel.view.T2DocView</span> <span class="kn">import</span> <span class="n">T2DocView</span>
+<span class="kn">from</span> <span class="nn">ampel.content.DataPoint</span> <span class="kn">import</span> <span class="n">DataPoint</span>
+<span class="kn">from</span> <span class="nn">ampel.base.decorator</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">ampel.content.T1Document</span> <span class="kn">import</span> <span class="n">T1Document</span>
+<span class="kn">from</span> <span class="nn">ampel.abstract.AbsTiedT2Unit</span> <span class="kn">import</span> <span class="n">AbsTiedT2Unit</span>
+<span class="kn">from</span> <span class="nn">ampel.model.StateT2Dependency</span> <span class="kn">import</span> <span class="n">StateT2Dependency</span>
+
+<span class="n">U</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AbsTiedCustomStateT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedCustomStateT2Unit</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">AbsTiedT2Unit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	A T2 unit bound to a custom type *constructed* from a :class:`compound &lt;ampel.content.T1Document.T1Document&gt;`,</span>
+<span class="sd">	as well as the results of other T2 units.</span>
+
+<span class="sd">	Known subclass: :class:`~ampel.abstract.AbsTiedLightCurveT2Unit.AbsTiedLightCurveT2Unit`</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">t2_dependency</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StateT2Dependency</span><span class="p">[</span><span class="n">U</span><span class="p">]]</span>
+	
+
+	<span class="c1"># Note: we want to enforce the implementation of an abstract *class method*</span>
+	<span class="c1"># and hence have purposely omitted the first reflective argument</span>
+<div class="viewcode-block" id="AbsTiedCustomStateT2Unit.build"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build">[docs]</a>	<span class="nd">@staticmethod</span>
+	<span class="nd">@abstractmethod</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="n">compound</span><span class="p">:</span> <span class="n">T1Document</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Create the parametrized type using compound and datapoints.</span>
+<span class="sd">		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a</span>
+<span class="sd">		:class:`~ampel.view.LightCurve.LightCurve` instance.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="o">...</span></div>
+
+<div class="viewcode-block" id="AbsTiedCustomStateT2Unit.get_link"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link">[docs]</a>	<span class="nd">@staticmethod</span>
+	<span class="nd">@abstractmethod</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">link_override</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">arg</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]]:</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Method used by T2Processor if &#39;t2_dependency&#39; is specified in the t2 config dict</span>
+<span class="sd">		and if &#39;link_override&#39; is defined in there.</span>
+
+<span class="sd">		T2Processor needs to retrieve the T2Records of units tied with this unit.</span>
+<span class="sd">		If unspecified in config, t2 dependencies are resolved - for each unit defined in get_tied_unit_names() -</span>
+<span class="sd">		using the db match query: {unit: &lt;unit_name&gt;, config: None, link: &lt;same link as root doc&gt;}.</span>
+
+<span class="sd">		This behavior is overridable/customizable by adding the keyword &#39;t2_dependency&#39; to the t2 config dict.</span>
+<span class="sd">		The value of t2_dependency should be of type Union[T2Dependency, List[T2Dependency]].</span>
+<span class="sd">		The parameter &#39;link_override&#39; in T2Dependency allows to link this state T2 with a different value</span>
+<span class="sd">		than the one registered as &#39;link&#39; in the T2Record (which is the _id of a compound document for state t2s).</span>
+
+<span class="sd">		This method thus enables to tie a state T2 with the result of a point t2</span>
+<span class="sd">		(the returned link could be the id of the first datapoint contained in the compound)</span>
+
+<span class="sd">		:returns: the value of &#39;link&#39; (tied t2 document) to be matched</span>
+<span class="sd">		&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="AbsTiedCustomStateT2Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
+	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">t2_views</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T2DocView</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">UBson</span><span class="p">,</span> <span class="n">UnitResult</span><span class="p">]:</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
+
+<span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
+<span class="sd">		&quot;&quot;&quot;</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/ampel.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.0-alpha.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsTiedCustomStateT2Unit</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+    </div>
+  </body>
+</html>
