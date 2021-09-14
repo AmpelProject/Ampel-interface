@@ -82,11 +82,11 @@ class T2DocView:
 		"""
 		:returns: The content of the last array element of body associated with a meta code >= 0.
 		"""
-		if not self.has_content():
+		if not self.body:
 			return None
 
 		idx = len([el for el in self.meta if el['tier'] == 2 and el['code'] >= 0]) - 1
-		return self.body[idx] if idx >= 0 else None # type: ignore[index] # mypy does not get has_content()
+		return self.body[idx] if idx >= 0 else None
 
 
 	def is_point_type(self) -> bool:
