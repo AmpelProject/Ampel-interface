@@ -9,7 +9,7 @@
 
 from datetime import datetime
 from typing import Dict, Optional, Union, Any, Sequence, Literal, overload
-from ampel.types import StockId, UBson, T2Link
+from ampel.types import StockId, UBson, T2Link, Tag
 from ampel.content.MetaRecord import MetaRecord
 
 TYPE_POINT_T2 = 0 # linked with datapoints, that is with tier 0
@@ -22,12 +22,13 @@ class T2DocView:
 	View of a given T2Document (with unique stock id).
 	"""
 
-	__slots__ = 'unit', 'config', 'link', 'stock', 'code', 'meta', 'created', 't2_type', 'body', '_frozen'
+	__slots__ = 'unit', 'config', 'link', 'stock', 'tag', 'code', 'meta', 'created', 't2_type', 'body', '_frozen'
 
 	stock: Union[StockId, Sequence[StockId]]
 	unit: Union[int, str]
 	config: Optional[Dict[str, Any]]
 	link: T2Link
+	tag: Sequence[Tag]
 	code: int
 	t2_type: int
 	created: float
@@ -39,6 +40,7 @@ class T2DocView:
 		stock: Union[StockId, Sequence[StockId]],
 		unit: Union[int, str],
 		link: T2Link,
+		tag: Sequence[Tag],
 		code: int,
 		t2_type: int,
 		created: float,
@@ -50,6 +52,7 @@ class T2DocView:
 		self.stock = stock
 		self.unit = unit
 		self.link = link
+		self.tag = tag
 		self.code = code
 		self.body = body
 		self.meta = meta
