@@ -11,6 +11,8 @@ from datetime import datetime
 from typing import Dict, Optional, Union, Any, Sequence, Literal, overload
 from ampel.types import StockId, UBson, T2Link, Tag
 from ampel.content.MetaRecord import MetaRecord
+from ampel.content.T2Document import T2Document
+from ampel.config.AmpelConfig import AmpelConfig
 
 TYPE_POINT_T2 = 0 # linked with datapoints, that is with tier 0
 TYPE_STATE_T2 = 1 # linked with compounds, that is with tier 1
@@ -34,6 +36,38 @@ class T2DocView:
 	created: float
 	meta: Sequence[MetaRecord]
 	body: Optional[Sequence[UBson]]
+
+
+	@classmethod # Static ctor
+	def of(cls, doc: T2Document, conf: AmpelConfig) -> "T2DocView":
+		"""
+		We might want to move this method elsewhere in the future
+		"""
+
+		t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
+		if not t2_unit_info:
+			raise ValueError(f'Unknown T2 unit {doc["unit"]}')
+
+		if 'AbsStockT2Unit' in t2_unit_info['base']:
+			t2_type: int = TYPE_STOCK_T2
+		elif 'AbsPointT2Unit' in t2_unit_info['base']:
+			t2_type = TYPE_POINT_T2
+		else: # quick n dirty
+			t2_type = TYPE_STATE_T2
+
+		return cls(
+			stock = doc['stock'],
+			unit = doc['unit'],
+			t2_type = t2_type,
+			link = doc['link'],
+			tag = doc['tag'],
+			code = doc['code'],
+			meta = doc['meta'],
+			body = doc.get('body'),
+			created = doc['_id'].generation_time.timestamp(), # type: ignore
+			config = conf.get(f'confid.{doc["config"]}', dict) \
+				if doc['config'] else None
+		)
 
 
 	def __init__(self,
