@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 10.02.2021
-# Last Modified Date: 30.05.2021
+# Last Modified Date: 14.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
@@ -75,10 +75,10 @@ class T2DocView:
 
 
 	def has_content(self) -> bool:
-		return self.body is not None and len(self.body) > 0
+		return True if self.body else False
 
 
-	def get_data(self) -> UBson:
+	def get_payload(self) -> UBson:
 		"""
 		:returns: The content of the last array element of body associated with a meta code >= 0.
 		"""
@@ -87,10 +87,6 @@ class T2DocView:
 
 		idx = len([el for el in self.meta if el['tier'] == 2 and el['code'] >= 0]) - 1
 		return self.body[idx] if idx >= 0 else None # type: ignore[index] # mypy does not get has_content()
-
-
-	def get_records(self) -> Optional[Sequence[UBson]]:
-		return self.body if self.has_content() else None # type: ignore # inadequate mypy inference
 
 
 	def is_point_type(self) -> bool:
