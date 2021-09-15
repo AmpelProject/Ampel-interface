@@ -163,7 +163,7 @@ class ArgParserBuilder:
 		target: str, name: str, descr: str, metavar: str = "#",
 		required: bool = False, pos: Optional[int] = None,
 		ref: Optional[str] = None, excl: bool = False,
-		**kwargs
+		json: bool = True, **kwargs
 	) -> None:
 		"""
 		Calls method 'create_logic_args' (see AmpelArgumentParser docstring) for the selected parser(s).
@@ -171,7 +171,7 @@ class ArgParserBuilder:
 		"""
 		parsers, group = self.get_targets(target, True)
 		for p in parsers:
-			p.create_logic_args(name, group, descr, metavar, required, pos, ref, excl)
+			p.create_logic_args(name, group, descr, metavar, required, pos, ref, excl, json)
 
 
 	def add_note(self, parsers: str, note: str, pos: Optional[int] = None, ref: Optional[str] = None) -> None:

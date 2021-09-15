@@ -284,7 +284,7 @@ class AmpelArgumentParser(ArgumentParser):
 		name: str, group: str, descr: str, metavar: str = "#",
 		required: bool = False, pos: Optional[int] = None,
 		ref: Optional[str] = None, excl: bool = False,
-		**kwargs
+		json: bool = True, **kwargs
 	) -> None:
 		"""
 		Ex: channel, channels-and, channels-or, channels-json
@@ -320,24 +320,25 @@ class AmpelArgumentParser(ArgumentParser):
 		mux.add_argument(
 			f"--{name}s-and", dest=dest, action=LoadAllOfAction,
 			metavar=metavar, type=str, default=None, nargs="+",
-			help=f"{descr}s to be {what} (AND connected)"
+			help=f"{descr}s to be {what} (AND connected)" + ("" if json else "\n\n")
 		)
 
-		suffix = f"{self.note_open}{ref}{self.note_close}" if ref else ""
-		mux.add_argument(
-			f"--{name}s-json", dest=dest, action=LoadJSONAction,
-			metavar=metavar, type=str, default=None,
-			help=f"{descr}s to be {what} {suffix}\n\n"
-		)
-
-		# Add note about JSON arg
-		if not self._logic_ops_note_added:
-			self.add_note(
-				"Allows the use of logic operators such as:\n" +
-				"Nested logic: \'{\"any_of\": [\"VAL1\", {\"all_of\": [\"VAL2\", \"VAL3\"]}]}\'\n" +
-				"Exclusive match: \'{\"one_of\": [\"VAL1\"]}\'", pos=pos, ref=ref
+		if json:
+			suffix = f"{self.note_open}{ref}{self.note_close}" if ref else ""
+			mux.add_argument(
+				f"--{name}s-json", dest=dest, action=LoadJSONAction,
+				metavar=metavar, type=str, default=None,
+				help=f"{descr}s to be {what} {suffix}\n\n"
 			)
-			self._logic_ops_note_added = True
+
+			# Add note about JSON arg
+			if not self._logic_ops_note_added:
+				self.add_note(
+					"Allows the use of logic operators such as:\n" +
+					"Nested logic: \'{\"any_of\": [\"VAL1\", {\"all_of\": [\"VAL2\", \"VAL3\"]}]}\'\n" +
+					"Exclusive match: \'{\"one_of\": [\"VAL1\"]}\'", pos=pos, ref=ref
+				)
+				self._logic_ops_note_added = True
 
 
 	# Cosmetic
