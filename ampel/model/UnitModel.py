@@ -4,13 +4,11 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 26.09.2019
-# Last Modified Date: 17.02.2021
+# Last Modified Date: 15.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Dict, Optional, Any, Union, Generic
 from ampel.types import T
-from ampel.secret.NamedSecret import NamedSecret
-from ampel.secret.AESecret import AESecret
 from ampel.model.StrictGenericModel import StrictGenericModel
 
 
