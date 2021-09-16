@@ -46,15 +46,25 @@ jobs:
     if: ${{ github.event_name == 'push' && ( contains(github.ref, '/tags/v') || contains(github.ref, 'refs/heads/master') ) }}
 
     steps:
+    - name: Get commit range
+      id: commits
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ github.token }}
+        script: return context.payload.commits.length+1
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 2
-    # Check if the _last_ commit bumped the version
+        fetch-depth: ${{ steps.commits.outputs.result }}
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: ${{ steps.commits.outputs.result }}
+    # Check if the version was changed in the commit range that was just pushed
     - name: Check for version bump
       id: check
       run: |
+        echo Checking last $((${{ steps.commits.outputs.result }}-1)) commits
         poetry_version() { awk '/^\s*$/{f=0};f{if ($1=="version") {gsub(/"/, "", $3); print($3)}};/\[tool\.poetry\]/{f=1}'; }
-        echo "::set-output name=previous::$(git show HEAD^:pyproject.toml | poetry_version)"
+        echo "::set-output name=previous::$(git show HEAD~$((${{ steps.commits.outputs.result }}-1)):pyproject.toml | poetry_version)"
         echo "::set-output name=current::$(git show HEAD:pyproject.toml | poetry_version)"
     # If the version was bumped on a push to main (rather than a tag), create a tag
     - name: Create tag
