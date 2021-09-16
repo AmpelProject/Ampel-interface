@@ -60,9 +60,9 @@ class T2DocView:
 			unit = doc['unit'],
 			t2_type = t2_type,
 			link = doc['link'],
-			tag = doc['tag'],
+			tag = doc.get('tag', []),
 			code = doc['code'],
-			meta = doc['meta'],
+			meta = doc.get('meta', []),
 			body = doc.get('body'),
 			created = doc['_id'].generation_time.timestamp(), # type: ignore
 			config = conf.get(f'confid.{doc["config"]}', dict) \
