@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 18.03.2021
-# Last Modified Date: 18.03.2021
+# Last Modified Date: 16.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from argparse import Action
@@ -19,7 +19,8 @@ class LoadAllOfAction(Action):
 			for el in values
 		]
 
-		if len(v) == 1:
-			v = [0]
-
-		setattr(namespace, self.dest, AllOf(all_of = v))
+		setattr(
+			namespace,
+			self.dest,
+			v[0] if len(v) == 1 else AllOf(all_of = v)
+		)
