@@ -43,61 +43,81 @@ jobs:
   pypi:
     runs-on: ubuntu-latest
     needs: [test, mypy]
-    if: ${{ github.event_name == 'push' && ( contains(github.ref, '/tags/v') || contains(github.ref, 'refs/heads/master') ) }}
+    # run only on pushes, not PRs
+    if: ${{ github.event_name == 'push' && github.base_ref == null }}
 
     steps:
-    - name: Get commit range
-      id: commits
-      uses: actions/github-script@v3
+    - uses: actions/setup-node@v2
       with:
-        github-token: ${{ github.token }}
-        script: return context.payload.commits.length+1
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: ${{ steps.commits.outputs.result }}
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: ${{ steps.commits.outputs.result }}
-    # Check if the version was changed in the commit range that was just pushed
+        node-version: 14
+    - run: npm install toml@3.0.0
     - name: Check for version bump
       id: check
-      run: |
-        echo Checking last $((${{ steps.commits.outputs.result }}-1)) commits
-        poetry_version() { awk '/^\s*$/{f=0};f{if ($1=="version") {gsub(/"/, "", $3); print($3)}};/\[tool\.poetry\]/{f=1}'; }
-        echo "::set-output name=previous::$(git show HEAD~$((${{ steps.commits.outputs.result }}-1)):pyproject.toml | poetry_version)"
-        echo "::set-output name=current::$(git show HEAD:pyproject.toml | poetry_version)"
-    # If the version was bumped on a push to main (rather than a tag), create a tag
-    - name: Create tag
-      uses: actions/github-script@v3
-      if: ${{ !contains(github.ref, '/tags/v') && (steps.check.outputs.current != steps.check.outputs.previous) }}
+      uses: actions/github-script@v4
       with:
         github-token: ${{ github.token }}
+        debug: true
         script: |
-          github.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: "refs/tags/v${{steps.check.outputs.current}}",
-            sha: context.sha
-          })
-    # For tag pushes, verify that the tag makes sense
-    - id: tag
-      uses: dawidd6/action-get-tag@v1.0.0
-      if: ${{ success() && contains(github.ref, '/tags/v') }}
-    - name: Verify tag matches version
-      if: ${{ success() && contains(github.ref, '/tags/v') }}
-      run: |
-        [ v${{steps.check.outputs.current}} = "${{steps.tag.outputs.tag}}" ] || (echo "tag does not match version: "${{steps.tag.outputs.tag}}" != version v${{steps.check.outputs.current}}" && false)
-    # Publish on tag push or version bump
+          const toml = require('toml')
+          async function getVersion(ref) {
+            try {
+              response = await github.repos.getContent({
+                repo: context.repo.repo,
+                owner: context.repo.owner,
+                path: 'pyproject.toml',
+                ref: ref
+              });
+              return toml.parse(Buffer.from(response.data.content, 'base64').toString())
+                .tool
+                .poetry
+                .version;
+            } catch (exc) {
+              if (exc instanceof RequestError && exc.status == 404) {
+                return null;
+              } else {
+                throw exc;
+              }
+            }
+          }
+          after = await getVersion(context.payload.after);
+          ref = `refs/tags/v${after}`
+          is_main = context.payload.ref === `refs/heads/${context.payload.repository.default_branch}`
+
+          // a tag matching the version was just pushed
+          let release = context.payload.ref == ref;
+          // the version on the default branch changed; create a tag
+          if (!release && is_main) {
+            before = await getVersion(context.payload.before);
+            if (before !== after) {
+              try {
+                await github.git.createRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref,
+                  sha: context.sha
+                });
+                release = true;
+              } catch (exc) {
+                // tag already existed
+                if (exc instanceof RequestError && exc.status == 422) {
+                  release = false;
+                } else {
+                  throw exc;
+                }
+              }
+            }
+          }
+          return release;
     - uses: actions/setup-python@v2
-      if: ${{ success() && (contains(github.ref, '/tags/v') || (steps.check.outputs.current != steps.check.outputs.previous)) }}
+      if: ${{ fromJSON(steps.check.outputs.result) }}
       with:
         python-version: 3.9
     - name: Install poetry
-      if: ${{ success() && (contains(github.ref, '/tags/v') || (steps.check.outputs.current != steps.check.outputs.previous)) }}
+      if: ${{ fromJSON(steps.check.outputs.result) }}
       run: |
         python -m pip install --upgrade poetry
     - name: Publish
-      if: ${{ success() && (contains(github.ref, '/tags/v') || (steps.check.outputs.current != steps.check.outputs.previous)) }}
+      if: ${{ fromJSON(steps.check.outputs.result) }}
       run: |
         poetry config repositories.testpypi https://test.pypi.org/legacy/
         poetry publish -n --build
