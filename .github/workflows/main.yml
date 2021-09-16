@@ -42,7 +42,7 @@ jobs:
   pypi:
     runs-on: ubuntu-latest
     needs: [test, mypy]
-    if: github.event_name == "push" && contains(github.ref, '/tags/v')
+    if: ${{ github.event_name == 'push' && contains(github.ref, '/tags/v') }}
 
     steps:
     - uses: actions/checkout@v2
