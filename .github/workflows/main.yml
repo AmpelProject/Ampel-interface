@@ -40,23 +40,23 @@ jobs:
         poetry install $(cat pyproject.toml | awk '/^\s*$/{f=0};f{if ($1!="docs") printf(" -E %s",$1)};/\[tool\.poetry\.extras\]/{f=1}')
     - run: poetry run mypy --namespace-packages -p ampel
 
-  pypi:
+  check_version:
+    name: Tag version bump
     runs-on: ubuntu-latest
-    needs: [test, mypy]
     # run only on pushes, not PRs
     if: ${{ github.event_name == 'push' && github.base_ref == null }}
-
+    needs: [test, mypy]
+    outputs:
+      should_publish: ${{ steps.check.outputs.result }} 
     steps:
     - uses: actions/setup-node@v2
       with:
         node-version: 14
     - run: npm install toml@3.0.0
-    - name: Check for version bump
+    - name: Ensure tag for version bump
       id: check
       uses: actions/github-script@v4
       with:
-        github-token: ${{ github.token }}
-        debug: true
         script: |
           const toml = require('toml')
           async function getVersion(ref) {
@@ -108,16 +108,22 @@ jobs:
             }
           }
           return release;
+
+  pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: [check_version]
+    # NB: outputs are always strings; explicitly parse to get a boolean
+    if: ${{ fromJSON(needs.check_version.outputs.should_publish) }}
+    
+    steps:
     - uses: actions/setup-python@v2
-      if: ${{ fromJSON(steps.check.outputs.result) }}
       with:
         python-version: 3.9
     - name: Install poetry
-      if: ${{ fromJSON(steps.check.outputs.result) }}
       run: |
         python -m pip install --upgrade poetry
     - name: Publish
-      if: ${{ fromJSON(steps.check.outputs.result) }}
       run: |
         poetry config repositories.testpypi https://test.pypi.org/legacy/
         poetry publish -n --build
