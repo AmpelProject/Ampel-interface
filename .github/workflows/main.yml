@@ -85,10 +85,14 @@ jobs:
 
           // a tag matching the version was just pushed
           let release = context.payload.ref == ref;
+          if (release) {
+            console.log(`Tag v${after} pushed (${context.sha})`);
+          }
           // the version on the default branch changed; create a tag
           if (!release && is_main) {
             before = await getVersion(context.payload.before);
             if (before !== after) {
+              console.log(`Version bumped: ${before} -> ${after}`);
               try {
                 await github.git.createRef({
                   owner: context.repo.owner,
@@ -96,16 +100,22 @@ jobs:
                   ref,
                   sha: context.sha
                 });
+                console.log(`Tag v${after} created (${context.sha})`);
                 release = true;
               } catch (exc) {
                 // tag already existed
                 if (exc instanceof RequestError && exc.status == 422) {
+                  console.log(`Skipping publish (tag v${after} already exists)`);
                   release = false;
                 } else {
                   throw exc;
                 }
               }
+            } else {
+              console.log(`Skipping publish (version is still ${before})`);
             }
+          } else if (!is_main) {
+            console.log(`Skipping publish (push to ${context.payload.ref} != refs/heads/${context.payload.repository.default_branch})`);
           }
           return release;
 
