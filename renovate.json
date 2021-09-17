@@ -1,0 +1,4 @@
+{
+  "extends": ["github>AmpelProject/renovate-config"],
+  "enabledManagers": ["github-actions", "poetry"]
+}
