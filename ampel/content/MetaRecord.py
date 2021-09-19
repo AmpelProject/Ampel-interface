@@ -7,7 +7,7 @@
 # Last Modified Date: 05.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, Literal, Any, Dict, TypedDict
+from typing import Optional, Sequence, Union, Literal, Any, Dict, TypedDict
 from ampel.types import ChannelId, Tag
 
 
@@ -30,7 +30,7 @@ class MetaRecord(TypedDict, total=False):
 	channel: Union[ChannelId, Sequence[ChannelId]]
 
 	#: Trace ids associated with the creation / update of this document
-	traceid: Dict[str, int]
+	traceid: Dict[str, Optional[int]]
 
 	#: Name of the associated process
 	process: Union[int, str]
