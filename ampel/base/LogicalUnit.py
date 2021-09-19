@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.10.2019
-# Last Modified Date: 22.06.2021
+# Last Modified Date: 19.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Tuple, Dict, Any, Optional, ClassVar
@@ -28,10 +28,10 @@ class LogicalUnit(AmpelBaseModel):
 	session_info: Optional[Dict[str, Any]] = None
 
 	#: Private variable potentially set by UnitLoader for provenance purposes. Either:
-	#: * 0 if provanance flag is False
-	#: * -1 in case model content is not serializable
+	#: * None if provanance flag is False
+	#: * 0 in case model content is not serializable
 	#: * any other signed int value
-	_trace_id: int = 0
+	_trace_id: Optional[int] = None
 
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
@@ -69,8 +69,7 @@ class LogicalUnit(AmpelBaseModel):
 		d = self.__dict__
 		self._trace_content = {
 			k: d[k] for k in sorted(d)
-			if not isinstance(d[k], Secret) and
-			k not in ("session_info", "logger")
+			if not isinstance(d[k], Secret) and k not in ("session_info", "logger")
 		}
 
 		self.logger = logger
