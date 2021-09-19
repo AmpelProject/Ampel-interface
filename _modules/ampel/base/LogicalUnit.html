@@ -39,7 +39,7 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 12.10.2019</span>
-<span class="c1"># Last Modified Date: 22.06.2021</span>
+<span class="c1"># Last Modified Date: 19.09.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">ClassVar</span>
@@ -63,10 +63,10 @@
 	<span class="n">session_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 
 	<span class="c1">#: Private variable potentially set by UnitLoader for provenance purposes. Either:</span>
-	<span class="c1">#: * 0 if provanance flag is False</span>
-	<span class="c1">#: * -1 in case model content is not serializable</span>
+	<span class="c1">#: * None if provanance flag is False</span>
+	<span class="c1">#: * 0 in case model content is not serializable</span>
 	<span class="c1">#: * any other signed int value</span>
-	<span class="n">_trace_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">_trace_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 	<span class="c1"># Some unit contributors might want to restrict units usage</span>
 	<span class="c1"># by scoping them to their respective distribution name (str)</span>
@@ -104,8 +104,7 @@
 		<span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_trace_content</span> <span class="o">=</span> <span class="p">{</span>
 			<span class="n">k</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-			<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">Secret</span><span class="p">)</span> <span class="ow">and</span>
-			<span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;session_info&quot;</span><span class="p">,</span> <span class="s2">&quot;logger&quot;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">Secret</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;session_info&quot;</span><span class="p">,</span> <span class="s2">&quot;logger&quot;</span><span class="p">)</span>
 		<span class="p">}</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
