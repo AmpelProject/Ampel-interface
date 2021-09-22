@@ -9,9 +9,8 @@
 
 import importlib, sys, re
 from os import environ
-from os.path import isfile
 from pkg_resources import ( # type: ignore[attr-defined]
-	get_distribution, AvailableDistributions 
+	get_distribution, AvailableDistributions
 )
 from typing import Dict, Tuple
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
@@ -58,13 +57,18 @@ def main() -> None:
 		sub_op = sys.argv[1]
 		del sys.argv[1]
 
+	if env_opts := environ.get("AMPEL_CLI_OPTS"):
+		if "--debug" in sys.argv:
+			print("[DEBUG] Incorperating options defined by env var AMPEL_CLI_OPTS")
+		for el in env_opts.split(" "):
+			sys.argv.append(el)
+
 	# Convert "-" to "--" for argparse
 	for i in range(len(sys.argv)):
 		if sys.argv[i][0] == '-' and sys.argv[i][1] != '-':
 			sys.argv[i] = "-" + sys.argv[i]
 
-	if "--debug" in sys.argv:
-		print("[DEBUG] sys.argv: %s" % sys.argv)
+
 
 	try:
 
@@ -77,16 +81,8 @@ def main() -> None:
 		parser = cli_op.get_parser(sub_op)
 		args, unknown_args = parser.parse_known_args()
 
-		if hasattr(args, "config") and getattr(args, 'config') is None:
-			if "AMPELCONF" in environ:
-				if environ["AMPELCONF"] and isfile(environ["AMPELCONF"]):
-					args.config = environ["AMPELCONF"]
-					print("[INFO] Using config path defined by environment variable AMPELCONF")
-				else:
-					print("\n[ERROR] Cannot use invalid config. Please either:")
-					print(" - correct the environment variable AMPELCONF")
-					print(" - override it by specifying --config <path to config file>\n")
-					return
+		#if not args.config:
+		#	return
 
 		if "-debug" in sys.argv:
 			print("[DEBUG] Loaded argument parameters")

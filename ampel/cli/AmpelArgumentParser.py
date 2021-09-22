@@ -4,12 +4,11 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 17.03.2021
-# Last Modified Date: 22.03.2021
+# Last Modified Date: 22.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import textwrap
 from os import environ
-from os.path import isfile
 from typing import Dict, Optional, List, Union, Set, Any, Tuple
 from ampel.cli.MaybeIntAction import MaybeIntAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
@@ -100,13 +99,9 @@ class AmpelArgumentParser(ArgumentParser):
 		# Re-insert optional group
 		self._action_groups.append(optional_group)
 
-		if "AMPELCONF" in environ and environ["AMPELCONF"]:
-			if isfile(environ["AMPELCONF"]):
-				self.has_env_conf = True
-			else:
-				print("\n=================================================================")
-				print("Warning: environment variable AMPELCONF points to an invalid file")
-				print("=================================================================")
+		# TODO: use better regex matching
+		if "AMPEL_CLI_OPTS" in environ and "config " in environ["AMPEL_CLI_OPTS"]:
+			self.has_env_conf = True
 
 
 	def set_ampel_sub_op(self, name: str) -> None:
@@ -185,7 +180,10 @@ class AmpelArgumentParser(ArgumentParser):
 			self.notations.add(("-argument #", "Argument requiring one value"))
 
 		if name == "config" and group == "required" and self.has_env_conf:
-			self.add_note(f"{environ['AMPELCONF']} will be used unless an override using -config is specified")
+			self.add_note(
+				"Config file defined by env var AMPEL_CLI_OPTS will be used " +
+				"unless an override using -config is specified"
+			)
 			group = "optional"
 
 		if isinstance(group, str):
