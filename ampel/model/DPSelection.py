@@ -1,24 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/model/T2IngestOptions.py
+# File              : Ampel-interface/ampel/model/DPSelection.py
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 10.03.2020
-# Last Modified Date: 11.05.2021
+# Last Modified Date: 28.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Optional, Literal, List, TypedDict
-from ampel.abstract.AbsApplicable import AbsApplicable
+from typing import Union, Optional, Literal, Tuple
+from ampel.model.StrictModel import StrictModel
 
-class T2IngestOptions(TypedDict, total=False):
-	"""
-	:param filter: filter datapoints
-	:param sort: sort datapoints.
-		'id' uses the datapoint 'id' at root level.
-		Anything else will target a field (by name) in 'body'
-	:param select: how to slice the datapoint array.
-		If a list is provided, it must have a length of 3
-	"""
-	filter: Optional[Union[str, AbsApplicable]]
-	sort: Optional[Union[Literal['id'], str]]
-	select: Optional[Union[Literal['first', 'last'], List[Optional[int]]]]
+class DPSelection(StrictModel):
+
+	#: Aux unit name used to filter datapoints.
+	# (Unit must define method apply(self, arg: Any) -> Any)
+	filter: Optional[str]
+
+	#: Dict key used for sorting
+	#: Use 'id' to sort dps based on key 'id' at root level,
+	#: anything else will target a field (by name) in 'body'
+	sort: Optional[str]
+
+	#: How to slice the datapoint array.
+	#: If a list is provided, it must have a length of 3
+	select: Union[
+		None,
+		Literal['first'],
+		Literal['last'],
+		Tuple[Optional[int], Optional[int], Optional[int]]
+	]
+
+	def __init__(self, **kwargs):
+
+		if 'select' in kwargs and isinstance(kwargs['select'], list) and len(kwargs['select']) == 3:
+			kwargs['select'] = tuple(kwargs['select'])
+
+		super().__init__(**kwargs)
+
+		if self.sort and not self.select:
+			raise ValueError("Options 'sort' requires option 'select'")
