@@ -76,6 +76,30 @@ For example, in the case of ZiDataPointShaper:</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.abstract.AbsPointT2Unit.</span></code><code class="sig-name descname"><span class="pre">AbsPointT2Unit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.AmpelABC.AmpelABC</span></code>, <a class="reference internal" href="#ampel.base.LogicalUnit.LogicalUnit" title="ampel.base.LogicalUnit.LogicalUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.base.LogicalUnit.LogicalUnit</span></code></a></p>
 <p>A T2 unit bound to a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></p>
+<p>Note that the implementing class can customize the default ingestion behavior
+(which <code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code> to create
+<a class="reference internal" href="#ampel.content.T2Document.T2Document" title="ampel.content.T2Document.T2Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">T2</span> <span class="pre">documents</span></code></a> for)
+by defining the class variable ‘eligible’</p>
+<dl class="simple">
+<dt>Example::</dt><dd><p>ingest: ClassVar[DPSelection] = DPSelection(select=(1, -2, 5))</p>
+</dd>
+</dl>
+<p>will create documents bound to every 5th datapoint starting from the 2nd
+and ending with the 3rd-to-last</p>
+<dl class="simple">
+<dt>Example::</dt><dd><p>ingest: ClassVar[DPSelection] = DPSelection(filter=’PPSFilter’, sort=’jd’, select=’first’}</p>
+</dd>
+<dt>select options:</dt><dd><ul class="simple">
+<li><p>“first”: first datapoint for a stock</p></li>
+<li><p>“last”: most recent datapoint for a stock</p></li>
+<li><p>“all”: every datapoint (default)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: <a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">slice</span></code></a> of datapoints</p></li>
+</ul>
+</dd>
+</dl>
+<p>-&gt; see DPSelection docstring for info regarding ‘filter’ and ‘sort’.</p>
+<p>If ‘eligible’ is not specified, default ingestion will occur:
+a T2 document will be created for each datapoint</p>
 <dl class="py method">
 <dt id="ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.process">
 <em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsPointT2Unit.html#AbsPointT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsPointT2Unit.AbsPointT2Unit.process" title="Permalink to this definition">¶</a></dt>
@@ -194,30 +218,6 @@ Sub-class can add unit id constraints by parametrizing UnitModel</p>
 <p>A T2 unit bound to a <code class="xref py py-class docutils literal notranslate"><span class="pre">T1Document</span></code> (state of a stock),
 as well as the results of other T2 units</p>
 <dl class="py method">
-<dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
-and if ‘link_override’ is defined in there.</p>
-<p>T2Processor needs to retrieve the T2Records of units tied with this unit.
-If unspecified in config, t2 dependencies are resolved - for each unit defined in get_tied_unit_names() -
-using the db match query: {unit: &lt;unit_name&gt;, config: None, link: &lt;same link as root doc&gt;}.</p>
-<p>This behavior is overridable/customizable by adding the keyword ‘t2_dependency’ to the t2 config dict.
-The value of t2_dependency should be of type Union[T2Dependency, List[T2Dependency]].
-The parameter ‘link_override’ in T2Dependency allows to link this state T2 with a different value
-than the one registered as ‘link’ in the T2Record (which is the _id of a compound document for state t2s).</p>
-<p>This method thus enables to tie a state T2 with the result of a point t2
-(the returned link could be the id of the first datapoint contained in the compound)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the value of ‘link’ (tied t2 document) to be matched</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.process">
 <em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_views</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedStateT2Unit.html#AbsTiedStateT2Unit.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returned object should contain computed science results to be saved into the DB.</p>
@@ -250,30 +250,6 @@ For example, AbsTiedCustomStateT2Unit[LightCurve] would return a
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>~T</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">get_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link_override</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/abstract/AbsTiedCustomStateT2Unit.html#AbsTiedCustomStateT2Unit.get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.get_link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used by T2Processor if ‘t2_dependency’ is specified in the t2 config dict
-and if ‘link_override’ is defined in there.</p>
-<p>T2Processor needs to retrieve the T2Records of units tied with this unit.
-If unspecified in config, t2 dependencies are resolved - for each unit defined in get_tied_unit_names() -
-using the db match query: {unit: &lt;unit_name&gt;, config: None, link: &lt;same link as root doc&gt;}.</p>
-<p>This behavior is overridable/customizable by adding the keyword ‘t2_dependency’ to the t2 config dict.
-The value of t2_dependency should be of type Union[T2Dependency, List[T2Dependency]].
-The parameter ‘link_override’ in T2Dependency allows to link this state T2 with a different value
-than the one registered as ‘link’ in the T2Record (which is the _id of a compound document for state t2s).</p>
-<p>This method thus enables to tie a state T2 with the result of a point t2
-(the returned link could be the id of the first datapoint contained in the compound)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the value of ‘link’ (tied t2 document) to be matched</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1083,18 +1059,19 @@ Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Litera
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">ampel.model.StateT2Dependency.</span></code><code class="sig-name descname"><span class="pre">StateT2Dependency</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/StateT2Dependency.html#StateT2Dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ampel.model.UnitModel.UnitModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ampel.types.T</span></code>]</p>
 <p>Used to specify how “tied state t2” units should select the associated required t2 document.</p>
+<p>T2Processor needs to retrieve the T2Records of units tied with this unit.
+If link_override is unspecified, t2 dependencies are resolved - for each StateT2Dependency -
+using the db match query: {unit: &lt;unit_name&gt;, link: &lt;same link as root doc&gt;}.</p>
+<p>This behavior is overridable/customizable via ‘t2_dependency-&gt;link_override’ (t2 config dict).
+‘link_override’ allows to link a state T2 with a different value than the one registered as ‘link’ in the T2Record.</p>
+<p>For example, link_override enables to tie a state T2 with the result of a point t2
+(the returned link could be the id of the first datapoint contained in the compound)</p>
 <dl class="py attribute">
 <dt id="ampel.model.StateT2Dependency.StateT2Dependency.link_override">
-<code class="sig-name descname"><span class="pre">link_override</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency.link_override" title="Permalink to this definition">¶</a></dt>
-<dd><ul>
+<code class="sig-name descname"><span class="pre">link_override</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ampel.model.DPSelection.DPSelection</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency.link_override" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
 <li><p>None: the state associated with the root tied state T2 will be used (value of ‘link’ in t2 doc)</p></li>
-<li><p>Dict: allows tied state T2 units to be bound with point t2 units.
-The value provided here must be understandable by</p>
-<blockquote>
-<div><p><a class="reference internal" href="#ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link" title="ampel.abstract.AbsTiedStateT2Unit.AbsTiedStateT2Unit.get_link"><code class="xref py py-func docutils literal notranslate"><span class="pre">AbsTiedStateT2Unit.get_link</span></code></a></p>
-</div></blockquote>
-<p>Ampel extensions such as Ampel-photometry accept more ‘link_override’ options than vanilla Ampel.</p>
-</li>
+<li><p>DPSelection: allows tied state T2 units to be bound with point t2 units.</p></li>
 </ul>
 </dd></dl>
 
