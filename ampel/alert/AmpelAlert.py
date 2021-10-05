@@ -4,12 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 26.01.2020
-# Last Modified Date: 25.05.2021
+# Last Modified Date: 04.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
 from typing import Dict, Tuple, List, Sequence, Optional, Any, Callable, Union
-from ampel.types import StockId
+from ampel.types import StockId, Tag
 
 osa = object.__setattr__
 
@@ -31,18 +31,26 @@ def __ro__(self, *args, **kwargs):
 
 class AmpelAlert:
 
-	__slots__ = 'id', 'stock_id', 'dps', 'new'
+	__slots__ = 'id', 'stock_id', 'dps', 'tag'
 	__setattr__ = __ro__
 
 	id: int #: unique identifier for this alert
 	stock_id: StockId #: stock this alert belongs to
 	dps: Sequence[Dict] #: datapoints
 
+	#: Optional tag associated with this alert
+	tag: Optional[Union[Tag, List[Tag]]]
 
-	def __init__(self, id: Union[int, str], stock_id: StockId, dps: Sequence[Dict]) -> None:
+
+	def __init__(self,
+		id: Union[int, str],
+		stock_id: StockId, dps: Sequence[Dict],
+		tag: Optional[Union[Tag, List[Tag]]] = None
+	) -> None:
 		osa(self, 'id', id)
 		osa(self, 'stock_id', stock_id)
 		osa(self, 'dps', dps)
+		osa(self, 'tag', tag)
 
 
 	def __reduce__(self):
