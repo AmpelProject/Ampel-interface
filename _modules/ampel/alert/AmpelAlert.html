@@ -39,12 +39,12 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 26.01.2020</span>
-<span class="c1"># Last Modified Date: 25.05.2021</span>
+<span class="c1"># Last Modified Date: 04.10.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
 <span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">Tag</span>
 
 <span class="n">osa</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span>
 
@@ -66,18 +66,26 @@
 
 <div class="viewcode-block" id="AmpelAlert"><a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert">[docs]</a><span class="k">class</span> <span class="nc">AmpelAlert</span><span class="p">:</span>
 
-	<span class="vm">__slots__</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;stock_id&#39;</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">,</span> <span class="s1">&#39;new&#39;</span>
+	<span class="vm">__slots__</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;stock_id&#39;</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">,</span> <span class="s1">&#39;tag&#39;</span>
 	<span class="fm">__setattr__</span> <span class="o">=</span> <span class="n">__ro__</span>
 
 	<span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="c1">#: unique identifier for this alert</span>
 	<span class="n">stock_id</span><span class="p">:</span> <span class="n">StockId</span> <span class="c1">#: stock this alert belongs to</span>
 	<span class="n">dps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="c1">#: datapoints</span>
 
+	<span class="c1">#: Optional tag associated with this alert</span>
+	<span class="n">tag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tag</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]]</span>
 
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">stock_id</span><span class="p">:</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">dps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+		<span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+		<span class="n">stock_id</span><span class="p">:</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">dps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+		<span class="n">tag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tag</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 		<span class="n">osa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
 		<span class="n">osa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stock_id&#39;</span><span class="p">,</span> <span class="n">stock_id</span><span class="p">)</span>
 		<span class="n">osa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">,</span> <span class="n">dps</span><span class="p">)</span>
+		<span class="n">osa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;tag&#39;</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
 
 
 	<span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
