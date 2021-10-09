@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 01.09.2021
-# Last Modified Date: 01.10.2021
+# Last Modified Date: 08.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from enum import IntFlag
@@ -12,7 +12,7 @@ from enum import IntFlag
 # flake8: noqa (E221)
 class MetaActionCode(IntFlag):
 	"""
-	Potential code of field 'action' from :class:`~ampel.content.MetaRecord.MetaRecord` (62 different possible values)
+	Potential code for 'action' field from :class:`~ampel.content.MetaActivity.MetaActivity`
 	"""
 
 	UNIT                      = 1
@@ -29,4 +29,5 @@ class MetaActionCode(IntFlag):
 	ADD_BODY                  = 1<<12
 	PULL_BODY                 = 1<<13
 	RESET_BODY                = 1<<14
-	BUMP_STOCK_UPD            = 1<<15
+	ADD_T1_EXCL               = 1<<15
+	BUMP_STOCK_UPD            = 1<<16
