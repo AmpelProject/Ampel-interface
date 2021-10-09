@@ -4,18 +4,16 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 17.05.2021
-# Last Modified Date: 05.09.2021
+# Last Modified Date: 07.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Optional, Sequence, Union, Literal, Any, Dict, TypedDict
 from ampel.types import ChannelId, Tag
+from ampel.content.MetaActivity import MetaActivity
 
 
 class MetaRecord(TypedDict, total=False):
-	"""
-	A record of activity on tier documents.
-	Very similar to JournalRecord for now
-	"""
+	""" A record of updates on tier documents """
 
 	#: Run(s) associated with this record
 	run: int
@@ -41,8 +39,8 @@ class MetaRecord(TypedDict, total=False):
 	#: Status code of the associated process
 	code: int
 
-	#: Action code(s) built from :class:`~ampel.enum.MetaActionCode.MetaActionCode`
-	action: int
+	#: Actions performed on the associated document
+	activity: Sequence[MetaActivity]
 
 	#: Duration of the process
 	duration: Union[int, float]
