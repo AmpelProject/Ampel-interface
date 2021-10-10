@@ -39,14 +39,14 @@ class T1Document(TypedDict, total=False):
 	#: intger hash hash of dps (referenced by stated T2 units)
 	link: int
 
-	#: channel(s) associated with this doc
+	#: visible by any projection (not channel bound)
+	tag: Sequence[Tag]
+
+	#: Ampel channel(s) associated with this document
 	channel: Sequence[ChannelId]
 
 	#: DocumentCode.NEW for T1 units requiring computation, DocumentCode.OK otherwise
 	code: int
-
-	#: Set by ingesters (ex: ZTF_PUB)
-	tag: Sequence[Tag]
 
 	#: References among other things the id of process invocation that created this doc
 	meta: Sequence[MetaRecord]
