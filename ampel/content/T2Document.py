@@ -36,7 +36,10 @@ class T2Document(TypedDict, total=False):
 	#: References to input data
 	link: T2Link
 
+	#: visible by any projection (not channel bound)
 	tag: Sequence[Tag]
+
+	#: Ampel channel(s) associated with this document
 	channel: Sequence[ChannelId]
 
 	#: Records of activity on this document
