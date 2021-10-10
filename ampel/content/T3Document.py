@@ -33,6 +33,10 @@ class T3Document(TypedDict, total=False):
 	#: Ever increasing global and unique run identifier
 	run: int
 
+	#: visible by any projection (not channel bound)
+	tag: Sequence[Tag]
+
+	#: Ampel channel(s) associated with this document
 	channel: Union[ChannelId, Sequence[ChannelId]]
 
 	#: Note: might contain versions of dependent external services
@@ -45,8 +49,6 @@ class T3Document(TypedDict, total=False):
 
 	#: Optional source origin (avoids potential stock collision between different data sources)
 	origin: int
-
-	tag: Sequence[Tag]
 
 	#: Negative values must be member of :class:`~ampel.enum.DocumentCode.DocumentCode`
 	code: int
