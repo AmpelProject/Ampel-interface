@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 01.09.2021
-# Last Modified Date: 08.10.2021
+# Last Modified Date: 10.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from enum import IntFlag
@@ -20,14 +20,16 @@ class MetaActionCode(IntFlag):
 	EXTRA_META                = 4
 	EXTRA_JOURNAL             = 8
 	SET_CODE                  = 16
+	SET_UNIT_CODE             = 32
 	ADD_INGEST_TAG            = 64
 	ADD_UNIT_TAG              = 128
-	ADD_OTHER_TAG             = 1<<8
-	PULL_TAG                  = 1<<9
-	ADD_CHANNEL               = 1<<10
-	PULL_CHANNEL              = 1<<11
-	ADD_BODY                  = 1<<12
-	PULL_BODY                 = 1<<13
-	RESET_BODY                = 1<<14
-	ADD_T1_EXCL               = 1<<15
-	BUMP_STOCK_UPD            = 1<<16
+	ADD_WORKER_TAG            = 1<<8
+	ADD_OTHER_TAG             = 1<<9
+	PULL_TAG                  = 1<<10
+	ADD_CHANNEL               = 1<<11
+	PULL_CHANNEL              = 1<<12
+	ADD_BODY                  = 1<<13
+	PULL_BODY                 = 1<<14
+	RESET_BODY                = 1<<15
+	ADD_T1_EXCL               = 1<<16
+	BUMP_STOCK_UPD            = 1<<17
