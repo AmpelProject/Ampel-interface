@@ -36,7 +36,7 @@ class MetaRecord(TypedDict, total=False):
 	#: Free-form labels
 	tag: Union[Tag, Sequence[Tag]]
 
-	#: Status code of the associated process
+	#: Status code of the latest associated process
 	code: int
 
 	#: Actions performed on the associated document
