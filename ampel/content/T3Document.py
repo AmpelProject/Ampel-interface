@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 23.02.2021
-# Last Modified Date: 19.09.2021
+# Last Modified Date: 19.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from bson import ObjectId
@@ -52,5 +52,8 @@ class T3Document(TypedDict, total=False):
 
 	#: Negative values must be member of :class:`~ampel.enum.DocumentCode.DocumentCode`
 	code: int
+
+	#: Optional human friendly date time stamp
+	datetime: str
 
 	body: UBson
