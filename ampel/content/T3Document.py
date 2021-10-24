@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 23.02.2021
-# Last Modified Date: 19.10.2021
+# Last Modified Date: 20.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from bson import ObjectId
@@ -34,7 +34,7 @@ class T3Document(TypedDict, total=False):
 	run: int
 
 	#: visible by any projection (not channel bound)
-	tag: Sequence[Tag]
+	tag: Union[Tag, Sequence[Tag]]
 
 	#: Ampel channel(s) associated with this document
 	channel: Union[ChannelId, Sequence[ChannelId]]
