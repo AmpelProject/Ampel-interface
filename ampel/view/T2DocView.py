@@ -123,6 +123,11 @@ class T2DocView:
 			return None
 
 		idx = len([el for el in self.meta if el['tier'] == 2 and el['code'] >= 0]) - 1
+
+		# A manual/admin $unset: {body: 1} was used to delete bad data
+		if idx > len(self.body) - 1:
+			idx = len(self.body) - 1
+
 		return self.body[idx] if idx >= 0 else None
 
 
