@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 17.02.2021
-# Last Modified Date: 05.08.2021
+# Last Modified Date: 08.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from importlib import import_module
@@ -12,6 +12,7 @@ from typing import Dict, Type, Any, Union, Optional, ClassVar, overload # type: 
 from ampel.types import T, check_class
 from ampel.model.UnitModel import UnitModel
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.config.AmpelConfig import AmpelConfig
 
 
 class AuxUnitRegister:
@@ -23,8 +24,11 @@ class AuxUnitRegister:
 	_dyn: ClassVar[Dict[str, Any]] = {}
 
 	@classmethod
-	def initialize(cls, defs: Dict[str, Any]) -> None:
-		cls._defs = defs
+	def initialize(cls, config: AmpelConfig) -> None:
+		cls._defs = {
+			k: v for k, v in config.get("unit", ret_type=dict, raise_exc=True).items()
+			if 'ContextUnit' not in v.get('base', []) and 'LogicalUnit' not in v.get('base', [])
+		}
 
 	@overload
 	@classmethod
@@ -51,7 +55,11 @@ class AuxUnitRegister:
 				return Klass(**(model.config | kwargs)) # type: ignore[call-arg]
 			raise ValueError("Auxiliary units cannot use config aliases")
 
-		return Klass(**kwargs) # type: ignore[call-arg]
+		unit = Klass(**kwargs) # type: ignore[call-arg]
+		if hasattr(unit, "post_init"):
+			unit.post_init() # type: ignore[union-attr]
+
+		return unit
 
 
 	@overload
