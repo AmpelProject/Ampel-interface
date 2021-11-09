@@ -38,14 +38,6 @@ class SnapView:
 
 	__slots__ = 'id', 'stock', 'origin', 't0', 't1', 't2', 't3', 'logs', 'extra', '_frozen'
 
-	stock: Optional[StockDocument] #: Stock record, if loaded
-	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
-	t1: Optional[Sequence[T1Document]] #: Compounds, if loaded
-	t2: Optional[Sequence[T2Document]] #: T2 documents, if loaded
-	t3: Optional[Sequence[T3Document]] #: T3 documents, if loaded
-	logs: Optional[Sequence[LogDocument]] #: Logs, if added by T3 complement stage
-	extra: Optional[Dict[str, Any]] #: Free-form, auxiliary information added by instances of :class:`~ampel.abstract.AbsBufferComplement.AbsBufferComplement`
-
 
 	@classmethod
 	def of(cls, ampel_buffer: AmpelBuffer) -> 'SnapView':
