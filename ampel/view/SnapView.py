@@ -52,8 +52,8 @@ class SnapView:
 		t1: Optional[Sequence[T1Document]] = None,
 		t2: Optional[Sequence[T2Document]] = None,
 		t3: Optional[Sequence[T3Document]] = None,
-		logs: Optional[Sequence[LogDocument]] = None,
-		extra: Optional[Dict[str, Any]] = None,
+		logs: Optional[Sequence[LogDocument]] = None, # Logs, if added by T3 complement stage
+		extra: Optional[Dict[str, Any]] = None, # Free-form information addable via instances of AbsBufferComplement
 		freeze: bool = True
 	):
 		self.stock = stock
