@@ -4,10 +4,10 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 31.05.2018
-# Last Modified Date: 04.04.2021
+# Last Modified Date: 09.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Dict, List, Any, TypedDict, Literal
+from typing import Optional, Dict, List, Any, TypedDict, Literal, Union
 from ampel.types import StockId
 from ampel.content.StockDocument import StockDocument
 from ampel.content.DataPoint import DataPoint
@@ -18,7 +18,7 @@ from ampel.content.LogDocument import LogDocument
 
 # Please update BufferKey on AmpelBuffer udpates
 # There is currently unfortunately no way of extracting a Literal out of a TypedDict
-BufferKey = Literal['id', 'stock', 't0', 't1', 't2', 't3', 'logs', 'extra']
+BufferKey = Literal['id', 'stock', 'origin', 't0', 't1', 't2', 't3', 'logs', 'extra']
 
 class AmpelBuffer(TypedDict, total=False):
 	"""
@@ -29,6 +29,7 @@ class AmpelBuffer(TypedDict, total=False):
 	# Could stock be of type List[StockDocument] to enable hybrid/dual transients ?
 	id: StockId
 	stock: Optional[StockDocument]
+	origin: Optional[Union[int, List[int]]]
 	t0: Optional[List[DataPoint]]
 	t1: Optional[List[T1Document]]
 	t2: Optional[List[T2Document]]
