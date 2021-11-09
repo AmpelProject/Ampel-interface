@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 18.06.2021
+# Last Modified Date: 09.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
@@ -36,7 +36,7 @@ class SnapView:
 
 	"""
 
-	__slots__ = 'id', 'stock', 't0', 't1', 't2', 't3', 'logs', 'extra', '_frozen'
+	__slots__ = 'id', 'stock', 'origin', 't0', 't1', 't2', 't3', 'logs', 'extra', '_frozen'
 
 	stock: Optional[StockDocument] #: Stock record, if loaded
 	t0: Optional[Sequence[DataPoint]] #: Datapoints, if loaded
@@ -55,6 +55,7 @@ class SnapView:
 	def __init__(self,
 		id: StockId,
 		stock: Optional[StockDocument] = None,
+		origin: Optional[Union[int, Sequence[int]]] = None,
 		t0: Optional[Sequence[DataPoint]] = None,
 		t1: Optional[Sequence[T1Document]] = None,
 		t2: Optional[Sequence[T2Document]] = None,
@@ -64,6 +65,7 @@ class SnapView:
 		freeze: bool = True
 	):
 		self.stock = stock
+		self.origin = origin
 		self.t0 = t0
 		self.t1 = t1
 		self.t2 = t2
