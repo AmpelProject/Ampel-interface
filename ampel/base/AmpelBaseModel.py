@@ -4,15 +4,15 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.10.2019
-# Last Modified Date: 12.05.2021
+# Last Modified Date: 19.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from copy import deepcopy
 from types import MemberDescriptorType
 from typing import get_origin, get_args, Union, Dict, Any, ClassVar, Set, Type
 from pydantic import BaseModel, validate_model, create_model
-from ampel.config.AmpelConfig import AmpelConfig
 from ampel.model.StrictModel import StrictModel
+
+_check_types = True
 
 
 class AmpelBaseModel:
@@ -20,9 +20,7 @@ class AmpelBaseModel:
 	Top level class that uses pydantic's BaseModel to validate data.
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
 
-	Type checking can be deactivated globaly through the
-	:attr:`AmpelConfig._check_types <ampel.config.AmpelConfig.AmpelConfig._check_types>`
-	parameter, which will speed up instantiation significantly::
+	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::
 	
 	  In []: class B(AmpelBaseModel):
 	    ...:     a: List[int] = []
@@ -30,7 +28,7 @@ class AmpelBaseModel:
 	  In []: %timeit B(a=[11])
 	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 
-	  In []: AmpelConfig._check_types=False
+	  In []: ampel.base.AmpelBaseModel._check_types=False
 
 	  In []: %timeit B(a=[11])
 	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
@@ -125,7 +123,7 @@ class AmpelBaseModel:
 			# cls._model.update_forward_refs()
 
 		# Check types (default behavior)
-		if AmpelConfig._check_types:
+		if _check_types:
 
 			vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
 
@@ -140,14 +138,12 @@ class AmpelBaseModel:
 				print("#" * 60)
 				raise e
 
-			# Note: coercion could be checked/deactived by AmpelConfig flag as well
+			# Note: coercion could be checked/deactived by a flag as well
 			kwargs.update(vres[0])
 
-		d = self.__dict__
 		sa = self.__setattr__
 		sks = cls._sks
 		aks = cls._aks
-		NoneType = type(None)
 
 		for k, v in cls._slot_defaults.items():
 			if k not in kwargs:
