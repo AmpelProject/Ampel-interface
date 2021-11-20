@@ -4,13 +4,14 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 13.01.2018
-# Last Modified Date: 09.11.2021
+# Last Modified Date: 10.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Literal, Sequence, Callable
+from typing import Dict, Optional, Union, Any, Literal, Sequence, Callable, Tuple, Type, overload
 
-from ampel.types import StockId, UBson
+
+from ampel.types import StockId, UBson, T
 from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.content.DataPoint import DataPoint
 from ampel.content.T1Document import T1Document
@@ -114,16 +115,16 @@ class SnapView:
 		return self.t2
 
 
-	def get_t2_result(self,
+	def get_latest_t2_body(self,
 		unit_id: Union[int, str],
 		link_id: Optional[int] = None,
-		code: Optional[Union[int]] = None
-	) -> Optional[UBson]:
+		code: Optional[Union[int]] = None,
+	) -> UBson:
 		"""
-		Get latest result from a given unit.
+		Get latest t2 body element from a given unit.
 
 		:param unit_id: target unit id
-		:param link_id: restrict to a specific state
+		:param link_id: restrict to a specific link
 		"""
 
 		# from the records that match the unit and compound selection,
@@ -134,6 +135,116 @@ class SnapView:
 			for subrecord in reversed(t2.get('body') or []):
 				if subrecord:
 					return subrecord
+		return None
+
+
+	@overload
+	def get_t2_value(self,
+		key: None, rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: bool = ..., require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[T]:
+		...
+
+	@overload
+	def get_t2_value(self,
+		key: str, rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: bool = ..., require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[T]:
+		...
+
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Tuple[Optional[T], Optional[T]]:
+		...
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[Tuple[T, T]]:
+		...
+
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Tuple[Optional[T], Optional[T], Optional[T]]:
+		...
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[Tuple[T, T, T]]:
+		...
+
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[Tuple[Optional[T], Optional[T], Optional[T], Optional[T]]]:
+		...
+	@overload
+	def get_t2_value(self,
+		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
+	) -> Optional[Tuple[T, T, T, T]]:
+		...
+
+	def get_t2_value(self,
+		key: Union[None, str, tuple[str, ...]],
+		rtype: Type[T],
+		unit: Union[str, list[str]], *,
+		no_none: bool = False,
+		require_all_keys: bool = True,
+		code: int = 0,
+		data_slice: int = -1
+	) -> Optional[Union[Optional[T], Tuple[Optional[T], ...]]]:
+		"""
+		Examples:
+		get_t2_value("fit_result", dict, ["T2NedSNCosmo", "T2SNCosmo"])
+		get_t2_value(("z", "zunc"), float, "T2NedTap")
+		get_t2_value(None, dict, "T2NedSNCosmo")
+
+		key = ("a", "b")
+		t2_result: {'body': [{'data': {'a': 1}}]} or {'body': [{'data': {'a': 1, 'b': None, 'c': 3}}]}
+		no_none = False -> (1, None) | no_none = True -> None
+		"""
+
+		for ustr in [unit] if isinstance(unit, str) else unit:
+
+			if (x := self.get_latest_t2_body(unit_id=ustr, code=code)) is None:
+				continue
+
+			if not isinstance(x, dict):
+				continue
+
+			if 'data' not in x or len(x['data']) == 0:
+				continue
+
+			r = x['data'][data_slice]
+
+			if key is None:
+				return r if isinstance(r, rtype) else None
+
+			if isinstance(key, str):
+				if key in r:
+					return r[key]
+				continue
+
+			if require_all_keys:
+				print(len(r.keys() & key), len(key))
+				if len(r.keys() & key) == len(key):
+					t = tuple(r[k] for k in key)
+					return None if (None in t and no_none) else t
+				continue
+
+			if r.keys() & key:
+				return tuple(r[k] if k in r else None for k in key)
+
+		if key is None or isinstance(key, str):
+			return None
+
 		return None
 
 
