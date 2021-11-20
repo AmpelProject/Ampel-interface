@@ -4,12 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb, jvs
 # Date              : Unspecified
-# Last Modified Date: 09.11.2021
+# Last Modified Date: 19.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from setuptools import setup, find_namespace_packages
 
-install_requires = ['PyYAML>=5.4.1,<6.0.0', 'pydantic>=1.8,<2', 'pymongo>=3.10,<4.0']
+install_requires = ['PyYAML>=5.4.1,<6.0.0', 'pydantic>=1.8,<2']
 extras_require = {
 	'docs': [
 		'Sphinx>=3.5.1,<4.0.0',
@@ -20,7 +20,7 @@ extras_require = {
 
 setup(
 	name = 'ampel-interface',
-	version = '0.8.1-alpha.3',
+	version = '0.8.1-alpha.4',
 	description = 'Base classes for the Ampel analysis platform',
 	long_description = '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
 	author = 'Valery Brinnel',
