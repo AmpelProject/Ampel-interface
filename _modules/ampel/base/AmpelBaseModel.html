@@ -39,15 +39,15 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 07.10.2019</span>
-<span class="c1"># Last Modified Date: 12.05.2021</span>
+<span class="c1"># Last Modified Date: 19.11.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MemberDescriptorType</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">validate_model</span><span class="p">,</span> <span class="n">create_model</span>
-<span class="kn">from</span> <span class="nn">ampel.config.AmpelConfig</span> <span class="kn">import</span> <span class="n">AmpelConfig</span>
 <span class="kn">from</span> <span class="nn">ampel.model.StrictModel</span> <span class="kn">import</span> <span class="n">StrictModel</span>
+
+<span class="n">_check_types</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="AmpelBaseModel"><a class="viewcode-back" href="../../../api.html#ampel.base.AmpelBaseModel.AmpelBaseModel">[docs]</a><span class="k">class</span> <span class="nc">AmpelBaseModel</span><span class="p">:</span>
@@ -55,9 +55,7 @@
 <span class="sd">	Top level class that uses pydantic&#39;s BaseModel to validate data.</span>
 <span class="sd">	This class supports setting slots values through constructor parameters (they will be type checked as well).</span>
 
-<span class="sd">	Type checking can be deactivated globaly through the</span>
-<span class="sd">	:attr:`AmpelConfig._check_types &lt;ampel.config.AmpelConfig.AmpelConfig._check_types&gt;`</span>
-<span class="sd">	parameter, which will speed up instantiation significantly::</span>
+<span class="sd">	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::</span>
 <span class="sd">	</span>
 <span class="sd">	  In []: class B(AmpelBaseModel):</span>
 <span class="sd">	    ...:     a: List[int] = []</span>
@@ -65,7 +63,7 @@
 <span class="sd">	  In []: %timeit B(a=[11])</span>
 <span class="sd">	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
 
-<span class="sd">	  In []: AmpelConfig._check_types=False</span>
+<span class="sd">	  In []: ampel.base.AmpelBaseModel._check_types=False</span>
 
 <span class="sd">	  In []: %timeit B(a=[11])</span>
 <span class="sd">	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)</span>
@@ -160,7 +158,7 @@
 			<span class="c1"># cls._model.update_forward_refs()</span>
 
 		<span class="c1"># Check types (default behavior)</span>
-		<span class="k">if</span> <span class="n">AmpelConfig</span><span class="o">.</span><span class="n">_check_types</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">_check_types</span><span class="p">:</span>
 
 			<span class="n">vres</span> <span class="o">=</span> <span class="n">validate_model</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span> <span class="c1"># type: ignore[arg-type]</span>
 
@@ -175,14 +173,12 @@
 				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
 				<span class="k">raise</span> <span class="n">e</span>
 
-			<span class="c1"># Note: coercion could be checked/deactived by AmpelConfig flag as well</span>
+			<span class="c1"># Note: coercion could be checked/deactived by a flag as well</span>
 			<span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">vres</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-		<span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
 		<span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span>
 		<span class="n">sks</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_sks</span>
 		<span class="n">aks</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_aks</span>
-		<span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
 		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 			<span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
