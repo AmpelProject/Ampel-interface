@@ -140,53 +140,53 @@ class SnapView:
 
 	@overload
 	def get_t2_value(self,
-		key: None, rtype: Type[T], unit: Union[str, list[str]], *,
+		key: None, rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: bool = ..., require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[T]:
 		...
 
 	@overload
 	def get_t2_value(self,
-		key: str, rtype: Type[T], unit: Union[str, list[str]], *,
+		key: str, rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: bool = ..., require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[T]:
 		...
 
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Tuple[Optional[T], Optional[T]]:
 		...
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[Tuple[T, T]]:
 		...
 
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Tuple[Optional[T], Optional[T], Optional[T]]:
 		...
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[Tuple[T, T, T]]:
 		...
 
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[False], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[Tuple[Optional[T], Optional[T], Optional[T], Optional[T]]]:
 		...
 	@overload
 	def get_t2_value(self,
-		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, list[str]], *,
+		key: tuple[str, str, str, str], rtype: Type[T], unit: Union[str, tuple[str, ...]], *,
 		no_none: Literal[True], require_all_keys: bool = ..., code: int = ..., data_slice: int = ...
 	) -> Optional[Tuple[T, T, T, T]]:
 		...
@@ -194,7 +194,7 @@ class SnapView:
 	def get_t2_value(self,
 		key: Union[None, str, tuple[str, ...]],
 		rtype: Type[T],
-		unit: Union[str, list[str]], *,
+		unit: Union[str, tuple[str, ...]], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
 		code: int = 0,
