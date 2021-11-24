@@ -38,7 +38,7 @@ class AmpelAlert:
 	__setattr__ = __ro__
 
 	def __init__(self,
-		id: Union[int, str], #: unique identifier for this alert
+		id: int, #: unique identifier for this alert
 		stock: StockId, #: stock this alert belongs to
 		datapoints: Sequence[dict[str, Any]],
 		tag: Optional[Union[Tag, list[Tag]]] = None, #: Optional tag associated with this alert
@@ -51,7 +51,7 @@ class AmpelAlert:
 		osa(self, '_extra', extra)
 
 	@property
-	def id(self) -> StockId:
+	def id(self) -> int:
 		return self._id # type: ignore[attr-defined]
 
 	@property

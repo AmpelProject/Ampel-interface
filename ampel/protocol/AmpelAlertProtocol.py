@@ -14,7 +14,7 @@ from ampel.types import StockId, Tag
 class AmpelAlertProtocol(Protocol):
 
 	@property
-	def id(self) -> StockId:
+	def id(self) -> int:
 		...
 
 	@property
