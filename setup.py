@@ -20,7 +20,7 @@ extras_require = {
 
 setup(
 	name = 'ampel-interface',
-	version = '0.8.1-alpha.7',
+	version = '0.8.1-alpha.8',
 	description = 'Base classes for the Ampel analysis platform',
 	long_description = '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
 	author = 'Valery Brinnel',
