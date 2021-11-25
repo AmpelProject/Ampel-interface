@@ -22,7 +22,9 @@ ops: dict[str, Callable[[str, Any], bool]] = {
 	'==': operator.eq,
 	'!=': operator.ne,
 	'is': operator.is_,
-	'is not': operator.is_not
+	'is not': operator.is_not,
+	'contains': operator.contains,
+	'exists': None, # type: ignore
 }
 
 def __ro__(self, *args, **kwargs):
@@ -143,9 +145,14 @@ class AmpelAlert:
 				raise ValueError("Parameter 'filters' must be a dict or a sequence of dicts")
 
 		for f in filters:
-			dicts = [
-				d for d in dicts
-				if f['attribute'] in d and ops[f['operator']](d[f['attribute']], f['value'])
-			]
+			attr = f['attribute']
+			op = f['operator']
+			if op == 'exists':
+				if f['value'] is True:
+					dicts = [d for d in dicts if attr in d]
+				else:
+					dicts = [d for d in dicts if attr not in d]
+			else:
+				dicts = [d for d in dicts if attr in d and ops[op](d[attr], f['value'])]
 
 		return dicts
