@@ -57,7 +57,9 @@
 	<span class="s1">&#39;==&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">eq</span><span class="p">,</span>
 	<span class="s1">&#39;!=&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">ne</span><span class="p">,</span>
 	<span class="s1">&#39;is&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">is_</span><span class="p">,</span>
-	<span class="s1">&#39;is not&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">is_not</span>
+	<span class="s1">&#39;is not&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">is_not</span><span class="p">,</span>
+	<span class="s1">&#39;contains&#39;</span><span class="p">:</span> <span class="n">operator</span><span class="o">.</span><span class="n">contains</span><span class="p">,</span>
+	<span class="s1">&#39;exists&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># type: ignore</span>
 <span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">__ro__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -178,10 +180,15 @@
 				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter &#39;filters&#39; must be a dict or a sequence of dicts&quot;</span><span class="p">)</span>
 
 		<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
-			<span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span>
-				<span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dicts</span>
-				<span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;attribute&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">ops</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;operator&#39;</span><span class="p">]](</span><span class="n">d</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;attribute&#39;</span><span class="p">]],</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
-			<span class="p">]</span>
+			<span class="n">attr</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;attribute&#39;</span><span class="p">]</span>
+			<span class="n">op</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;operator&#39;</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;exists&#39;</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+					<span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dicts</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dicts</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dicts</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">ops</span><span class="p">[</span><span class="n">op</span><span class="p">](</span><span class="n">d</span><span class="p">[</span><span class="n">attr</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])]</span>
 
 		<span class="k">return</span> <span class="n">dicts</span></div>
 </pre></div>
