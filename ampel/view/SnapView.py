@@ -233,7 +233,6 @@ class SnapView:
 				continue
 
 			if require_all_keys:
-				print(len(r.keys() & key), len(key))
 				if len(r.keys() & key) == len(key):
 					t = tuple(r[k] for k in key)
 					return None if (None in t and no_none) else t
