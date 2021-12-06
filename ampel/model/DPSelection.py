@@ -18,7 +18,7 @@ class DPSelection(StrictModel):
 
 	#: Aux unit name used to filter datapoints.
 	# (Unit must define method apply(self, arg: Any) -> Any)
-	filter: Optional[str]
+	filter: Optional[Union[UnitModel, str]]
 
 	#: Dict key used for sorting
 	#: Use 'id' to sort dps based on key 'id' at root level,
@@ -51,7 +51,7 @@ class DPSelection(StrictModel):
 		sl = None
 
 		f = AuxUnitRegister.new_unit(
-			UnitModel(unit=self.filter),
+			self.filter if isinstance(self.filter, UnitModel) else UnitModel(unit=self.filter),
 			sub_type = AbsApplicable
 		) if self.filter else None
 
