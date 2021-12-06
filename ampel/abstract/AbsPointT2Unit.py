@@ -32,7 +32,9 @@ class AbsPointT2Unit(AmpelABC, LogicalUnit, abstract=True):
 	and ending with the 3rd-to-last
 
 	Example::
-	   ingest: ClassVar[DPSelection] = DPSelection(filter='PPSFilter', sort='jd', select='first'}
+	   ingest: ClassVar[DPSelection] = DPSelection(filter=UnitModel(unit='SimpleTagFilter', config={'require': ['ZTF_DP']}), sort='jd', select='first'}
+
+	will create documents bound to the first datapoint with tag 'ZTF_DP', in order of body.jd.
 	
 	select options:
 	  - "first": first datapoint for a stock
