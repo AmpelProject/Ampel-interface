@@ -8,8 +8,13 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Any
-from bson import ObjectId
 from base64 import b64encode, b64decode
+
+try:
+	from bson import ObjectId
+	HAVE_BSON = True
+except ImportError:
+	HAVE_BSON = False
  
 dsi = dict.__setitem__
 
@@ -25,7 +30,7 @@ def walk_and_encode(arg: Any) -> Any:
 
 	elif isinstance(arg, dict):
 		for k, v in arg.items():
-			if isinstance(v, ObjectId):
+			if HAVE_BSON and isinstance(v, ObjectId):
 				dsi(arg, k, "oid:" + v.binary.hex())
 			elif isinstance(v, bytes):
 				dsi(arg, k, "b64:" + b64encode(v).decode('ascii'))
@@ -33,7 +38,7 @@ def walk_and_encode(arg: Any) -> Any:
 				dsi(arg, k, walk_and_encode(v))
 		return arg
 
-	elif isinstance(arg, ObjectId):
+	elif HAVE_BSON and isinstance(arg, ObjectId):
 		return "oid:" + arg.binary.hex()
 
 	elif isinstance(arg, bytes):
@@ -56,7 +61,11 @@ def walk_and_decode(arg: Any) -> Any:
 			if isinstance(v, str) and v.startswith("b64:"):
 				arg[k] = b64decode(v[4:])
 			elif isinstance(v, str) and v.startswith("oid:"):
-				arg[k] = ObjectId(v[4:])
+				if HAVE_BSON:
+					arg[k] = ObjectId(v[4:])
+				else:
+					raise ValueError(f"got ObjectId {v}, but pymongo is not installed")
+
 			else:
 				arg[k] = walk_and_decode(v)
 		return arg
@@ -65,6 +74,9 @@ def walk_and_decode(arg: Any) -> Any:
 		return b64decode(arg[4:])
 
 	elif isinstance(arg, str) and arg.startswith("oid:"):
-		return ObjectId(arg[4:])
+		if HAVE_BSON:
+			return ObjectId(arg[4:])
+		else:
+			raise ValueError(f"got ObjectId {arg}, but pymongo is not installed")
 
 	return arg
