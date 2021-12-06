@@ -7,11 +7,12 @@
 # Last Modified Date: 20.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from bson import ObjectId
-from typing import Sequence, Union, TypedDict, Dict, Any
+from typing import Sequence, Union, TypedDict, Dict, Any, TYPE_CHECKING
 from ampel.types import ChannelId, StockId, Tag, UBson
 from ampel.content.MetaRecord import MetaRecord
 
+if TYPE_CHECKING:
+	from bson import ObjectId
 
 class T3Document(TypedDict, total=False):
 	"""
@@ -19,7 +20,7 @@ class T3Document(TypedDict, total=False):
 	"""
 
 	#: Database primary id (contains time of creation)
-	_id: ObjectId
+	_id: "ObjectId"
 
 	#: Name of the associated T3 process (may be a hash)
 	process: Union[int, str]
