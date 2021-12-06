@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API reference &#8212; ampel-interface 0.8.1-alpha.10 documentation</title>
+    <title>API reference &#8212; ampel-interface 0.8.1-alpha.11 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="structure.html" title="Structure"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.1-alpha.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.1-alpha.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>  
@@ -88,8 +88,11 @@ by defining the class variable ‘eligible’</p>
 <p>will create documents bound to every 5th datapoint starting from the 2nd
 and ending with the 3rd-to-last</p>
 <dl class="simple">
-<dt>Example::</dt><dd><p>ingest: ClassVar[DPSelection] = DPSelection(filter=’PPSFilter’, sort=’jd’, select=’first’}</p>
+<dt>Example::</dt><dd><p>ingest: ClassVar[DPSelection] = DPSelection(filter=UnitModel(unit=’SimpleTagFilter’, config={‘require’: [‘ZTF_DP’]}), sort=’jd’, select=’first’}</p>
 </dd>
+</dl>
+<p>will create documents bound to the first datapoint with tag ‘ZTF_DP’, in order of body.jd.</p>
+<dl class="simple">
 <dt>select options:</dt><dd><ul class="simple">
 <li><p>“first”: first datapoint for a stock</p></li>
 <li><p>“last”: most recent datapoint for a stock</p></li>
@@ -1091,7 +1094,7 @@ In []: %timeit B(a=[11])
         <li class="right" >
           <a href="structure.html" title="Structure"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.1-alpha.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.8.1-alpha.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>

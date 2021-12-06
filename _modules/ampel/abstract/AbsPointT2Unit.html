@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.abstract.AbsPointT2Unit &#8212; ampel-interface 0.8.1-alpha.10 documentation</title>
+    <title>ampel.abstract.AbsPointT2Unit &#8212; ampel-interface 0.8.1-alpha.11 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.1-alpha.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.1-alpha.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsPointT2Unit</a></li> 
       </ul>
@@ -67,7 +67,9 @@
 <span class="sd">	and ending with the 3rd-to-last</span>
 
 <span class="sd">	Example::</span>
-<span class="sd">	   ingest: ClassVar[DPSelection] = DPSelection(filter=&#39;PPSFilter&#39;, sort=&#39;jd&#39;, select=&#39;first&#39;}</span>
+<span class="sd">	   ingest: ClassVar[DPSelection] = DPSelection(filter=UnitModel(unit=&#39;SimpleTagFilter&#39;, config={&#39;require&#39;: [&#39;ZTF_DP&#39;]}), sort=&#39;jd&#39;, select=&#39;first&#39;}</span>
+
+<span class="sd">	will create documents bound to the first datapoint with tag &#39;ZTF_DP&#39;, in order of body.jd.</span>
 <span class="sd">	</span>
 <span class="sd">	select options:</span>
 <span class="sd">	  - &quot;first&quot;: first datapoint for a stock</span>
@@ -118,7 +120,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.1-alpha.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.1-alpha.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsPointT2Unit</a></li> 
       </ul>
