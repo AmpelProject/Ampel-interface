@@ -4,23 +4,21 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 23.02.2021
-# Last Modified Date: 20.10.2021
+# Last Modified Date: 03.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, TypedDict, Dict, Any, TYPE_CHECKING
+from typing import Sequence, Union, TypedDict, Any, Optional
 from ampel.types import ChannelId, StockId, Tag, UBson
 from ampel.content.MetaRecord import MetaRecord
 
-if TYPE_CHECKING:
-	from bson import ObjectId
 
 class T3Document(TypedDict, total=False):
 	"""
 	Specifications for tier3 documents stored as BSON structures in the ampel DB
 	"""
 
-	#: Database primary id (contains time of creation)
-	_id: "ObjectId"
+	#: Database primary id
+	_id: Union[str, bytes]
 
 	#: Name of the associated T3 process (may be a hash)
 	process: Union[int, str]
@@ -28,8 +26,11 @@ class T3Document(TypedDict, total=False):
 	#: T3 unit name
 	unit: str
 
+	#: Hash of config (including defaults defined in unit class)
+	confid: int
+
 	#: T3 unit config (hash of possibly)
-	config: Union[int, Dict[str, Any]]
+	config: dict[str, Any]
 
 	#: Ever increasing global and unique run identifier
 	run: int
@@ -46,7 +47,7 @@ class T3Document(TypedDict, total=False):
 	meta: MetaRecord
 
 	#: Stock id of the views provided to unit
-	stock: Sequence[StockId]
+	stock: Optional[Sequence[StockId]]
 
 	#: Optional source origin (avoids potential stock collision between different data sources)
 	origin: int
