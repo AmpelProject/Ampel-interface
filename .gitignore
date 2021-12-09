@@ -1,7 +1,5 @@
 *.egg-info
-*.swp
-*.swo
-*.swn
+*.sw*
 __pycache__
 .pytest_cache
 .DS_Store
