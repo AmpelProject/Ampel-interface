@@ -4,12 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 10.02.2021
-# Last Modified Date: 14.09.2021
+# Last Modified Date: 01.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Sequence, Literal, overload
-from ampel.types import StockId, UBson, T2Link, Tag
+from typing import Dict, Optional, Union, Any, Sequence, Literal, Type, Tuple, overload
+from ampel.types import StockId, UBson, T2Link, Tag, T
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T2Document import T2Document
 from ampel.config.AmpelConfig import AmpelConfig
@@ -22,9 +22,11 @@ TYPE_STOCK_T2 = 3 # linked with stock document
 class T2DocView:
 	"""
 	View of a given T2Document (with unique stock id).
+	A t2 view contains read-only information from a T2Document
+	and provides convenience methods to access it.
 	"""
 
-	__slots__ = 'unit', 'config', 'link', 'stock', 'tag', 'code', 'meta', 'created', 't2_type', 'body', '_frozen'
+	__slots__ = 'unit', 'config', 'link', 'stock', 'tag', 'code', 'meta', 't2_type', 'body'
 
 	stock: Union[StockId, Sequence[StockId]]
 	unit: Union[int, str]
@@ -33,27 +35,29 @@ class T2DocView:
 	tag: Sequence[Tag]
 	code: int
 	t2_type: int
-	created: float
 	meta: Sequence[MetaRecord]
 	body: Optional[Sequence[UBson]]
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T2Document, conf: AmpelConfig) -> "T2DocView":
+	def of(cls, doc: T2Document, conf: Optional[AmpelConfig] = None) -> "T2DocView":
 		"""
 		We might want to move this method elsewhere in the future
 		"""
 
-		t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
-		if not t2_unit_info:
-			raise ValueError(f'Unknown T2 unit {doc["unit"]}')
+		if conf:
+			t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
+			if not t2_unit_info:
+				raise ValueError(f'Unknown T2 unit {doc["unit"]}')
 
-		if 'AbsStockT2Unit' in t2_unit_info['base']:
-			t2_type: int = TYPE_STOCK_T2
-		elif 'AbsPointT2Unit' in t2_unit_info['base']:
-			t2_type = TYPE_POINT_T2
-		else: # quick n dirty
-			t2_type = TYPE_STATE_T2
+			if 'AbsStockT2Unit' in t2_unit_info['base']:
+				t2_type: int = TYPE_STOCK_T2
+			elif 'AbsPointT2Unit' in t2_unit_info['base']:
+				t2_type = TYPE_POINT_T2
+			else: # quick n dirty
+				t2_type = TYPE_STATE_T2
+		else:
+			t2_type = -1
 
 		return cls(
 			stock = doc['stock'],
@@ -64,9 +68,7 @@ class T2DocView:
 			code = doc['code'],
 			meta = doc.get('meta', []),
 			body = doc.get('body'),
-			created = doc['_id'].generation_time.timestamp(), # type: ignore
-			config = conf.get(f'confid.{doc["config"]}', dict) \
-				if doc['config'] else None
+			config = conf.get(f'confid.{doc["config"]}', dict) if (conf and doc['config']) else None
 		)
 
 
@@ -77,34 +79,37 @@ class T2DocView:
 		tag: Sequence[Tag],
 		code: int,
 		t2_type: int,
-		created: float,
 		meta: Sequence[MetaRecord],
 		config: Optional[Dict[str, Any]] = None,
-		body: Optional[Sequence[UBson]] = None,
-		freeze: bool = True
+		body: Optional[Sequence[UBson]] = None
 	):
-		self.stock = stock
-		self.unit = unit
-		self.link = link
-		self.tag = tag
-		self.code = code
-		self.body = body
-		self.meta = meta
-		self.config = config
-		self.created = created
-		self.t2_type = t2_type
-		self._frozen = freeze
-
-
-	def freeze(self):
-		if not self._frozen:
-			self._frozen = True
+		sa = object.__setattr__
+		sa(self, 'stock', stock)
+		sa(self, 'unit', unit)
+		sa(self, 'link', link)
+		sa(self, 'tag', tag)
+		sa(self, 'code', code)
+		sa(self, 'body', body)
+		sa(self, 'meta', meta)
+		sa(self, 'config', config)
+		sa(self, 't2_type', t2_type)
 
 
 	def __setattr__(self, k, v):
-		if getattr(self, "_frozen", False):
-			raise ValueError("SnapView is read only")
-		object.__setattr__(self, k, v)
+		raise ValueError("T2DocView is read only")
+
+
+	def __delattr__(self, k):
+		raise ValueError("T2DocView is read only")
+
+
+	def __reduce__(self):
+		return (
+			type(self), (
+				self.stock, self.unit, self.link, self.tag, self.code,
+				self.body, self.meta, self.config, self.t2_type
+			)
+		)
 
 
 	def serialize(self) -> Dict[str, Any]:
@@ -115,14 +120,23 @@ class T2DocView:
 		return True if self.body else False
 
 
-	def get_payload(self) -> UBson:
+	def get_payload(self, code: Optional[int] = None) -> UBson:
 		"""
-		:returns: The content of the last array element of body associated with a meta code >= 0.
+		:returns: the content of the last array element of body associated with a meta code >= 0 or equals code arg.
 		"""
 		if not self.body:
 			return None
 
-		idx = len([el for el in self.meta if el['tier'] == 2 and el['code'] >= 0]) - 1
+		idx = len(
+			[
+				el for el in self.meta
+				if el['tier'] == 2 and
+				(el['code'] >= 0 if code is None else el['code'] == code)
+			]
+		) - 1
+
+		if idx == -1:
+			return None
 
 		# A manual/admin $unset: {body: 1} was used to delete bad data
 		if idx > len(self.body) - 1:
@@ -143,6 +157,92 @@ class T2DocView:
 		return self.t2_type == TYPE_STATE_T2
 
 
+	def get_value(self,
+		key: str,
+		rtype: Type[T], *,
+		code: Optional[int] = None,
+	) -> Optional[T]:
+		"""
+		:returns: the value of a given key from the content of the last array element of body
+		associated with a meta code >= 0 or equals code arg
+
+		Examples:
+		get_value("fit_result", dict)
+		"""
+		r = self.get_payload(code)
+		if isinstance(r, dict) and key in r:
+			return r[key]
+		return None
+
+
+	@overload
+	def get_ntuple(self,
+		key: tuple[str, ...], rtype: Type[T], *,
+		no_none: Literal[True], require_all_keys: bool, code: Optional[int]
+	) -> Optional[Tuple[T, ...]]:
+		...
+
+	@overload
+	def get_ntuple(self,
+		key: tuple[str, ...], rtype: Type[T], *,
+		no_none: Literal[False], require_all_keys: bool, code: Optional[int]
+	) -> Optional[Tuple[Optional[T], ...]]:
+		...
+
+	def get_ntuple(self,
+		key: tuple[str, ...],
+		rtype: Type[T], *,
+		no_none: bool = False,
+		require_all_keys: bool = True,
+		code: Optional[int] = None,
+	) -> Union[None, Tuple[T, ...], Tuple[Optional[T], ...]]:
+		"""
+		Returns a tuple of n values from the content of the last array element of body
+		associated with a meta code >= 0 or equals code arg
+
+		Examples:
+
+		In []: tv = T2DocView(
+			body=[{'a': 1, 'b': None, 'c': 3}], unit=None, link=None, tag=None,
+			code=0, t2_type=0, meta=[{'tier': 2, 'code':0}], stock=0
+		)
+
+		In []: tv.get_ntuple(("a", "b"), int, no_none = False)
+		Out[]: (1, None)
+
+		In []: tv.get_ntuple(("a", "b"), int, no_none = True)
+		Out[]: None
+
+		In []: tv = T2DocView(body=[{'a': 1, 'c': 3}], ...)
+
+		In []: tv.get_ntuple(("a", "b"), int)
+		Out[]: None
+
+		In []: tv.get_ntuple(("a", "b"), int, require_all_keys = False)
+		Out[]: (1, None)
+
+		In []: tv.get_ntuple(("a", "b"), int, require_all_keys = False, no_none = True)
+		Out[]: None
+		"""
+
+		r = self.get_payload(code)
+
+		if isinstance(r, dict):
+			if r and (sks := r.keys() & key):
+
+				if require_all_keys and len(sks) != len(key):
+					return None
+
+				t = tuple(
+					r[k] if (k in r and isinstance(r[k], rtype)) else None
+					for k in key
+				)
+
+				return None if (no_none and None in t) else t # type: ignore[return-value]
+
+		return None
+
+
 	@overload
 	def get_time_created(self, to_string: Literal[False]) -> Optional[float]:
 		...
@@ -151,10 +251,12 @@ class T2DocView:
 		...
 	def get_time_created(self, to_string: bool = False) -> Optional[Union[float, str]]:
 
-		if to_string:
-			return datetime.fromtimestamp(self.created).strftime('%d/%m/%Y %H:%M:%S')
+		ts = self.meta[0]['ts']
 
-		return self.created
+		if to_string:
+			return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
+
+		return ts
 
 
 	@overload
@@ -170,7 +272,6 @@ class T2DocView:
 
 		ts = self.meta[-1]['ts']
 		if to_string:
-			dt = datetime.fromtimestamp(ts)
-			return dt.strftime('%d/%m/%Y %H:%M:%S')
+			return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
 
 		return ts
