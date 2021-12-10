@@ -39,7 +39,7 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 12.10.2019</span>
-<span class="c1"># Last Modified Date: 19.09.2021</span>
+<span class="c1"># Last Modified Date: 08.12.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">ClassVar</span>
@@ -57,10 +57,6 @@
 
 	<span class="c1">#: Resources requirements as class variable (passed on to and merged with subclasses).</span>
 	<span class="n">require</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
-
-	<span class="c1">#: a dictionary containing session information, which can be requested in process configuration.</span>
-	<span class="c1">#: Example of session information: date and time the current process was last run</span>
-	<span class="n">session_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 
 	<span class="c1">#: Private variable potentially set by UnitLoader for provenance purposes. Either:</span>
 	<span class="c1">#: * None if provanance flag is False</span>
