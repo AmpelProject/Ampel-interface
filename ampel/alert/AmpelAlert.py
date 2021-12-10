@@ -4,14 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 26.01.2020
-# Last Modified Date: 24.11.2021
+# Last Modified Date: 08.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
 from typing import Dict, Tuple, Sequence, Optional, Any, Callable, Union
 from ampel.types import StockId, Tag
-
-osa = object.__setattr__
 
 # Do not enable customizations of operators by sub-classes for now
 ops: dict[str, Callable[[str, Any], bool]] = {
@@ -27,9 +25,6 @@ ops: dict[str, Callable[[str, Any], bool]] = {
 	'exists': None, # type: ignore
 }
 
-def __ro__(self, *args, **kwargs):
-	raise RuntimeError("Cannot modify AmpelAlert")
-
 
 class AmpelAlert:
 	"""
@@ -37,7 +32,6 @@ class AmpelAlert:
 	"""
 
 	__slots__ = '_id', '_stock', '_datapoints', '_tag', '_extra'
-	__setattr__ = __ro__
 
 	def __init__(self,
 		id: int, #: unique identifier for this alert
@@ -46,11 +40,12 @@ class AmpelAlert:
 		tag: Optional[Union[Tag, list[Tag]]] = None, #: Optional tag associated with this alert
 		extra: Optional[dict[str, Any]] = None #: Optional information associated with this alert
 	) -> None:
-		osa(self, '_id', id)
-		osa(self, '_stock', stock)
-		osa(self, '_datapoints', datapoints)
-		osa(self, '_tag', tag)
-		osa(self, '_extra', extra)
+		sa = object.__setattr__
+		sa(self, '_id', id)
+		sa(self, '_stock', stock)
+		sa(self, '_datapoints', datapoints)
+		sa(self, '_tag', tag)
+		sa(self, '_extra', extra)
 
 	@property
 	def id(self) -> int:
@@ -73,7 +68,16 @@ class AmpelAlert:
 		return self._extra # type: ignore[attr-defined]
 
 	def __reduce__(self):
-		return (type(self), (self.id, self.stock_id, self.dps))
+		return (
+			type(self),
+			(self._id, self._stock, self._datapoints, self._tag, self._extra)
+		)
+
+	def __setattr__(self, k, v):
+		raise ValueError("AmpelAlert is read only")
+
+	def __delattr__(self, k):
+		raise ValueError("AmpelAlert is read only")
 
 
 	def get_values(self,
