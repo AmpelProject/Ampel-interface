@@ -19,15 +19,18 @@ if TYPE_CHECKING:
 	from ampel.struct.StockAttributes import StockAttributes
 
 T = TypeVar('T')
+
 StockId = Union[int, bytes, str]
 ChannelId = Union[int, str]
 DataPointId = int
 Tag = Union[int, str]
 UnitId = str
+
 T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
 UBson = Union[None, str, int, float, bool, bytes, List[Any], Dict[str, Any]]
+TBson = TypeVar("TBson", str, int, float, bool, bytes, list, dict)
 ubson = (str, int, float, bool, bytes, list, dict)
 StrictIterable = Union[List[T], Set[T], Tuple[T], FrozenSet[T], ValuesView[T], KeysView[T]]
 strict_iterable = (list, tuple, set, frozenset, values_view, keys_view)
