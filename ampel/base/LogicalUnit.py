@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.10.2019
-# Last Modified Date: 19.09.2021
+# Last Modified Date: 08.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Tuple, Dict, Any, Optional, ClassVar
@@ -22,10 +22,6 @@ class LogicalUnit(AmpelBaseModel):
 
 	#: Resources requirements as class variable (passed on to and merged with subclasses).
 	require: ClassVar[Optional[Tuple[str, ...]]] = None
-
-	#: a dictionary containing session information, which can be requested in process configuration.
-	#: Example of session information: date and time the current process was last run
-	session_info: Optional[Dict[str, Any]] = None
 
 	#: Private variable potentially set by UnitLoader for provenance purposes. Either:
 	#: * None if provanance flag is False
