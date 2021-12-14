@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 01.12.2021
-# Last Modified Date: 08.12.2021
+# Last Modified Date: 12.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
@@ -40,7 +40,7 @@ class T3DocView:
 		if 'config' in doc:
 			config = doc['config']
 		else:
-			config = conf.get(f'confid.{doc["confid"]}', dict, raise_exc=True)
+			config = conf._config['confid'][doc['confid']]
 
 		return cls(
 			unit = doc['unit'],
