@@ -4,7 +4,7 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 23.02.2021
-# Last Modified Date: 03.12.2021
+# Last Modified Date: 13.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Sequence, Union, TypedDict, Any, Optional
@@ -45,6 +45,9 @@ class T3Document(TypedDict, total=False):
 	#: (not only those used by t3 units but also potentially versions of resources
 	#: used by session and/or complement routines)
 	meta: MetaRecord
+
+	#: Records session info, if any
+	session: Optional[dict[str, Any]]
 
 	#: Stock id of the views provided to unit
 	stock: Optional[Sequence[StockId]]
