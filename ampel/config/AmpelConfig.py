@@ -8,18 +8,18 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import yaml, json
-from typing import Dict, List, Union, Optional, Type, Literal, Any, TypeVar, overload, get_origin
+from typing import Union, Optional, Type, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
-UJson = Union[None, str, int, float, bool, List[Any], Dict[str, Any]]
-JT = TypeVar('JT', None, str, int, float, bool, bytes, List[Any], Dict[str, Any])
+UJson = Union[None, str, int, float, bool, list[Any], dict[str, Any]]
+JT = TypeVar('JT', None, str, int, float, bool, bytes, list[Any], dict[str, Any])
 
 
 class AmpelConfig:
 	"""Container for the central Ampel configuration"""
 
-	_config: Dict
+	_config: dict
 	_check_types: int = 1
 
 
@@ -29,7 +29,7 @@ class AmpelConfig:
 			return cls(yaml.safe_load(f), freeze)
 
 
-	def __init__(self, config: Dict, freeze: bool = False) -> None:
+	def __init__(self, config: dict, freeze: bool = False) -> None:
 		"""
 		:raises: ValueError if provided config is None or empty
 		"""
@@ -41,7 +41,7 @@ class AmpelConfig:
 			for k in [el for el in config[s].keys() if isinstance(el, str) and el.isdigit()]:
 				config[s][int(k)] = config[s].pop(k)
 
-		self._config: Dict = recursive_freeze(config) if freeze else config
+		self._config: dict = recursive_freeze(config) if freeze else config
 
 		if 'general' in config and 'check_types' in config['general']:
 			self._check_types = config['general']['check_types']
@@ -49,69 +49,69 @@ class AmpelConfig:
 	# Overloads for method call without 'entry'
 
 	@overload
-	def get(self) -> Dict[str, Any]:
+	def get(self) -> dict[str, Any]:
 		""" config.get() """
 
 	@overload
-	def get(self, entry: None) -> Dict[str, Any]:
+	def get(self, entry: None) -> dict[str, Any]:
 		""" config.get(None) """
 
 	@overload
-	def get(self, entry: None, ret_type: Any) -> Dict[str, Any]:
+	def get(self, entry: None, ret_type: Any) -> dict[str, Any]:
 		""" config.get(None, None/dict) """
 
 	@overload
-	def get(self, entry: None, ret_type: Any, *, raise_exc: bool) -> Dict[str, Any]:
+	def get(self, entry: None, ret_type: Any, *, raise_exc: bool) -> dict[str, Any]:
 		""" config.get(None, None/dict, raise_exc=True/False) """
 
 	@overload
-	def get(self, entry: None, *, raise_exc: bool) -> Dict[str, Any]:
+	def get(self, entry: None, *, raise_exc: bool) -> dict[str, Any]:
 		""" config.get(None, raise_exc=True/False) """
 
 
 	# Overloads for method call with 'entry' but without return type
 
 	@overload
-	def get(self, entry: Union[str, List[str]]) -> UJson:
+	def get(self, entry: Union[str, list[str]]) -> UJson:
 		""" config.get('logging') """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: None) -> UJson:
+	def get(self, entry: Union[str, list[str]], ret_type: None) -> UJson:
 		""" config.get('logging', None) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], *, raise_exc: bool) -> UJson:
+	def get(self, entry: Union[str, list[str]], *, raise_exc: bool) -> UJson:
 		""" config.get('logging', raise_exc=False/True) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: None, *, raise_exc: bool) -> UJson:
+	def get(self, entry: Union[str, list[str]], ret_type: None, *, raise_exc: bool) -> UJson:
 		""" config.get('logging', None, raise_exc=False/True) """
 
 
 	# Overloads for method call with 'entry' and return type
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: Type[JT]) -> Optional[JT]:
+	def get(self, entry: Union[str, list[str]], ret_type: Type[JT]) -> Optional[JT]:
 		""" config.get('logging', dict) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: Type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
+	def get(self, entry: Union[str, list[str]], ret_type: Type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
 		""" config.get('logging', dict, raise_exc=False) """
 
 	@overload
-	def get(self, entry: Union[str, List[str]], ret_type: Type[JT], *, raise_exc: Literal[True]) -> JT:
+	def get(self, entry: Union[str, list[str]], ret_type: Type[JT], *, raise_exc: Literal[True]) -> JT:
 		""" config.get('logging', dict, raise_exc=True) """
 
 
 	def get(self, # type: ignore[misc]
-		entry: Optional[Union[str, List[str]]] = None,
+		entry: Optional[Union[str, list[str]]] = None,
 		ret_type: Optional[Type[JT]] = None,
 		*, raise_exc: bool = False
 	) -> Union[UJson, Optional[JT]]:
 		"""
 		Optional arguments:
 		
-		:param ret_type: expected return type (str, int, Dict, List, ...).
+		:param ret_type: expected return type (str, int, dict, list, ...).
 		:param entry: sub-config element will be returned.
 		
 		Examples::
@@ -156,7 +156,7 @@ class AmpelConfig:
 		return ret
 
 
-	def get_conf_id(self, conf_id: int) -> Dict[str, Any]:
+	def get_conf_id(self, conf_id: int) -> dict[str, Any]:
 
 		if conf_id not in self._config['confid']:
 			raise ValueError(f"Config with id {conf_id} not found")
