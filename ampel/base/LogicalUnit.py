@@ -4,13 +4,16 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 12.10.2019
-# Last Modified Date: 08.12.2021
+# Last Modified Date: 13.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Tuple, Dict, Any, Optional, ClassVar
+from ampel.types import Traceless
 from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.secret.Secret import Secret
+
+ttf = type(Traceless)
 
 
 class LogicalUnit(AmpelBaseModel):
@@ -20,8 +23,12 @@ class LogicalUnit(AmpelBaseModel):
 	Note that the defined parameters must all be serializable
 	"""
 
+	logger: Traceless[LoggerProtocol]
+
 	#: Resources requirements as class variable (passed on to and merged with subclasses).
 	require: ClassVar[Optional[Tuple[str, ...]]] = None
+
+	resource: Traceless[Optional[Dict[str, Any]]] = None
 
 	#: Private variable potentially set by UnitLoader for provenance purposes. Either:
 	#: * None if provanance flag is False
@@ -45,11 +52,7 @@ class LogicalUnit(AmpelBaseModel):
 		)
 
 
-	def __init__(self,
-		logger: LoggerProtocol,
-		resource: Optional[Dict[str, Any]] = None,
-		**kwargs
-	) -> None:
+	def __init__(self, **kwargs) -> None:
 		"""
 		Note: logical units are initialized (by UnitLoader) as follows:
 		* ctor
@@ -57,19 +60,17 @@ class LogicalUnit(AmpelBaseModel):
 		* if defined by sub-class, post_init() is called
 		"""
 
-		if logger is None:
-			raise ValueError("Parameter logger cannot be None")
-
 		AmpelBaseModel.__init__(self, **kwargs)
 
 		d = self.__dict__
-		self._trace_content = {
-			k: d[k] for k in sorted(d)
-			if not isinstance(d[k], Secret) and k not in ("session_info", "logger")
+		excl = {
+			k for k, v in self._annots.items()
+			if type(v) is ttf and v.__metadata__[0] == -1
 		}
 
-		self.logger = logger
-
-		if resource:
-			# self._trace_content['require'] = self.require
-			self.resource = resource
+		self._trace_content = {
+			k: d[k]
+			for k in sorted(d)
+			if k not in excl and
+			not isinstance(d[k], Secret)
+		}
