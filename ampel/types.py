@@ -10,7 +10,7 @@
 from collections.abc import ValuesView as values_view, KeysView as keys_view
 from typing import ( # type: ignore[attr-defined]
 	Union, TypeVar, Set, Tuple, FrozenSet, List, Type, get_origin,
-	TYPE_CHECKING, KeysView, ValuesView, Dict, Any, _GenericAlias
+	TYPE_CHECKING, KeysView, ValuesView, Dict, Any, Annotated, _GenericAlias
 )
 
 if TYPE_CHECKING:
@@ -18,7 +18,9 @@ if TYPE_CHECKING:
 	from ampel.struct.JournalAttributes import JournalAttributes
 	from ampel.struct.StockAttributes import StockAttributes
 
+TRACELESS = -1
 T = TypeVar('T')
+Traceless = Annotated[T, TRACELESS]
 
 StockId = Union[int, bytes, str]
 ChannelId = Union[int, str]
