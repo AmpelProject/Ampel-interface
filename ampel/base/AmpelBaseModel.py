@@ -4,11 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.10.2019
-# Last Modified Date: 19.11.2021
+# Last Modified Date: 15.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from types import MemberDescriptorType
-from typing import get_origin, get_args, Union, Dict, Any, ClassVar, Set, Type
+from ampel.types import Traceless, TRACELESS
+from typing import Union, Any, ClassVar, Type, get_origin, get_args
 from pydantic import BaseModel, validate_model, create_model
 from ampel.model.StrictModel import StrictModel
 
@@ -35,11 +36,11 @@ class AmpelBaseModel:
 	"""
 
 	_model: Type[BaseModel]
-	_annots: ClassVar[Dict[str, Any]] = {}
-	_defaults: ClassVar[Dict[str, Any]] = {}
-	_slot_defaults: ClassVar[Dict[str, Any]] = {}
-	_aks: ClassVar[Set[str]] = set() # annotation keys
-	_sks: ClassVar[Set[str]] = set() # slots keys
+	_annots: ClassVar[dict[str, Any]] = {}
+	_defaults: ClassVar[dict[str, Any]] = {}
+	_slot_defaults: ClassVar[dict[str, Any]] = {}
+	_aks: ClassVar[set[str]] = set() # annotation keys
+	_sks: ClassVar[set[str]] = set() # slots keys
 
 
 	@classmethod
@@ -90,27 +91,43 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _create_model(cls):
+	def _create_model(cls, omit_traceless: bool = False) -> Type[BaseModel]:
+
 		defs = cls._defaults
-		cls._model = create_model(
-			cls.__name__,
-			__config__ = StrictModel.__config__,
-			**{
+		if omit_traceless:
+			ttf = type(Traceless)
+			kwargs = {
 				k: (v, defs[k] if k in defs else ...)
 				for k, v in cls._annots.items()
-			} # type: ignore[arg-type]
+				if not (type(v) is ttf and v.__metadata__[0] == TRACELESS)
+			}
+		else:
+			kwargs = {
+				k: (v, defs[k] if k in defs else ...)
+				for k, v in cls._annots.items()
+			}
+
+		return create_model(
+			cls.__name__,
+			__config__ = StrictModel.__config__,
+			**kwargs # type: ignore
 		)
 
+
 	@classmethod
-	def validate(cls, value: Any) -> Any:
-		"""
-		Validate kwargs against the fields of cls
-		"""
-		if cls._model is None:
-			cls._create_model()
-		values, fields, errors = validate_model(cls._model, value)
+	def validate(cls, value: dict, _omit_traceless: bool = True) -> Any:
+		""" Validate kwargs values against the fields of cls """
+		if _omit_traceless:
+			model = cls._create_model(_omit_traceless)
+		elif cls._model is None:
+			model = cls._model = cls._create_model()
+		else:
+			model = cls._model
+
+		values, fields, errors = validate_model(model, value)
 		if errors:
 			raise errors
+		return values
 
 
 	def __init__(self, **kwargs) -> None:
@@ -118,7 +135,7 @@ class AmpelBaseModel:
 		cls = self.__class__
 
 		if cls._model is None:
-			self._create_model()
+			cls._model = self._create_model()
 			# might be needed in the future due to postponed annotations
 			# cls._model.update_forward_refs()
 
