@@ -44,7 +44,7 @@
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MemberDescriptorType</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">Traceless</span><span class="p">,</span> <span class="n">TRACELESS</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">validate_model</span><span class="p">,</span> <span class="n">create_model</span>
 <span class="kn">from</span> <span class="nn">ampel.model.StrictModel</span> <span class="kn">import</span> <span class="n">StrictModel</span>
 
@@ -126,7 +126,7 @@
 
 
 	<span class="nd">@classmethod</span>
-	<span class="k">def</span> <span class="nf">_create_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">omit_traceless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;BaseModel&#39;</span><span class="p">)]:</span>
+	<span class="k">def</span> <span class="nf">_create_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">omit_traceless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]:</span>
 
 		<span class="n">defs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span>
 		<span class="k">if</span> <span class="n">omit_traceless</span><span class="p">:</span>
