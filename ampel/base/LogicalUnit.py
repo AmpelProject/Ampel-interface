@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from typing import Tuple, Dict, Any, Optional, ClassVar
-from ampel.types import Traceless
+from ampel.types import Traceless, TRACELESS
 from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.secret.Secret import Secret
@@ -65,12 +65,11 @@ class LogicalUnit(AmpelBaseModel):
 		d = self.__dict__
 		excl = {
 			k for k, v in self._annots.items()
-			if type(v) is ttf and v.__metadata__[0] == -1
+			if type(v) is ttf and v.__metadata__[0] == TRACELESS
 		}
 
 		self._trace_content = {
 			k: d[k]
 			for k in sorted(d)
-			if k not in excl and
-			not isinstance(d[k], Secret)
+			if k not in excl and not isinstance(d[k], Secret)
 		}
