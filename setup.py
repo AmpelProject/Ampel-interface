@@ -9,7 +9,7 @@
 
 from setuptools import setup, find_namespace_packages
 
-install_requires = ['PyYAML>=5.4.1,<6.0.0', 'pydantic>=1.8,<2']
+install_requires = ['PyYAML>=5.4.1,<7.0.0', 'pydantic>=1.8,<2']
 extras_require = {
 	'docs': [
 		'Sphinx>=3.5.1,<4.0.0',
@@ -20,7 +20,7 @@ extras_require = {
 
 setup(
 	name = 'ampel-interface',
-	version = '0.8.2-alpha.3',
+	version = '0.8.2-alpha.4',
 	description = 'Base classes for the Ampel analysis platform',
 	long_description = '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
 	author = 'Valery Brinnel',

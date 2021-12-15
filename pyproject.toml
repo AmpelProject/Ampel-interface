@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.8.2-alpha.3"
+version = "0.8.2-alpha.4"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -20,7 +20,7 @@ packages = [{include = "ampel"}]
 python = "^3.9"
 pydantic = "^1.8.2"
 xxhash = "^2.0.2"
-PyYAML = "^5.4.1"
+PyYAML = "^6.0.0"
 Sphinx = {version = "^4.0.0", optional = true}
 sphinx-autodoc-typehints = {version = "^1.11.1", optional = true}
 tomlkit = {version = "^0.7.0", optional = true}
