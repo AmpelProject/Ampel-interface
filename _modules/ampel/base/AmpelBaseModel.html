@@ -39,11 +39,12 @@
 <span class="c1"># License           : BSD-3-Clause</span>
 <span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 <span class="c1"># Date              : 07.10.2019</span>
-<span class="c1"># Last Modified Date: 19.11.2021</span>
+<span class="c1"># Last Modified Date: 15.12.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MemberDescriptorType</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">Traceless</span><span class="p">,</span> <span class="n">TRACELESS</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">validate_model</span><span class="p">,</span> <span class="n">create_model</span>
 <span class="kn">from</span> <span class="nn">ampel.model.StrictModel</span> <span class="kn">import</span> <span class="n">StrictModel</span>
 
@@ -70,11 +71,11 @@
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="n">_model</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span>
-	<span class="n">_annots</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="n">_defaults</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="n">_slot_defaults</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="n">_aks</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># annotation keys</span>
-	<span class="n">_sks</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># slots keys</span>
+	<span class="n">_annots</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_defaults</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_slot_defaults</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_aks</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># annotation keys</span>
+	<span class="n">_sks</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># slots keys</span>
 
 
 	<span class="nd">@classmethod</span>
@@ -125,27 +126,43 @@
 
 
 	<span class="nd">@classmethod</span>
-	<span class="k">def</span> <span class="nf">_create_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">_create_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">omit_traceless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;BaseModel&#39;</span><span class="p">)]:</span>
+
 		<span class="n">defs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span>
-		<span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span>
-			<span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
-			<span class="n">__config__</span> <span class="o">=</span> <span class="n">StrictModel</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span>
-			<span class="o">**</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">omit_traceless</span><span class="p">:</span>
+			<span class="n">ttf</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">Traceless</span><span class="p">)</span>
+			<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
 				<span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defs</span> <span class="k">else</span> <span class="o">...</span><span class="p">)</span>
 				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-			<span class="p">}</span> <span class="c1"># type: ignore[arg-type]</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ttf</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">__metadata__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">TRACELESS</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defs</span> <span class="k">else</span> <span class="o">...</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="p">}</span>
+
+		<span class="k">return</span> <span class="n">create_model</span><span class="p">(</span>
+			<span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+			<span class="n">__config__</span> <span class="o">=</span> <span class="n">StrictModel</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span>
+			<span class="o">**</span><span class="n">kwargs</span>
 		<span class="p">)</span>
 
+
 	<span class="nd">@classmethod</span>
-	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Validate kwargs against the fields of cls</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-			<span class="bp">cls</span><span class="o">.</span><span class="n">_create_model</span><span class="p">()</span>
-		<span class="n">values</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_model</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">_omit_traceless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+		<span class="sd">&quot;&quot;&quot; Validate kwargs values against the fields of cls &quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">_omit_traceless</span><span class="p">:</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_create_model</span><span class="p">(</span><span class="n">_omit_traceless</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_create_model</span><span class="p">()</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span>
+
+		<span class="n">values</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="n">errors</span>
+		<span class="k">return</span> <span class="n">values</span>
 
 
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -153,7 +170,7 @@
 		<span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
 
 		<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">_create_model</span><span class="p">()</span>
+			<span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_model</span><span class="p">()</span>
 			<span class="c1"># might be needed in the future due to postponed annotations</span>
 			<span class="c1"># cls._model.update_forward_refs()</span>
 
