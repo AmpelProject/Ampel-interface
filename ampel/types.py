@@ -9,8 +9,8 @@
 
 from collections.abc import ValuesView as values_view, KeysView as keys_view
 from typing import ( # type: ignore[attr-defined]
-	Union, TypeVar, Set, Tuple, FrozenSet, List, Type, get_origin,
-	TYPE_CHECKING, KeysView, ValuesView, Dict, Any, Annotated, _GenericAlias
+	Union, TypeVar, FrozenSet, Type, Sequence, get_origin,
+	TYPE_CHECKING, KeysView, ValuesView, Any, Annotated, _GenericAlias
 )
 
 if TYPE_CHECKING:
@@ -31,14 +31,16 @@ UnitId = str
 T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
-UBson = Union[None, str, int, float, bool, bytes, List[Any], Dict[str, Any]]
+UBson = Union[None, str, int, float, bool, bytes, list[Any], dict[str, Any]]
 TBson = TypeVar("TBson", str, int, float, bool, bytes, list, dict)
 ubson = (str, int, float, bool, bytes, list, dict)
-StrictIterable = Union[List[T], Set[T], Tuple[T], FrozenSet[T], ValuesView[T], KeysView[T]]
+StrictIterable = Union[list[T], set[T], tuple[T], FrozenSet[T], ValuesView[T], KeysView[T]]
 strict_iterable = (list, tuple, set, frozenset, values_view, keys_view)
 
+OneOrMany = Union[Sequence[T], T] # please keep this order
 
-def check_class(Klass: Type, class_type: Union[Type["AmpelBaseModel"], Tuple[Type["AmpelBaseModel"], ...], _GenericAlias]) -> None:
+
+def check_class(Klass: Type, class_type: Union[Type["AmpelBaseModel"], tuple[Type["AmpelBaseModel"], ...], _GenericAlias]) -> None:
 	""" :raises: ValueError """
 	if isinstance(class_type, _GenericAlias):
 		class_type = get_origin(class_type)
