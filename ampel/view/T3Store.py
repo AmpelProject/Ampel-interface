@@ -126,7 +126,7 @@ class T3Store:
 		for t3v in self.views:
 			if units and t3v.unit not in units:
 				continue
-			if configs and t3v.config not in configs:
+			if configs and t3v.confid not in configs:
 				continue
 			if code is not None and t3v.code != code:
 				continue
