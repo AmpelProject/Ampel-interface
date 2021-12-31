@@ -42,7 +42,8 @@
 <span class="c1"># Last Modified Date: 05.05.2021</span>
 <span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">Tag</span>
 <span class="kn">from</span> <span class="nn">ampel.content.JournalRecord</span> <span class="kn">import</span> <span class="n">JournalRecord</span>
 
@@ -74,7 +75,7 @@
 	<span class="n">journal</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">JournalRecord</span><span class="p">]</span>
 
 	<span class="c1">#: Creation time (UNIX epoch) in each channel</span>
-	<span class="n">ts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;tied&#39;</span><span class="p">,</span> <span class="s1">&#39;upd&#39;</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span>
+	<span class="n">ts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;tied&#39;</span><span class="p">,</span> <span class="s1">&#39;upd&#39;</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span>
 
 	<span class="c1">#: Last update time for any channel</span>
 	<span class="n">updated</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
@@ -83,7 +84,7 @@
 	<span class="n">name</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
 
 	<span class="c1">#: Optional specific content</span>
-	<span class="n">body</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
+	<span class="n">body</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
