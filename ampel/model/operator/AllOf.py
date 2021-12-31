@@ -7,11 +7,11 @@
 # Last Modified Date: 18.03.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from pydantic.generics import GenericModel
-from typing import List, Generic
+from typing import Generic
 from ampel.types import T
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AllOf(GenericModel, Generic[T]):
+class AllOf(Generic[T], AmpelBaseModel):
 	#: Select items by logical AND
-	all_of: List[T]
+	all_of: list[T]

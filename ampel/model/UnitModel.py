@@ -7,12 +7,12 @@
 # Last Modified Date: 15.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Dict, Optional, Any, Union, Generic
+from typing import Optional, Any, Union, Generic
 from ampel.types import T
-from ampel.model.StrictGenericModel import StrictGenericModel
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class UnitModel(StrictGenericModel, Generic[T]):
+class UnitModel(Generic[T], AmpelBaseModel):
 	"""
 	Specification of a processing unit.
 	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])
@@ -25,15 +25,15 @@ class UnitModel(StrictGenericModel, Generic[T]):
 	#: - dict: config 'as is'
 	#: - str: a corresponding alias key in the AmpelConfig must match the provided string
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
-	config: Union[None, int, str, Dict[str, Any]]
+	config: Union[None, int, str, dict[str, Any]] = None
 
-	secrets: Union[None, Dict[str, Any]]
+	secrets: Optional[dict[str, Any]] = None
 
 	#: Values to override in the config
-	override: Optional[Dict[str, Any]]
+	override: Optional[dict[str, Any]] = None
 
 
-	def dict(self, **kwargs):
+	def dict(self, **kwargs) -> dict[str, Any]:
 		ret = super().dict(**kwargs)
 		if 'secrets' in ret:
 			del ret['secrets']

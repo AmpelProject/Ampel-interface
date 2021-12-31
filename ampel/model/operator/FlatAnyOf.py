@@ -8,19 +8,17 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import collections
-from typing import List, Generic
-from pydantic import validator
-from pydantic.generics import GenericModel
+from typing import Generic
 from ampel.types import T
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
-class FlatAnyOf(GenericModel, Generic[T]):
+class FlatAnyOf(Generic[T], AmpelBaseModel):
 	"""
 	Similar to AnyOf except that it does not allow embedded AllOf elements
 	"""
-	any_of: List[T]
+	any_of: list[T]
 
-	@validator('any_of', pre=True)
-	def cast_to_list(cls, v):
-		if not isinstance(v, collections.abc.Sequence):
-			return [v]
-		return v
+	def __init__(self, **kwargs) -> None:
+		if 'any_of' in kwargs and not isinstance(kwargs['any_of'], collections.abc.Sequence):
+			kwargs['any_of'] = [kwargs['any_of']]
+		super().__init__(**kwargs)

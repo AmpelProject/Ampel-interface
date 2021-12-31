@@ -4,12 +4,12 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.06.2018
-# Last Modified Date: 10.12.2021
+# Last Modified Date: 30.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from pydantic import BaseModel
 from typing import Any, List, Union, Optional, Tuple, Sequence, Iterable, Mapping, MutableMapping
 from ampel.types import UBson, strict_iterable, T
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
 def get_by_path(
@@ -288,8 +288,8 @@ def dictify(item):
 	"""
 	Recursively dictifies input
 	"""
-	if isinstance(item, BaseModel):
-		return item.dict(exclude_unset=False)
+	if isinstance(item, AmpelBaseModel):
+		return item.dict()
 
 	if isinstance(item, dict):
 		# cast potential dict subclasses into plain old dicts

@@ -9,21 +9,21 @@
 
 from typing import Union, Optional, Literal, Tuple, Callable
 from ampel.model.UnitModel import UnitModel
-from ampel.model.StrictModel import StrictModel
 from ampel.base.AuxUnitRegister import AuxUnitRegister
 from ampel.abstract.AbsApplicable import AbsApplicable
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class DPSelection(StrictModel):
+class DPSelection(AmpelBaseModel):
 
 	#: Aux unit name used to filter datapoints.
 	# (Unit must define method apply(self, arg: Any) -> Any)
-	filter: Optional[Union[UnitModel, str]]
+	filter: Optional[Union[UnitModel, str]] = None
 
 	#: Dict key used for sorting
 	#: Use 'id' to sort dps based on key 'id' at root level,
 	#: anything else will target a field (by name) in 'body'
-	sort: Optional[str]
+	sort: Optional[str] = None
 
 	#: How to slice the datapoint array.
 	#: If a list is provided, it must have a length of 3
@@ -32,7 +32,8 @@ class DPSelection(StrictModel):
 		Literal['first'],
 		Literal['last'],
 		Tuple[Optional[int], Optional[int], Optional[int]]
-	]
+	] = None
+
 
 	def __init__(self, **kwargs):
 

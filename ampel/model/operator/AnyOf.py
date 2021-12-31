@@ -8,20 +8,18 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import collections
-from typing import Union, List, Generic
-from pydantic import validator
-from pydantic.generics import GenericModel
+from typing import Union, Generic
 from ampel.types import T
 from ampel.model.operator.AllOf import AllOf
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AnyOf(GenericModel, Generic[T]):
+class AnyOf(Generic[T], AmpelBaseModel):
 
 	#: Select items by logical OR
-	any_of: List[Union[T, AllOf[T]]]
+	any_of: list[Union[T, AllOf[T]]]
 
-	@validator('any_of', pre=True)
-	def cast_to_list(cls, v):
-		if not isinstance(v, collections.abc.Sequence):
-			return [v]
-		return v
+	def __init__(self, **kwargs) -> None:
+		if 'any_of' in kwargs and not isinstance(kwargs['any_of'], collections.abc.Sequence):
+			kwargs['any_of'] = [kwargs['any_of']]
+		super().__init__(**kwargs)

@@ -7,11 +7,9 @@
 # Last Modified Date: 18.03.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import List, Generic
-from pydantic.generics import GenericModel
+from typing import Generic
 from ampel.types import T
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
-
-class OneOf(GenericModel, Generic[T]):
-	""" """
-	one_of: List[T]
+class OneOf(Generic[T], AmpelBaseModel):
+	one_of: list[T]
