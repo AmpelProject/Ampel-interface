@@ -7,7 +7,8 @@
 # Last Modified Date: 12.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Dict, Optional, Sequence, Union, Any
+from typing import Optional, Union, Any
+from collections.abc import Sequence
 from ampel.types import Tag
 from ampel.content.JournalRecord import JournalRecord
 
@@ -27,13 +28,13 @@ class JournalAttributes:
 	tag: Optional[Union[Tag, Sequence[Tag]]]
 
 	#: if provided, will be included as-is under the journal root key 'extra'
-	extra: Optional[Dict[str, Any]]
+	extra: Optional[dict[str, Any]]
 
 
 	def __init__(self,
 		code: Optional[int] = None,
 		tag: Optional[Union[Tag, Sequence[Tag]]] = None,
-		extra: Optional[Dict[str, Any]] = None
+		extra: Optional[dict[str, Any]] = None
 	) -> None:
 		"""
 		:param code: potential integer code of the executed process

@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from pydantic import BaseModel
-from typing import Any, List, Union, Optional, Tuple, Sequence, Iterable, Mapping, MutableMapping
+from typing import Any, Union, Optional, Sequence, Iterable, Mapping, MutableMapping
 from ampel.types import UBson, strict_iterable, T
 
 
@@ -27,7 +27,7 @@ def get_by_path(
 		path = path.split(delimiter)
 
 	# check for int elements encoded as str
-	path: List[Union[int, str]] = [ # type: ignore
+	path: list[Union[int, str]] = [ # type: ignore
 		(el if not el.isdigit() else int(el)) for el in path
 	]
 
@@ -39,7 +39,7 @@ def get_by_path(
 	return mapping
 
 
-def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimiter: str = '.') -> Optional[Tuple[str, UBson]]:
+def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimiter: str = '.') -> Optional[tuple[str, UBson]]:
 	"""
 	Lacks robustness, unflexible, fast.
 	Supports only Bracket notation with number (https://cburgmer.github.io/json-path-comparison/)

@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Sequence, Literal, Type, Tuple, overload
+from typing import Optional, Union, Any, Literal, overload
+from collections.abc import Sequence
 from ampel.types import StockId, UBson, T2Link, Tag, T
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T2Document import T2Document
@@ -30,7 +31,7 @@ class T2DocView:
 
 	stock: Union[StockId, Sequence[StockId]]
 	unit: Union[int, str]
-	config: Optional[Dict[str, Any]]
+	config: Optional[dict[str, Any]]
 	link: T2Link
 	tag: Sequence[Tag]
 	code: int
@@ -80,7 +81,7 @@ class T2DocView:
 		code: int,
 		t2_type: int,
 		meta: Sequence[MetaRecord],
-		config: Optional[Dict[str, Any]] = None,
+		config: Optional[dict[str, Any]] = None,
 		body: Optional[Sequence[UBson]] = None
 	):
 		sa = object.__setattr__
@@ -112,7 +113,7 @@ class T2DocView:
 		)
 
 
-	def serialize(self) -> Dict[str, Any]:
+	def serialize(self) -> dict[str, Any]:
 		return {k: getattr(self, k) for k in self.__slots__ if k != '_frozen'}
 
 
@@ -159,7 +160,7 @@ class T2DocView:
 
 	def get_value(self,
 		key: str,
-		rtype: Type[T], *,
+		rtype: type[T], *,
 		code: Optional[int] = None,
 	) -> Optional[T]:
 		"""
@@ -177,25 +178,25 @@ class T2DocView:
 
 	@overload
 	def get_ntuple(self,
-		key: tuple[str, ...], rtype: Type[T], *,
+		key: tuple[str, ...], rtype: type[T], *,
 		no_none: Literal[True], require_all_keys: bool, code: Optional[int]
-	) -> Optional[Tuple[T, ...]]:
+	) -> Optional[tuple[T, ...]]:
 		...
 
 	@overload
 	def get_ntuple(self,
-		key: tuple[str, ...], rtype: Type[T], *,
+		key: tuple[str, ...], rtype: type[T], *,
 		no_none: Literal[False], require_all_keys: bool, code: Optional[int]
-	) -> Optional[Tuple[Optional[T], ...]]:
+	) -> Optional[tuple[Optional[T], ...]]:
 		...
 
 	def get_ntuple(self,
 		key: tuple[str, ...],
-		rtype: Type[T], *,
+		rtype: type[T], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
 		code: Optional[int] = None,
-	) -> Union[None, Tuple[T, ...], Tuple[Optional[T], ...]]:
+	) -> Union[None, tuple[T, ...], tuple[Optional[T], ...]]:
 		"""
 		Returns a tuple of n values from the content of the last array element of body
 		associated with a meta code >= 0 or equals code arg

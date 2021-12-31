@@ -7,7 +7,8 @@
 # Last Modified Date: 11.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Union, Sequence
+from typing import Optional, Union
+from collections.abc import Sequence
 from ampel.types import UBson, Tag
 from ampel.struct.JournalAttributes import JournalAttributes
 

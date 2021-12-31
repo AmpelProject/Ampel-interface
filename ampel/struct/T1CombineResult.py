@@ -7,7 +7,7 @@
 # Last Modified Date: 17.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Dict, Any, List
+from typing import Optional, Any
 from ampel.types import DataPointId
 
 
@@ -20,9 +20,9 @@ class T1CombineResult:
 	__slots__ = 'code', 'meta', 'dps'
 
 	def __init__(self,
-		dps: List[DataPointId],
+		dps: list[DataPointId],
 		code: Optional[int] = None,
-		meta: Optional[Dict[str, Any]] = None
+		meta: Optional[dict[str, Any]] = None
 	) -> None:
 		"""
 		:param dps: ids of the datapoints to combine

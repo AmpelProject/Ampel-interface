@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from functools import partial
-from typing import TypeVar, Callable, overload
+from typing import TypeVar, overload
+from collections.abc import Callable
 
 F = TypeVar('F', bound=Callable)
 

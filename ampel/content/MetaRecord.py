@@ -7,7 +7,8 @@
 # Last Modified Date: 07.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Sequence, Union, Literal, Any, Dict, TypedDict
+from typing import Optional, Union, Literal, Any, TypedDict
+from collections.abc import Sequence
 from ampel.types import ChannelId, Tag
 from ampel.content.MetaActivity import MetaActivity
 
@@ -28,7 +29,7 @@ class MetaRecord(TypedDict, total=False):
 	channel: Union[ChannelId, Sequence[ChannelId]]
 
 	#: Trace ids associated with the creation / update of this document
-	traceid: Dict[str, Optional[int]]
+	traceid: dict[str, Optional[int]]
 
 	#: Name of the associated process
 	process: Union[int, str]
@@ -46,4 +47,4 @@ class MetaRecord(TypedDict, total=False):
 	duration: Union[int, float]
 
 	#: Free-form information
-	extra: Dict[str, Any]
+	extra: dict[str, Any]

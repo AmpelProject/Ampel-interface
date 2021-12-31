@@ -7,7 +7,8 @@
 # Last Modified Date: 28.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Sequence
+from typing import Union
+from collections.abc import Sequence
 from ampel.types import UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.view.T2DocView import T2DocView

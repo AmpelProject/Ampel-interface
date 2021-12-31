@@ -7,7 +7,7 @@
 # Last Modified Date: 01.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Dict, List, Any, TypedDict, Literal, Union
+from typing import Optional, Any, TypedDict, Literal, Union
 from ampel.types import StockId
 from ampel.content.StockDocument import StockDocument
 from ampel.content.DataPoint import DataPoint
@@ -25,12 +25,12 @@ class AmpelBuffer(TypedDict, total=False):
 	
 	This is a dict containing 1 or more of the following items:
 	"""
-	# Could stock be of type List[StockDocument] to enable hybrid/dual transients ?
+	# Could stock be of type list[StockDocument] to enable hybrid/dual transients ?
 	id: StockId
 	stock: Optional[StockDocument]
-	origin: Optional[Union[int, List[int]]]
-	t0: Optional[List[DataPoint]]
-	t1: Optional[List[T1Document]]
-	t2: Optional[List[T2Document]]
-	logs: Optional[List[LogDocument]]
-	extra: Optional[Dict[str, Any]]
+	origin: Optional[Union[int, list[int]]]
+	t0: Optional[list[DataPoint]]
+	t1: Optional[list[T1Document]]
+	t2: Optional[list[T2Document]]
+	logs: Optional[list[LogDocument]]
+	extra: Optional[dict[str, Any]]

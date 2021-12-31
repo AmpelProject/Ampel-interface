@@ -7,7 +7,8 @@
 # Last Modified Date: 14.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Iterable, Optional, Sequence
+from typing import Union, Optional
+from collections.abc import Iterable, Sequence
 from ampel.types import ChannelId, DataPointId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod

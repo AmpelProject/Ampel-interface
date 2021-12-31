@@ -7,7 +7,8 @@
 # Last Modified Date: 17.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Iterable, List
+from typing import Union
+from collections.abc import Iterable
 from ampel.types import ChannelId, DataPointId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -21,9 +22,9 @@ class AbsT1RetroCombineUnit(AmpelABC, LogicalUnit, abstract=True):
 
 	debug: bool = False
 	channel: ChannelId
-	access: List[Union[int, str]]
-	policy: List[Union[int, str]]
+	access: list[Union[int, str]]
+	policy: list[Union[int, str]]
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> Union[List[List[DataPointId]], List[T1CombineResult]]:
+	def combine(self, datapoints: Iterable[DataPoint]) -> Union[list[list[DataPointId]], list[T1CombineResult]]:
 		...

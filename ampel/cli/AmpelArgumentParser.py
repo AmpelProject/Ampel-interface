@@ -9,7 +9,7 @@
 
 import textwrap
 from os import environ
-from typing import Dict, Optional, List, Union, Set, Any, Tuple
+from typing import Optional, Union, Any, Tuple
 from ampel.cli.MaybeIntAction import MaybeIntAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
 from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
@@ -62,13 +62,13 @@ class AmpelArgumentParser(ArgumentParser):
 	def __init__(self, ampel_op: Optional[str] = None, **kwargs) -> None:
 
 		super().__init__(formatter_class=AmpelHelpFormatter, **kwargs)
-		self.notes: List[str] = []
-		self.examples: List[str] = []
-		self.args_descr: Dict[str, str] = {}
+		self.notes: list[str] = []
+		self.examples: list[str] = []
+		self.args_descr: dict[str, str] = {}
 		self._logic_ops_note_added = False
-		self.notations: Set[Union[str, Tuple[str, str]]] = set()
+		self.notations: set[Union[str, tuple[str, str]]] = set()
 		self.has_env_conf = False
-		self.groups: Dict[str, _ArgumentGroup] = {}
+		self.groups: dict[str, _ArgumentGroup] = {}
 		self.bullet = "\u2022"
 		self.usage = "" # required by argparse (AssertionError), unclear why
 		self._ampel_op = ampel_op
@@ -122,7 +122,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.groups[name].set_defaults(**kwargs)
 
 
-	def add_description(self, descr: Optional[Union[str, List[str]]]) -> None:
+	def add_description(self, descr: Optional[Union[str, list[str]]]) -> None:
 
 		if not descr:
 			return
@@ -195,7 +195,7 @@ class AmpelArgumentParser(ArgumentParser):
 		)
 
 
-	def add_x_args(self, group: str = "optional", *args: Dict[str, Any]):
+	def add_x_args(self, group: str = "optional", *args: dict[str, Any]):
 		"""
 		Create a mutually exclusive group, attach it to the group defined in 'target'
 		and add arguments to it according to provided definitions (*args)
@@ -219,7 +219,7 @@ class AmpelArgumentParser(ArgumentParser):
 			self.add_arg(group=x, **arg)
 
 
-	def _auto_metavar(self, kw: Dict) -> None:
+	def _auto_metavar(self, kw: dict) -> None:
 		if "dest" in kw or "metavar" in kw:
 			return
 		if (a := kw.get("action")) and a != MaybeIntAction:
@@ -227,7 +227,7 @@ class AmpelArgumentParser(ArgumentParser):
 		kw['metavar'] = "#"
 
 
-	def set_help_descr(self, args_descr: Dict) -> None:
+	def set_help_descr(self, args_descr: dict) -> None:
 		""" Sets help parameter descriptions """
 		self.args_descr = args_descr
 
@@ -259,7 +259,7 @@ class AmpelArgumentParser(ArgumentParser):
 			self.notes.append(content)
 
 
-	def add_notes(self, notes: List[str]) -> None:
+	def add_notes(self, notes: list[str]) -> None:
 		""" Each note will start with a bullet """
 		for el in notes:
 			self.add_note(el)
@@ -458,9 +458,9 @@ class AmpelArgumentParser(ArgumentParser):
 		return self.spacer + k + filler + v
 
 
-	def _numerate(self, fh: str, target: List[Any], open_key: str, close_key: str) -> str:
+	def _numerate(self, fh: str, target: list[Any], open_key: str, close_key: str) -> str:
 		try:
-			l: List[str] = []
+			l: list[str] = []
 			y = 1
 			for i, el in enumerate(target):
 				if isinstance(el, str) and el[4] == open_key:
@@ -477,7 +477,7 @@ class AmpelArgumentParser(ArgumentParser):
 
 		return fh
 
-	def _sort(self, target: List[Any]) -> List[str]:
+	def _sort(self, target: list[Any]) -> list[str]:
 		""" # Put numerated notes/examples first. If not notes, then examples """
 		opn = self.note_open if target == self.notes else self.ex_open
 		return [el for el in target if el[4] == opn] + \
@@ -486,7 +486,7 @@ class AmpelArgumentParser(ArgumentParser):
 
 	@classmethod
 	def build_choice_help(cls,
-		op: str, sub_ops: List[str], hlp: Dict[str, str],
+		op: str, sub_ops: list[str], hlp: dict[str, str],
 		description: Optional[str] = None
 	) -> 'AmpelArgumentParser':
 

@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from ampel.types import Tag
-from typing import Union, Literal, Sequence, overload
+from typing import Union, Literal, overload
+from collections.abc import Sequence
 
 
 @overload

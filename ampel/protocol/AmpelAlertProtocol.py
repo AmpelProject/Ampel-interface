@@ -7,7 +7,8 @@
 # Last Modified Date: 24.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Union, Tuple, Any, Protocol, Sequence
+from typing import Optional, Union, Any, Protocol
+from collections.abc import Sequence
 from ampel.types import StockId, Tag
 
 
@@ -41,12 +42,12 @@ class AmpelAlertProtocol(Protocol):
 	def get_tuples(self,
 		key1: str, key2: str,
 		filters: Optional[Sequence[dict[str, Any]]] = None
-	) -> list[Tuple[Any, Any]]:
+	) -> list[tuple[Any, Any]]:
 		...
 
 	def get_ntuples(self,
 		params: list[str], filters: Optional[Sequence[dict[str, Any]]] = None
-	) -> list[Tuple]:
+	) -> list[tuple]:
 		...
 
 	# Unsure whether this belongs here

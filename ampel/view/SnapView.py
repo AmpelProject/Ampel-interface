@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Dict, Optional, Union, Any, Literal, Container, Sequence, Callable, Tuple, Type, Iterator, overload
+from typing import Optional, Union, Any, Literal, overload
+from collections.abc import Container, Callable, Iterator, Sequence
 
 from ampel.types import StockId, T2Link, UBson, T
 from ampel.struct.AmpelBuffer import AmpelBuffer
@@ -46,7 +47,7 @@ class SnapView:
 	t1: Optional[Sequence[T1Document]]
 	t2: Optional[Sequence[T2DocView]]
 	logs: Optional[Sequence[LogDocument]]
-	extra: Optional[Dict[str, Any]]
+	extra: Optional[dict[str, Any]]
 
 
 	@classmethod
@@ -84,7 +85,7 @@ class SnapView:
 		t1: Optional[Sequence[T1Document]] = None,
 		t2: Optional[Sequence[T2DocView]] = None,
 		logs: Optional[Sequence[LogDocument]] = None, # Logs, if added by T3 complement stage
-		extra: Optional[Dict[str, Any]] = None # Free-form information addable via instances of AbsBufferComplement
+		extra: Optional[dict[str, Any]] = None # Free-form information addable via instances of AbsBufferComplement
 	):
 		sa = object.__setattr__
 		sa(self, 'id', id)
@@ -115,7 +116,7 @@ class SnapView:
 		)
 
 
-	def serialize(self) -> Dict:
+	def serialize(self) -> dict:
 		return {k: getattr(self, k) for k in self.__slots__}
 
 
@@ -190,14 +191,14 @@ class SnapView:
 	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]]) -> Optional[dict[str, Any]]:
 		...
 	@overload
-	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]], ret_type: Type[T]) -> Optional[T]:
+	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]], ret_type: type[T]) -> Optional[T]:
 		...
 	@overload
 	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]], *, raise_exc: Literal[True]) -> T:
 		...
 	def get_t2_body(self,
 		unit: Union[str, list[str], tuple[str, ...]],
-		ret_type: Type[T] = dict, # type: ignore[assignment]
+		ret_type: type[T] = dict, # type: ignore[assignment]
 		*,
 		data_slice: int = -1, # latest
 		link: Optional[T2Link] = None,
@@ -222,7 +223,7 @@ class SnapView:
 	def get_t2_value(self,
 		unit: Union[str, tuple[str, ...]],
 		key: str,
-		rtype: Type[T], *,
+		rtype: type[T], *,
 		code: Optional[int] = None
 	) -> Optional[T]:
 		"""
@@ -239,26 +240,26 @@ class SnapView:
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: Type[T], *,
+		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: type[T], *,
 		no_none: Literal[False], require_all_keys: bool = ..., code: Optional[int] = ...
-	) -> Optional[Tuple[Optional[T], ...]]:
+	) -> Optional[tuple[Optional[T], ...]]:
 		...
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: Type[T], *,
+		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: type[T], *,
 		no_none: Literal[True], require_all_keys: bool = ..., code: Optional[int] = ...
-	) -> Optional[Tuple[T, ...]]:
+	) -> Optional[tuple[T, ...]]:
 		...
 
 	def get_t2_ntuple(self,
 		unit: Union[str, tuple[str, ...]],
 		key: tuple[str, ...],
-		rtype: Type[T], *,
+		rtype: type[T], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
 		code: Optional[int] = None
-	) -> Union[None, Tuple[T, ...], Tuple[Optional[T], ...]]:
+	) -> Union[None, tuple[T, ...], tuple[Optional[T], ...]]:
 		"""
 		Examples:
 		get_t2_ntuple("T2NedTap", ("ra", "dec", "z", "zunc"), float)

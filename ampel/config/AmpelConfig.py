@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import yaml, json
-from typing import Union, Optional, Type, Literal, Any, TypeVar, overload, get_origin
+from typing import Union, Optional, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
@@ -91,21 +91,21 @@ class AmpelConfig:
 	# Overloads for method call with 'entry' and return type
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: Type[JT]) -> Optional[JT]:
+	def get(self, entry: Union[str, list[str]], ret_type: type[JT]) -> Optional[JT]:
 		""" config.get('logging', dict) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: Type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
+	def get(self, entry: Union[str, list[str]], ret_type: type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
 		""" config.get('logging', dict, raise_exc=False) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: Type[JT], *, raise_exc: Literal[True]) -> JT:
+	def get(self, entry: Union[str, list[str]], ret_type: type[JT], *, raise_exc: Literal[True]) -> JT:
 		""" config.get('logging', dict, raise_exc=True) """
 
 
 	def get(self, # type: ignore[misc]
 		entry: Optional[Union[str, list[str]]] = None,
-		ret_type: Optional[Type[JT]] = None,
+		ret_type: Optional[type[JT]] = None,
 		*, raise_exc: bool = False
 	) -> Union[UJson, Optional[JT]]:
 		"""

@@ -7,7 +7,8 @@
 # Last Modified Date: 28.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Generic, Iterable, Sequence, Union, TypeVar
+from typing import Generic, Union, TypeVar
+from collections.abc import Iterable, Sequence
 from ampel.types import T, UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.view.T2DocView import T2DocView

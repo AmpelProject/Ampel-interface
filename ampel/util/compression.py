@@ -9,7 +9,7 @@
 
 import zipfile
 from io import BytesIO
-from typing import Dict, Tuple, Literal
+from typing import Literal
 
 Compression = Literal['ZIP_DEFLATED', 'ZIP_DEFLATED', 'ZIP_BZIP2']
 
@@ -27,7 +27,7 @@ def compress(
 
 
 def compress_many(
-	arg: Dict[str, bytes],
+	arg: dict[str, bytes],
 	alg: Compression = "ZIP_DEFLATED",
 	compress_level: int = 9
 ) -> bytes:
@@ -43,7 +43,7 @@ def compress_many(
 def _new(
 	alg: Compression = "ZIP_DEFLATED",
 	compress_level: int = 9
-) -> Tuple[BytesIO, zipfile.ZipFile]:
+) -> tuple[BytesIO, zipfile.ZipFile]:
 
 	outbio = BytesIO()
 	return outbio, zipfile.ZipFile(
@@ -64,7 +64,7 @@ def decompress_str(arg: bytes) -> str:
 	return str(decompress(arg), "utf8")
 
 
-def decompress_many(arg: bytes) -> Dict[str, bytes]:
+def decompress_many(arg: bytes) -> dict[str, bytes]:
 	bio = BytesIO()
 	bio.write(arg)
 	zf = zipfile.ZipFile(bio)

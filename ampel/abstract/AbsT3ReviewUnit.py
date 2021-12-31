@@ -7,7 +7,8 @@
 # Last Modified Date: 27.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, TypeVar, Type, Generic, Generator
+from typing import Union, TypeVar, Generic
+from collections.abc import Generator
 from ampel.types import UBson, T3Send
 from ampel.view.SnapView import SnapView
 from ampel.view.T3Store import T3Store
@@ -23,7 +24,7 @@ class AbsT3ReviewUnit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
 	""" Generic abstract class for T3 units receiving a SnapView generator """
 
 	# avoid introspection at run-time
-	_View: Type[T] = SnapView # type: ignore[assignment]
+	_View: type[T] = SnapView # type: ignore[assignment]
 
 	@abstractmethod
 	def process(self,

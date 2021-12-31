@@ -7,7 +7,8 @@
 # Last Modified Date: 17.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, TypedDict, Sequence, Union, Dict
+from typing import Any, TypedDict, Union
+from collections.abc import Sequence
 from ampel.types import StockId, DataPointId, ChannelId
 from ampel.content.MetaRecord import MetaRecord
 
@@ -26,4 +27,4 @@ class DataPoint(TypedDict, total=False):
 	channel: Sequence[ChannelId]
 	meta: Sequence[MetaRecord]
 	excl: Sequence[ChannelId]
-	body: Dict[str, Any]
+	body: dict[str, Any]

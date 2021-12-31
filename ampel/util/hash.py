@@ -8,13 +8,13 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import json, xxhash # type: ignore[import]
-from typing import Type, TypeVar, Optional, Dict
+from typing import TypeVar, Optional
 from ampel.util.mappings import flatten_dict
 
 HT = TypeVar("HT", int, bytes, str)
 xxfunc = {bytes: 'digest', int: 'intdigest', str: 'hexdigest'}
 
-def hash_payload(payload: bytes, ret: Type[HT] = int, size: int = -64) -> HT: # type: ignore[assignment]
+def hash_payload(payload: bytes, ret: type[HT] = int, size: int = -64) -> HT: # type: ignore[assignment]
 	"""
 	:param ret: return type, can be bytes, str (hex digest) or int
 	:param size: xxhash size. Available sizes: 32, 64, 128 bits.
@@ -52,8 +52,8 @@ def hash_payload(payload: bytes, ret: Type[HT] = int, size: int = -64) -> HT: # 
 
 
 def build_unsafe_dict_id(
-	dict_arg: Optional[Dict],
-	ret: Type[HT] = int, # type: ignore[assignment]
+	dict_arg: Optional[dict],
+	ret: type[HT] = int, # type: ignore[assignment]
 	size: int = -64,
 	sort_keys: bool = True,
 	flatten_list_members: bool = True,

@@ -7,7 +7,7 @@
 # Last Modified Date: 22.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, List, Optional, Type, overload
+from typing import Any, Optional, overload
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
 from ampel.secret.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
@@ -16,10 +16,10 @@ from ampel.secret.NamedSecret import NamedSecret
 class AmpelVault:
 	""" Collection of secret providers """
 
-	def __init__(self, providers: List[AbsSecretProvider]) -> None:
+	def __init__(self, providers: list[AbsSecretProvider]) -> None:
 		self.providers = providers
 
-	def resolve_secret(self, secret: Secret, ValueType: Type) -> bool:
+	def resolve_secret(self, secret: Secret, ValueType: type) -> bool:
 
 		for sp in self.providers:
 			if sp.tell(secret, ValueType):
@@ -31,7 +31,7 @@ class AmpelVault:
 		...
 	
 	@overload
-	def get_named_secret(self, label: str, ValueType: Type[T]) -> Optional[NamedSecret[T]]:
+	def get_named_secret(self, label: str, ValueType: type[T]) -> Optional[NamedSecret[T]]:
 		...
 	
 	def get_named_secret(self, label, ValueType=object):

@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import operator
-from typing import Dict, Tuple, Sequence, Optional, Any, Callable, Union
+from typing import Optional, Any, Union
+from collections.abc import Callable, Sequence
 from ampel.types import StockId, Tag
 
 # Do not enable customizations of operators by sub-classes for now
@@ -96,7 +97,7 @@ class AmpelAlert:
 	def get_tuples(self,
 		key1: str, key2: str,
 		filters: Optional[Sequence[dict[str, Any]]] = None
-	) -> list[Tuple[Any, Any]]:
+	) -> list[tuple[Any, Any]]:
 		"""
 		Example::
 			
@@ -111,7 +112,7 @@ class AmpelAlert:
 
 	def get_ntuples(self,
 		params: list[str], filters: Optional[Sequence[dict[str, Any]]] = None
-	) -> list[Tuple]:
+	) -> list[tuple]:
 		"""
 		Example:
 			
@@ -128,19 +129,10 @@ class AmpelAlert:
 		return len(self.datapoints) == 1
 
 
-	def dict(self) -> dict[str, Any]:
-		return {
-			'id': self.id,
-			'stock': self.stock,
-			'datapoints': self.datapoints,
-			'extra': self.extra,
-		}
-
-
 	def apply_filter(self,
-		dicts: Sequence[Dict[str, Any]],
-		filters: Sequence[Dict[str, Any]]
-	) -> Sequence[Dict[str, Any]]:
+		dicts: Sequence[dict[str, Any]],
+		filters: Sequence[dict[str, Any]]
+	) -> Sequence[dict[str, Any]]:
 
 		if isinstance(filters, dict):
 			filters = [filters]
@@ -160,3 +152,12 @@ class AmpelAlert:
 				dicts = [d for d in dicts if attr in d and ops[op](d[attr], f['value'])]
 
 		return dicts
+
+
+	def dict(self) -> dict[str, Any]:
+		return {
+			'id': self.id,
+			'stock': self.stock,
+			'datapoints': self.datapoints,
+			'extra': self.extra,
+		}

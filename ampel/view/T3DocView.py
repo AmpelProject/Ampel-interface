@@ -8,7 +8,8 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from datetime import datetime
-from typing import Optional, Union, Any, Sequence, Literal, Type, overload
+from typing import Optional, Union, Any, Literal, overload
+from collections.abc import Sequence
 from ampel.types import StockId, UBson, TBson, Tag
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T3Document import T3Document
@@ -94,15 +95,15 @@ class T3DocView:
 	def get_body(self, *, raise_exc: Literal[True]) -> dict[str, Any]:
 		...
 	@overload
-	def get_body(self, ret_type: Type[TBson]) -> Optional[TBson]:
+	def get_body(self, ret_type: type[TBson]) -> Optional[TBson]:
 		...
 	@overload
-	def get_body(self, ret_type: Type[TBson], *, raise_exc: Literal[True]) -> TBson:
+	def get_body(self, ret_type: type[TBson], *, raise_exc: Literal[True]) -> TBson:
 		...
 	@overload
-	def get_body(self, ret_type: Type[TBson], *, raise_exc: Literal[False]) -> Optional[TBson]:
+	def get_body(self, ret_type: type[TBson], *, raise_exc: Literal[False]) -> Optional[TBson]:
 		...
-	def get_body(self, ret_type: Type[TBson] = dict, *, raise_exc: bool = False) -> Optional[TBson]: # type: ignore[assignment]
+	def get_body(self, ret_type: type[TBson] = dict, *, raise_exc: bool = False) -> Optional[TBson]: # type: ignore[assignment]
 		"""
 		:param raise_exc: raise exception if the body has not the expected type
 

@@ -7,7 +7,7 @@
 # Last Modified Date: 12.02.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import List, Union, overload
+from typing import Union, overload
 from ampel.types import StrictIterable, StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -23,12 +23,12 @@ class AbsIdMapper(AmpelABC, AmpelBaseModel, abstract=True):
 
 	@overload
 	@classmethod
-	def to_ampel_id(cls, ext_id: StrictIterable[str]) -> List[int]:
+	def to_ampel_id(cls, ext_id: StrictIterable[str]) -> list[int]:
 		...
 
 	@classmethod
 	@abstractmethod
-	def to_ampel_id(cls, ext_id: Union[str, StrictIterable[str]]) -> Union[int, List[int]]:
+	def to_ampel_id(cls, ext_id: Union[str, StrictIterable[str]]) -> Union[int, list[int]]:
 		...
 
 	@overload
@@ -38,10 +38,10 @@ class AbsIdMapper(AmpelABC, AmpelBaseModel, abstract=True):
 
 	@overload
 	@classmethod
-	def to_ext_id(cls, ampel_id: StrictIterable[StockId]) -> List[str]:
+	def to_ext_id(cls, ampel_id: StrictIterable[StockId]) -> list[str]:
 		...
 
 	@classmethod
 	@abstractmethod
-	def to_ext_id(cls, ampel_id: Union[StockId, StrictIterable[StockId]]) -> Union[str, List[str]]:
+	def to_ext_id(cls, ampel_id: Union[StockId, StrictIterable[StockId]]) -> Union[str, list[str]]:
 		...

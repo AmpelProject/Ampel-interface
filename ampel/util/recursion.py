@@ -7,7 +7,8 @@
 # Last Modified Date: 16.11.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Optional, Callable
+from typing import Union, Optional
+from collections.abc import Callable
 
 
 def walk_and_process_dict(

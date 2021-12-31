@@ -7,7 +7,8 @@
 # Last Modified Date: 18.04.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, TypedDict, Dict, Any, Literal
+from typing import Union, TypedDict, Any, Literal
+from collections.abc import Sequence
 from ampel.enum.EventCode import EventCode
 from ampel.types import ChannelId
 
@@ -39,4 +40,4 @@ class EventDocument(TypedDict, total=False):
 	code: EventCode
 
 	#: Optional extras
-	extra: Dict[str, Any]
+	extra: dict[str, Any]

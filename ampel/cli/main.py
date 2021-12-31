@@ -12,12 +12,11 @@ from os import environ
 from pkg_resources import ( # type: ignore[attr-defined]
 	get_distribution, AvailableDistributions
 )
-from typing import Dict, Tuple
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 
 # key: op name, value: (potential short descr, fqn of corresponding module/class [subclass of AbsCLIOperation])
-clis: Dict[str, Tuple[str, str]] = {
+clis: dict[str, tuple[str, str]] = {
 	(x := ep.name.split(" "))[0]: (" ".join(x[1:]) if len(x) > 1 else "", ep.module_name)
 	for dist_name in AvailableDistributions() if "ampel-" in dist_name
 	for ep in get_distribution(dist_name).get_entry_map().get('cli', {}).values()
