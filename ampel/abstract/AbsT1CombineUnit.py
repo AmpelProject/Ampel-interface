@@ -7,7 +7,7 @@
 # Last Modified Date: 14.06.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Iterable, List, Optional
+from typing import Union, Iterable, Optional, Sequence
 from ampel.types import ChannelId, DataPointId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -20,10 +20,10 @@ class AbsT1CombineUnit(AmpelABC, LogicalUnit, abstract=True):
 	""" A unit that combines datapoints """
 
 	debug: bool = False
-	access: List[Union[int, str]]
-	policy: List[Union[int, str]]
+	access: Sequence[Union[int, str]]
+	policy: Sequence[Union[int, str]]
 	channel: Optional[ChannelId] = None
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> Union[List[DataPointId], T1CombineResult]:
+	def combine(self, datapoints: Iterable[DataPoint]) -> Union[list[DataPointId], T1CombineResult]:
 		...
