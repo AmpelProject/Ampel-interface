@@ -12,10 +12,8 @@ from ampel.types import T
 from ampel.model.UnitModel import UnitModel
 from ampel.model.DPSelection import DPSelection
 
-# Note class inheritance order matters
-# "TypeError: Cannot create a consistent method resolution"
-# is raised if order is switched (possibly due to pydantic's metaclass)
-class StateT2Dependency(UnitModel[T], Generic[T]):
+
+class StateT2Dependency(Generic[T], UnitModel[T]):
 	"""
 	Used to specify how "tied state t2" units should select the associated required t2 document.
 
