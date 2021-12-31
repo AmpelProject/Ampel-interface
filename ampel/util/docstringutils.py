@@ -15,8 +15,8 @@ regex_stop = re.compile('^[ \t]*?@|^[ \t]*?def|^class ')
 def gendocstring(klass):
 	"""
 	=============================================================================
-	Decorator for pydantic BaseModel child classes and python 3.7 dataclasses.
-	-> Automatically generates doctring based on class members (makes required 
+	Decorator for model sub-classes and python 3.7 dataclasses.
+	-> Automatically generates doctring based on class members (makes required
 	variables (including type hints) available in docstring)
 	=============================================================================
 
@@ -25,16 +25,16 @@ def gendocstring(klass):
 	Code example:
 	~~~~~~~~~~~~~
 	
-		from pydantic import BaseModel
+		from ampel.base.AmpelBaseModel import AmpelBaseModel
 		from ampel.util.docstringutils import gendocstring
 	
 		@gendocstring
-		class MyConfig(BaseModel):
+		class MyConfig(AmpelBaseModel):
 			my_str: str
 			my_int: int = 0
 	
 		@gendocstring
-		class MyConfig2(BaseModel):
+		class MyConfig2(AmpelBaseModel):
 			\"\"\"
 			Existing docstrings will be preserved
 			\"\"\"
@@ -47,7 +47,7 @@ def gendocstring(klass):
 		In []: print(MyConfig.__doc__)
 		Out []:
 		===================
-		Fields: 
+		Fields:
 		  my_str: str
 		  my_int: int = 0
 		===================
@@ -57,7 +57,7 @@ def gendocstring(klass):
 		=====================================
 		Existing docstrings will be preserved
 		-------------------------------------
-		Fields: 
+		Fields:
 		  my_str2: str
 		  my_int2: int = 0
 		=====================================
