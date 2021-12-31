@@ -4,14 +4,11 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 02.12.2019
-# Last Modified Date: 05.09.2021
+# Last Modified Date: 31.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from collections.abc import ValuesView as values_view, KeysView as keys_view
-from typing import ( # type: ignore[attr-defined]
-	Union, TypeVar, FrozenSet, Type, Sequence, get_origin,
-	TYPE_CHECKING, KeysView, ValuesView, Any, Annotated, _GenericAlias
-)
+from collections.abc import ValuesView, KeysView, Sequence
+from typing import Union, TypeVar, get_origin, TYPE_CHECKING, Any, Annotated, _GenericAlias # type: ignore[attr-defined]
 
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -34,13 +31,13 @@ T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttr
 UBson = Union[None, str, int, float, bool, bytes, list[Any], dict[str, Any]]
 TBson = TypeVar("TBson", str, int, float, bool, bytes, list, dict)
 ubson = (str, int, float, bool, bytes, list, dict)
-StrictIterable = Union[list[T], set[T], tuple[T], FrozenSet[T], ValuesView[T], KeysView[T]]
-strict_iterable = (list, tuple, set, frozenset, values_view, keys_view)
+StrictIterable = Union[list[T], set[T], tuple[T], frozenset[T], ValuesView[T], KeysView[T]]
+strict_iterable = (list, tuple, set, frozenset, ValuesView, KeysView)
 
 OneOrMany = Union[Sequence[T], T] # please keep this order
 
 
-def check_class(Klass: Type, class_type: Union[Type["AmpelBaseModel"], tuple[Type["AmpelBaseModel"], ...], _GenericAlias]) -> None:
+def check_class(Klass: type, class_type: Union[type["AmpelBaseModel"], tuple[type["AmpelBaseModel"], ...], _GenericAlias]) -> None:
 	""" :raises: ValueError """
 	if isinstance(class_type, _GenericAlias):
 		class_type = get_origin(class_type)

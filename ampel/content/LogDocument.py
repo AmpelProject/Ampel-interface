@@ -12,7 +12,8 @@ if sys.version_info.minor > 8:
 	from typing import TypedDict
 else:
 	from typing_extensions import TypedDict
-from typing import Sequence, Union, Any, Dict
+from typing import Union, Any
+from collections.abc import Sequence
 from ampel.types import ChannelId, StockId
 
 
@@ -76,4 +77,4 @@ class LogDocument(TypedDict, total=False):
 	c: Union[ChannelId, Sequence[ChannelId]]
 
 	#: extra
-	e: Dict[str, Any]
+	e: dict[str, Any]

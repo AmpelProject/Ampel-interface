@@ -7,7 +7,7 @@
 # Last Modified Date: 09.06.2020
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Dict, Any
+from typing import Any
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
 
@@ -39,7 +39,7 @@ def recursive_freeze(arg: Any) -> Any:
 	return arg
 
 
-def recursive_unfreeze(arg: ReadOnlyDict) -> Dict:
+def recursive_unfreeze(arg: ReadOnlyDict) -> dict:
 	"""
 	Inverse of recursive_freeze
 	"""

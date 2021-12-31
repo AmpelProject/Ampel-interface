@@ -7,7 +7,8 @@
 # Last Modified Date: 10.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Optional, Union, Any, Sequence, Container, Iterable, Iterator
+from typing import Optional, Union, Any
+from collections.abc import Container, Iterator, Iterable, Sequence
 from ampel.view.T3DocView import T3DocView
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.content.T3Document import T3Document

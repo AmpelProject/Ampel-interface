@@ -7,7 +7,8 @@
 # Last Modified Date: 23.03.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import TypedDict, Union, Optional, Sequence
+from typing import TypedDict, Union, Optional
+from collections.abc import Sequence
 from ampel.types import UBson, ChannelId, StockId, Tag, UnitId, T2Link
 from ampel.content.MetaRecord import MetaRecord
 

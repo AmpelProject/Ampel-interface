@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 import inspect
-from typing import Type, Callable
+from typing import Callable
 
 
 class AmpelABC:
@@ -63,7 +63,7 @@ class AmpelABC:
 
 
 	@staticmethod
-	def _check_methods(Klass: Type, func_attr: str) -> None:
+	def _check_methods(Klass: type, func_attr: str) -> None:
 
 		# Gather abstract methods (marked by the decorator @abstractmethod)
 		abs_methods = {

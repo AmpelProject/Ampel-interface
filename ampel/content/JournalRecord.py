@@ -7,7 +7,8 @@
 # Last Modified Date: 05.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, Literal, Any, Dict, TypedDict
+from typing import Union, Literal, Any, TypedDict
+from collections.abc import Sequence
 from ampel.types import ChannelId, Tag
 
 
@@ -46,7 +47,7 @@ class JournalRecord(TypedDict, total=False):
 	duration: Union[int, float]
 
 	#: Trace ids
-	traceid: Dict[str, int]
+	traceid: dict[str, int]
 
 	#: id of the unit associated with this record
 	unit: Union[int, str]
@@ -55,4 +56,4 @@ class JournalRecord(TypedDict, total=False):
 	doc: Union[int, bytes]
 
 	#: Free-form information
-	extra: Dict[str, Any]
+	extra: dict[str, Any]

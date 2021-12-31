@@ -7,7 +7,8 @@
 # Last Modified Date: 22.03.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Dict, Any, Optional, Union
+from typing import Any, Optional, Union
+from collections.abc import Sequence
 from argparse import ArgumentParser
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -24,5 +25,5 @@ class AbsCLIOperation(AmpelABC, abstract=True):
 		...
 
 	@abstractmethod
-	def run(self, args: Dict[str, Any], unknown_args: Sequence[str], sub_op: Optional[str] = None) -> None:
+	def run(self, args: dict[str, Any], unknown_args: Sequence[str], sub_op: Optional[str] = None) -> None:
 		...

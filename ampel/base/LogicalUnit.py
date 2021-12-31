@@ -7,7 +7,7 @@
 # Last Modified Date: 13.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Tuple, Dict, Any, Optional, ClassVar
+from typing import Any, Optional, ClassVar
 from ampel.types import Traceless, TRACELESS
 from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -26,9 +26,9 @@ class LogicalUnit(AmpelBaseModel):
 	logger: Traceless[LoggerProtocol]
 
 	#: Resources requirements as class variable (passed on to and merged with subclasses).
-	require: ClassVar[Optional[Tuple[str, ...]]] = None
+	require: ClassVar[Optional[tuple[str, ...]]] = None
 
-	resource: Traceless[Optional[Dict[str, Any]]] = None
+	resource: Traceless[Optional[dict[str, Any]]] = None
 
 	#: Private variable potentially set by UnitLoader for provenance purposes. Either:
 	#: * None if provanance flag is False

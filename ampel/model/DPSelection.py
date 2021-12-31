@@ -7,7 +7,8 @@
 # Last Modified Date: 28.09.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Union, Optional, Literal, Tuple, Callable
+from typing import Union, Optional, Literal
+from collections.abc import Callable
 from ampel.model.UnitModel import UnitModel
 from ampel.base.AuxUnitRegister import AuxUnitRegister
 from ampel.abstract.AbsApplicable import AbsApplicable
@@ -31,7 +32,7 @@ class DPSelection(AmpelBaseModel):
 		None,
 		Literal['first'],
 		Literal['last'],
-		Tuple[Optional[int], Optional[int], Optional[int]]
+		tuple[Optional[int], Optional[int], Optional[int]]
 	] = None
 
 
@@ -46,7 +47,7 @@ class DPSelection(AmpelBaseModel):
 			raise ValueError("Options 'sort' requires option 'select'")
 
 
-	def tools(self) -> Tuple[Optional[AbsApplicable], Optional[Callable[[list], list]], slice]:
+	def tools(self) -> tuple[Optional[AbsApplicable], Optional[Callable[[list], list]], slice]:
 
 		so = None
 		sl = None

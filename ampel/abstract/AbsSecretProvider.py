@@ -21,7 +21,7 @@ class AbsSecretProvider(AmpelABC, abstract=True):
 	"""
 
 	@abstractmethod
-	def tell(self, arg: Secret, ValueType: Type) -> bool:
+	def tell(self, arg: Secret, ValueType: type) -> bool:
 		"""
 		Potentially update an initialized Secret instance with
 		the actual sensitive information associable with it.

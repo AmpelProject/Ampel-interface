@@ -7,7 +7,8 @@
 # Last Modified Date: 03.04.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Iterable, Generic, Union
+from typing import Generic, Union
+from collections.abc import Iterable
 from ampel.types import T, UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.content.T1Document import T1Document

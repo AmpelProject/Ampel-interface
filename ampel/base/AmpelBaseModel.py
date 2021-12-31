@@ -14,10 +14,7 @@ from typeguard import check_type
 from types import MemberDescriptorType, GenericAlias
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from typing import ( # type: ignore[attr-defined]
-	Union, Any, Type, Annotated,
-	get_origin, get_args, _GenericAlias, _UnionGenericAlias
-)
+from typing import Union, Any, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
 
 do_type_check = True
 ttf = type(Traceless)
@@ -30,7 +27,7 @@ class AmpelBaseModel:
 	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::
 	
 	  In []: class B(AmpelBaseModel):
-	    ...:     a: List[int] = []
+	    ...:     a: list[int] = []
 
 	  In []: %timeit B(a=[11])
 	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
@@ -122,7 +119,7 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _spawn_model(cls, model: "Type[AmpelBaseModel]", value: dict) -> "AmpelBaseModel":
+	def _spawn_model(cls, model: "type[AmpelBaseModel]", value: dict) -> "AmpelBaseModel":
 		return model(
 			**{
 				k: model._spawn_model(model, v)

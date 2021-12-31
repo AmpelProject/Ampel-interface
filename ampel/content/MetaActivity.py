@@ -7,7 +7,8 @@
 # Last Modified Date: 10.10.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Sequence, Union, TypedDict, List
+from typing import Union, TypedDict
+from collections.abc import Sequence
 from ampel.types import ChannelId, Tag, DataPointId
 from ampel.enum.MetaActionCode import MetaActionCode
 
@@ -22,7 +23,7 @@ class MetaActivity(TypedDict, total=False):
 	tag: Union[Tag, Sequence[Tag]]
 
 	#: references dps exclusion (t1)
-	excl: List[DataPointId]
+	excl: list[DataPointId]
 
 	#: Document code (useful when t1_compute is performed on the fly)
 	code: int

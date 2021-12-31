@@ -7,7 +7,7 @@
 # Last Modified Date: 23.03.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Dict, Optional, List, Union, Any, Tuple
+from typing import Optional, Union, Any, Tuple
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 
 
@@ -19,22 +19,22 @@ class ArgParserBuilder:
 	def __init__(self, op: Optional[str] = None) -> None:
 		"""
 		"""
-		self.parsers: Dict[str, AmpelArgumentParser] = {}
+		self.parsers: dict[str, AmpelArgumentParser] = {}
 		self._op = op
 
 
-	def add_parser(self, name: str, hlp: Dict[str, str]):
+	def add_parser(self, name: str, hlp: dict[str, str]):
 		self.parsers[name] = AmpelArgumentParser(ampel_op=self._op)
 		self.parsers[name].set_help_descr(hlp)
 		setattr(self.parsers[name], '_sub_op', name)
 
 
-	def add_parsers(self, names: List[str], hlp: Dict[str, str]):
+	def add_parsers(self, names: list[str], hlp: dict[str, str]):
 		for el in names:
 			self.add_parser(el, hlp)
 
 
-	def get(self) -> Dict[str, AmpelArgumentParser]:
+	def get(self) -> dict[str, AmpelArgumentParser]:
 		""" Returns parsers created during the build procedure """
 		return self.parsers
 
@@ -58,7 +58,7 @@ class ArgParserBuilder:
 			p.groups[group].set_defaults(**kwargs)
 
 
-	def add_description(self, target: str, descr: Optional[Union[str, List[str]]]) -> None:
+	def add_description(self, target: str, descr: Optional[Union[str, list[str]]]) -> None:
 		"""
 		Calls method 'add_description' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param target: see add_arg(...) docstring
@@ -97,7 +97,7 @@ class ArgParserBuilder:
 			p.add_arg(name, group, **kwargs)
 
 
-	def add_x_args(self, target: str, *args: Dict[str, Any]) -> None:
+	def add_x_args(self, target: str, *args: dict[str, Any]) -> None:
 		"""
 		Calls method 'add_x_args' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param target: see add_arg(...) docstring
@@ -107,7 +107,7 @@ class ArgParserBuilder:
 			p.add_x_args(group, *args)
 
 
-	def get_targets(self, target: str, check_group: bool = True) -> Tuple[List[AmpelArgumentParser], str]:
+	def get_targets(self, target: str, check_group: bool = True) -> tuple[list[AmpelArgumentParser], str]:
 		"""
 		:param target: see add_arg(...) docstring
 		"""
@@ -130,7 +130,7 @@ class ArgParserBuilder:
 		return parsers, group
 
 
-	def _get_parsers(self, arg: str) -> List[AmpelArgumentParser]:
+	def _get_parsers(self, arg: str) -> list[AmpelArgumentParser]:
 		"""
 		:param arg: string containing one or more parser names.
 		Multiple parser names mst be separated by the character "|".
@@ -143,7 +143,7 @@ class ArgParserBuilder:
 				if el not in self.parsers:
 					raise ValueError(f"Unknown parser: '{el}', please create it using add_parser")
 
-			ret1: List[AmpelArgumentParser] = [
+			ret1: list[AmpelArgumentParser] = [
 				v for k, v in self.parsers.items()
 				if k in pp
 			]

@@ -7,7 +7,8 @@
 # Last Modified Date: 05.05.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from typing import Any, Sequence, Union, Dict, TypedDict, Literal
+from typing import Any, Union, TypedDict, Literal
+from collections.abc import Sequence
 from ampel.types import StockId, ChannelId, Tag
 from ampel.content.JournalRecord import JournalRecord
 
@@ -39,7 +40,7 @@ class StockDocument(TypedDict, total=False):
 	journal: Sequence[JournalRecord]
 
 	#: Creation time (UNIX epoch) in each channel
-	ts: Dict[ChannelId, Dict[Literal['tied', 'upd'], float]]
+	ts: dict[ChannelId, dict[Literal['tied', 'upd'], float]]
 
 	#: Last update time for any channel
 	updated: Union[int, float]
@@ -48,4 +49,4 @@ class StockDocument(TypedDict, total=False):
 	name: Sequence[Union[int, str]]
 
 	#: Optional specific content
-	body: Dict[str, Any]
+	body: dict[str, Any]
