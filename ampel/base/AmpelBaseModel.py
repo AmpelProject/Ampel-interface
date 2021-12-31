@@ -4,21 +4,27 @@
 # License           : BSD-3-Clause
 # Author            : vb <vbrinnel@physik.hu-berlin.de>
 # Date              : 07.10.2019
-# Last Modified Date: 15.12.2021
+# Last Modified Date: 30.12.2021
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
-from types import MemberDescriptorType
+from __future__ import annotations
+from ujson import loads, dumps # type: ignore[import]
+import collections.abc as abc
+from typeguard import check_type
+from types import MemberDescriptorType, GenericAlias
 from ampel.types import Traceless, TRACELESS
-from typing import Union, Any, ClassVar, Type, get_origin, get_args
-from pydantic import BaseModel, validate_model, create_model
-from ampel.model.StrictModel import StrictModel
+from ampel.secret.Secret import Secret
+from typing import ( # type: ignore[attr-defined]
+	Union, Any, Type, Annotated,
+	get_origin, get_args, _GenericAlias, _UnionGenericAlias
+)
 
-_check_types = True
+do_type_check = True
+ttf = type(Traceless)
 
 
 class AmpelBaseModel:
 	"""
-	Top level class that uses pydantic's BaseModel to validate data.
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
 
 	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::
@@ -35,12 +41,13 @@ class AmpelBaseModel:
 	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
 	"""
 
-	_model: Type[BaseModel]
-	_annots: ClassVar[dict[str, Any]] = {}
-	_defaults: ClassVar[dict[str, Any]] = {}
-	_slot_defaults: ClassVar[dict[str, Any]] = {}
-	_aks: ClassVar[set[str]] = set() # annotation keys
-	_sks: ClassVar[set[str]] = set() # slots keys
+	_annots: dict[str, Any] = {}
+	_defaults: dict[str, Any] = {}
+	_slot_defaults: dict[str, Any] = {}
+	_aks: set[str] = set() # annotation keys
+	_sks: set[str] = set() # slots keys
+	_exclude_unset: set[str] = set()
+	_debug: int = 0
 
 
 	@classmethod
@@ -91,82 +98,261 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _create_model(cls, omit_traceless: bool = False) -> Type[BaseModel]:
+	def validate(cls, value: dict, _omit_traceless: bool = True) -> Any:
+		""" Validate kwargs values against the fields of cls """
 
 		defs = cls._defaults
-		if omit_traceless:
-			ttf = type(Traceless)
-			kwargs = {
-				k: (v, defs[k] if k in defs else ...)
-				for k, v in cls._annots.items()
-				if not (type(v) is ttf and v.__metadata__[0] == TRACELESS)
-			}
-		else:
-			kwargs = {
-				k: (v, defs[k] if k in defs else ...)
-				for k, v in cls._annots.items()
-			}
+		ttf = type(Traceless)
+		for k, v in cls._annots.items():
+			if type(v) is ttf and v.__metadata__[0] == TRACELESS:
+				continue
+			if k in value:
+				if cls._has_nested_model(v):
+					v = cls._modelify(k, value[k], v)[1]
+				check_type(k, value[k], v)
+				#raise ValueError(f"Wrong type for parameter '{k}'. Expected: {v}, Provided: {type(value[k])}")
+			elif k in defs:
+				continue
+			else:
+				raise ValueError(f"Parameter required: {k}")
 
-		return create_model(
-			cls.__name__,
-			__config__ = StrictModel.__config__,
-			**kwargs # type: ignore
+		for k in value.keys():
+			if k not in cls._annots:
+				raise ValueError(f"Unknown parameter {k}")
+
+
+	@classmethod
+	def _spawn_model(cls, model: "Type[AmpelBaseModel]", value: dict) -> "AmpelBaseModel":
+		return model(
+			**{
+				k: model._spawn_model(model, v)
+				if (k in cls._annots and isinstance(cls._annots[k], type) and issubclass(cls._annots[k], cls)) else v
+				for k, v in value.items()
+			}
 		)
 
 
 	@classmethod
-	def validate(cls, value: dict, _omit_traceless: bool = True) -> Any:
-		""" Validate kwargs values against the fields of cls """
-		if _omit_traceless:
-			model = cls._create_model(_omit_traceless)
-		elif cls._model is None:
-			model = cls._model = cls._create_model()
-		else:
-			model = cls._model
+	def _has_nested_model(cls, annot: type) -> bool:
 
-		values, fields, errors = validate_model(model, value)
-		if errors:
-			raise errors
-		return values
+		if isinstance(annot, _GenericAlias) and hasattr(annot, 'mro') and issubclass(get_origin(annot), Secret): # type: ignore
+			return True
+
+		for el in get_args(annot):
+			o = get_origin(el)
+			if isinstance(el, (GenericAlias, _GenericAlias, _UnionGenericAlias)):
+				o = get_origin(el)
+				if (isinstance(o, type) and issubclass(o, Klass)) or cls._has_nested_model(el):
+					return True
+			if isinstance(el, type) and issubclass(el, Klass):
+				return True
+
+		return False
+
+
+	@classmethod
+	def _modelify(cls, key: str, arg: Any, annot: type) -> tuple[Union[Exception, bool], Any]:
+
+		oa = get_origin(annot)
+
+		if cls._debug:
+			print(f"⬤  Modelify {cls.__name__}")
+			print("Annot: ", annot)
+			print("Arg:", arg)
+			print("Origin", oa)
+
+		if oa is Union:
+			if cls._debug:
+				print("Origin is Union")
+			es: list[Exception] = []
+			for a in get_args(annot):
+				try:
+					if cls._debug > 1:
+						print("Considering union member: ", a)
+					modified, ret = cls._modelify(key, arg, a)
+					if modified is True:
+						if cls._debug > 1:
+							print("Model was spawned by union member")
+						return True, ret
+					elif isinstance(modified, Exception):
+						es.append(modified)
+				except Exception as e:
+					es.append(e)
+			if es and cls._has_nested_model(annot):
+				raise TypeError(
+					f"Type of {cls.__name__}.{key} must be one of {str(annot).replace('typing.', '')}:\n" +
+					f"Value: {arg}\nAssociated errors:\n• " +
+					"\n• ".join([str(e) for e in es])
+				)
+			return False, arg
+
+		elif oa is Annotated:
+			return cls._modelify(key, arg, get_args(annot)[0])
+				
+		elif oa is dict and isinstance(arg, dict):
+			if cls._debug:
+				print("Origin is dict")
+			modified = False
+			vtype = get_args(annot)[1]
+			ret = {}
+			for k, v in arg.items():
+				x, ret[k] = cls._modelify(f"{key}.{k}", v, vtype)
+				if x is True:
+					modified = True
+			return modified, ret
+
+		elif oa in (list, tuple, abc.Sequence) and isinstance(arg, (list, tuple)):
+			if cls._debug:
+				print("Origin is sequence")
+			vtype = get_args(annot)[0]
+			ret = []
+			modified = False
+			for i, el in enumerate(arg):
+				x, y = cls._modelify(f"{key}[{i}]", el, vtype)
+				ret.append(y)
+				if x:
+					modified = True
+			return modified, ret
+
+		elif oa is None and isinstance(arg, dict) and isinstance(annot, type) and issubclass(annot, AmpelBaseModel):
+			if cls._debug:
+				print("Spawning ", annot)
+			try:
+				ret = cls._spawn_model(annot, arg)
+				if cls._debug > 0:
+					print(f"{annot.__name__} spawned")
+				return True, ret
+			except Exception as e:
+				if cls._debug > 0:
+					print(f"{annot.__name__} instantiation failed")
+				if cls._debug > 1:
+					print(e)
+				return e, arg
+
+		elif isinstance(oa, type) and issubclass(oa, Klass) and isinstance(arg, dict):
+			if cls._debug:
+				print("Spawning ", oa)
+			try:
+				ret = cls._spawn_model(oa, arg)
+				if cls._debug > 0:
+					print(f"{oa.__name__} spawned")
+				return True, ret
+			except Exception as e:
+				if cls._debug > 0:
+					print(f"{oa.__name__} instantiation failed")
+				if cls._debug > 1:
+					print(e)
+				return e, arg
+
+		else:
+			if cls._debug > 1:
+				print("No action performed")
+
+		return False, arg
 
 
 	def __init__(self, **kwargs) -> None:
 
+		if self.__class__._debug > 1:
+			print(f"{self.__class__.__name__}.__init__(...)")
+
 		cls = self.__class__
-
-		if cls._model is None:
-			cls._model = self._create_model()
-			# might be needed in the future due to postponed annotations
-			# cls._model.update_forward_refs()
-
-		# Check types (default behavior)
-		if _check_types:
-
-			vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
-
-			# pydantic ValidationError
-			if e := vres[2]:
-				# https://github.com/samuelcolvin/pydantic/issues/784
-				print("")
-				print("#" * 60)
-				print("Offending values:")
-				for k, v in kwargs.items():
-					print(f"{k}: {v}")
-				print("#" * 60)
-				raise e
-
-			# Note: coercion could be checked/deactived by a flag as well
-			kwargs.update(vres[0])
-
 		sa = self.__setattr__
-		sks = cls._sks
-		aks = cls._aks
+		defs = cls._defaults
 
-		for k, v in cls._slot_defaults.items():
-			if k not in kwargs:
-				sa(k, v)
+		for k in cls._annots:
+			if k in kwargs:
+				v = cls._annots[k]
+				if cls._has_nested_model(v):
+					if self.__class__._debug > 1:
+						print(f"{cls.__name__}.{k} has nested model")
+					es, kwargs[k] = self._modelify(k, kwargs[k], v)
+				elif isinstance(v, type) and issubclass(v, Klass) and isinstance(kwargs[k], dict):
+					kwargs[k] = self._spawn_model(v, kwargs[k])
+				elif isinstance(v, type) and issubclass(v, Secret):
+					kwargs[k] = v(**kwargs[k])
+				else:
+					if self.__class__._debug > 1:
+						print(f"{cls.__name__}.{k} has no nested model")
 
-		# Set kwargs attributes
-		for k in kwargs:
-			if k in sks or k in aks:
+				if do_type_check:
+					try:
+						check_type(k, kwargs[k], v)
+					except Exception as e:
+						msg = f"{str(e)}\nField: {cls.__name__}.{k}\nType: {v}\nValue: {kwargs[k]}"
+						if isinstance(es, list):
+							msg += "Related errors:\n" + "\n".join([str(e) for e in es])
+						raise TypeError(msg) from None
+
+					# v, e = ModelField(name=k, type_=v, class_validators=None, model_config=BaseConfig).validate(kwargs[k], {}, loc=k)
+					#if e:
+					#	from pydantic.error_wrappers import flatten_errors, display_errors
+					#	#print(display_errors(list(flatten_errors([e[1]], BaseConfig))))
+					#	raise ValueError(
+					#		display_errors(list(flatten_errors([e], BaseConfig)))
+					#	)
+					# ModelField(name=k, type_=v).validate(kwargs[k])
 				sa(k, kwargs[k])
+			elif k in defs:
+				self._exclude_unset.add(k)
+				if isinstance(defs[k], (list, dict)):
+					sa(k, loads(dumps(defs[k])))
+				elif Klass in defs[k].__class__.__mro__:
+					sa(k, defs[k].__class__(**loads(dumps(defs[k].dict()))))
+				else:
+					sa(k, defs[k])
+			elif k in cls._slot_defaults:
+				self._exclude_unset.add(k)
+				#sa(k, loads(dumps(cls._slot_defaults[k])))
+				sa(k, cls._slot_defaults[k])
+			else:
+				raise ValueError(f"{self.__class__.__name__}: a value for parameter '{k}' is required")
+
+		for k in kwargs.keys():
+			if k not in cls._annots:
+				raise ValueError(f"{self.__class__.__name__}: unknown parameter {k}")
+
+		if self.__class__._debug > 1:
+			print(f"End of {self.__class__.__name__}.__init__(...)")
+
+
+	def dict(self, **kwargs) -> dict[str, Any]:
+
+		d = self.__dict__
+		excl = {
+			k for k, v in self._annots.items()
+			if type(v) is ttf and v.__metadata__[0] == TRACELESS
+		}
+
+		if kwargs.get('exclude_unset'):
+			excl.update(self._exclude_unset)
+
+		if kwargs.get('exclude_defaults'):
+			for k in self._defaults:
+				if k in self.__dict__:
+					if self.__dict__[k] == self._defaults[k]:
+						excl.add(k)
+				else:
+					excl.add(k)
+
+		return {
+			k: self._dictify(v)
+			for k, v in d.items()
+			if not (k in excl or isinstance(d[k], Secret))
+		}
+
+
+	def _dictify(self, arg: Any) -> Any:
+		if isinstance(arg, (list, tuple, set)):
+			return [self._dictify(el) for el in arg]
+		elif isinstance(arg, dict):
+			return {
+				k: self._dictify(v)
+				for k, v in arg.items()
+			}
+		elif isinstance(arg, Klass):
+			return arg.dict()
+		return arg
+
+
+Klass = AmpelBaseModel
