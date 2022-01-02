@@ -8,7 +8,7 @@
 # Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
 
 from collections.abc import ValuesView, KeysView, Sequence
-from typing import Union, TypeVar, get_origin, TYPE_CHECKING, Any, Annotated, _GenericAlias # type: ignore[attr-defined]
+from typing import Any, Union, TypeVar, get_origin, TYPE_CHECKING, Annotated, _GenericAlias # type: ignore[attr-defined]
 
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -24,6 +24,7 @@ ChannelId = Union[int, str]
 DataPointId = int
 Tag = Union[int, str]
 UnitId = str
+JDict = dict[str, Any] # JSON dict
 
 T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
