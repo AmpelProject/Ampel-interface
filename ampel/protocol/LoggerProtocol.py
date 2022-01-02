@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/protocol/LoggerProtocol.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 27.09.2018
-# Last Modified Date: 18.12.2020
-# Last Modified By  : Jakob van Santen <jakob.van.santen@desy.de>
+# File:                Ampel-interface/ampel/protocol/LoggerProtocol.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                27.09.2018
+# Last Modified Date:  18.12.2020
+# Last Modified By:    Jakob van Santen <jakob.van.santen@desy.de>
 
 from typing import Optional, Union, Any, Protocol, runtime_checkable, TYPE_CHECKING
 

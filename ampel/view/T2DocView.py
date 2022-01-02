@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/view/T2DocView.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 10.02.2021
-# Last Modified Date: 01.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/view/T2DocView.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                10.02.2021
+# Last Modified Date:  01.12.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from datetime import datetime
 from typing import Optional, Union, Any, Literal, overload

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/util/tag.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 25.11.2021
-# Last Modified Date: 25.11.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/util/tag.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                25.11.2021
+# Last Modified Date:  25.11.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.types import Tag
 from typing import Union, Literal, overload

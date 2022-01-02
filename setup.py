@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/setup.py
-# License           : BSD-3-Clause
-# Author            : vb, jvs
-# Date              : Unspecified
-# Last Modified Date: 19.11.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/setup.py
+# License:             BSD-3-Clause
+# Author:              vb, jvs
+# Date:                Unspecified
+# Last Modified Date:  19.11.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from setuptools import setup, find_namespace_packages
 

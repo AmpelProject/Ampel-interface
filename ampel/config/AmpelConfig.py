@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/config/AmpelConfig.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 22.10.2019
-# Last Modified Date: 04.08.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/config/AmpelConfig.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                22.10.2019
+# Last Modified Date:  04.08.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import yaml, json
 from typing import Union, Optional, Literal, Any, TypeVar, overload, get_origin

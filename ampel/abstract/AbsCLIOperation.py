@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsCLIOperation.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 16.03.2021
-# Last Modified Date: 22.03.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsCLIOperation.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                16.03.2021
+# Last Modified Date:  22.03.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any, Optional, Union
 from collections.abc import Sequence
