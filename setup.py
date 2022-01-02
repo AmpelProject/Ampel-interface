@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              vb, jvs
 # Date:                Unspecified
-# Last Modified Date:  19.11.2021
+# Last Modified Date:  02.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from setuptools import setup, find_namespace_packages
@@ -20,7 +20,7 @@ extras_require = {
 
 setup(
 	name = 'ampel-interface',
-	version = '0.8.2-alpha.6',
+	version = '0.8.3-alpha.1',
 	description = 'Base classes for the Ampel analysis platform',
 	long_description = '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
 	author = 'Valery Brinnel',
