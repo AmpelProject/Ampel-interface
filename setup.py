@@ -32,5 +32,5 @@ setup(
 	package_data = {'': ['*']},
 	install_requires = install_requires,
 	extras_require = extras_require,
-	python_requires = '>=3.9,<4.0',
+	python_requires = '>=3.10,<4.0',
 )
