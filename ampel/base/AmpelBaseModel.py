@@ -11,10 +11,10 @@ from __future__ import annotations
 from ujson import loads, dumps # type: ignore[import]
 import collections.abc as abc
 from typeguard import check_type
-from types import MemberDescriptorType, GenericAlias
+from types import MemberDescriptorType, GenericAlias, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from typing import Union, Any, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
+from typing import Any, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
 
 do_type_check = True
 ttf = type(Traceless)
@@ -79,7 +79,7 @@ class AmpelBaseModel:
 							continue
 						joined_defaults[k] = base.__dict__[k]
 					# if Optional[] with no default
-					elif get_origin(v) is Union and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
+					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
@@ -136,11 +136,15 @@ class AmpelBaseModel:
 			return True
 
 		for el in get_args(annot):
-			o = get_origin(el)
-			if isinstance(el, (GenericAlias, _GenericAlias, _UnionGenericAlias)):
+
+			if cls._debug > 1:
+				print("el", el, get_origin(el))
+
+			if isinstance(el, (GenericAlias, _GenericAlias, _UnionGenericAlias, UnionType)):
 				o = get_origin(el)
 				if (isinstance(o, type) and issubclass(o, Klass)) or cls._has_nested_model(el):
 					return True
+
 			if isinstance(el, type) and issubclass(el, Klass):
 				return True
 
@@ -148,7 +152,7 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _modelify(cls, key: str, arg: Any, annot: type) -> tuple[Union[Exception, bool], Any]:
+	def _modelify(cls, key: str, arg: Any, annot: type) -> tuple[Exception | bool, Any]:
 
 		oa = get_origin(annot)
 
@@ -158,7 +162,7 @@ class AmpelBaseModel:
 			print("Arg:", arg)
 			print("Origin", oa)
 
-		if oa is Union:
+		if oa is Union or oa is UnionType:
 			if cls._debug:
 				print("Origin is Union")
 			es: list[Exception] = []
@@ -169,7 +173,7 @@ class AmpelBaseModel:
 					modified, ret = cls._modelify(key, arg, a)
 					if modified is True:
 						if cls._debug > 1:
-							print("Model was spawned by union member")
+							print("Model spawned by union member: ", a)
 						return True, ret
 					elif isinstance(modified, Exception):
 						es.append(modified)
@@ -222,8 +226,8 @@ class AmpelBaseModel:
 			except Exception as e:
 				if cls._debug > 0:
 					print(f"{annot.__name__} instantiation failed")
-				if cls._debug > 1:
-					print(e)
+					if cls._debug > 1:
+						print(e)
 				return e, arg
 
 		elif isinstance(oa, type) and issubclass(oa, Klass) and isinstance(arg, dict):
@@ -237,8 +241,8 @@ class AmpelBaseModel:
 			except Exception as e:
 				if cls._debug > 0:
 					print(f"{oa.__name__} instantiation failed")
-				if cls._debug > 1:
-					print(e)
+					if cls._debug > 1:
+						print(e)
 				return e, arg
 
 		else:
@@ -280,15 +284,6 @@ class AmpelBaseModel:
 						if isinstance(es, list):
 							msg += "Related errors:\n" + "\n".join([str(e) for e in es])
 						raise TypeError(msg) from None
-
-					# v, e = ModelField(name=k, type_=v, class_validators=None, model_config=BaseConfig).validate(kwargs[k], {}, loc=k)
-					#if e:
-					#	from pydantic.error_wrappers import flatten_errors, display_errors
-					#	#print(display_errors(list(flatten_errors([e[1]], BaseConfig))))
-					#	raise ValueError(
-					#		display_errors(list(flatten_errors([e], BaseConfig)))
-					#	)
-					# ModelField(name=k, type_=v).validate(kwargs[k])
 				sa(k, kwargs[k])
 			elif k in defs:
 				self._exclude_unset.add(k)
