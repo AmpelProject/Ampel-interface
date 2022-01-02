@@ -7,7 +7,6 @@
 # Last Modified Date:  11.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union
 from collections.abc import Sequence
 from ampel.types import UBson, Tag
 from ampel.struct.JournalAttributes import JournalAttributes
@@ -23,9 +22,9 @@ class UnitResult:
 
 	def __init__(self,
 		body: UBson = None,
-		tag: Optional[Union[Tag, Sequence[Tag]]] = None,
-		code: Optional[int] = None,
-		journal: Optional[JournalAttributes] = None
+		tag: None | Tag | Sequence[Tag] = None,
+		code: None | int = None,
+		journal: None | JournalAttributes = None
 	) -> None:
 		"""
 		:param body: content for the field 'body' of the associated tier document

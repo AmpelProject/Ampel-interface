@@ -21,7 +21,7 @@ class AbsTiedStockT2Unit(AbsTiedT2Unit, abstract=True):
 	""" Later """
 
 	@abstractmethod
-	def process(self, stock: StockDocument, t2_view: Sequence[T2DocView]) -> Union[UBson, UnitResult]:
+	def process(self, stock: StockDocument, t2_view: Sequence[T2DocView]) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

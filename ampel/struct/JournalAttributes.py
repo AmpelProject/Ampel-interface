@@ -7,7 +7,7 @@
 # Last Modified Date:  12.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union, Any
+from typing import Any
 from collections.abc import Sequence
 from ampel.types import Tag
 from ampel.content.JournalRecord import JournalRecord
@@ -22,19 +22,19 @@ class JournalAttributes:
 	__slots__ = 'tag', 'code', 'extra'
 
 	#: code / status
-	code: Optional[int]
+	code: None | int
 
 	#: journal entry tag(s)
-	tag: Optional[Union[Tag, Sequence[Tag]]]
+	tag: None | Tag | Sequence[Tag]
 
 	#: if provided, will be included as-is under the journal root key 'extra'
-	extra: Optional[dict[str, Any]]
+	extra: None | dict[str, Any]
 
 
 	def __init__(self,
-		code: Optional[int] = None,
-		tag: Optional[Union[Tag, Sequence[Tag]]] = None,
-		extra: Optional[dict[str, Any]] = None
+		code: None | int = None,
+		tag: None | Tag | Sequence[Tag] = None,
+		extra: None | dict[str, Any] = None
 	) -> None:
 		"""
 		:param code: potential integer code of the executed process

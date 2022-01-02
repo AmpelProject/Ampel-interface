@@ -7,7 +7,7 @@
 # Last Modified Date:  07.10.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union, Literal, Any, TypedDict
+from typing import Literal, Any, TypedDict
 from collections.abc import Sequence
 from ampel.types import ChannelId, Tag
 from ampel.content.MetaActivity import MetaActivity
@@ -20,22 +20,22 @@ class MetaRecord(TypedDict, total=False):
 	run: int
 
 	#: UNIX epoch of the activity
-	ts: Union[int, float]
+	ts: int | float
 
 	#: Tier of the associated process
 	tier: Literal[-1, 0, 1, 2, 3]
 
 	#: Channels associated with the activity
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	channel: ChannelId | Sequence[ChannelId]
 
 	#: Trace ids associated with the creation / update of this document
-	traceid: dict[str, Optional[int]]
+	traceid: dict[str, None | int]
 
 	#: Name of the associated process
-	process: Union[int, str]
+	process: int | str
 
 	#: Free-form labels
-	tag: Union[Tag, Sequence[Tag]]
+	tag: Tag | Sequence[Tag]
 
 	#: Status code of the latest associated process
 	code: int
@@ -44,7 +44,7 @@ class MetaRecord(TypedDict, total=False):
 	activity: Sequence[MetaActivity]
 
 	#: Duration of the process
-	duration: Union[int, float]
+	duration: int | float
 
 	#: Free-form information
 	extra: dict[str, Any]

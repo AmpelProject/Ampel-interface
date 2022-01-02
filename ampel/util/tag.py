@@ -8,84 +8,84 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.types import Tag
-from typing import Union, Literal, overload
+from typing import Literal, overload
 from collections.abc import Sequence
 
 
 @overload
 def merge_tags(
-	arg1: Union[Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]]
-) -> Union[list[Tag]]:
+	arg1: Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag]
+) -> list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[Tag, Sequence[Tag], set[Tag]]
-) -> Union[list[Tag]]:
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: Tag | Sequence[Tag] | set[Tag]
+) -> list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]]
-) -> Union[None, list[Tag]]:
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag]
+) -> None | list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]], *,
+	arg1: Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[False]
-) -> Union[list[Tag]]:
+) -> list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[Tag, Sequence[Tag], set[Tag]], *,
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[False]
-) -> Union[list[Tag]]:
+) -> list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]], *,
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[False]
-) -> Union[None, list[Tag]]:
+) -> None | list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]], *,
+	arg1: Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[True]
-) -> Union[Tag, list[Tag]]:
+) -> Tag | list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[Tag, Sequence[Tag], set[Tag]], *,
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[True]
-) -> Union[Tag, list[Tag]]:
+) -> Tag | list[Tag]:
 	...
 
 @overload
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]], *,
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag], *,
 	reduce: Literal[True]
-) -> Union[None, Tag, list[Tag]]:
+) -> None | Tag | list[Tag]:
 	...
 
 def merge_tags(
-	arg1: Union[None, Tag, Sequence[Tag], set[Tag]],
-	arg2: Union[None, Tag, Sequence[Tag], set[Tag]], *,
+	arg1: None | Tag | Sequence[Tag] | set[Tag],
+	arg2: None | Tag | Sequence[Tag] | set[Tag], *,
 	reduce: bool = True
-) -> Union[None, Tag, list[Tag]]:
+) -> None | Tag | list[Tag]:
 	""" A mypy friendly method that merges tags together """
 
 	if arg2 is None:

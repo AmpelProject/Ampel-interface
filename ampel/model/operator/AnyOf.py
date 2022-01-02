@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import collections
-from typing import Union, Generic
+from typing import Generic
 from ampel.types import T
 from ampel.model.operator.AllOf import AllOf
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -17,7 +17,7 @@ from ampel.base.AmpelBaseModel import AmpelBaseModel
 class AnyOf(Generic[T], AmpelBaseModel):
 
 	#: Select items by logical OR
-	any_of: list[Union[T, AllOf[T]]]
+	any_of: list[T | AllOf[T]]
 
 	def __init__(self, **kwargs) -> None:
 		if 'any_of' in kwargs and not isinstance(kwargs['any_of'], collections.abc.Sequence):

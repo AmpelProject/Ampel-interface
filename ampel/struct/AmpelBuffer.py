@@ -7,7 +7,7 @@
 # Last Modified Date:  01.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Any, TypedDict, Literal, Union
+from typing import Any, TypedDict, Literal
 from ampel.types import StockId
 from ampel.content.StockDocument import StockDocument
 from ampel.content.DataPoint import DataPoint
@@ -27,10 +27,10 @@ class AmpelBuffer(TypedDict, total=False):
 	"""
 	# Could stock be of type list[StockDocument] to enable hybrid/dual transients ?
 	id: StockId
-	stock: Optional[StockDocument]
-	origin: Optional[Union[int, list[int]]]
-	t0: Optional[list[DataPoint]]
-	t1: Optional[list[T1Document]]
-	t2: Optional[list[T2Document]]
-	logs: Optional[list[LogDocument]]
-	extra: Optional[dict[str, Any]]
+	stock: None | StockDocument
+	origin: None | int | list[int]
+	t0: None | list[DataPoint]
+	t1: None | list[T1Document]
+	t2: None | list[T2Document]
+	logs: None | list[LogDocument]
+	extra: None | dict[str, Any]

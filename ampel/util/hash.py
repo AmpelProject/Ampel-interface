@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import json, xxhash # type: ignore[import]
-from typing import TypeVar, Optional
+from typing import TypeVar
 from ampel.util.mappings import flatten_dict
 
 HT = TypeVar("HT", int, bytes, str)
@@ -52,7 +52,7 @@ def hash_payload(payload: bytes, ret: type[HT] = int, size: int = -64) -> HT: # 
 
 
 def build_unsafe_dict_id(
-	dict_arg: Optional[dict],
+	dict_arg: None | dict,
 	ret: type[HT] = int, # type: ignore[assignment]
 	size: int = -64,
 	sort_keys: bool = True,

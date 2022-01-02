@@ -48,7 +48,7 @@ class AbsPointT2Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, datapoint: DataPoint) -> Union[UBson, UnitResult]:
+	def process(self, datapoint: DataPoint) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

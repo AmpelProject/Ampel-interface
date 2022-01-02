@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/alert/AmpelAlert.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 26.01.2020
-# Last Modified Date: 08.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/alert/AmpelAlert.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                26.01.2020
+# Last Modified Date:  02.01.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import operator
-from typing import Optional, Any, Union
+from typing import Any
 from collections.abc import Callable, Sequence
-from ampel.types import StockId, Tag
+from ampel.types import JDict, StockId, Tag
 
 # Do not enable customizations of operators by sub-classes for now
 ops: dict[str, Callable[[str, Any], bool]] = {
@@ -37,9 +37,9 @@ class AmpelAlert:
 	def __init__(self,
 		id: int, #: unique identifier for this alert
 		stock: StockId, #: stock this alert belongs to
-		datapoints: Sequence[dict[str, Any]],
-		tag: Optional[Union[Tag, list[Tag]]] = None, #: Optional tag associated with this alert
-		extra: Optional[dict[str, Any]] = None #: Optional information associated with this alert
+		datapoints: Sequence[JDict],
+		tag: None | Tag | list[Tag] = None, #: Optional tag associated with this alert
+		extra: None | JDict = None #: Optional information associated with this alert
 	) -> None:
 		sa = object.__setattr__
 		sa(self, '_id', id)
@@ -57,15 +57,15 @@ class AmpelAlert:
 		return self._stock # type: ignore[attr-defined]
 
 	@property
-	def datapoints(self) -> Sequence[dict[str, Any]]:
+	def datapoints(self) -> Sequence[JDict]:
 		return self._datapoints # type: ignore[attr-defined]
 
 	@property
-	def tag(self) -> Union[None, Tag, list[Tag]]:
+	def tag(self) -> None | Tag | list[Tag]:
 		return self._tag # type: ignore[attr-defined]
 
 	@property
-	def extra(self) -> Optional[dict[str, Any]]:
+	def extra(self) -> None | JDict:
 		return self._extra # type: ignore[attr-defined]
 
 	def __reduce__(self):
@@ -83,7 +83,7 @@ class AmpelAlert:
 
 	def get_values(self,
 		key: str,
-		filters: Optional[Sequence[dict[str, Any]]] = None
+		filters: None | Sequence[JDict] = None
 	) -> list[Any]:
 		"""
 		Example:
@@ -96,7 +96,7 @@ class AmpelAlert:
 
 	def get_tuples(self,
 		key1: str, key2: str,
-		filters: Optional[Sequence[dict[str, Any]]] = None
+		filters: None | Sequence[JDict] = None
 	) -> list[tuple[Any, Any]]:
 		"""
 		Example::
@@ -111,7 +111,8 @@ class AmpelAlert:
 
 
 	def get_ntuples(self,
-		params: list[str], filters: Optional[Sequence[dict[str, Any]]] = None
+		params: list[str],
+		filters: None | Sequence[JDict] = None
 	) -> list[tuple]:
 		"""
 		Example:
@@ -130,9 +131,9 @@ class AmpelAlert:
 
 
 	def apply_filter(self,
-		dicts: Sequence[dict[str, Any]],
-		filters: Sequence[dict[str, Any]]
-	) -> Sequence[dict[str, Any]]:
+		dicts: Sequence[JDict],
+		filters: Sequence[JDict]
+	) -> Sequence[JDict]:
 
 		if isinstance(filters, dict):
 			filters = [filters]
@@ -154,7 +155,7 @@ class AmpelAlert:
 		return dicts
 
 
-	def dict(self) -> dict[str, Any]:
+	def dict(self) -> JDict:
 		return {
 			'id': self.id,
 			'stock': self.stock,

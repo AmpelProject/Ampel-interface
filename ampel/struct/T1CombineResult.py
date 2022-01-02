@@ -7,7 +7,7 @@
 # Last Modified Date:  17.06.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Any
+from typing import Any
 from ampel.types import DataPointId
 
 
@@ -21,8 +21,8 @@ class T1CombineResult:
 
 	def __init__(self,
 		dps: list[DataPointId],
-		code: Optional[int] = None,
-		meta: Optional[dict[str, Any]] = None
+		code: None | int = None,
+		meta: None | dict[str, Any] = None
 	) -> None:
 		"""
 		:param dps: ids of the datapoints to combine

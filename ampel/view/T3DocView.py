@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from datetime import datetime
-from typing import Optional, Union, Any, Literal, overload
+from typing import Any, Literal, overload
 from collections.abc import Sequence
 from ampel.types import StockId, UBson, TBson, Tag
 from ampel.content.MetaRecord import MetaRecord
@@ -25,11 +25,11 @@ class T3DocView:
 
 	__slots__ = 'unit', 'confid', 'config', 'stock', 'tag', 'code', 'meta', 'body'
 
-	stock: Optional[Sequence[StockId]]
+	stock: None | Sequence[StockId]
 	unit: str
 	confid: int
-	config: Optional[dict[str, Any]]
-	tag: Optional[Union[Tag, Sequence[Tag]]]
+	config: None | dict[str, Any]
+	tag: None | Tag | Sequence[Tag]
 	code: int
 	meta: MetaRecord
 	body: UBson
@@ -60,9 +60,9 @@ class T3DocView:
 		code: int,
 		meta: MetaRecord,
 		confid: int,
-		tag: Optional[Union[Tag, Sequence[Tag]]] = None,
-		stock: Optional[Sequence[StockId]] = None,
-		config: Optional[dict[str, Any]] = None,
+		tag: None | Tag | Sequence[Tag] = None,
+		stock: None | Sequence[StockId] = None,
+		config: None | dict[str, Any] = None,
 		body: UBson = None
 	):
 		sa = object.__setattr__
@@ -89,21 +89,21 @@ class T3DocView:
 
 
 	@overload
-	def get_body(self) -> Optional[dict[str, Any]]:
+	def get_body(self) -> None | dict[str, Any]:
 		...
 	@overload
 	def get_body(self, *, raise_exc: Literal[True]) -> dict[str, Any]:
 		...
 	@overload
-	def get_body(self, ret_type: type[TBson]) -> Optional[TBson]:
+	def get_body(self, ret_type: type[TBson]) -> None | TBson:
 		...
 	@overload
 	def get_body(self, ret_type: type[TBson], *, raise_exc: Literal[True]) -> TBson:
 		...
 	@overload
-	def get_body(self, ret_type: type[TBson], *, raise_exc: Literal[False]) -> Optional[TBson]:
+	def get_body(self, ret_type: type[TBson], *, raise_exc: Literal[False]) -> None | TBson:
 		...
-	def get_body(self, ret_type: type[TBson] = dict, *, raise_exc: bool = False) -> Optional[TBson]: # type: ignore[assignment]
+	def get_body(self, ret_type: type[TBson] = dict, *, raise_exc: bool = False) -> None | TBson: # type: ignore[assignment]
 		"""
 		:param raise_exc: raise exception if the body has not the expected type
 
@@ -116,12 +116,12 @@ class T3DocView:
 
 
 	@overload
-	def get_time_created(self, to_string: Literal[False]) -> Optional[float]:
+	def get_time_created(self, to_string: Literal[False]) -> None | float:
 		...
 	@overload
-	def get_time_created(self, to_string: Literal[True]) -> Optional[str]:
+	def get_time_created(self, to_string: Literal[True]) -> None | str:
 		...
-	def get_time_created(self, to_string: bool = False) -> Optional[Union[float, str]]:
+	def get_time_created(self, to_string: bool = False) -> None | float | str:
 
 		if to_string:
 			return datetime.fromtimestamp(self.meta['ts']).strftime('%d/%m/%Y %H:%M:%S')

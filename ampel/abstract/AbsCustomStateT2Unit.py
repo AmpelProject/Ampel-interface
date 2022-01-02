@@ -7,7 +7,7 @@
 # Last Modified Date:  03.04.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Generic, Union
+from typing import Generic
 from collections.abc import Iterable
 from ampel.types import T, UBson
 from ampel.struct.UnitResult import UnitResult
@@ -39,7 +39,7 @@ class AbsCustomStateT2Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
 
 
 	@abstractmethod
-	def process(self, arg: T) -> Union[UBson, UnitResult]:
+	def process(self, arg: T) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

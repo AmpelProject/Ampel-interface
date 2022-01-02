@@ -7,7 +7,7 @@
 # Last Modified Date:  22.03.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Optional, Union
+from typing import Any
 from collections.abc import Sequence
 from argparse import ArgumentParser
 from ampel.base.AmpelABC import AmpelABC
@@ -21,9 +21,9 @@ class AbsCLIOperation(AmpelABC, abstract=True):
 	"""
 
 	@abstractmethod
-	def get_parser(self, sub_op: Optional[str] = None) -> Union[ArgumentParser, AmpelArgumentParser]:
+	def get_parser(self, sub_op: None | str = None) -> ArgumentParser | AmpelArgumentParser:
 		...
 
 	@abstractmethod
-	def run(self, args: dict[str, Any], unknown_args: Sequence[str], sub_op: Optional[str] = None) -> None:
+	def run(self, args: dict[str, Any], unknown_args: Sequence[str], sub_op: None | str = None) -> None:
 		...

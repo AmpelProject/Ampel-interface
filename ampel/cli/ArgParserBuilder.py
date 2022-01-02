@@ -7,7 +7,7 @@
 # Last Modified Date:  23.03.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union, Any, Tuple
+from typing import Any, Tuple
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 
 
@@ -16,7 +16,7 @@ class ArgParserBuilder:
 	Creates one or many instances of AmpelArgumentParser
 	"""
 
-	def __init__(self, op: Optional[str] = None) -> None:
+	def __init__(self, op: None | str = None) -> None:
 		"""
 		"""
 		self.parsers: dict[str, AmpelArgumentParser] = {}
@@ -58,7 +58,7 @@ class ArgParserBuilder:
 			p.groups[group].set_defaults(**kwargs)
 
 
-	def add_description(self, target: str, descr: Optional[Union[str, list[str]]]) -> None:
+	def add_description(self, target: str, descr: None | str | list[str]) -> None:
 		"""
 		Calls method 'add_description' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param target: see add_arg(...) docstring
@@ -161,8 +161,8 @@ class ArgParserBuilder:
 
 	def create_logic_args(self,
 		target: str, name: str, descr: str, metavar: str = "#",
-		required: bool = False, pos: Optional[int] = None,
-		ref: Optional[str] = None, excl: bool = False,
+		required: bool = False, pos: None | int = None,
+		ref: None | str = None, excl: bool = False,
 		json: bool = True, **kwargs
 	) -> None:
 		"""
@@ -174,7 +174,7 @@ class ArgParserBuilder:
 			p.create_logic_args(name, group, descr, metavar, required, pos, ref, excl, json)
 
 
-	def add_note(self, parsers: str, note: str, pos: Optional[int] = None, ref: Optional[str] = None) -> None:
+	def add_note(self, parsers: str, note: str, pos: None | int = None, ref: None | str = None) -> None:
 		"""
 		Calls method 'add_note' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param parsers: see _get_parsers() docstring
@@ -183,7 +183,7 @@ class ArgParserBuilder:
 			p.add_note(note, pos, ref)
 
 
-	def add_all_note(self, note: str, pos: Optional[int] = None, ref: Optional[str] = None) -> None:
+	def add_all_note(self, note: str, pos: None | int = None, ref: None | str = None) -> None:
 		"""
 		Calls method 'add_note' (see AmpelArgumentParser docstring) of all the underlying parsers.
 		"""
@@ -193,7 +193,7 @@ class ArgParserBuilder:
 
 	def add_example(self,
 		parsers: str, ex: str, prepend=None, append="",
-		auto_strip: bool = True, ref: Optional[str] = None
+		auto_strip: bool = True, ref: None | str = None
 	) -> None:
 		"""
 		Calls method 'add_example' (see AmpelArgumentParser docstring) for the selected parser(s).
@@ -208,7 +208,7 @@ class ArgParserBuilder:
 
 
 	def add_all_example(self,
-		ex: str, prepend="ampel ", append="", auto_strip: bool = True, ref: Optional[str] = None
+		ex: str, prepend="ampel ", append="", auto_strip: bool = True, ref: None | str = None
 	) -> None:
 		"""
 		Calls method 'add_example' (see AmpelArgumentParser docstring) of all the underlying parsers.
@@ -217,27 +217,27 @@ class ArgParserBuilder:
 			p.add_example(ex, prepend, append, auto_strip, ref)
 
 
-	def hint_query_logic(self, parsers: str, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_query_logic(self, parsers: str, pos: None | int = None, ref: None | str = None):
 		for p in self._get_parsers(parsers):
 			p.hint_query_logic(pos, ref)
 
 
-	def hint_all_query_logic(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_all_query_logic(self, pos: None | int = None, ref: None | str = None):
 		for p in self.parsers.values():
 			p.hint_query_logic(pos, ref)
 
 
-	def hint_time_format(self, parsers: str, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_time_format(self, parsers: str, pos: None | int = None, ref: None | str = None):
 		for p in self._get_parsers(parsers):
 			p.hint_time_format(pos, ref)
 
 
-	def hint_all_time_format(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_all_time_format(self, pos: None | int = None, ref: None | str = None):
 		for p in self.parsers.values():
 			p.hint_time_format(pos, ref)
 
 
-	def hint_all_config_override(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_all_config_override(self, pos: None | int = None, ref: None | str = None):
 		for p in self.parsers.values():
 			p.hint_config_override(pos, ref)
 

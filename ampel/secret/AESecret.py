@@ -7,7 +7,6 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
@@ -40,7 +39,7 @@ class AESecret(Secret[str], AmpelBaseModel):
 	salt: str
 	ct: str
 
-	value: Optional[str]
+	value: None | str
 
 	def __repr__(self):
 		return '<AESecret>'

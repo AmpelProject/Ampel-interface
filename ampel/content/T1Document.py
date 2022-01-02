@@ -7,7 +7,7 @@
 # Last Modified Date:  17.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal, Union, TypedDict
+from typing import Literal, TypedDict
 from collections.abc import Sequence
 from ampel.types import UBson, StockId, DataPointId, ChannelId, Tag, UnitId
 from ampel.content.MetaRecord import MetaRecord
@@ -29,7 +29,7 @@ class T1Document(TypedDict, total=False):
 	config: int
 
 	#: stock(s) this doc is associated to
-	stock: Union[StockId, Sequence[StockId]]
+	stock: StockId | Sequence[StockId]
 
 	#: Optional instrument/source identifier
 	origin: int

@@ -7,7 +7,7 @@
 # Last Modified Date:  05.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Literal, Any, TypedDict
+from typing import Literal, Any, TypedDict
 from collections.abc import Sequence
 from ampel.types import ChannelId, Tag
 
@@ -23,16 +23,16 @@ class JournalRecord(TypedDict, total=False):
 	tier: Literal[-1, 0, 1, 2, 3]
 
 	#: UNIX epoch of the activity
-	ts: Union[int, float]
+	ts: int | float
 
 	#: Channels associated with the activity
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	channel: ChannelId | Sequence[ChannelId]
 
 	#: Name of the associated process
-	process: Union[int, str]
+	process: int | str
 
 	#: Free-form labels
-	tag: Union[Tag, Sequence[Tag]]
+	tag: Tag | Sequence[Tag]
 
 	#: Run(s) associated with this record
 	run: int
@@ -44,16 +44,16 @@ class JournalRecord(TypedDict, total=False):
 	action: int
 
 	#: Duration of the process
-	duration: Union[int, float]
+	duration: int | float
 
 	#: Trace ids
 	traceid: dict[str, int]
 
 	#: id of the unit associated with this record
-	unit: Union[int, str]
+	unit: int | str
 
 	#: id of the document associated with the invocation
-	doc: Union[int, bytes]
+	doc: int | bytes
 
 	#: Free-form information
 	extra: dict[str, Any]

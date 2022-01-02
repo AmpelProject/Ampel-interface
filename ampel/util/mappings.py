@@ -7,15 +7,15 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Union, Optional
+from typing import Any
 from collections.abc import MutableMapping, Mapping, Iterable, Sequence
 from ampel.types import UBson, strict_iterable, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
 def get_by_path(
-	mapping: dict, path: Union[str, Sequence[str]], delimiter: str = '.'
-) -> Optional[UBson]:
+	mapping: dict, path: str | Sequence[str], delimiter: str = '.'
+) -> None | UBson:
 	"""
 	Get an item from a nested mapping by path, e.g.
 	'foo.bar.baz' -> mapping['foo']['bar']['baz']
@@ -28,7 +28,7 @@ def get_by_path(
 		path = path.split(delimiter)
 
 	# check for int elements encoded as str
-	path: list[Union[int, str]] = [ # type: ignore
+	path: list[int | str] = [ # type: ignore
 		(el if not el.isdigit() else int(el)) for el in path
 	]
 
@@ -40,7 +40,7 @@ def get_by_path(
 	return mapping
 
 
-def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimiter: str = '.') -> Optional[tuple[str, UBson]]:
+def get_by_json_path(d: dict[str, Any], path: str | Sequence[str], delimiter: str = '.') -> None | tuple[str, UBson]:
 	"""
 	Lacks robustness, unflexible, fast.
 	Supports only Bracket notation with number (https://cburgmer.github.io/json-path-comparison/)
@@ -85,7 +85,7 @@ def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimit
 
 
 def set_by_path(
-	d: dict, path: Union[str, Sequence[str]], val: Any,
+	d: dict, path: str | Sequence[str], val: Any,
 	delimiter: str = '.', create: bool = True
 ) -> bool:
 	"""
@@ -108,7 +108,7 @@ def set_by_path(
 	return True
 
 
-def del_by_path(d: dict, path: Union[str, Sequence[str]], delimiter: str = '.') -> bool:
+def del_by_path(d: dict, path: str | Sequence[str], delimiter: str = '.') -> bool:
 	""" :returns: False if the key was successfully deleted, True otherwise """
 
 	if isinstance(path, str):
@@ -302,7 +302,7 @@ def dictify(item):
 	return item
 
 
-def merge_dicts(items: Sequence[Optional[dict[T, Any]]]) -> Optional[dict[T, Any]]:
+def merge_dicts(items: Sequence[None | dict[T, Any]]) -> None | dict[T, Any]:
 	"""
 	Merge a sequence of dicts recursively. Elements that are None are skipped.
 	"""

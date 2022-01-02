@@ -7,7 +7,7 @@
 # Last Modified Date:  13.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Optional, ClassVar
+from typing import Any, ClassVar
 from ampel.types import Traceless, TRACELESS
 from ampel.protocol.LoggerProtocol import LoggerProtocol
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -26,19 +26,19 @@ class LogicalUnit(AmpelBaseModel):
 	logger: Traceless[LoggerProtocol]
 
 	#: Resources requirements as class variable (passed on to and merged with subclasses).
-	require: ClassVar[Optional[tuple[str, ...]]] = None
+	require: ClassVar[None | tuple[str, ...]] = None
 
-	resource: Traceless[Optional[dict[str, Any]]] = None
+	resource: Traceless[None | dict[str, Any]] = None
 
 	#: Private variable potentially set by UnitLoader for provenance purposes. Either:
 	#: * None if provanance flag is False
 	#: * 0 in case model content is not serializable
 	#: * any other signed int value
-	_trace_id: Optional[int] = None
+	_trace_id: None | int = None
 
 	# Some unit contributors might want to restrict units usage
 	# by scoping them to their respective distribution name (str)
-	# private: ClassVar[Optional[str]] = None
+	# private: ClassVar[None | str] = None
 
 
 	@classmethod

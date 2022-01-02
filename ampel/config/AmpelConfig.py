@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import yaml, json
-from typing import Union, Optional, Literal, Any, TypeVar, overload, get_origin
+from typing import Union, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
@@ -72,42 +72,42 @@ class AmpelConfig:
 	# Overloads for method call with 'entry' but without return type
 
 	@overload
-	def get(self, entry: Union[str, list[str]]) -> UJson:
+	def get(self, entry: str | list[str]) -> UJson:
 		""" config.get('logging') """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: None) -> UJson:
+	def get(self, entry: str | list[str], ret_type: None) -> UJson:
 		""" config.get('logging', None) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], *, raise_exc: bool) -> UJson:
+	def get(self, entry: str | list[str], *, raise_exc: bool) -> UJson:
 		""" config.get('logging', raise_exc=False/True) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: None, *, raise_exc: bool) -> UJson:
+	def get(self, entry: str | list[str], ret_type: None, *, raise_exc: bool) -> UJson:
 		""" config.get('logging', None, raise_exc=False/True) """
 
 
 	# Overloads for method call with 'entry' and return type
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: type[JT]) -> Optional[JT]:
+	def get(self, entry: str | list[str], ret_type: type[JT]) -> None | JT:
 		""" config.get('logging', dict) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: type[JT], *, raise_exc: Literal[False]) -> Optional[JT]:
+	def get(self, entry: str | list[str], ret_type: type[JT], *, raise_exc: Literal[False]) -> None | JT:
 		""" config.get('logging', dict, raise_exc=False) """
 
 	@overload
-	def get(self, entry: Union[str, list[str]], ret_type: type[JT], *, raise_exc: Literal[True]) -> JT:
+	def get(self, entry: str | list[str], ret_type: type[JT], *, raise_exc: Literal[True]) -> JT:
 		""" config.get('logging', dict, raise_exc=True) """
 
 
 	def get(self, # type: ignore[misc]
-		entry: Optional[Union[str, list[str]]] = None,
-		ret_type: Optional[type[JT]] = None,
+		entry: None | str | list[str] = None,
+		ret_type: None | type[JT] = None,
 		*, raise_exc: bool = False
-	) -> Union[UJson, Optional[JT]]:
+	) -> UJson | None | JT:
 		"""
 		Optional arguments:
 		
@@ -165,7 +165,7 @@ class AmpelConfig:
 
 
 	def print(self,
-		entry: Optional[str] = None, format: Literal['json', 'yaml'] = 'yaml'
+		entry: None | str = None, format: Literal['json', 'yaml'] = 'yaml'
 	) -> None:
 
 		out = self.get(entry)

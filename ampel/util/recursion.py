@@ -7,13 +7,12 @@
 # Last Modified Date:  16.11.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Optional
 from collections.abc import Callable
 
 
 def walk_and_process_dict(
-	arg: Union[dict, list], callback: Callable,
-	match: Optional[list[str]] = None, path: str = None, **kwargs
+	arg: dict | list, callback: Callable,
+	match: None | list[str] = None, path: str = None, **kwargs
 ) -> bool:
 	"""
 	callback is called with 4 arguments:

@@ -7,7 +7,7 @@
 # Last Modified Date:  28.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Generic
+from typing import Generic
 from collections.abc import Sequence
 from ampel.types import UBson, T
 from ampel.struct.UnitResult import UnitResult
@@ -32,7 +32,7 @@ class AbsTiedStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
 		compound: T1Document,
 		datapoints: Sequence[DataPoint],
 		t2_views: Sequence[T2DocView]
-	) -> Union[UBson, UnitResult]:
+	) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

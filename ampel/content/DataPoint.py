@@ -7,7 +7,7 @@
 # Last Modified Date:  17.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, TypedDict, Union
+from typing import Any, TypedDict
 from collections.abc import Sequence
 from ampel.types import StockId, DataPointId, ChannelId
 from ampel.content.MetaRecord import MetaRecord
@@ -21,9 +21,9 @@ class DataPoint(TypedDict, total=False):
 	"""
 
 	id: DataPointId
-	stock: Union[StockId, Sequence[StockId]]
+	stock: StockId | Sequence[StockId]
 	origin: int
-	tag: Sequence[Union[int, str]]
+	tag: Sequence[int | str]
 	channel: Sequence[ChannelId]
 	meta: Sequence[MetaRecord]
 	excl: Sequence[ChannelId]

@@ -7,7 +7,7 @@
 # Last Modified Date:  15.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Optional
+from typing import Any
 from ampel.types import StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -29,7 +29,7 @@ class AbsT0Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, arg: Any, stock: Optional[StockId] = None) -> list[DataPoint]:
+	def process(self, arg: Any, stock: None | StockId = None) -> list[DataPoint]:
 		"""
 		Convert an external object to Ampel format
 		"""

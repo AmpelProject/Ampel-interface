@@ -24,7 +24,7 @@ class AbsStateT2Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, compound: T1Document, datapoints: Iterable[DataPoint]) -> Union[UBson, UnitResult]:
+	def process(self, compound: T1Document, datapoints: Iterable[DataPoint]) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

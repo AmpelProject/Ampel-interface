@@ -78,7 +78,7 @@ class AmpelBaseModel:
 								joined_defaults[k] = cls._slot_defaults[k]
 							continue
 						joined_defaults[k] = base.__dict__[k]
-					# if Optional[] with no default
+					# if None |  with no default
 					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:

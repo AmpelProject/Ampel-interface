@@ -20,7 +20,7 @@ class AbsT3PlainUnit(AmpelABC, LogicalUnit, abstract=True):
 	""" Generic abstract class for T3 units receiving only a T3Store via the process method """
 
 	@abstractmethod
-	def process(self, t3s: T3Store) -> Union[UBson, UnitResult]:
+	def process(self, t3s: T3Store) -> UBson | UnitResult:
 		"""
 		The content of the t3 store is dependent on:
 		- the configuration of the 'include' option of the underlying t3 process

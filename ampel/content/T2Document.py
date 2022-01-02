@@ -7,7 +7,7 @@
 # Last Modified Date:  23.03.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import TypedDict, Union, Optional
+from typing import TypedDict
 from collections.abc import Sequence
 from ampel.types import UBson, ChannelId, StockId, Tag, UnitId, T2Link
 from ampel.content.MetaRecord import MetaRecord
@@ -22,7 +22,7 @@ class T2Document(TypedDict, total=False):
 	"""
 
 	#: Stock id associated with the data
-	stock: Union[StockId, Sequence[StockId]]
+	stock: StockId | Sequence[StockId]
 
 	#: Optional source origin (avoids potential stock collision between different data sources)
 	origin: int
@@ -32,7 +32,7 @@ class T2Document(TypedDict, total=False):
 
 	#: Configuration hash, if unit defaults were overridden. The underlying values can be resolved with
 	#: :meth:`UnitLoader.get_init_config() <ampel.core.UnitLoader.UnitLoader.get_init_config>`
-	config: Optional[int]
+	config: None | int
 
 	#: References to input data
 	link: T2Link
@@ -51,7 +51,7 @@ class T2Document(TypedDict, total=False):
 	col: str
 
 	#: Ever increasing global and unique run identifier
-	run: Union[int, Sequence[int]]
+	run: int | Sequence[int]
 
 	#: DocumentCode.NEW for new T2 document, DocumentCode.OK if computation was successful
 	code: int

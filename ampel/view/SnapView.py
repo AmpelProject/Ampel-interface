@@ -8,10 +8,10 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from datetime import datetime
-from typing import Optional, Union, Any, Literal, overload
+from typing import Any, Literal, overload
 from collections.abc import Container, Callable, Iterator, Sequence
 
-from ampel.types import StockId, T2Link, UBson, T
+from ampel.types import OneOrMany, StockId, T2Link, UBson, T
 from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.DataPoint import DataPoint
@@ -41,17 +41,17 @@ class SnapView:
 	__slots__ = 'id', 'stock', 'origin', 't0', 't1', 't2', 'logs', 'extra'
 
 	id: StockId
-	stock: Optional[StockDocument]
-	origin: Optional[Union[int, Sequence[int]]]
-	t0: Optional[Sequence[DataPoint]]
-	t1: Optional[Sequence[T1Document]]
-	t2: Optional[Sequence[T2DocView]]
-	logs: Optional[Sequence[LogDocument]]
-	extra: Optional[dict[str, Any]]
+	stock: None | StockDocument
+	origin: None | OneOrMany[int]
+	t0: None | Sequence[DataPoint]
+	t1: None | Sequence[T1Document]
+	t2: None | Sequence[T2DocView]
+	logs: None | Sequence[LogDocument]
+	extra: None | dict[str, Any]
 
 
 	@classmethod
-	def of(cls, ab: AmpelBuffer, conf: Optional[AmpelConfig] = None, freeze: bool = True) -> 'SnapView':
+	def of(cls, ab: AmpelBuffer, conf: None | AmpelConfig = None, freeze: bool = True) -> 'SnapView':
 
 		if freeze:
 			return cls(
@@ -79,13 +79,13 @@ class SnapView:
 
 	def __init__(self,
 		id: StockId,
-		stock: Optional[StockDocument] = None,
-		origin: Optional[Union[int, Sequence[int]]] = None,
-		t0: Optional[Sequence[DataPoint]] = None,
-		t1: Optional[Sequence[T1Document]] = None,
-		t2: Optional[Sequence[T2DocView]] = None,
-		logs: Optional[Sequence[LogDocument]] = None, # Logs, if added by T3 complement stage
-		extra: Optional[dict[str, Any]] = None # Free-form information addable via instances of AbsBufferComplement
+		stock: None | StockDocument = None,
+		origin: None | OneOrMany[int] = None,
+		t0: None | Sequence[DataPoint] = None,
+		t1: None | Sequence[T1Document] = None,
+		t2: None | Sequence[T2DocView] = None,
+		logs: None | Sequence[LogDocument] = None, # Logs, if added by T3 complement stage
+		extra: None | dict[str, Any] = None # Free-form information addable via instances of AbsBufferComplement
 	):
 		sa = object.__setattr__
 		sa(self, 'id', id)
@@ -122,9 +122,9 @@ class SnapView:
 
 	# TODO: add config filter
 	def get_t2_views(self,
-		unit: Union[None, str, list[str], tuple[str, ...]] = None,
-		link: Optional[T2Link] = None,
-		code: Optional[Union[int]] = None,
+		unit: None | str | list[str] | tuple[str, ...] = None,
+		link: None | T2Link = None,
+		code: None | int = None,
 	) -> Iterator[T2DocView]:
 		"""
 		Get a subset of T2 documents.
@@ -137,7 +137,7 @@ class SnapView:
 		if not self.t2:
 			return None
 
-		units: Optional[Container[str]] = [unit] if isinstance(unit, str) else unit
+		units: None | Container[str] = [unit] if isinstance(unit, str) else unit
 
 		for t2v in self.t2:
 			if link and t2v.link != link:
@@ -150,10 +150,10 @@ class SnapView:
 
 
 	def get_raw_t2_body(self,
-		unit: Union[str, list[str], tuple[str, ...]],
-		link: Optional[T2Link] = None,
-		code: Optional[Union[int]] = None,
-	) -> Optional[Sequence[UBson]]:
+		unit: str | list[str] | tuple[str, ...],
+		link: None | T2Link = None,
+		code: None | int = None,
+	) -> None | Sequence[UBson]:
 		"""
 		:param link: restrict to a specific link
 		:param code: restrict to a specific code
@@ -167,9 +167,9 @@ class SnapView:
 
 
 	def get_latest_t2_body(self,
-		unit: Union[str, list[str], tuple[str, ...]],
-		link: Optional[T2Link] = None,
-		code: Optional[Union[int]] = None,
+		unit: str | list[str] | tuple[str, ...],
+		link: None | T2Link = None,
+		code: None | int = None,
 	) -> UBson:
 		"""
 		Get latest t2 body element from a given unit.
@@ -188,23 +188,23 @@ class SnapView:
 
 
 	@overload
-	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]]) -> Optional[dict[str, Any]]:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...]) -> None | dict[str, Any]:
 		...
 	@overload
-	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]], ret_type: type[T]) -> Optional[T]:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[T]) -> None | T:
 		...
 	@overload
-	def get_t2_body(self, unit: Union[str, list[str], tuple[str, ...]], *, raise_exc: Literal[True]) -> T:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], *, raise_exc: Literal[True]) -> T:
 		...
 	def get_t2_body(self,
-		unit: Union[str, list[str], tuple[str, ...]],
+		unit: str | list[str] | tuple[str, ...],
 		ret_type: type[T] = dict, # type: ignore[assignment]
 		*,
 		data_slice: int = -1, # latest
-		link: Optional[T2Link] = None,
-		code: Optional[Union[int]] = None,
+		link: None | T2Link = None,
+		code: None | int = None,
 		raise_exc: bool = False
-	) -> Optional[T]:
+	) -> None | T:
 		"""
 		Get latest t2 body element from a given unit.
 		:param ret_type: expected body element type. If isinstance check is not fullfied
@@ -221,11 +221,11 @@ class SnapView:
 
 
 	def get_t2_value(self,
-		unit: Union[str, tuple[str, ...]],
+		unit: str | tuple[str, ...],
 		key: str,
 		rtype: type[T], *,
-		code: Optional[int] = None
-	) -> Optional[T]:
+		code: None | int = None
+	) -> None | T:
 		"""
 		Examples:
 		get_t2_value(("T2NedSNCosmo", "T2SNCosmo"), "fit_result", dict)
@@ -240,26 +240,26 @@ class SnapView:
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: type[T], *,
-		no_none: Literal[False], require_all_keys: bool = ..., code: Optional[int] = ...
-	) -> Optional[tuple[Optional[T], ...]]:
+		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[T], *,
+		no_none: Literal[False], require_all_keys: bool = ..., code: None | int = ...
+	) -> None | tuple[None | T, ...]:
 		...
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: Union[str, tuple[str, ...]], key: tuple[str, ...], rtype: type[T], *,
-		no_none: Literal[True], require_all_keys: bool = ..., code: Optional[int] = ...
-	) -> Optional[tuple[T, ...]]:
+		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[T], *,
+		no_none: Literal[True], require_all_keys: bool = ..., code: None | int = ...
+	) -> None | tuple[T, ...]:
 		...
 
 	def get_t2_ntuple(self,
-		unit: Union[str, tuple[str, ...]],
+		unit: str | tuple[str, ...],
 		key: tuple[str, ...],
 		rtype: type[T], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
-		code: Optional[int] = None
-	) -> Union[None, tuple[T, ...], tuple[Optional[T], ...]]:
+		code: None | int = None
+	) -> None | tuple[T, ...] | tuple[None | T, ...]:
 		"""
 		Examples:
 		get_t2_ntuple("T2NedTap", ("ra", "dec", "z", "zunc"), float)
@@ -277,9 +277,9 @@ class SnapView:
 
 
 	def get_journal_entries(self,
-		tier: Optional[Literal[0, 1, 2, 3]] = None,
-		process_name: Optional[str] = None,
-		filter_func: Optional[Callable[[JournalRecord], bool]] = None,
+		tier: None | Literal[0, 1, 2, 3] = None,
+		process_name: None | str = None,
+		filter_func: None | Callable[[JournalRecord], bool] = None,
 	) -> Iterator[JournalRecord]:
 		"""
 		Get a subset of journal entries.
@@ -313,7 +313,7 @@ class SnapView:
 
 	def get_time_created(self,
 		output: Literal['raw', 'datetime', 'str'] = 'raw'
-	) -> Optional[Union[float, datetime, str]]:
+	) -> None | float | datetime | str:
 
 		if not self.stock:
 			return None
@@ -323,7 +323,7 @@ class SnapView:
 
 	def get_time_updated(self,
 		output: Literal['raw', 'datetime', 'str'] = 'raw'
-	) -> Optional[Union[float, datetime, str]]:
+	) -> None | float | datetime | str:
 
 		if not self.stock:
 			return None
@@ -334,8 +334,8 @@ class SnapView:
 	@classmethod
 	def _get_time(cls,
 		entry: JournalRecord,
-		output: Optional[Union[bool, str]] = None
-	) -> Union[float, str, datetime]:
+		output: None | bool | str = None
+	) -> float | str | datetime:
 
 		if output == 'raw':
 			return entry['ts']

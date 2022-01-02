@@ -7,7 +7,7 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Any, Union, Generic
+from typing import Any, Generic
 from ampel.types import T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
@@ -25,12 +25,12 @@ class UnitModel(Generic[T], AmpelBaseModel):
 	#: - dict: config 'as is'
 	#: - str: a corresponding alias key in the AmpelConfig must match the provided string
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
-	config: Union[None, int, str, dict[str, Any]] = None
+	config: None | int | str | dict[str, Any] = None
 
-	secrets: Optional[dict[str, Any]] = None
+	secrets: None | dict[str, Any] = None
 
 	#: Values to override in the config
-	override: Optional[dict[str, Any]] = None
+	override: None | dict[str, Any] = None
 
 
 	def dict(self, **kwargs) -> dict[str, Any]:

@@ -7,7 +7,7 @@
 # Last Modified Date:  28.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Generic
+from typing import Generic
 from ampel.types import T
 from ampel.model.UnitModel import UnitModel
 from ampel.model.DPSelection import DPSelection
@@ -30,4 +30,4 @@ class StateT2Dependency(Generic[T], UnitModel[T]):
 
 	#: - None: the state associated with the root tied state T2 will be used (value of 'link' in t2 doc)
 	#: - DPSelection: allows tied state T2 units to be bound with point t2 units.
-	link_override: Optional[DPSelection]
+	link_override: None | DPSelection

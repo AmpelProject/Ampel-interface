@@ -7,7 +7,6 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional
 from ampel.secret.Secret import Secret, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
@@ -20,7 +19,7 @@ class NamedSecret(Secret[T], AmpelBaseModel):
 	"""
 
 	label: str
-	value: Optional[T] = None
+	value: None | T = None
 
 	def __repr__(self):
 		return '<NamedSecret>'

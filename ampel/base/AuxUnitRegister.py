@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from importlib import import_module
-from typing import Any, Union, Optional, ClassVar, overload # type: ignore[attr-defined]
+from typing import Any, ClassVar, overload # type: ignore[attr-defined]
 from ampel.types import T, check_class
 from ampel.model.UnitModel import UnitModel
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -41,9 +41,9 @@ class AuxUnitRegister:
 
 	@classmethod
 	def new_unit(cls,
-		model: UnitModel, *, sub_type: Optional[type[T]] = None, **kwargs
-	) -> Union[T, AmpelBaseModel]:
-		"""	:raises: ValueError is model.config is not of type Optional[dict] """
+		model: UnitModel, *, sub_type: None | type[T] = None, **kwargs
+	) -> T | AmpelBaseModel:
+		"""	:raises: ValueError is model.config is not of type None | dict """
 
 		if model.unit in cls._dyn:
 			Klass = cls._dyn[model.unit]
@@ -73,7 +73,7 @@ class AuxUnitRegister:
 		...
 
 	@classmethod
-	def get_aux_class(cls, klass: str, *, sub_type: Optional[type[T]] = None) -> Union[type[T], type[AmpelBaseModel]]:
+	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T] | type[AmpelBaseModel]:
 		""" :raises: ValueError if unit is unknown """
 
 		if klass not in cls._defs:

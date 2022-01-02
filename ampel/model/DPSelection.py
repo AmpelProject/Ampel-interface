@@ -7,7 +7,7 @@
 # Last Modified Date:  28.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Optional, Literal
+from typing import Literal
 from collections.abc import Callable
 from ampel.model.UnitModel import UnitModel
 from ampel.base.AuxUnitRegister import AuxUnitRegister
@@ -19,21 +19,16 @@ class DPSelection(AmpelBaseModel):
 
 	#: Aux unit name used to filter datapoints.
 	# (Unit must define method apply(self, arg: Any) -> Any)
-	filter: Optional[Union[UnitModel, str]] = None
+	filter: None | UnitModel | str = None
 
 	#: Dict key used for sorting
 	#: Use 'id' to sort dps based on key 'id' at root level,
 	#: anything else will target a field (by name) in 'body'
-	sort: Optional[str] = None
+	sort: None | str = None
 
 	#: How to slice the datapoint array.
 	#: If a list is provided, it must have a length of 3
-	select: Union[
-		None,
-		Literal['first'],
-		Literal['last'],
-		tuple[Optional[int], Optional[int], Optional[int]]
-	] = None
+	select: None | Literal['first', 'last'] | tuple[None | int, None | int, None | int] = None
 
 
 	def __init__(self, **kwargs):
@@ -47,7 +42,7 @@ class DPSelection(AmpelBaseModel):
 			raise ValueError("Options 'sort' requires option 'select'")
 
 
-	def tools(self) -> tuple[Optional[AbsApplicable], Optional[Callable[[list], list]], slice]:
+	def tools(self) -> tuple[None | AbsApplicable, None | Callable[[list], list], slice]:
 
 		so = None
 		sl = None

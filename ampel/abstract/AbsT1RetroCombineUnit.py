@@ -22,9 +22,9 @@ class AbsT1RetroCombineUnit(AmpelABC, LogicalUnit, abstract=True):
 
 	debug: bool = False
 	channel: ChannelId
-	access: list[Union[int, str]]
-	policy: list[Union[int, str]]
+	access: list[int | str]
+	policy: list[int | str]
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> Union[list[list[DataPointId]], list[T1CombineResult]]:
+	def combine(self, datapoints: Iterable[DataPoint]) -> list[list[DataPointId]] | list[T1CombineResult]:
 		...

@@ -7,7 +7,7 @@
 # Last Modified Date:  22.06.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Optional, overload
+from typing import Any, overload
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
 from ampel.secret.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
@@ -27,11 +27,11 @@ class AmpelVault:
 		return False
 
 	@overload
-	def get_named_secret(self, label: str) -> Optional[NamedSecret[Any]]:
+	def get_named_secret(self, label: str) -> None | NamedSecret[Any]:
 		...
 	
 	@overload
-	def get_named_secret(self, label: str, ValueType: type[T]) -> Optional[NamedSecret[T]]:
+	def get_named_secret(self, label: str, ValueType: type[T]) -> None | NamedSecret[T]:
 		...
 	
 	def get_named_secret(self, label, ValueType=object):
