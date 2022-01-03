@@ -105,7 +105,10 @@ class AmpelBaseModel:
 			if k in value:
 				if cls._has_nested_model(v):
 					v = cls._modelify(k, value[k], v)[1]
-				check_type(k, value[k], v)
+				if isinstance(v, type) and issubclass(v, Klass):
+					v.validate(value[k], _omit_traceless=_omit_traceless)
+				else:
+					check_type(k, value[k], v)
 				#raise ValueError(f"Wrong type for parameter '{k}'. Expected: {v}, Provided: {type(value[k])}")
 			elif k in defs:
 				continue
