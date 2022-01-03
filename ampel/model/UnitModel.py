@@ -19,7 +19,7 @@ class UnitModel(Generic[T], AmpelBaseModel):
 	"""
 
 	#: Name of ampel unit class
-	unit: T
+	unit: str | T
 
 	#: - None: no config (use class defaults)
 	#: - dict: config 'as is'
@@ -33,12 +33,11 @@ class UnitModel(Generic[T], AmpelBaseModel):
 	override: None | dict[str, Any] = None
 
 
-	def dict(
-		self,
-		include: None | set[str]=None,
-		exclude: None | set[str]={"secrets"},
-		exclude_defaults: bool=False,
-		exclude_unset: bool=False,
+	def dict(self,
+		include: None | set[str] = None,
+		exclude: None | set[str] = {"secrets"},
+		exclude_defaults: bool = False,
+		exclude_unset: bool = False,
 	) -> dict[str, Any]:
 		return super().dict(
 			include=include,
