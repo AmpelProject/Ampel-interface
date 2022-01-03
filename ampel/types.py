@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 	from ampel.struct.JournalAttributes import JournalAttributes
 	from ampel.struct.StockAttributes import StockAttributes
 
+do_type_check = True
+
 TRACELESS = -1
 T = TypeVar('T')
 Traceless = Annotated[T, TRACELESS]
