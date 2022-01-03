@@ -14,7 +14,7 @@ from typeguard import check_type
 from types import MemberDescriptorType, GenericAlias, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from typing import Any, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
+from typing import Any, Type, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
 
 do_type_check = True
 ttf = type(Traceless)
@@ -312,18 +312,28 @@ class AmpelBaseModel:
 			print(f"End of {self.__class__.__name__}.__init__(...)")
 
 
-	def dict(self, **kwargs) -> dict[str, Any]:
+	def dict(
+		self,
+		include: None | set[str]=None,
+		exclude: None | set[str]=None,
+		exclude_defaults: bool=False,
+		exclude_unset: bool=False,
+	) -> dict[str, Any]:
 
 		d = self.__dict__
+		incl = self._aks if include is None else include
 		excl = {
 			k for k, v in self._annots.items()
 			if type(v) is ttf and v.__metadata__[0] == TRACELESS
 		}
 
-		if kwargs.get('exclude_unset'):
+		if exclude is not None:
+			excl.update(exclude)
+
+		if exclude_unset:
 			excl.update(self._exclude_unset)
 
-		if kwargs.get('exclude_defaults'):
+		if exclude_defaults:
 			for k in self._defaults:
 				if k in self.__dict__:
 					if self.__dict__[k] == self._defaults[k]:
@@ -334,20 +344,20 @@ class AmpelBaseModel:
 		return {
 			k: self._dictify(v)
 			for k, v in d.items()
-			if k in self._annots and not (k in excl or isinstance(d[k], Secret))
+			if k in incl and not (k in excl or isinstance(d[k], Secret))
 		}
 
 
-	def _dictify(self, arg: Any) -> Any:
+	def _dictify(self, arg: Any, dict_kwargs={}) -> Any:
 		if isinstance(arg, (list, tuple, set)):
-			return [self._dictify(el) for el in arg]
+			return [self._dictify(el, dict_kwargs) for el in arg]
 		elif isinstance(arg, dict):
 			return {
-				k: self._dictify(v)
+				k: self._dictify(v, dict_kwargs)
 				for k, v in arg.items()
 			}
 		elif isinstance(arg, Klass):
-			return arg.dict()
+			return arg.dict(**dict_kwargs)
 		return arg
 
 

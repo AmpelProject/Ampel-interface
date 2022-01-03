@@ -33,8 +33,16 @@ class UnitModel(Generic[T], AmpelBaseModel):
 	override: None | dict[str, Any] = None
 
 
-	def dict(self, **kwargs) -> dict[str, Any]:
-		ret = super().dict(**kwargs)
-		if 'secrets' in ret:
-			del ret['secrets']
-		return ret
+	def dict(
+		self,
+		include: None | set[str]=None,
+		exclude: None | set[str]={"secrets"},
+		exclude_defaults: bool=False,
+		exclude_unset: bool=False,
+	) -> dict[str, Any]:
+		return super().dict(
+			include=include,
+			exclude=exclude,
+			exclude_defaults=exclude_defaults,
+			exclude_unset=exclude_unset
+		)
