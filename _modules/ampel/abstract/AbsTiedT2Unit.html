@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.view.ReadOnlyDict &#8212; ampel-interface 0.8.3-alpha.2 documentation</title>
+    <title>ampel.abstract.AbsTiedT2Unit &#8212; ampel-interface 0.8.3-alpha.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -23,7 +23,7 @@
              accesskey="I">index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.view.ReadOnlyDict</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsTiedT2Unit</a></li> 
       </ul>
     </div>  
 
@@ -32,36 +32,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for ampel.view.ReadOnlyDict</h1><div class="highlight"><pre>
+  <h1>Source code for ampel.abstract.AbsTiedT2Unit</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># File:                Ampel-interface/ampel/view/ReadOnlyDict.py</span>
+<span class="c1"># File:                Ampel-interface/ampel/abstract/AbsTiedT2Unit.py</span>
 <span class="c1"># License:             BSD-3-Clause</span>
 <span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
-<span class="c1"># Date:                Unspecified</span>
-<span class="c1"># Last Modified Date:  16.04.2020</span>
+<span class="c1"># Date:                06.02.2021</span>
+<span class="c1"># Last Modified Date:  31.05.2021</span>
 <span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">ampel.model.UnitModel</span> <span class="kn">import</span> <span class="n">UnitModel</span>
+<span class="kn">from</span> <span class="nn">ampel.base.AmpelABC</span> <span class="kn">import</span> <span class="n">AmpelABC</span>
+<span class="kn">from</span> <span class="nn">ampel.base.LogicalUnit</span> <span class="kn">import</span> <span class="n">LogicalUnit</span>
 
-<div class="viewcode-block" id="ReadOnlyDict"><a class="viewcode-back" href="../../../api.html#ampel.view.ReadOnlyDict.ReadOnlyDict">[docs]</a><span class="k">class</span> <span class="nc">ReadOnlyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;A dict whose items can&#39;t be changed.&quot;&quot;&quot;</span>
 
-	<span class="k">def</span> <span class="nf">__readonly__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;:raises RuntimeError: whenever called&quot;&quot;&quot;</span>
-		<span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot modify ReadOnlyDict&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="AbsTiedT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedT2Unit.AbsTiedT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedT2Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">LogicalUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	A T2 unit that depends on the results of other T2 units.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
 
-	<span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="fm">__delitem__</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">pop</span> <span class="o">=</span> <span class="n">__readonly__</span> <span class="c1"># type: ignore</span>
-	<span class="n">popitem</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">clear</span> <span class="o">=</span> <span class="n">__readonly__</span>
-	<span class="n">update</span> <span class="o">=</span> <span class="n">__readonly__</span> <span class="c1"># type: ignore</span>
-	<span class="n">setdefault</span> <span class="o">=</span> <span class="n">__readonly__</span>
+	<span class="c1">#: Dependencies configuration for the underlying tied t2 unit</span>
+	<span class="c1">#: Sub-class can add unit id constraints by parametrizing UnitModel</span>
+	<span class="n">t2_dependency</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">UnitModel</span><span class="p">]</span>
 
-	<span class="k">del</span> <span class="n">__readonly__</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Dependency errors should not happen with config built by ampel (ConfigBuilder)</span>
+<span class="sd">		but might happen in developers notebook</span>
+<span class="sd">		&quot;&quot;&quot;</span>
 
-	<span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">),)</span></div>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;t2_dependency&quot;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t2_dependency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t2_dependency&quot;</span><span class="p">]]</span>
+
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -95,7 +100,7 @@
              >index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.view.ReadOnlyDict</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsTiedT2Unit</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

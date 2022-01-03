@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.abstract.AbsSecretProvider &#8212; ampel-interface 0.8.3-alpha.2 documentation</title>
+    <title>ampel.abstract.AbsT0Unit &#8212; ampel-interface 0.8.3-alpha.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -23,7 +23,7 @@
              accesskey="I">index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsSecretProvider</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsT0Unit</a></li> 
       </ul>
     </div>  
 
@@ -32,37 +32,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for ampel.abstract.AbsSecretProvider</h1><div class="highlight"><pre>
+  <h1>Source code for ampel.abstract.AbsT0Unit</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># File:                Ampel-interface/ampel/abstract/AbsSecretProvider.py</span>
+<span class="c1"># File:                Ampel-interface/ampel/abstract/AbsT0Unit.py</span>
 <span class="c1"># License:             BSD-3-Clause</span>
-<span class="c1"># Author:              Jakob van Santen &lt;jakob.van.santen@desy.de&gt;</span>
-<span class="c1"># Date:                14.08.2020</span>
-<span class="c1"># Last Modified Date:  21.06.2021</span>
+<span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
+<span class="c1"># Date:                07.10.2019</span>
+<span class="c1"># Last Modified Date:  15.05.2021</span>
 <span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
-<span class="kn">from</span> <span class="nn">ampel.secret.Secret</span> <span class="kn">import</span> <span class="n">Secret</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">StockId</span>
 <span class="kn">from</span> <span class="nn">ampel.base.AmpelABC</span> <span class="kn">import</span> <span class="n">AmpelABC</span>
 <span class="kn">from</span> <span class="nn">ampel.base.decorator</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">ampel.base.LogicalUnit</span> <span class="kn">import</span> <span class="n">LogicalUnit</span>
+<span class="kn">from</span> <span class="nn">ampel.content.DataPoint</span> <span class="kn">import</span> <span class="n">DataPoint</span>
 
 
-<div class="viewcode-block" id="AbsSecretProvider"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsSecretProvider.AbsSecretProvider">[docs]</a><span class="k">class</span> <span class="nc">AbsSecretProvider</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="AbsT0Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsT0Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">LogicalUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Interface to a secret store used to resolve secrets.</span>
-<span class="sd">	The underlying store may be as simple as a dict loaded from a JSON file</span>
-<span class="sd">	or a complete key manager like Vault.</span>
+<span class="sd">	A unit that creates :class:`datapoints &lt;ampel.content.DataPoint.DataPoint&gt;` for Ampel</span>
+
+<span class="sd">	Before new datapoint are inserted into the database, they are customized (or &#39;ampelized&#39; if you will),</span>
+<span class="sd">	in order to later enable the use of short and flexible queries.</span>
+<span class="sd">	The cutomizations are light, most of the original information is kept.</span>
+<span class="sd">	For example, in the case of ZiDataPointShaper:</span>
+<span class="sd">		* The field candid is renamed in id</span>
+<span class="sd">		* A new field &#39;tag&#39; is created</span>
+<span class="sd">		...</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="AbsSecretProvider.tell"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsSecretProvider.AbsSecretProvider.tell">[docs]</a>	<span class="nd">@abstractmethod</span>
-	<span class="k">def</span> <span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Secret</span><span class="p">,</span> <span class="n">ValueType</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="AbsT0Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT0Unit.AbsT0Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
+	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">stock</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">StockId</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">]:</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Potentially update an initialized Secret instance with</span>
-<span class="sd">		the actual sensitive information associable with it.</span>
-<span class="sd">		:returns: True if the Secret was told/resolved or False</span>
-<span class="sd">		if the provided Secret is either unknown to this secret</span>
-<span class="sd">		provider, or resolves to a value of the wrong type.</span>
+<span class="sd">		Convert an external object to Ampel format</span>
 <span class="sd">		&quot;&quot;&quot;</span></div></div>
 </pre></div>
 
@@ -97,7 +101,7 @@
              >index</a></li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsSecretProvider</a></li> 
+        <li class="nav-item nav-item-this"><a href="">ampel.abstract.AbsT0Unit</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

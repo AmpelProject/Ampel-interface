@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ampel.base.AmpelBaseModel &#8212; ampel-interface 0.8.3-alpha.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.base.AmpelBaseModel</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ampel.base.AmpelBaseModel</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># File:                Ampel-interface/ampel/base/AmpelBaseModel.py</span>
+<span class="c1"># License:             BSD-3-Clause</span>
+<span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
+<span class="c1"># Date:                07.10.2019</span>
+<span class="c1"># Last Modified Date:  30.12.2021</span>
+<span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">ujson</span> <span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">dumps</span> <span class="c1"># type: ignore[import]</span>
+<span class="kn">import</span> <span class="nn">collections.abc</span> <span class="k">as</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">typeguard</span> <span class="kn">import</span> <span class="n">check_type</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MemberDescriptorType</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">,</span> <span class="n">UnionType</span>
+<span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">Traceless</span><span class="p">,</span> <span class="n">TRACELESS</span>
+<span class="kn">from</span> <span class="nn">ampel.secret.Secret</span> <span class="kn">import</span> <span class="n">Secret</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">,</span> <span class="n">_UnionGenericAlias</span> <span class="c1"># type: ignore[attr-defined]</span>
+
+<span class="n">do_type_check</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">ttf</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">Traceless</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AmpelBaseModel"><a class="viewcode-back" href="../../../api.html#ampel.base.AmpelBaseModel.AmpelBaseModel">[docs]</a><span class="k">class</span> <span class="nc">AmpelBaseModel</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	This class supports setting slots values through constructor parameters (they will be type checked as well).</span>
+
+<span class="sd">	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::</span>
+<span class="sd">	</span>
+<span class="sd">	  In []: class B(AmpelBaseModel):</span>
+<span class="sd">	    ...:     a: list[int] = []</span>
+
+<span class="sd">	  In []: %timeit B(a=[11])</span>
+<span class="sd">	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+
+<span class="sd">	  In []: ampel.base.AmpelBaseModel._check_types=False</span>
+
+<span class="sd">	  In []: %timeit B(a=[11])</span>
+<span class="sd">	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">_annots</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_slot_defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">_aks</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># annotation keys</span>
+	<span class="n">_sks</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># slots keys</span>
+	<span class="n">_debug</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Combines annotations &amp; default values of this class with the one defined in sub-classes.</span>
+<span class="sd">		Has similarities with the newly introduced typing.get_type_hints() function.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+
+		<span class="n">joined_ann</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;_&#39;</span> <span class="ow">or</span> <span class="s1">&#39;ClassVar&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+		<span class="p">}</span>
+		<span class="n">joined_defaults</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">joined_sks</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_sks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">joined_aks</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_aks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+		<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">mro</span><span class="p">()):</span>
+			<span class="k">if</span> <span class="n">ann</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+				<span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+				<span class="n">defs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="p">{})</span>
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ann</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+					<span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;__slots__&#39;</span> <span class="ow">or</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;_&#39;</span> <span class="ow">or</span> <span class="s1">&#39;ClassVar&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+						<span class="k">continue</span>
+					<span class="n">joined_ann</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="c1"># update merged annotations</span>
+					<span class="n">joined_aks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="c1"># update set of known attribute names</span>
+					<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defs</span><span class="p">:</span>
+						<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="ow">is</span> <span class="n">MemberDescriptorType</span><span class="p">:</span> <span class="c1"># is a slot</span>
+							<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">:</span>
+								<span class="n">joined_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+							<span class="k">continue</span>
+						<span class="n">joined_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+					<span class="c1"># if None |  with no default</span>
+					<span class="k">elif</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Union</span><span class="p">,</span> <span class="n">UnionType</span><span class="p">)</span> <span class="ow">and</span> <span class="n">NoneType</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">joined_defaults</span><span class="p">:</span> <span class="c1"># type: ignore[misc]</span>
+						<span class="n">joined_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+					<span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">:</span>
+						<span class="n">joined_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">slots</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__slots__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+			<span class="n">joined_sks</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">slots</span><span class="p">)</span>
+
+		<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="p">(</span>
+			<span class="p">(</span><span class="s1">&#39;_annots&#39;</span><span class="p">,</span> <span class="n">joined_ann</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_defaults&#39;</span><span class="p">,</span> <span class="n">joined_defaults</span><span class="p">),</span>
+			<span class="p">(</span><span class="s1">&#39;_aks&#39;</span><span class="p">,</span> <span class="n">joined_aks</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_sks&#39;</span><span class="p">,</span> <span class="n">joined_sks</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_model&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="p">):</span>
+			<span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">el</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">el</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">_omit_traceless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+		<span class="sd">&quot;&quot;&quot; Validate kwargs values against the fields of cls &quot;&quot;&quot;</span>
+
+		<span class="n">defs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span>
+		<span class="n">ttf</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">Traceless</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ttf</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">__metadata__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">TRACELESS</span><span class="p">:</span>
+				<span class="k">continue</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_nested_model</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+					<span class="n">v</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">v</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Klass</span><span class="p">):</span>
+					<span class="n">v</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">_omit_traceless</span><span class="o">=</span><span class="n">_omit_traceless</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">check_type</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+				<span class="c1">#raise ValueError(f&quot;Wrong type for parameter &#39;{k}&#39;. Expected: {v}, Provided: {type(value[k])}&quot;)</span>
+			<span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defs</span><span class="p">:</span>
+				<span class="k">continue</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter required: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown parameter </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">_spawn_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;type[AmpelBaseModel]&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AmpelBaseModel&quot;</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">model</span><span class="p">(</span>
+			<span class="o">**</span><span class="p">{</span>
+				<span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">_spawn_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">cls</span><span class="p">))</span> <span class="k">else</span> <span class="n">v</span>
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="p">}</span>
+		<span class="p">)</span>
+
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">_has_nested_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">annot</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annot</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">annot</span><span class="p">,</span> <span class="s1">&#39;mro&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">get_origin</span><span class="p">(</span><span class="n">annot</span><span class="p">),</span> <span class="n">Secret</span><span class="p">):</span> <span class="c1"># type: ignore</span>
+			<span class="k">return</span> <span class="kc">True</span>
+
+		<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annot</span><span class="p">):</span>
+
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;el&quot;</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">el</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="p">(</span><span class="n">GenericAlias</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">,</span> <span class="n">_UnionGenericAlias</span><span class="p">,</span> <span class="n">UnionType</span><span class="p">)):</span>
+				<span class="n">o</span> <span class="o">=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">Klass</span><span class="p">))</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_nested_model</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+					<span class="k">return</span> <span class="kc">True</span>
+
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">Klass</span><span class="p">):</span>
+				<span class="k">return</span> <span class="kc">True</span>
+
+		<span class="k">return</span> <span class="kc">False</span>
+
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">_modelify</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">annot</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="ne">Exception</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+
+		<span class="n">oa</span> <span class="o">=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⬤  Modelify </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Annot: &quot;</span><span class="p">,</span> <span class="n">annot</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Arg:&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Origin&quot;</span><span class="p">,</span> <span class="n">oa</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">oa</span> <span class="ow">is</span> <span class="n">Union</span> <span class="ow">or</span> <span class="n">oa</span> <span class="ow">is</span> <span class="n">UnionType</span><span class="p">:</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Origin is Union&quot;</span><span class="p">)</span>
+			<span class="n">es</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annot</span><span class="p">):</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Considering union member: &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+					<span class="n">modified</span><span class="p">,</span> <span class="n">ret</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+					<span class="k">if</span> <span class="n">modified</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+						<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+							<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model spawned by union member: &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+						<span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span>
+					<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">modified</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+						<span class="n">es</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified</span><span class="p">)</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+					<span class="n">es</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">es</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_nested_model</span><span class="p">(</span><span class="n">annot</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+					<span class="sa">f</span><span class="s2">&quot;Type of </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> must be one of </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;typing.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+					<span class="sa">f</span><span class="s2">&quot;Value: </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="se">\n</span><span class="s2">Associated errors:</span><span class="se">\n</span><span class="s2">• &quot;</span> <span class="o">+</span>
+					<span class="s2">&quot;</span><span class="se">\n</span><span class="s2">• &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">es</span><span class="p">])</span>
+				<span class="p">)</span>
+			<span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">arg</span>
+
+		<span class="k">elif</span> <span class="n">oa</span> <span class="ow">is</span> <span class="n">Annotated</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annot</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+				
+		<span class="k">elif</span> <span class="n">oa</span> <span class="ow">is</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Origin is dict&quot;</span><span class="p">)</span>
+			<span class="n">modified</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="n">vtype</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annot</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+			<span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+			<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+				<span class="n">x</span><span class="p">,</span> <span class="n">ret</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">vtype</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+					<span class="n">modified</span> <span class="o">=</span> <span class="kc">True</span>
+			<span class="k">return</span> <span class="n">modified</span><span class="p">,</span> <span class="n">ret</span>
+
+		<span class="k">elif</span> <span class="n">oa</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Origin is sequence&quot;</span><span class="p">)</span>
+			<span class="n">vtype</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annot</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">modified</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">el</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+				<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">vtype</span><span class="p">)</span>
+				<span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">x</span><span class="p">:</span>
+					<span class="n">modified</span> <span class="o">=</span> <span class="kc">True</span>
+			<span class="k">return</span> <span class="n">modified</span><span class="p">,</span> <span class="n">ret</span>
+
+		<span class="k">elif</span> <span class="n">oa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annot</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">annot</span><span class="p">,</span> <span class="n">AmpelBaseModel</span><span class="p">):</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spawning &quot;</span><span class="p">,</span> <span class="n">annot</span><span class="p">)</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">ret</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_spawn_model</span><span class="p">(</span><span class="n">annot</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">annot</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> spawned&quot;</span><span class="p">)</span>
+				<span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">annot</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> instantiation failed&quot;</span><span class="p">)</span>
+					<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="n">arg</span>
+
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">oa</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">oa</span><span class="p">,</span> <span class="n">Klass</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spawning &quot;</span><span class="p">,</span> <span class="n">oa</span><span class="p">)</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">ret</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_spawn_model</span><span class="p">(</span><span class="n">oa</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">oa</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> spawned&quot;</span><span class="p">)</span>
+				<span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">oa</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> instantiation failed&quot;</span><span class="p">)</span>
+					<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="n">arg</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No action performed&quot;</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">arg</span>
+
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.__init__(...)&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_exclude_unset</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+		<span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+		<span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span>
+		<span class="n">defs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span>
+
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+				<span class="n">v</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+				<span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_nested_model</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> has nested model&quot;</span><span class="p">)</span>
+					<span class="n">es</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modelify</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Klass</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+					<span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spawn_model</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Secret</span><span class="p">):</span>
+					<span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> has no nested model&quot;</span><span class="p">)</span>
+
+				<span class="k">if</span> <span class="n">do_type_check</span><span class="p">:</span>
+					<span class="k">try</span><span class="p">:</span>
+						<span class="n">check_type</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+					<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+						<span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">Field: </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n</span><span class="s2">Type: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="se">\n</span><span class="s2">Value: </span><span class="si">{</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+						<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+							<span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;Related errors:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">es</span><span class="p">])</span>
+						<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+				<span class="n">sa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+			<span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defs</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_exclude_unset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+					<span class="n">sa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">loads</span><span class="p">(</span><span class="n">dumps</span><span class="p">(</span><span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">])))</span>
+				<span class="k">elif</span> <span class="n">Klass</span> <span class="ow">in</span> <span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+					<span class="n">sa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">**</span><span class="n">loads</span><span class="p">(</span><span class="n">dumps</span><span class="p">(</span><span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dict</span><span class="p">()))))</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">sa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">defs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+			<span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_exclude_unset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+				<span class="c1">#sa(k, loads(dumps(cls._slot_defaults[k])))</span>
+				<span class="n">sa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_slot_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: a value for parameter &#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&#39; is required&quot;</span><span class="p">)</span>
+
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_annots</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: unknown parameter </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_debug</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.__init__(...)&quot;</span><span class="p">)</span>
+
+
+	<span class="k">def</span> <span class="nf">dict</span><span class="p">(</span>
+		<span class="bp">self</span><span class="p">,</span>
+		<span class="n">include</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+		<span class="n">exclude</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+		<span class="n">exclude_defaults</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+		<span class="n">exclude_unset</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+	<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+
+		<span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
+		<span class="n">incl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aks</span> <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">include</span>
+		<span class="n">excl</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annots</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ttf</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">__metadata__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">TRACELESS</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">excl</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">exclude_unset</span><span class="p">:</span>
+			<span class="n">excl</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exclude_unset</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">exclude_defaults</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+						<span class="n">excl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">excl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="p">{</span>
+			<span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dictify</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">incl</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">excl</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">Secret</span><span class="p">))</span>
+		<span class="p">}</span>
+
+
+	<span class="k">def</span> <span class="nf">_dictify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_kwargs</span><span class="o">=</span><span class="p">{})</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+			<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dictify</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">dict_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">]</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="k">return</span> <span class="p">{</span>
+				<span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dictify</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dict_kwargs</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+			<span class="p">}</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Klass</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">arg</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="o">**</span><span class="n">dict_kwargs</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">arg</span></div>
+
+
+<span class="n">Klass</span> <span class="o">=</span> <span class="n">AmpelBaseModel</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/ampel.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ampel.base.AmpelBaseModel</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>
