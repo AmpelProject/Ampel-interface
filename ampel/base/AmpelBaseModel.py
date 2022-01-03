@@ -43,7 +43,6 @@ class AmpelBaseModel:
 	_slot_defaults: dict[str, Any] = {}
 	_aks: set[str] = set() # annotation keys
 	_sks: set[str] = set() # slots keys
-	_exclude_unset: set[str] = set()
 	_debug: int = 0
 
 
@@ -257,6 +256,8 @@ class AmpelBaseModel:
 		if self.__class__._debug > 1:
 			print(f"{self.__class__.__name__}.__init__(...)")
 
+		self._exclude_unset: set[str] = set()
+
 		cls = self.__class__
 		sa = self.__setattr__
 		defs = cls._defaults
@@ -330,7 +331,7 @@ class AmpelBaseModel:
 		return {
 			k: self._dictify(v)
 			for k, v in d.items()
-			if not (k in excl or isinstance(d[k], Secret))
+			if k in self._annots and not (k in excl or isinstance(d[k], Secret))
 		}
 
 
