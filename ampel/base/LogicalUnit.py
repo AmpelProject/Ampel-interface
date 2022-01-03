@@ -44,10 +44,10 @@ class LogicalUnit(AmpelBaseModel):
 	@classmethod
 	def __init_subclass__(cls, **kwargs) -> None:
 		super().__init_subclass__(**kwargs) # type: ignore
-		setattr(cls, "resource",
-			set(getattr(cls, "resource", None) or []) | {
+		setattr(cls, "require",
+			set(getattr(cls, "require", None) or []) | {
 				el for base in cls.__bases__
-				for el in (getattr(base, 'resource', None) or [])
+				for el in (getattr(base, 'require', None) or [])
 			}
 		)
 
