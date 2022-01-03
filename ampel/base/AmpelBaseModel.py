@@ -63,7 +63,7 @@ class AmpelBaseModel:
 		joined_aks = cls._aks.copy()
 
 		for base in reversed(cls.mro()):
-			if ann := getattr(base, '__annotations__', None):
+			if ann := getattr(base, '__annotations__', {}):
 				NoneType = type(None)
 				defs = getattr(base, '__dict__', {})
 				for k, v in ann.items():
@@ -82,6 +82,12 @@ class AmpelBaseModel:
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
+
+			# allow subclasses to change default value without supplying a new annotation
+			for k, v in getattr(base, '__dict__', {}).items():
+				if k in joined_ann and not k in ann:
+					joined_defaults[k] = v
+
 
 		if slots := getattr(cls, '__slots__', None):
 			joined_sks.update(slots)

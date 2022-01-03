@@ -17,3 +17,13 @@ def test_dict_view():
     base = Base(**Derived(base=42, derived=3).dict(include=Base._aks))
 
     assert base.dict() == Base(base=42).dict()
+
+
+def test_default_override():
+    class Base(AmpelBaseModel):
+        base: int = 1
+    
+    class Derived(Base):
+        base = 2
+    
+    assert Derived().base == 2
