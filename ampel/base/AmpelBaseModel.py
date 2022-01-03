@@ -12,30 +12,19 @@ from ujson import loads, dumps # type: ignore[import]
 import collections.abc as abc
 from typeguard import check_type
 from types import MemberDescriptorType, GenericAlias, UnionType
+import ampel.types as altypes
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from typing import Any, Type, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
 
-do_type_check = True
 ttf = type(Traceless)
+NoneType = type(None)
 
 
 class AmpelBaseModel:
 	"""
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
-
-	Type checking can be deactivated globaly through the _check_types varaible, which will speed up instantiation significantly::
-	
-	  In []: class B(AmpelBaseModel):
-	    ...:     a: list[int] = []
-
-	  In []: %timeit B(a=[11])
-	  8.08 µs ± 78 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
-
-	  In []: ampel.base.AmpelBaseModel._check_types=False
-
-	  In []: %timeit B(a=[11])
-	  1.46 µs ± 21 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
+	Type checking can be deactivated globally by setting ampel.types.do_type_check to False
 	"""
 
 	_annots: dict[str, Any] = {}
@@ -64,7 +53,6 @@ class AmpelBaseModel:
 
 		for base in reversed(cls.mro()):
 			if ann := getattr(base, '__annotations__', {}):
-				NoneType = type(None)
 				defs = getattr(base, '__dict__', {})
 				for k, v in ann.items():
 					if k == '__slots__' or k[0] == '_' or 'ClassVar' in str(v):
@@ -88,6 +76,9 @@ class AmpelBaseModel:
 				if k in joined_ann and not k in ann:
 					joined_defaults[k] = v
 
+		# Corecion (models, secrets) and type checking if ampel.types.do_type_check is True
+		for k, v in joined_defaults.items():
+			joined_defaults[k] = cls.get_value(k, joined_ann[k], v)
 
 		if slots := getattr(cls, '__slots__', None):
 			joined_sks.update(slots)
@@ -104,18 +95,16 @@ class AmpelBaseModel:
 		""" Validate kwargs values against the fields of cls """
 
 		defs = cls._defaults
-		ttf = type(Traceless)
 		for k, v in cls._annots.items():
 			if type(v) is ttf and v.__metadata__[0] == TRACELESS:
 				continue
 			if k in value:
 				if cls._has_nested_model(v):
-					v = cls._modelify(k, value[k], v)[1]
+					v = cls._modelify(k, v, value[k])[1]
 				if isinstance(v, type) and issubclass(v, Klass):
 					v.validate(value[k], _omit_traceless=_omit_traceless)
 				else:
 					check_type(k, value[k], v)
-				#raise ValueError(f"Wrong type for parameter '{k}'. Expected: {v}, Provided: {type(value[k])}")
 			elif k in defs:
 				continue
 			else:
@@ -128,25 +117,48 @@ class AmpelBaseModel:
 
 	@classmethod
 	def _spawn_model(cls, model: "type[AmpelBaseModel]", value: dict) -> "AmpelBaseModel":
-		return model(
-			**{
-				k: model._spawn_model(model, v)
-				if (k in cls._annots and isinstance(cls._annots[k], type) and issubclass(cls._annots[k], cls)) else v
-				for k, v in value.items()
-			}
-		)
+
+		args = {
+			k: model._spawn_model(model, v) if (
+				k in cls._annots and
+				isinstance(cls._annots[k], type) and
+				issubclass(cls._annots[k], cls)
+			) else v
+			for k, v in value.items()
+		}
+
+		if cls._debug > 0:
+			print(f"Spawning {model.__name__} with: {args}")
+
+		try:
+			ret = model(**args)
+		except Exception as e:
+			if cls._debug > 0:
+				print(f"{model.__name__} instantiation failed")
+				print("##", repr(e))
+				import traceback
+				print(traceback.format_exc())
+			raise e
+
+		if cls._debug > 0:
+			print(f"{model.__name__} spawned")
+
+		return ret
 
 
 	@classmethod
 	def _has_nested_model(cls, annot: type) -> bool:
 
+		if cls._debug > 1:
+			print("Checking " + str(annot).replace('collections.abc.', '') + " for nested models")
+
 		if isinstance(annot, _GenericAlias) and hasattr(annot, 'mro') and issubclass(get_origin(annot), Secret): # type: ignore
 			return True
 
-		for el in get_args(annot):
+		for i, el in enumerate(get_args(annot)):
 
 			if cls._debug > 1:
-				print("el", el, get_origin(el))
+				print(f"get_args element {i}: ", el)
 
 			if isinstance(el, (GenericAlias, _GenericAlias, _UnionGenericAlias, UnionType)):
 				o = get_origin(el)
@@ -160,15 +172,16 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _modelify(cls, key: str, arg: Any, annot: type) -> tuple[Exception | bool, Any]:
+	def _modelify(cls, key: str, annot: type, arg: Any) -> tuple[Exception | bool, Any]:
 
 		oa = get_origin(annot)
 
 		if cls._debug:
-			print(f"⬤  Modelify {cls.__name__}")
-			print("Annot: ", annot)
-			print("Arg:", arg)
-			print("Origin", oa)
+			print(f"● Potentially spawning model for {cls.__name__}.{key}")
+			print("Annotation: ", annot)
+			if oa:
+				print("Origin", oa)
+			print("Value:", arg)
 
 		if oa is Union or oa is UnionType:
 			if cls._debug:
@@ -178,7 +191,7 @@ class AmpelBaseModel:
 				try:
 					if cls._debug > 1:
 						print("Considering union member: ", a)
-					modified, ret = cls._modelify(key, arg, a)
+					modified, ret = cls._modelify(key, a, arg)
 					if modified is True:
 						if cls._debug > 1:
 							print("Model spawned by union member: ", a)
@@ -196,16 +209,15 @@ class AmpelBaseModel:
 			return False, arg
 
 		elif oa is Annotated:
-			return cls._modelify(key, arg, get_args(annot)[0])
+			return cls._modelify(key, get_args(annot)[0], arg)
 				
 		elif oa is dict and isinstance(arg, dict):
 			if cls._debug:
 				print("Origin is dict")
 			modified = False
-			vtype = get_args(annot)[1]
 			ret = {}
 			for k, v in arg.items():
-				x, ret[k] = cls._modelify(f"{key}.{k}", v, vtype)
+				x, ret[k] = cls._modelify(f"{key}.{k}", get_args(annot)[1], v)
 				if x is True:
 					modified = True
 			return modified, ret
@@ -213,117 +225,131 @@ class AmpelBaseModel:
 		elif oa in (list, tuple, abc.Sequence) and isinstance(arg, (list, tuple)):
 			if cls._debug:
 				print("Origin is sequence")
-			vtype = get_args(annot)[0]
 			ret = []
 			modified = False
 			for i, el in enumerate(arg):
-				x, y = cls._modelify(f"{key}[{i}]", el, vtype)
+				x, y = cls._modelify(f"{key}[{i}]", get_args(annot)[0], el)
 				ret.append(y)
-				if x:
+				if x is True:
 					modified = True
 			return modified, ret
 
 		elif oa is None and isinstance(arg, dict) and isinstance(annot, type) and issubclass(annot, AmpelBaseModel):
-			if cls._debug:
-				print("Spawning ", annot)
 			try:
-				ret = cls._spawn_model(annot, arg)
-				if cls._debug > 0:
-					print(f"{annot.__name__} spawned")
-				return True, ret
+				return True, cls._spawn_model(annot, arg)
 			except Exception as e:
-				if cls._debug > 0:
-					print(f"{annot.__name__} instantiation failed")
-					if cls._debug > 1:
-						print(e)
 				return e, arg
 
 		elif isinstance(oa, type) and issubclass(oa, Klass) and isinstance(arg, dict):
-			if cls._debug:
-				print("Spawning ", oa)
 			try:
-				ret = cls._spawn_model(oa, arg)
-				if cls._debug > 0:
-					print(f"{oa.__name__} spawned")
-				return True, ret
+				return True, cls._spawn_model(oa, arg)
 			except Exception as e:
-				if cls._debug > 0:
-					print(f"{oa.__name__} instantiation failed")
-					if cls._debug > 1:
-						print(e)
 				return e, arg
 
 		else:
 			if cls._debug > 1:
-				print("No action performed")
+				print("Value left as is")
 
 		return False, arg
 
 
+	@classmethod
+	def get_value(cls, k: str, a: type, v: Any) -> Any:
+
+		es = None
+		if a in (bool, int, str, float):
+			pass
+		elif cls._has_nested_model(a):
+			if cls._debug > 1:
+				print(f"{cls.__name__}.{k} has nested model")
+			es, v = cls._modelify(k, a, v)
+		elif (ao := get_origin(a)) in (Union, UnionType):
+			if cls._debug > 1:
+				print(f"{cls.__name__}.{k} has Union type")
+			es, v = cls._modelify(k, a, v)
+		elif ao is Annotated:
+			return cls.get_value(k, get_args(a)[0], v)
+		elif isinstance(a, type) and issubclass(a, Klass) and isinstance(v, dict):
+			v = cls._spawn_model(a, v)
+		elif isinstance(a, type) and issubclass(a, Secret):
+			v = a(**v)
+		else:
+			if cls._debug > 1:
+				print(f"{cls.__name__}.{k} has no nested model")
+
+		if altypes.do_type_check:
+			try:
+				if cls._debug > 1:
+					print(f"○ Type checking {cls.__name__}.{k}\n  Annotated type: {a}\n  Value: {v}")
+				check_type(k, v, a)
+				if cls._debug > 1:
+					print("✓ OK")
+			except Exception as e:
+				msg = f"{str(e)}\nField: {cls.__name__}.{k}\nType: {a}\nValue: {v}"
+				if isinstance(es, list):
+					msg += "Related errors:\n" + "\n".join([str(e) for e in es])
+				raise TypeError(msg) from None
+
+		return v
+
+
 	def __init__(self, **kwargs) -> None:
-
-		if self.__class__._debug > 1:
-			print(f"{self.__class__.__name__}.__init__(...)")
-
-		self._exclude_unset: set[str] = set()
 
 		cls = self.__class__
 		sa = self.__setattr__
 		defs = cls._defaults
+		self._exclude_unset: set[str] = set()
 
-		for k in cls._annots:
+		if cls._debug > 1:
+			print(f"{cls.__name__}.__init__(...)")
+
+		for k, a in cls._annots.items():
+
+			if cls._debug > 1:
+				print(f"□ {cls.__name__}.{k}: {a}")
+
+			es = None
+
+			# Should be first
 			if k in kwargs:
-				v = cls._annots[k]
-				if cls._has_nested_model(v):
-					if self.__class__._debug > 1:
-						print(f"{cls.__name__}.{k} has nested model")
-					es, kwargs[k] = self._modelify(k, kwargs[k], v)
-				elif isinstance(v, type) and issubclass(v, Klass) and isinstance(kwargs[k], dict):
-					kwargs[k] = self._spawn_model(v, kwargs[k])
-				elif isinstance(v, type) and issubclass(v, Secret):
-					kwargs[k] = v(**kwargs[k])
-				else:
-					if self.__class__._debug > 1:
-						print(f"{cls.__name__}.{k} has no nested model")
-
-				if do_type_check:
-					try:
-						check_type(k, kwargs[k], v)
-					except Exception as e:
-						msg = f"{str(e)}\nField: {cls.__name__}.{k}\nType: {v}\nValue: {kwargs[k]}"
-						if isinstance(es, list):
-							msg += "Related errors:\n" + "\n".join([str(e) for e in es])
-						raise TypeError(msg) from None
-				sa(k, kwargs[k])
+				v = cls.get_value(k, a, kwargs[k])
 			elif k in defs:
 				self._exclude_unset.add(k)
 				if isinstance(defs[k], (list, dict)):
-					sa(k, loads(dumps(defs[k])))
+					v = loads(dumps(defs[k]))
 				elif Klass in defs[k].__class__.__mro__:
-					sa(k, defs[k].__class__(**loads(dumps(defs[k].dict()))))
+					v = defs[k].__class__(**loads(dumps(defs[k].dict())))
 				else:
-					sa(k, defs[k])
+					v = defs[k]
 			elif k in cls._slot_defaults:
 				self._exclude_unset.add(k)
-				#sa(k, loads(dumps(cls._slot_defaults[k])))
-				sa(k, cls._slot_defaults[k])
+				if isinstance(cls._slot_defaults[k], (list, dict)):
+					v = loads(dumps(cls._slot_defaults[k]))
+				elif Klass in cls._slot_defaults[k].__class__.__mro__:
+					v = cls._slot_defaults[k].__class__(**loads(dumps(cls._slot_defaults[k].dict())))
+				else:
+					v = cls._slot_defaults[k]
 			else:
-				raise ValueError(f"{self.__class__.__name__}: a value for parameter '{k}' is required")
+				raise ValueError(f"{cls.__name__}: a value is required for parameter '{k}'")
+
+			if cls._debug > 1:
+				print(f"Setting {cls.__name__}.{k} value: {v}")
+
+			sa(k, v)
 
 		for k in kwargs.keys():
 			if k not in cls._annots:
-				raise ValueError(f"{self.__class__.__name__}: unknown parameter {k}")
+				raise ValueError(f"{cls.__name__}: unknown parameter {k}")
 
-		if self.__class__._debug > 1:
-			print(f"End of {self.__class__.__name__}.__init__(...)")
+		if cls._debug > 1:
+			print(f"End of {cls.__name__}.__init__(...)")
 
 
-	def dict(
-		self,
-		include: None | set[str]=None,
-		exclude: None | set[str]=None,
-		exclude_defaults: bool=False,
-		exclude_unset: bool=False,
+	def dict(self,
+		include: None | set[str] = None,
+		exclude: None | set[str] = None,
+		exclude_defaults: bool = False,
+		exclude_unset: bool = False,
 	) -> dict[str, Any]:
 
 		d = self.__dict__
