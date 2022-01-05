@@ -7,8 +7,7 @@
 # Last Modified Date:  11.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import Sequence
-from ampel.types import UBson, Tag
+from ampel.types import UBson, OneOrMany, Tag
 from ampel.struct.JournalAttributes import JournalAttributes
 
 
@@ -22,7 +21,7 @@ class UnitResult:
 
 	def __init__(self,
 		body: UBson = None,
-		tag: None | Tag | Sequence[Tag] = None,
+		tag: None | OneOrMany[Tag] = None,
 		code: None | int = None,
 		journal: None | JournalAttributes = None
 	) -> None:
