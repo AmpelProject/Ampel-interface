@@ -13,7 +13,7 @@ from ampel.model.UnitModel import UnitModel
 from ampel.model.DPSelection import DPSelection
 
 
-class StateT2Dependency(Generic[T], UnitModel[T]):
+class StateT2Dependency(UnitModel[T], Generic[T]):
 	"""
 	Used to specify how "tied state t2" units should select the associated required t2 document.
 

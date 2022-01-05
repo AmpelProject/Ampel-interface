@@ -12,6 +12,6 @@ from ampel.types import T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AllOf(Generic[T], AmpelBaseModel):
+class AllOf(AmpelBaseModel, Generic[T]):
 	#: Select items by logical AND
 	all_of: list[T]

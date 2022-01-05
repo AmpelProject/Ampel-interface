@@ -14,7 +14,7 @@ from ampel.model.operator.AllOf import AllOf
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AnyOf(Generic[T], AmpelBaseModel):
+class AnyOf(AmpelBaseModel, Generic[T]):
 
 	#: Select items by logical OR
 	any_of: list[T | AllOf[T]]

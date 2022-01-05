@@ -12,7 +12,7 @@ from typing import Generic
 from ampel.types import T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
-class FlatAnyOf(Generic[T], AmpelBaseModel):
+class FlatAnyOf(AmpelBaseModel, Generic[T]):
 	"""
 	Similar to AnyOf except that it does not allow embedded AllOf elements
 	"""

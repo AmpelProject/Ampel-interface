@@ -11,5 +11,5 @@ from typing import Generic
 from ampel.types import T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
-class OneOf(Generic[T], AmpelBaseModel):
+class OneOf(AmpelBaseModel, Generic[T]):
 	one_of: list[T]
