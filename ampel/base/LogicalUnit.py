@@ -10,13 +10,11 @@
 from typing import Any, ClassVar
 from ampel.types import Traceless, TRACELESS
 from ampel.protocol.LoggerProtocol import LoggerProtocol
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelUnit import AmpelUnit
 from ampel.secret.Secret import Secret
 
-ttf = type(Traceless)
 
-
-class LogicalUnit(AmpelBaseModel):
+class LogicalUnit(AmpelUnit):
 	"""
 	Logical as in: performing logic operations of ampel's tier: add, combine, augment, synthetise.
 	Base for standardized t0, t1, t2 and t3 units.
@@ -61,6 +59,12 @@ class LogicalUnit(AmpelBaseModel):
 		"""
 
 		super().__init__(**kwargs)
-
-		self._trace_content = dict(sorted(self.dict(exclude_unset=False, exclude_defaults=False).items()))
+		self._trace_content = dict(
+			sorted(
+				self.dict(
+					exclude_unset=False,
+					exclude_defaults=False
+				).items()
+			)
+		)
 
