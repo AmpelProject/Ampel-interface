@@ -11,6 +11,7 @@ from typing import Any
 from collections.abc import MutableMapping, Mapping, Iterable, Sequence
 from ampel.types import UBson, strict_iterable, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
 def get_by_path(
@@ -289,7 +290,7 @@ def dictify(item):
 	"""
 	Recursively dictifies input
 	"""
-	if isinstance(item, AmpelBaseModel):
+	if isinstance(item, (AmpelBaseModel, AmpelGenericModel)):
 		return item.dict()
 
 	if isinstance(item, dict):
