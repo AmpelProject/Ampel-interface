@@ -11,10 +11,10 @@ import collections
 from typing import Generic
 from ampel.types import T
 from ampel.model.operator.AllOf import AllOf
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
-class AnyOf(AmpelBaseModel, Generic[T]):
+class AnyOf(AmpelGenericModel, Generic[T]):
 
 	#: Select items by logical OR
 	any_of: list[T | AllOf[T]]

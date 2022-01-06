@@ -9,7 +9,7 @@
 
 from typing import Generic
 from ampel.types import T
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
-class OneOf(AmpelBaseModel, Generic[T]):
+class OneOf(AmpelGenericModel, Generic[T]):
 	one_of: list[T]

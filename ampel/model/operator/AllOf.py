@@ -9,9 +9,9 @@
 
 from typing import Generic
 from ampel.types import T
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
-class AllOf(AmpelBaseModel, Generic[T]):
+class AllOf(AmpelGenericModel, Generic[T]):
 	#: Select items by logical AND
 	all_of: list[T]

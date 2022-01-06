@@ -7,19 +7,19 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Generic
+from typing import Any, Generic, Literal
 from ampel.types import T
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
-class UnitModel(Generic[T], AmpelBaseModel):
+class UnitModel(AmpelGenericModel, Generic[T]):
 	"""
 	Specification of a processing unit.
-	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])
+	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal['T2SNCosmo']])
 	"""
 
 	#: Name of ampel unit class
-	unit: str | T
+	unit: T
 
 	#: - None: no config (use class defaults)
 	#: - dict: config 'as is'
@@ -31,17 +31,3 @@ class UnitModel(Generic[T], AmpelBaseModel):
 
 	#: Values to override in the config
 	override: None | dict[str, Any] = None
-
-
-	def dict(self,
-		include: None | set[str] = None,
-		exclude: None | set[str] = {"secrets"},
-		exclude_defaults: bool = False,
-		exclude_unset: bool = False,
-	) -> dict[str, Any]:
-		return super().dict(
-			include=include,
-			exclude=exclude,
-			exclude_defaults=exclude_defaults,
-			exclude_unset=exclude_unset
-		)

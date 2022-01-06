@@ -10,9 +10,9 @@
 import collections
 from typing import Generic
 from ampel.types import T
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
-class FlatAnyOf(AmpelBaseModel, Generic[T]):
+class FlatAnyOf(AmpelGenericModel, Generic[T]):
 	"""
 	Similar to AnyOf except that it does not allow embedded AllOf elements
 	"""
