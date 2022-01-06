@@ -19,7 +19,7 @@ class DPSelection(AmpelBaseModel):
 
 	#: Aux unit name used to filter datapoints.
 	# (Unit must define method apply(self, arg: Any) -> Any)
-	filter: None | UnitModel | str = None
+	filter: None | str | UnitModel[str] = None
 
 	#: Dict key used for sorting
 	#: Use 'id' to sort dps based on key 'id' at root level,
@@ -28,7 +28,7 @@ class DPSelection(AmpelBaseModel):
 
 	#: How to slice the datapoint array.
 	#: If a list is provided, it must have a length of 3
-	select: None | Literal['first', 'last'] | tuple[None | int, None | int, None | int] = None
+	select: None | Literal['first', 'last'] | tuple[None|int, None|int, None|int] = None
 
 
 	def __init__(self, **kwargs):
@@ -42,7 +42,7 @@ class DPSelection(AmpelBaseModel):
 			raise ValueError("Options 'sort' requires option 'select'")
 
 
-	def tools(self) -> tuple[None | AbsApplicable, None | Callable[[list], list], slice]:
+	def tools(self) -> tuple[None|AbsApplicable, None|Callable[[list], list], slice]:
 
 		so = None
 		sl = None
