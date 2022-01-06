@@ -11,11 +11,11 @@ def test_dict_view():
         derived: int = 2
 
     # base can't be instantiated with dict repr of derived
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         Base(**Derived().dict())
 
     # base _can_ be instantiated with a slice of derived
-    base = Base(**Derived(base=42, derived=3).dict(include=Base._aks))
+    base = Base(**Derived(base=42, derived=3).dict(include=Base.get_model_keys()))
 
     assert base.dict() == Base(base=42).dict()
 
