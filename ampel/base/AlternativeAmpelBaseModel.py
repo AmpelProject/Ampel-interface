@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File:                Ampel-interface/ampel/base/AmpelBaseModel.py
+# File:                Ampel-interface/ampel/base/AlternativeAmpelBaseModel.py
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                07.10.2019
@@ -8,9 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from __future__ import annotations
-from ujson import loads, dumps # type: ignore[import]
 import collections.abc as abc
-from typeguard import check_type
+from ujson import loads, dumps # type: ignore
+from typeguard import check_type # type: ignore
 from types import MemberDescriptorType, GenericAlias, UnionType
 import ampel.types as altypes
 from ampel.types import Traceless, TRACELESS
@@ -21,8 +21,9 @@ ttf = type(Traceless)
 NoneType = type(None)
 
 
-class AmpelBaseModel:
+class AlternativeAmpelBaseModel:
 	"""
+	Prototype class, not in used.
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
 	Type checking can be deactivated globally by setting ampel.types.do_type_check to False
 	"""
@@ -76,7 +77,7 @@ class AmpelBaseModel:
 				if k in joined_ann and not k in ann:
 					joined_defaults[k] = v
 
-		# Corecion (models, secrets) and type checking if ampel.types.do_type_check is True
+		# Coercion (models, secrets) and type checking if ampel.types.do_type_check is True
 		for k, v in joined_defaults.items():
 			joined_defaults[k] = cls.get_value(k, joined_ann[k], v)
 
@@ -116,7 +117,7 @@ class AmpelBaseModel:
 
 
 	@classmethod
-	def _spawn_model(cls, model: "type[AmpelBaseModel]", value: dict) -> "AmpelBaseModel":
+	def _spawn_model(cls, model: "type[AlternativeAmpelBaseModel]", value: dict) -> "AlternativeAmpelBaseModel":
 
 		args = {
 			k: model._spawn_model(model, v) if (
@@ -234,7 +235,7 @@ class AmpelBaseModel:
 					modified = True
 			return modified, ret
 
-		elif oa is None and isinstance(arg, dict) and isinstance(annot, type) and issubclass(annot, AmpelBaseModel):
+		elif oa is None and isinstance(arg, dict) and isinstance(annot, type) and issubclass(annot, AlternativeAmpelBaseModel):
 			try:
 				return True, cls._spawn_model(annot, arg)
 			except Exception as e:
@@ -257,13 +258,14 @@ class AmpelBaseModel:
 	def get_value(cls, k: str, a: type, v: Any) -> Any:
 
 		es = None
+		ao = get_origin(a)
 		if a in (bool, int, str, float):
 			pass
 		elif cls._has_nested_model(a):
 			if cls._debug > 1:
 				print(f"{cls.__name__}.{k} has nested model")
 			es, v = cls._modelify(k, a, v)
-		elif (ao := get_origin(a)) in (Union, UnionType):
+		elif ao in (Union, UnionType):
 			if cls._debug > 1:
 				print(f"{cls.__name__}.{k} has Union type")
 			es, v = cls._modelify(k, a, v)
@@ -277,7 +279,23 @@ class AmpelBaseModel:
 			if cls._debug > 1:
 				print(f"{cls.__name__}.{k} has no nested model")
 
+		if ao is Annotated:
+			return cls.get_value(k, get_args(a)[0], v)
+
 		if altypes.do_type_check:
+			"""
+			from typingx import isinstancex
+			if cls._debug > 1:
+				print(f"○ Type checking {cls.__name__}.{k}\n  Annotated type: {a}\n  Value: {v}")
+			if isinstancex(v, a):
+				if cls._debug > 1:
+						print("✓ OK")
+			else:
+				msg = f"{cls.__name__}: invalid type for field '{k}'\n  Type: {a}\n  Value: {v}"
+				if isinstance(es, list):
+					msg += "Related errors:\n" + "\n".join([str(e) for e in es])
+				raise TypeError(msg) from None
+			"""
 			try:
 				if cls._debug > 1:
 					print(f"○ Type checking {cls.__name__}.{k}\n  Annotated type: {a}\n  Value: {v}")
@@ -393,4 +411,4 @@ class AmpelBaseModel:
 		return arg
 
 
-Klass = AmpelBaseModel
+Klass = AlternativeAmpelBaseModel
