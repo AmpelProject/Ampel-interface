@@ -7,11 +7,11 @@
 # Last Modified Date:  24.11.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Protocol
+from typing import Any, Protocol, runtime_checkable
 from collections.abc import Sequence
 from ampel.types import StockId, Tag
 
-
+@runtime_checkable
 class AmpelAlertProtocol(Protocol):
 
 	@property
