@@ -11,7 +11,7 @@ from importlib import import_module
 from typing import Any, ClassVar, overload # type: ignore[attr-defined]
 from ampel.types import T, check_class
 from ampel.model.UnitModel import UnitModel
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelUnit import AmpelUnit
 from ampel.config.AmpelConfig import AmpelConfig
 
 
@@ -36,13 +36,11 @@ class AuxUnitRegister:
 		...
 	@overload
 	@classmethod
-	def new_unit(cls, model: UnitModel, *, sub_type: None = ..., **kwargs) -> AmpelBaseModel:
+	def new_unit(cls, model: UnitModel, *, sub_type: None = ..., **kwargs) -> AmpelUnit:
 		...
 
 	@classmethod
-	def new_unit(cls,
-		model: UnitModel, *, sub_type: None | type[T] = None, **kwargs
-	) -> T | AmpelBaseModel:
+	def new_unit(cls, model: UnitModel, *, sub_type: None | type[T] = None, **kwargs) -> T | AmpelUnit:
 		"""	:raises: ValueError is model.config is not of type None | dict """
 
 		if model.unit in cls._dyn:
@@ -69,11 +67,11 @@ class AuxUnitRegister:
 
 	@overload
 	@classmethod
-	def get_aux_class(cls, klass: str, *, sub_type: None = ...) -> type[AmpelBaseModel]:
+	def get_aux_class(cls, klass: str, *, sub_type: None = ...) -> type[AmpelUnit]:
 		...
 
 	@classmethod
-	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T] | type[AmpelBaseModel]:
+	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T | type[AmpelUnit]]:
 		""" :raises: ValueError if unit is unknown """
 
 		if klass not in cls._defs:
