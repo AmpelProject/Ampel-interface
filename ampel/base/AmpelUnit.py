@@ -114,7 +114,7 @@ class AmpelUnit:
 		""" Validate kwargs values against fields of cls (except traceless) """
 		values, fields, errors = validate_model(cls._create_model(True), value)
 		if errors:
-			raise errors
+			raise TypeError(errors)
 		return values
 
 
@@ -127,7 +127,7 @@ class AmpelUnit:
 			model = cls._model
 		values, fields, errors = validate_model(model, value)
 		if errors:
-			raise errors
+			raise TypeError(errors)
 		return values
 
 
@@ -152,7 +152,7 @@ class AmpelUnit:
 			for k, v in kwargs.items():
 				print(f"{k}: {v}")
 			print("#" * 60)
-			raise e
+			raise TypeError(e)
 
 		# Save coerced values
 		kwargs.update(vres[0])
