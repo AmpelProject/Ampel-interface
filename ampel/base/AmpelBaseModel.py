@@ -24,8 +24,9 @@ class AmpelBaseModel(BaseModel):
 		try:
 			super().__init__(**kwargs)
 		except Exception as e:
-			raise TypeError(e)
+			raise TypeError(e) from None
 		self.__config__.extra = Extra.allow
+		
 
 	@classmethod
 	def get_model_keys(cls) -> KeysView[str]:
