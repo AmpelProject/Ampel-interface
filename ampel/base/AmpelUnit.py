@@ -4,17 +4,16 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                07.10.2019
-# Last Modified Date:  05.01.2022
+# Last Modified Date:  09.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import collections.abc as abc
-from types import MemberDescriptorType, GenericAlias, UnionType
-import ampel.types as altypes
+from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from pydantic import BaseModel, validate_model, create_model
-from typing import Any, Type, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
+from typing import Any, Type, Union, get_origin, get_args
 
 ttf = type(Traceless)
 NoneType = type(None)
@@ -49,6 +48,8 @@ class AmpelUnit:
 		joined_defaults = cls._defaults.copy()
 		joined_sks = cls._sks.copy()
 		joined_aks = cls._aks.copy()
+		# Needed for when sub-classes inherit both AmpelUnit and AmpelBaseModel/BaseModel
+		field_keys: Any = getattr(cls, '__fields__', set())
 
 		for base in reversed(cls.mro()):
 			if ann := getattr(base, '__annotations__', {}):
@@ -56,8 +57,10 @@ class AmpelUnit:
 				for k, v in ann.items():
 					if k == '__slots__' or k[0] == '_' or 'ClassVar' in str(v):
 						continue
+
 					joined_ann[k] = v # update merged annotations
 					joined_aks.add(k) # update set of known attribute names
+
 					if k in defs:
 						if type(defs[k]) is MemberDescriptorType: # is a slot
 							if k in cls._slot_defaults:
@@ -69,10 +72,15 @@ class AmpelUnit:
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
+					elif k in field_keys:
+						fields = cls.__fields__ # type: ignore[attr-defined]
+						if fields[k].required is False:
+							joined_defaults[k] = fields[k].default
+
 
 			# allow subclasses to change default value without supplying a new annotation
 			for k, v in getattr(base, '__dict__', {}).items():
-				if k in joined_ann and not k in ann:
+				if k in joined_ann and k not in ann:
 					joined_defaults[k] = v
 
 		if slots := getattr(cls, '__slots__', None):
@@ -89,6 +97,9 @@ class AmpelUnit:
 	def _create_model(cls, omit_traceless: bool = False) -> Type[BaseModel]:
 
 		defs = cls._defaults
+		if hasattr(cls, '__fields__'):
+			cls.__fields__.clear() # type: ignore[attr-defined]
+
 		if omit_traceless:
 			ttf = type(Traceless)
 			kwargs = {
@@ -104,7 +115,7 @@ class AmpelUnit:
 
 		return create_model(
 			cls.__name__,
-			__config__ = AmpelBaseModel.__config__,
+			__config__ = AmpelBaseModel.Config,
 			**kwargs # type: ignore
 		)
 
@@ -114,7 +125,7 @@ class AmpelUnit:
 		""" Validate kwargs values against fields of cls (except traceless) """
 		values, fields, errors = validate_model(cls._create_model(True), value)
 		if errors:
-			raise TypeError(errors)
+			raise TypeError(errors) from None
 		return values
 
 
@@ -127,10 +138,10 @@ class AmpelUnit:
 			model = cls._model
 		values, fields, errors = validate_model(model, value)
 		if errors:
-			raise TypeError(errors)
+			raise TypeError(errors) from None
 		return values
 
-
+	
 	def __init__(self, **kwargs) -> None:
 
 		cls = self.__class__
@@ -140,19 +151,23 @@ class AmpelUnit:
 			# might be needed in the future due to postponed annotations
 			# cls._model.update_forward_refs()
 
-		self._exclude_unset = self._defaults.keys() - kwargs.keys()
+		if hasattr(cls, '__fields__'):
+			AmpelBaseModel.__init__(self) # type: ignore[arg-type]
+
 		vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
+		self._exclude_unset = self._defaults.keys() - kwargs.keys()
 
 		# pydantic ValidationError
 		if e := vres[2]:
 			# https://github.com/samuelcolvin/pydantic/issues/784
 			print("")
-			print("#" * 60)
-			print("Offending values:")
-			for k, v in kwargs.items():
-				print(f"{k}: {v}")
-			print("#" * 60)
-			raise TypeError(e)
+			if kwargs:
+				print("#" * 60)
+				print("Offending values:")
+				for k, v in kwargs.items():
+					print(f"{k}: {v}")
+				print("#" * 60)
+			raise TypeError(e) from None
 
 		# Save coerced values
 		kwargs.update(vres[0])
@@ -171,27 +186,36 @@ class AmpelUnit:
 				sa(k, kwargs[k])
 
 
-	def dict(self, *,
-		include: None | set[str] = None,
-		exclude: None | set[str] = None,
-		exclude_defaults: bool = False,
-		exclude_unset: bool = False,
-	) -> dict[str, Any]:
+	def _get_trace_content(self) -> dict[str, Any]:
+
+		a = self._annots
+		return {
+			k: self._dictify(getattr(self, k))
+			for k in sorted(self._annots)
+			if not (
+				(type(a[k]) is ttf and a[k].__metadata__[0] == TRACELESS) or
+				isinstance(a[k], Secret)
+			)
+		}
+
+
+	# Note: note defining arguments to avoid mypy complains when mixing AmpelUnit with BaseModel
+	def dict(self, **kwargs) -> dict[str, Any]:
 
 		d = self.__dict__
-		incl = self._aks if include is None else include
+		incl = self._aks if (x := kwargs.get('include')) is None else x
 		excl = {
 			k for k, v in self._annots.items()
 			if type(v) is ttf and v.__metadata__[0] == TRACELESS
 		}
 
-		if exclude is not None:
-			excl.update(exclude)
+		if 'exclude' in kwargs:
+			excl.update(kwargs['exclude'])
 
-		if exclude_unset:
+		if kwargs.get('exclude_unset'):
 			excl.update(self._exclude_unset)
 
-		if exclude_defaults:
+		if kwargs.get('exclude_defaults'):
 			for k in self._defaults:
 				if self.__dict__[k] == self._defaults[k]:
 					excl.add(k)
@@ -211,7 +235,7 @@ class AmpelUnit:
 				k: self._dictify(v, dict_kwargs)
 				for k, v in arg.items()
 			}
-		elif isinstance(arg, Klass):
+		elif isinstance(arg, (Klass, BaseModel)):
 			return arg.dict(**dict_kwargs)
 		return arg
 
