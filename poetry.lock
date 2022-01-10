@@ -502,7 +502,7 @@ docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "3885d74c94cee56c732e71eb2210552442b4e30499d2bcb085768c3f783f61b3"
+content-hash = "0ddd69741f59eb426aa59c2475496d5767e825879176706d04fad339766eda8e"
 
 [metadata.files]
 alabaster = [
