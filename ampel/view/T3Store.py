@@ -4,10 +4,9 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                01.12.2021
-# Last Modified Date:  02.01.2022
+# Last Modified Date:  16.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any
 from collections.abc import Container, Iterator, Iterable, Sequence
 from ampel.types import JDict, OneOrMany
 from ampel.view.T3DocView import T3DocView
@@ -20,10 +19,21 @@ from ampel.util.hash import build_unsafe_dict_id
 
 class T3Store:
 
-	__slots__ = 'views', 'units', 'session'
+	__slots__ = 'views', 'units', 'session', 'extra'
+
+	# Sequence of T3 views (see T3IncludeDirective.docs and T3Processor.include)
 	views: None | Sequence[T3DocView]
-	session: None | JDict
+
+	# Set of unit names of the t3 views contained in this store
 	units: set[str]
+
+	# Read-only dict containing session information available in this store.
+	# (see T3IncludeDirective.session and T3Processor.include)
+	# Note that session infos are saved into 'meta' and therefore must be BSON encodable
+	session: None | JDict
+
+	# Free-form dict (usable for dedicated inter-units communication for example)
+	extra: JDict
 
 
 	@classmethod # Static ctor
@@ -40,6 +50,7 @@ class T3Store:
 		object.__setattr__(self, 'views', views)
 		object.__setattr__(self, 'session', ReadOnlyDict(session) if session else None)
 		object.__setattr__(self, 'units', set(v.unit for v in views) if views else set())
+		object.__setattr__(self, 'extra', {})
 
 
 	def __setattr__(self, k, v):
@@ -78,7 +89,6 @@ class T3Store:
 		config: None | int | JDict = None,
 		code: None | int = None
 	) -> T3DocView:
-		""" really tired of @overload """
 		if (x := self.get_view(unit, config=config, code=code)):
 			return x
 		raise ValueError(f"{unit} results are required")
