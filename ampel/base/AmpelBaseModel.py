@@ -15,6 +15,7 @@ class AmpelBaseModel(BaseModel):
 
 	class Config(BaseConfig):
 		arbitrary_types_allowed = True
+		underscore_attrs_are_private = True
 		allow_population_by_field_name = True
 		validate_all = True
 		extra = Extra.forbid
@@ -26,7 +27,7 @@ class AmpelBaseModel(BaseModel):
 		except Exception as e:
 			raise TypeError(e) from None
 		self.__config__.extra = Extra.allow
-		
+
 
 	@classmethod
 	def get_model_keys(cls) -> KeysView[str]:
