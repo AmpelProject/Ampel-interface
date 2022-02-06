@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  17.03.2021
+# Last Modified Date:  06.02.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -16,4 +16,4 @@ class AmpelFlexModel(AmpelBaseModel):
 	"""
 
 	def __init__(self, **kwargs):
-		super().__init__(**{k: kwargs[k] for k in kwargs if k in self._annots})
+		super().__init__(**{k: kwargs[k] for k in kwargs if k in self.get_model_keys()})
