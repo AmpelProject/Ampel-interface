@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.model.UnitModel &#8212; ampel-interface 0.8.3-alpha.9 documentation</title>
+    <title>ampel.model.UnitModel &#8212; ampel-interface 0.8.2-alpha.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.2-alpha.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.model.UnitModel</a></li> 
       </ul>
@@ -35,22 +35,22 @@
   <h1>Source code for ampel.model.UnitModel</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># File:                Ampel-interface/ampel/model/UnitModel.py</span>
-<span class="c1"># License:             BSD-3-Clause</span>
-<span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
-<span class="c1"># Date:                26.09.2019</span>
-<span class="c1"># Last Modified Date:  15.09.2021</span>
-<span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
+<span class="c1"># File              : Ampel-interface/ampel/model/UnitModel.py</span>
+<span class="c1"># License           : BSD-3-Clause</span>
+<span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+<span class="c1"># Date              : 26.09.2019</span>
+<span class="c1"># Last Modified Date: 15.09.2021</span>
+<span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Generic</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">T</span>
-<span class="kn">from</span> <span class="nn">ampel.base.AmpelGenericModel</span> <span class="kn">import</span> <span class="n">AmpelGenericModel</span>
+<span class="kn">from</span> <span class="nn">ampel.model.StrictGenericModel</span> <span class="kn">import</span> <span class="n">StrictGenericModel</span>
 
 
-<div class="viewcode-block" id="UnitModel"><a class="viewcode-back" href="../../../api.html#ampel.model.UnitModel.UnitModel">[docs]</a><span class="k">class</span> <span class="nc">UnitModel</span><span class="p">(</span><span class="n">AmpelGenericModel</span><span class="p">,</span> <span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+<div class="viewcode-block" id="UnitModel"><a class="viewcode-back" href="../../../api.html#ampel.model.UnitModel.UnitModel">[docs]</a><span class="k">class</span> <span class="nc">UnitModel</span><span class="p">(</span><span class="n">StrictGenericModel</span><span class="p">,</span> <span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Specification of a processing unit.</span>
-<span class="sd">	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[&#39;T2SNCosmo&#39;]])</span>
+<span class="sd">	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="c1">#: Name of ampel unit class</span>
@@ -60,12 +60,19 @@
 	<span class="c1">#: - dict: config &#39;as is&#39;</span>
 	<span class="c1">#: - str: a corresponding alias key in the AmpelConfig must match the provided string</span>
 	<span class="c1">#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key &#39;confid&#39;) must match the provided integer</span>
-	<span class="n">config</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
 
-	<span class="n">secrets</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="n">secrets</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
 
 	<span class="c1">#: Values to override in the config</span>
-	<span class="n">override</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+	<span class="n">override</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="UnitModel.dict"><a class="viewcode-back" href="../../../api.html#ampel.model.UnitModel.UnitModel.dict">[docs]</a>	<span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="s1">&#39;secrets&#39;</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+			<span class="k">del</span> <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;secrets&#39;</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">ret</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -97,14 +104,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.2-alpha.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.model.UnitModel</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>
