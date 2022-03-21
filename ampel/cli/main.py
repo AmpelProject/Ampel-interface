@@ -26,13 +26,18 @@ double_minus = re.compile("--([A-z])")
 
 def main() -> None:
 
+	# did we implicitly add --help to an otherwise invalid command?
+	ambiguous_help = False
+
 	if len(sys.argv) == 1:
-		return show_help()
+		show_help()
+		sys.exit(2)
 
 	elif len(sys.argv) == 2:
 		if sys.argv[1] in ("-h", "--help", "help"):
 			return show_help()
 		sys.argv += ["--help"]
+		ambiguous_help = True
 
 	if sys.argv[-1] == 'help':
 		sys.argv[-1] = "--help"
@@ -40,6 +45,7 @@ def main() -> None:
 	elif len(sys.argv) == 3:
 		if not sys.argv[-1].startswith("--"):
 			sys.argv += ["--help"]
+			ambiguous_help = True
 
 	# Remove first arg (op name such as 'log' or 'run')
 	op_name = sys.argv[1]
@@ -47,7 +53,8 @@ def main() -> None:
 
 	# Check if operation is known
 	if op_name not in clis:
-		return show_help()
+		show_help()
+		sys.exit(2)
 
 	# Remove second arg if sub-opeartion (such as 'show' in 'ampel log show')
 	if sys.argv[1][0] == "-":
@@ -68,31 +75,29 @@ def main() -> None:
 			sys.argv[i] = "-" + sys.argv[i]
 
 
+	fqn = clis[op_name][1]
+	cli_op: AbsCLIOperation = getattr(
+		importlib.import_module(fqn),
+		fqn.split(".")[-1]
+	)()
 
+	parser = cli_op.get_parser(sub_op)
 	try:
-
-		fqn = clis[op_name][1]
-		cli_op: AbsCLIOperation = getattr(
-			importlib.import_module(fqn),
-			fqn.split(".")[-1]
-		)()
-
-		parser = cli_op.get_parser(sub_op)
 		args, unknown_args = parser.parse_known_args()
+	except SystemExit as exc:
+		# intercept ArgumentParser.exit if we added --help ourselves
+		sys.exit(exc.code or (2 if ambiguous_help else 0))
 
-		#if not args.config:
-		#	return
+	#if not args.config:
+	#	return
 
-		if "-debug" in sys.argv:
-			print("[DEBUG] Loaded argument parameters")
-			for k, v in vars(args).items():
-				print(f"  {k}: {v}")
+	if "-debug" in sys.argv:
+		print("[DEBUG] Loaded argument parameters")
+		for k, v in vars(args).items():
+			print(f"  {k}: {v}")
 
-		cli_op.run(vars(args), unknown_args, sub_op)
+	cli_op.run(vars(args), unknown_args, sub_op)
 
-	except Exception:
-		import traceback
-		traceback.print_exc(file=sys.stderr)
 	return
 
 
