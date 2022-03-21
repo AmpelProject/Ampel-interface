@@ -27,11 +27,11 @@ sphinx-autodoc-typehints = {version = "^1.11.1", optional = true}
 tomlkit = {version = "^0.10.0", optional = true}
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.1.0"
+pytest = "^7.1.1"
 pytest-cov = "^3.0.0"
 mypy = "^0.930"
-types-PyYAML = "^6.0.4"
-types-setuptools = "^57.4.10"
+types-PyYAML = "^6.0.5"
+types-setuptools = "^57.4.11"
 
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
