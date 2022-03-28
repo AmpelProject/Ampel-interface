@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.content.T2Document &#8212; ampel-interface 0.8.2-alpha.8 documentation</title>
+    <title>ampel.content.T2Document &#8212; ampel-interface 0.8.3-alpha.9 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.2-alpha.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.T2Document</a></li> 
       </ul>
@@ -35,14 +35,14 @@
   <h1>Source code for ampel.content.T2Document</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># File              : Ampel-interface/ampel/content/T2Document.py</span>
-<span class="c1"># License           : BSD-3-Clause</span>
-<span class="c1"># Author            : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
-<span class="c1"># Date              : 13.01.2018</span>
-<span class="c1"># Last Modified Date: 23.03.2021</span>
-<span class="c1"># Last Modified By  : vb &lt;vbrinnel@physik.hu-berlin.de&gt;</span>
+<span class="c1"># File:                Ampel-interface/ampel/content/T2Document.py</span>
+<span class="c1"># License:             BSD-3-Clause</span>
+<span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
+<span class="c1"># Date:                13.01.2018</span>
+<span class="c1"># Last Modified Date:  23.03.2021</span>
+<span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">UBson</span><span class="p">,</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">UnitId</span><span class="p">,</span> <span class="n">T2Link</span>
 <span class="kn">from</span> <span class="nn">ampel.content.MetaRecord</span> <span class="kn">import</span> <span class="n">MetaRecord</span>
@@ -57,7 +57,7 @@
 <span class="sd">	&quot;&quot;&quot;</span>
 
 	<span class="c1">#: Stock id associated with the data</span>
-	<span class="n">stock</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">StockId</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StockId</span><span class="p">]]</span>
+	<span class="n">stock</span><span class="p">:</span> <span class="n">StockId</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StockId</span><span class="p">]</span>
 
 	<span class="c1">#: Optional source origin (avoids potential stock collision between different data sources)</span>
 	<span class="n">origin</span><span class="p">:</span> <span class="nb">int</span>
@@ -67,7 +67,7 @@
 
 	<span class="c1">#: Configuration hash, if unit defaults were overridden. The underlying values can be resolved with</span>
 	<span class="c1">#: :meth:`UnitLoader.get_init_config() &lt;ampel.core.UnitLoader.UnitLoader.get_init_config&gt;`</span>
-	<span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+	<span class="n">config</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span>
 
 	<span class="c1">#: References to input data</span>
 	<span class="n">link</span><span class="p">:</span> <span class="n">T2Link</span>
@@ -86,7 +86,7 @@
 	<span class="n">col</span><span class="p">:</span> <span class="nb">str</span>
 
 	<span class="c1">#: Ever increasing global and unique run identifier</span>
-	<span class="n">run</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+	<span class="n">run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 
 	<span class="c1">#: DocumentCode.NEW for new T2 document, DocumentCode.OK if computation was successful</span>
 	<span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
@@ -124,14 +124,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.2-alpha.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.3-alpha.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.content.T2Document</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
