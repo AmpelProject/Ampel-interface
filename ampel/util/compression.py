@@ -11,12 +11,12 @@ import zipfile
 from io import BytesIO
 from typing import Literal
 
-Compression = Literal['ZIP_DEFLATED', 'ZIP_DEFLATED', 'ZIP_BZIP2']
+TCompression = Literal['ZIP_DEFLATED', 'ZIP_LZMA', 'ZIP_BZIP2']
 
 def compress(
 	payload: bytes,
 	filename: str,
-	alg: Compression = "ZIP_DEFLATED",
+	alg: TCompression = "ZIP_DEFLATED",
 	compress_level: int = 9
 ) -> bytes:
 
@@ -28,7 +28,7 @@ def compress(
 
 def compress_many(
 	arg: dict[str, bytes],
-	alg: Compression = "ZIP_DEFLATED",
+	alg: TCompression = "ZIP_DEFLATED",
 	compress_level: int = 9
 ) -> bytes:
 
@@ -41,7 +41,7 @@ def compress_many(
 
 
 def _new(
-	alg: Compression = "ZIP_DEFLATED",
+	alg: TCompression = "ZIP_DEFLATED",
 	compress_level: int = 9
 ) -> tuple[BytesIO, zipfile.ZipFile]:
 
