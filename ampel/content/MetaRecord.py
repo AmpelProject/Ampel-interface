@@ -22,6 +22,9 @@ class MetaRecord(TypedDict, total=False):
 	#: UNIX epoch of the activity
 	ts: Union[int, float]
 
+	#: UNIX epoch after which the activity may be retried
+	retry_after: Union[int, float]
+
 	#: Tier of the associated process
 	tier: Literal[-1, 0, 1, 2, 3]
 
