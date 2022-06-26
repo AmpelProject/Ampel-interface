@@ -21,7 +21,7 @@ class ReadOnlyDict(dict):
 	popitem = __readonly__
 	clear = __readonly__
 	update = __readonly__ # type: ignore
-	setdefault = __readonly__
+	setdefault = __readonly__ # type: ignore
 
 	del __readonly__
 
