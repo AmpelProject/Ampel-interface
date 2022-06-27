@@ -4,12 +4,12 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  22.09.2021
+# Last Modified Date:  27.06.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import textwrap
 from os import environ
-from typing import Any, Tuple
+from typing import Any
 from ampel.cli.MaybeIntAction import MaybeIntAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
 from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
@@ -382,7 +382,7 @@ class AmpelArgumentParser(ArgumentParser):
 	def hint_config_override(self, pos: None | int = None, ref: None | str = None):
 		self.add_note(
 			"Any existing config parameter can be overriden using -path.to.config.key value\n" +
-			"Example: -db.prefix AmpelTest",
+			"Example: -mongo.prefix AmpelTest",
 			pos, ref
 		)
 
