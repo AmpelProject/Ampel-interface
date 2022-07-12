@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                04.03.2021
-# Last Modified Date:  18.04.2021
+# Last Modified Date:  12.07.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import TypedDict, Any, Literal
@@ -26,6 +26,9 @@ class EventDocument(TypedDict, total=False):
 
 	#: Ever increasing global and unique run identifier
 	run: int
+
+	#: hash of potentially underlying job schema
+	jobid: None | int
 
 	#: Optional identification of the associated execution layer
 	tier: Literal[-1, 0, 1, 2, 3]
