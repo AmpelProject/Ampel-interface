@@ -31,6 +31,9 @@ class MetaRecord(TypedDict, total=False):
 	#: Trace ids associated with the creation / update of this document
 	traceid: dict[str, None | int]
 
+	#: hash of potentially underlying job schema
+	jobid: None | int
+
 	#: Name of the associated process
 	process: int | str
 
