@@ -7,7 +7,7 @@
 # Last Modified Date:  23.03.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Tuple
+from typing import Any
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 
 
