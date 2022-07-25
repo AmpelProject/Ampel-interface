@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                04.03.2021
-# Last Modified Date:  04.03.2021
+# Last Modified Date:  25.07.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from enum import IntEnum
@@ -16,5 +16,9 @@ class EventCode(IntEnum):
 	"""
 
 	OK                        = 0
+	UNDEFINED                 = 1
+	PRE_CHECK_EXIT            = 2
+	ABORTED	                  = 3
+
 	ERROR                     = -1
 	EXCEPTION                 = -2
