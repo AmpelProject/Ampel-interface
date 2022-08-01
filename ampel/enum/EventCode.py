@@ -16,9 +16,10 @@ class EventCode(IntEnum):
 	"""
 
 	OK                        = 0
-	UNDEFINED                 = 1
-	PRE_CHECK_EXIT            = 2
-	ABORTED	                  = 3
+	RUNNING                   = 1
+	UNSPECIFIED               = 2
+	PRE_CHECK_EXIT            = 3
+	ABORTED                   = 4
 
 	ERROR                     = -1
 	EXCEPTION                 = -2
