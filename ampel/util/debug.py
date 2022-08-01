@@ -34,3 +34,5 @@ class ForkedPdb(pdb.Pdb):
 		finally:
 			sys.stdin = _stdin
 
+
+mp_breakpoint = ForkedPdb().set_trace
