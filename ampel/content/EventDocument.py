@@ -21,6 +21,9 @@ class EventDocument(TypedDict, total=False):
 	#: Name of the ampel process (may be hashed for performance reasons)
 	process: int | str
 
+	#: Task number (job system)
+	task: int
+
 	#: process version
 	version: int
 
