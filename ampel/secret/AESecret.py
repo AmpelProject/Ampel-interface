@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-core/ampel/secret/AESecret.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 20.06.2021
-# Last Modified Date: 20.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/secret/AESecret.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                20.06.2021
+# Last Modified Date:  30.12.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional
-from pydantic import BaseModel
 from ampel.secret.Secret import Secret
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AESecret(Secret[str], BaseModel):
+class AESecret(Secret[str], AmpelBaseModel):
 	"""
 	AES encrypted secret.
 
@@ -40,7 +39,7 @@ class AESecret(Secret[str], BaseModel):
 	salt: str
 	ct: str
 
-	value: Optional[str]
+	value: None | str
 
 	def __repr__(self):
 		return '<AESecret>'

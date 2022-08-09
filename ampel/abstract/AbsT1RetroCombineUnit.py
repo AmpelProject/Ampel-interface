@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsT1RetroCombineUnit.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 17.06.2021
-# Last Modified Date: 17.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsT1RetroCombineUnit.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                17.06.2021
+# Last Modified Date:  17.06.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Union
 from collections.abc import Iterable
@@ -22,9 +22,9 @@ class AbsT1RetroCombineUnit(AmpelABC, LogicalUnit, abstract=True):
 
 	debug: bool = False
 	channel: ChannelId
-	access: list[Union[int, str]]
-	policy: list[Union[int, str]]
+	access: list[int | str]
+	policy: list[int | str]
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> Union[list[list[DataPointId]], list[T1CombineResult]]:
+	def combine(self, datapoints: Iterable[DataPoint]) -> list[list[DataPointId]] | list[T1CombineResult]:
 		...

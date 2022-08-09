@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/protocol/AmpelAlertProtocol.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 24.11.2021
-# Last Modified Date: 24.11.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/protocol/AmpelAlertProtocol.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                24.11.2021
+# Last Modified Date:  24.11.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union, Any, Protocol
+from typing import Any, Protocol, runtime_checkable
 from collections.abc import Sequence
 from ampel.types import StockId, Tag
 
-
+@runtime_checkable
 class AmpelAlertProtocol(Protocol):
 
 	@property
@@ -23,11 +23,11 @@ class AmpelAlertProtocol(Protocol):
 		...
 
 	@property
-	def tag(self) -> Union[None, Tag, list[Tag]]:
+	def tag(self) -> None | Tag | list[Tag]:
 		...
 
 	@property
-	def extra(self) -> Optional[dict[str, Any]]:
+	def extra(self) -> None | dict[str, Any]:
 		...
 
 	@property
@@ -35,18 +35,18 @@ class AmpelAlertProtocol(Protocol):
 		...
 
 	def get_values(self,
-		key: str, filters: Optional[Sequence[dict[str, Any]]] = None
+		key: str, filters: None | Sequence[dict[str, Any]] = None
 	) -> list[Any]:
 		...
 
 	def get_tuples(self,
 		key1: str, key2: str,
-		filters: Optional[Sequence[dict[str, Any]]] = None
+		filters: None | Sequence[dict[str, Any]] = None
 	) -> list[tuple[Any, Any]]:
 		...
 
 	def get_ntuples(self,
-		params: list[str], filters: Optional[Sequence[dict[str, Any]]] = None
+		params: list[str], filters: None | Sequence[dict[str, Any]] = None
 	) -> list[tuple]:
 		...
 

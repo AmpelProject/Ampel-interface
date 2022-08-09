@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/content/MetaActivity.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 07.10.2021
-# Last Modified Date: 10.10.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/content/MetaActivity.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                07.10.2021
+# Last Modified Date:  10.10.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, TypedDict
+from typing import TypedDict
 from collections.abc import Sequence
 from ampel.types import ChannelId, Tag, DataPointId
 from ampel.enum.MetaActionCode import MetaActionCode
@@ -20,7 +20,7 @@ class MetaActivity(TypedDict, total=False):
 	action: MetaActionCode
 
 	#: Free-form labels
-	tag: Union[Tag, Sequence[Tag]]
+	tag: Tag | Sequence[Tag]
 
 	#: references dps exclusion (t1)
 	excl: list[DataPointId]
@@ -29,4 +29,4 @@ class MetaActivity(TypedDict, total=False):
 	code: int
 
 	#: Channel(s) associated with action
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	channel: ChannelId | Sequence[ChannelId]

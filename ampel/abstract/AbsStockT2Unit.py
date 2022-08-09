@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsStockT2Unit.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 28.12.2019
-# Last Modified Date: 11.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsStockT2Unit.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                28.12.2019
+# Last Modified Date:  11.06.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.types import Union, UBson
 from ampel.struct.UnitResult import UnitResult
@@ -21,7 +21,7 @@ class AbsStockT2Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, stock_doc: StockDocument) -> Union[UBson, UnitResult]:
+	def process(self, stock_doc: StockDocument) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

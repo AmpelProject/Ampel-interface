@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/base/decorator.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 27.12.2017
-# Last Modified Date: 17.05.2020
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/base/decorator.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                27.12.2017
+# Last Modified Date:  17.05.2020
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from functools import partial
 from typing import TypeVar, overload

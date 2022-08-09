@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/content/StockDocument.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 28.12.2019
-# Last Modified Date: 05.05.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/content/StockDocument.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                28.12.2019
+# Last Modified Date:  05.05.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Union, TypedDict, Literal
+from typing import Any, TypedDict, Literal
 from collections.abc import Sequence
 from ampel.types import StockId, ChannelId, Tag
 from ampel.content.JournalRecord import JournalRecord
@@ -43,10 +43,10 @@ class StockDocument(TypedDict, total=False):
 	ts: dict[ChannelId, dict[Literal['tied', 'upd'], float]]
 
 	#: Last update time for any channel
-	updated: Union[int, float]
+	updated: int | float
 
 	#: External name(s) associated with the stock
-	name: Sequence[Union[int, str]]
+	name: Sequence[int | str]
 
 	#: Optional specific content
 	body: dict[str, Any]

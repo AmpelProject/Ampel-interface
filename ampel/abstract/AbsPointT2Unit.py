@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsPointT2Unit.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 28.12.2019
-# Last Modified Date: 28.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsPointT2Unit.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                28.12.2019
+# Last Modified Date:  28.09.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union
 from ampel.types import UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.content.DataPoint import DataPoint
@@ -48,7 +47,7 @@ class AbsPointT2Unit(AmpelABC, LogicalUnit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, datapoint: DataPoint) -> Union[UBson, UnitResult]:
+	def process(self, datapoint: DataPoint) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

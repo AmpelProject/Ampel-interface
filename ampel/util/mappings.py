@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/util/mappings.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 07.06.2018
-# Last Modified Date: 10.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/util/mappings.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                07.06.2018
+# Last Modified Date:  30.12.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from pydantic import BaseModel
-from typing import Any, Union, Optional, Sequence, Iterable, Mapping, MutableMapping
+from typing import Any
+from collections.abc import MutableMapping, Mapping, Iterable, Sequence
 from ampel.types import UBson, strict_iterable, T
+from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
 def get_by_path(
-	mapping: dict, path: Union[str, Sequence[str]], delimiter: str = '.'
-) -> Optional[UBson]:
+	mapping: dict, path: str | Sequence[str], delimiter: str = '.'
+) -> None | UBson:
 	"""
 	Get an item from a nested mapping by path, e.g.
 	'foo.bar.baz' -> mapping['foo']['bar']['baz']
@@ -27,7 +29,7 @@ def get_by_path(
 		path = path.split(delimiter)
 
 	# check for int elements encoded as str
-	path: list[Union[int, str]] = [ # type: ignore
+	path: list[int | str] = [ # type: ignore
 		(el if not el.isdigit() else int(el)) for el in path
 	]
 
@@ -39,7 +41,7 @@ def get_by_path(
 	return mapping
 
 
-def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimiter: str = '.') -> Optional[tuple[str, UBson]]:
+def get_by_json_path(d: dict[str, Any], path: str | Sequence[str], delimiter: str = '.') -> None | tuple[str, UBson]:
 	"""
 	Lacks robustness, unflexible, fast.
 	Supports only Bracket notation with number (https://cburgmer.github.io/json-path-comparison/)
@@ -84,7 +86,7 @@ def get_by_json_path(d: dict[str, Any], path: Union[str, Sequence[str]], delimit
 
 
 def set_by_path(
-	d: dict, path: Union[str, Sequence[str]], val: Any,
+	d: dict, path: str | Sequence[str], val: Any,
 	delimiter: str = '.', create: bool = True
 ) -> bool:
 	"""
@@ -107,7 +109,7 @@ def set_by_path(
 	return True
 
 
-def del_by_path(d: dict, path: Union[str, Sequence[str]], delimiter: str = '.') -> bool:
+def del_by_path(d: dict, path: str | Sequence[str], delimiter: str = '.') -> bool:
 	""" :returns: False if the key was successfully deleted, True otherwise """
 
 	if isinstance(path, str):
@@ -288,8 +290,8 @@ def dictify(item):
 	"""
 	Recursively dictifies input
 	"""
-	if isinstance(item, BaseModel):
-		return item.dict(exclude_unset=False)
+	if isinstance(item, (AmpelBaseModel, AmpelGenericModel)):
+		return item.dict()
 
 	if isinstance(item, dict):
 		# cast potential dict subclasses into plain old dicts
@@ -301,7 +303,7 @@ def dictify(item):
 	return item
 
 
-def merge_dicts(items: Sequence[Optional[dict[T, Any]]]) -> Optional[dict[T, Any]]:
+def merge_dicts(items: Sequence[None | dict[T, Any]]) -> None | dict[T, Any]:
 	"""
 	Merge a sequence of dicts recursively. Elements that are None are skipped.
 	"""

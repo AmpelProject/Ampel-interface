@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/view/T2DocView.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 10.02.2021
-# Last Modified Date: 01.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/view/T2DocView.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                10.02.2021
+# Last Modified Date:  01.12.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from datetime import datetime
-from typing import Optional, Union, Any, Literal, overload
+from typing import Any, Literal, overload
 from collections.abc import Sequence
 from ampel.types import StockId, UBson, T2Link, Tag, T
 from ampel.content.MetaRecord import MetaRecord
@@ -29,19 +29,19 @@ class T2DocView:
 
 	__slots__ = 'unit', 'config', 'link', 'stock', 'tag', 'code', 'meta', 't2_type', 'body'
 
-	stock: Union[StockId, Sequence[StockId]]
-	unit: Union[int, str]
-	config: Optional[dict[str, Any]]
+	stock: StockId | Sequence[StockId]
+	unit: int | str
+	config: None | dict[str, Any]
 	link: T2Link
 	tag: Sequence[Tag]
 	code: int
 	t2_type: int
 	meta: Sequence[MetaRecord]
-	body: Optional[Sequence[UBson]]
+	body: None | Sequence[UBson]
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T2Document, conf: Optional[AmpelConfig] = None) -> "T2DocView":
+	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "T2DocView":
 		"""
 		We might want to move this method elsewhere in the future
 		"""
@@ -74,15 +74,15 @@ class T2DocView:
 
 
 	def __init__(self,
-		stock: Union[StockId, Sequence[StockId]],
-		unit: Union[int, str],
+		stock: StockId | Sequence[StockId],
+		unit: int | str,
 		link: T2Link,
 		tag: Sequence[Tag],
 		code: int,
 		t2_type: int,
 		meta: Sequence[MetaRecord],
-		config: Optional[dict[str, Any]] = None,
-		body: Optional[Sequence[UBson]] = None
+		config: None | dict[str, Any] = None,
+		body: None | Sequence[UBson] = None
 	):
 		sa = object.__setattr__
 		sa(self, 'stock', stock)
@@ -121,7 +121,7 @@ class T2DocView:
 		return True if self.body else False
 
 
-	def get_payload(self, code: Optional[int] = None) -> UBson:
+	def get_payload(self, code: None | int = None) -> UBson:
 		"""
 		:returns: the content of the last array element of body associated with a meta code >= 0 or equals code arg.
 		"""
@@ -161,8 +161,8 @@ class T2DocView:
 	def get_value(self,
 		key: str,
 		rtype: type[T], *,
-		code: Optional[int] = None,
-	) -> Optional[T]:
+		code: None | int = None,
+	) -> None | T:
 		"""
 		:returns: the value of a given key from the content of the last array element of body
 		associated with a meta code >= 0 or equals code arg
@@ -179,15 +179,15 @@ class T2DocView:
 	@overload
 	def get_ntuple(self,
 		key: tuple[str, ...], rtype: type[T], *,
-		no_none: Literal[True], require_all_keys: bool, code: Optional[int]
-	) -> Optional[tuple[T, ...]]:
+		no_none: Literal[True], require_all_keys: bool, code: None | int
+	) -> None | tuple[T, ...]:
 		...
 
 	@overload
 	def get_ntuple(self,
 		key: tuple[str, ...], rtype: type[T], *,
-		no_none: Literal[False], require_all_keys: bool, code: Optional[int]
-	) -> Optional[tuple[Optional[T], ...]]:
+		no_none: Literal[False], require_all_keys: bool, code: None | int
+	) -> None | tuple[None | T, ...]:
 		...
 
 	def get_ntuple(self,
@@ -195,8 +195,8 @@ class T2DocView:
 		rtype: type[T], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
-		code: Optional[int] = None,
-	) -> Union[None, tuple[T, ...], tuple[Optional[T], ...]]:
+		code: None | int = None,
+	) -> None | tuple[T, ...] | tuple[None | T, ...]:
 		"""
 		Returns a tuple of n values from the content of the last array element of body
 		associated with a meta code >= 0 or equals code arg
@@ -245,12 +245,12 @@ class T2DocView:
 
 
 	@overload
-	def get_time_created(self, to_string: Literal[False]) -> Optional[float]:
+	def get_time_created(self, to_string: Literal[False]) -> None | float:
 		...
 	@overload
-	def get_time_created(self, to_string: Literal[True]) -> Optional[str]:
+	def get_time_created(self, to_string: Literal[True]) -> None | str:
 		...
-	def get_time_created(self, to_string: bool = False) -> Optional[Union[float, str]]:
+	def get_time_created(self, to_string: bool = False) -> None | float | str:
 
 		ts = self.meta[0]['ts']
 
@@ -261,12 +261,12 @@ class T2DocView:
 
 
 	@overload
-	def get_time_updated(self, to_string: Literal[False]) -> Optional[float]:
+	def get_time_updated(self, to_string: Literal[False]) -> None | float:
 		...
 	@overload
-	def get_time_updated(self, to_string: Literal[True]) -> Optional[str]:
+	def get_time_updated(self, to_string: Literal[True]) -> None | str:
 		...
-	def get_time_updated(self, to_string: bool = False) -> Optional[Union[float, str]]:
+	def get_time_updated(self, to_string: bool = False) -> None | float | str:
 
 		if not self.has_content():
 			return None

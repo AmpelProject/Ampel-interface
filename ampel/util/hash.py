@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/util/hash.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 22.05.2021
-# Last Modified Date: 10.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/util/hash.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                22.05.2021
+# Last Modified Date:  12.07.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import json, xxhash # type: ignore[import]
-from typing import TypeVar, Optional
+from typing import TypeVar
 from ampel.util.mappings import flatten_dict
 
 HT = TypeVar("HT", int, bytes, str)
@@ -52,7 +52,7 @@ def hash_payload(payload: bytes, ret: type[HT] = int, size: int = -64) -> HT: # 
 
 
 def build_unsafe_dict_id(
-	dict_arg: Optional[dict],
+	dict_arg: None | dict,
 	ret: type[HT] = int, # type: ignore[assignment]
 	size: int = -64,
 	sort_keys: bool = True,
@@ -63,6 +63,7 @@ def build_unsafe_dict_id(
 	"""
 	:param dict_arg: can be nested, can be None
 	:param ret: return type, can be bytes, str (hex digest) or int
+	:param size: see hash_payload docstring
 	:param alg: hash algorithm (default is xx_64)
 	:param sort_keys: see `flatten_dict` docstring
 	:param flatten_list_members: see `flatten_dict` docstring
@@ -70,29 +71,29 @@ def build_unsafe_dict_id(
 	:param flatten_lists: see `flatten_dict` docstring
 
 	Examples:
-	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=-32)
-	Out[]: -1226665093
+	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=32)
+	Out[]: 2122149373
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=32)
-	Out[]: 3068302203
+	Out[]: 2122149373
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=-64)
-	Out[]: 7919378396208456243
+	Out[]: -8986814508490313900
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'a': ['r', 1, 4], 'b': 3}}, size=32, ret=str)
-	Out[]: '909d2172'
+	Out[]: 'ec94bc00'
 
 	In []: build_unsafe_dict_id({'b': 2, 'a': 1, 'c': {'b': 3, 'a': [4, 'r', 1]}}, size=32, ret=str)
-	Out[]: '909d2172'
+	Out[]: 'ec94bc00'
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 5]}}, size=32, ret=str)
-	Out[]: 'd87f695f'
+	Out[]: 'a6cc3e6b'
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=128, ret=str)
-	Out[]: '747ddf83cb323db7365d303faa1bddad'
+	Out[]: '4ee95bc895cf7ef0ddac663121b2b911'
 
 	In []: build_unsafe_dict_id({'a': 1, 'b': 2, 'c': {'b': 3, 'a': [1, 4]}}, size=128)
-	Out[]: 154844018037484193130281437272915828141
+	Out[]: 104891450430532601648229971339559221521
 
 	Note:
 	In []: flatten_dict(

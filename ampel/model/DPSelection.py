@@ -1,39 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/model/DPSelection.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 10.03.2020
-# Last Modified Date: 28.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/model/DPSelection.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                10.03.2020
+# Last Modified Date:  28.09.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Optional, Literal
+from typing import Literal
 from collections.abc import Callable
 from ampel.model.UnitModel import UnitModel
-from ampel.model.StrictModel import StrictModel
 from ampel.base.AuxUnitRegister import AuxUnitRegister
 from ampel.abstract.AbsApplicable import AbsApplicable
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class DPSelection(StrictModel):
+class DPSelection(AmpelBaseModel):
 
 	#: Aux unit name used to filter datapoints.
 	# (Unit must define method apply(self, arg: Any) -> Any)
-	filter: Optional[Union[UnitModel, str]]
+	filter: None | str | UnitModel[str] = None
 
 	#: Dict key used for sorting
 	#: Use 'id' to sort dps based on key 'id' at root level,
 	#: anything else will target a field (by name) in 'body'
-	sort: Optional[str]
+	sort: None | str = None
 
 	#: How to slice the datapoint array.
 	#: If a list is provided, it must have a length of 3
-	select: Union[
-		None,
-		Literal['first'],
-		Literal['last'],
-		tuple[Optional[int], Optional[int], Optional[int]]
-	] = None
+	select: None | Literal['first', 'last'] | tuple[None|int, None|int, None|int] = None
 
 
 	def __init__(self, **kwargs):
@@ -47,7 +42,7 @@ class DPSelection(StrictModel):
 			raise ValueError("Options 'sort' requires option 'select'")
 
 
-	def tools(self) -> tuple[Optional[AbsApplicable], Optional[Callable[[list], list]], slice]:
+	def tools(self) -> tuple[None|AbsApplicable, None|Callable[[list], list], slice]:
 
 		so = None
 		sl = None

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/view/ReadOnlyDict.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : Unspecified
-# Last Modified Date: 16.04.2020
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/view/ReadOnlyDict.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                Unspecified
+# Last Modified Date:  16.04.2020
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 
 class ReadOnlyDict(dict):
@@ -21,7 +21,7 @@ class ReadOnlyDict(dict):
 	popitem = __readonly__
 	clear = __readonly__
 	update = __readonly__ # type: ignore
-	setdefault = __readonly__
+	setdefault = __readonly__ # type: ignore
 
 	del __readonly__
 

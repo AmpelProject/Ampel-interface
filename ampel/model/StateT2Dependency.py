@@ -1,20 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/model/StateT2Dependency.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 06.02.2021
-# Last Modified Date: 28.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/model/StateT2Dependency.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                06.02.2021
+# Last Modified Date:  28.09.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Generic
+from typing import Generic
 from ampel.types import T
 from ampel.model.UnitModel import UnitModel
 from ampel.model.DPSelection import DPSelection
 
-# Note class inheritance order matters
-# "TypeError: Cannot create a consistent method resolution"
-# is raised if order is switched (possibly due to pydantic's metaclass)
+
 class StateT2Dependency(UnitModel[T], Generic[T]):
 	"""
 	Used to specify how "tied state t2" units should select the associated required t2 document.
@@ -32,4 +30,4 @@ class StateT2Dependency(UnitModel[T], Generic[T]):
 
 	#: - None: the state associated with the root tied state T2 will be used (value of 'link' in t2 doc)
 	#: - DPSelection: allows tied state T2 units to be bound with point t2 units.
-	link_override: Optional[DPSelection]
+	link_override: None | DPSelection

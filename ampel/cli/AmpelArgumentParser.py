@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/cli/AmpelArgumentParser.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 17.03.2021
-# Last Modified Date: 22.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/cli/AmpelArgumentParser.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                17.03.2021
+# Last Modified Date:  27.06.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import textwrap
 from os import environ
-from typing import Optional, Union, Any, Tuple
+from typing import Any
 from ampel.cli.MaybeIntAction import MaybeIntAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
 from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
@@ -59,14 +59,14 @@ class AmpelArgumentParser(ArgumentParser):
 	See the class ampel.cli.T2Command for an full utilization of this class
 	"""
 
-	def __init__(self, ampel_op: Optional[str] = None, **kwargs) -> None:
+	def __init__(self, ampel_op: None | str = None, **kwargs) -> None:
 
 		super().__init__(formatter_class=AmpelHelpFormatter, **kwargs)
 		self.notes: list[str] = []
 		self.examples: list[str] = []
 		self.args_descr: dict[str, str] = {}
 		self._logic_ops_note_added = False
-		self.notations: set[Union[str, tuple[str, str]]] = set()
+		self.notations: set[str | tuple[str, str]] = set()
 		self.has_env_conf = False
 		self.groups: dict[str, _ArgumentGroup] = {}
 		self.bullet = "\u2022"
@@ -122,7 +122,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.groups[name].set_defaults(**kwargs)
 
 
-	def add_description(self, descr: Optional[Union[str, list[str]]]) -> None:
+	def add_description(self, descr: None | str | list[str]) -> None:
 
 		if not descr:
 			return
@@ -152,13 +152,13 @@ class AmpelArgumentParser(ArgumentParser):
 		return -1
 
 
-	def get_group(self, name: str) -> Optional[_ArgumentGroup]:
+	def get_group(self, name: str) -> None | _ArgumentGroup:
 		return self.groups.get(name)
 
 
 	def add_arg(self,
-		name: str, group: Union[str, _ArgumentGroup] = "optional",
-		help: Optional[str] = None, **kwargs
+		name: str, group: str | _ArgumentGroup = "optional",
+		help: None | str = None, **kwargs
 	) -> None:
 		"""
 		:param target:
@@ -232,7 +232,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.args_descr = args_descr
 
 
-	def add_note(self, note: str, pos: Optional[int] = None, ref: Optional[str] = None) -> None:
+	def add_note(self, note: str, pos: None | int = None, ref: None | str = None) -> None:
 		""" Newlines in note are supported and will be properly formatted """
 
 		notes = note.split("\n")
@@ -267,7 +267,7 @@ class AmpelArgumentParser(ArgumentParser):
 
 	def add_example(self,
 		ex: str, prepend="ampel ", append="", auto_strip_config: bool = True,
-		ref: Optional[str] = None
+		ref: None | str = None
 	) -> None:
 		if ref:
 			prepend = f"{self.ex_open}{ref}{self.ex_close} {prepend}"
@@ -280,8 +280,8 @@ class AmpelArgumentParser(ArgumentParser):
 
 	def create_logic_args(self,
 		name: str, group: str, descr: str, metavar: str = "#",
-		required: bool = False, pos: Optional[int] = None,
-		ref: Optional[str] = None, excl: bool = False,
+		required: bool = False, pos: None | int = None,
+		ref: None | str = None, excl: bool = False,
 		json: bool = True, **kwargs
 	) -> None:
 		"""
@@ -364,14 +364,14 @@ class AmpelArgumentParser(ArgumentParser):
 		)
 		
 
-	def hint_query_logic(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_query_logic(self, pos: None | int = None, ref: None | str = None):
 		self.add_note(
 			"Matching criteria related to different keys are AND-combined with each other",
 			pos, ref
 		)
 
 
-	def hint_time_format(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_time_format(self, pos: None | int = None, ref: None | str = None):
 		self.add_note(
 			"Date-time strings are parsed using datetime.fromisoformat(<value>).\n" +
 			"Example of supported formats (unexhaustive): 2011-11-04 or 2011-11-04T00:05:23",
@@ -379,10 +379,10 @@ class AmpelArgumentParser(ArgumentParser):
 		)
 
 
-	def hint_config_override(self, pos: Optional[int] = None, ref: Optional[str] = None):
+	def hint_config_override(self, pos: None | int = None, ref: None | str = None):
 		self.add_note(
 			"Any existing config parameter can be overriden using -path.to.config.key value\n" +
-			"Example: -db.prefix AmpelTest",
+			"Example: -mongo.prefix AmpelTest",
 			pos, ref
 		)
 
@@ -487,7 +487,7 @@ class AmpelArgumentParser(ArgumentParser):
 	@classmethod
 	def build_choice_help(cls,
 		op: str, sub_ops: list[str], hlp: dict[str, str],
-		description: Optional[str] = None
+		description: None | str = None
 	) -> 'AmpelArgumentParser':
 
 		parser = AmpelArgumentParser(ampel_op=op)

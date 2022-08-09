@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/enum/DocumentCode.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 14.12.2017
-# Last Modified Date: 03.05.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/enum/DocumentCode.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                14.12.2017
+# Last Modified Date:  17.05.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from enum import IntEnum
 
@@ -33,10 +33,11 @@ class DocumentCode(IntEnum):
 	OK                        = 0
 	NEW                       = -1
 	ERROR                     = -2
-	EXCEPTION                 = -3
-	RUNNING                   = -4
-	RERUN_REQUESTED           = -5
-	TOO_MANY_TRIALS           = -6
+	INTERNAL_ERROR            = -3
+	EXCEPTION                 = -4
+	RUNNING                   = -5
+	RERUN_REQUESTED           = -6
+	TOO_MANY_TRIALS           = -7
 
 	# T1
 	T1_NEW_PRIO               = -1000  # For now, std ingesters do not support this

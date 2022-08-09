@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/model/UnitModel.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 26.09.2019
-# Last Modified Date: 15.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/model/UnitModel.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                26.09.2019
+# Last Modified Date:  15.09.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Dict, Optional, Any, Union, Generic
+from typing import Any, Generic, Literal
 from ampel.types import T
-from ampel.model.StrictGenericModel import StrictGenericModel
+from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
-class UnitModel(StrictGenericModel, Generic[T]):
+class UnitModel(AmpelGenericModel, Generic[T]):
 	"""
 	Specification of a processing unit.
-	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[T2SNCosmo]])
+	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal['T2SNCosmo']])
 	"""
 
 	#: Name of ampel unit class
@@ -25,16 +25,9 @@ class UnitModel(StrictGenericModel, Generic[T]):
 	#: - dict: config 'as is'
 	#: - str: a corresponding alias key in the AmpelConfig must match the provided string
 	#: - int: used internally for T2 units, a corresponding int key (AmpelConfig, base key 'confid') must match the provided integer
-	config: Union[None, int, str, Dict[str, Any]]
+	config: None | int | str | dict[str, Any] = None
 
-	secrets: Union[None, Dict[str, Any]]
+	secrets: None | dict[str, Any] = None
 
 	#: Values to override in the config
-	override: Optional[Dict[str, Any]]
-
-
-	def dict(self, **kwargs):
-		ret = super().dict(**kwargs)
-		if 'secrets' in ret:
-			del ret['secrets']
-		return ret
+	override: None | dict[str, Any] = None

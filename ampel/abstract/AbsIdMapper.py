@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsIdMapper.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 12.02.2021
-# Last Modified Date: 12.02.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsIdMapper.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                12.02.2021
+# Last Modified Date:  12.02.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, overload
+from typing import overload
 from ampel.types import StrictIterable, StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -28,7 +28,7 @@ class AbsIdMapper(AmpelABC, AmpelBaseModel, abstract=True):
 
 	@classmethod
 	@abstractmethod
-	def to_ampel_id(cls, ext_id: Union[str, StrictIterable[str]]) -> Union[int, list[int]]:
+	def to_ampel_id(cls, ext_id: str | StrictIterable[str]) -> int | list[int]:
 		...
 
 	@overload
@@ -43,5 +43,5 @@ class AbsIdMapper(AmpelABC, AmpelBaseModel, abstract=True):
 
 	@classmethod
 	@abstractmethod
-	def to_ext_id(cls, ampel_id: Union[StockId, StrictIterable[StockId]]) -> Union[str, list[str]]:
+	def to_ext_id(cls, ampel_id: StockId | StrictIterable[StockId]) -> str | list[str]:
 		...

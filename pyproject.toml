@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.8.2-alpha.9"
+version = "0.8.3-alpha.15"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -17,20 +17,21 @@ classifiers = [
 packages = [{include = "ampel"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.10"
-pydantic = ">=1.8,<1.9"
-xxhash = "^2.0.2"
+python = "^3.10"
+pydantic = "^1.9.0"
+xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
+ujson = "^5.1.0"
 Sphinx = {version = "^4.0.0", optional = true}
 sphinx-autodoc-typehints = {version = "^1.11.1", optional = true}
-tomlkit = {version = "^0.8.0", optional = true}
+tomlkit = {version = "^0.11.0", optional = true}
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
-mypy = "^0.910"
-types-PyYAML = "^6.0.1"
-types-setuptools = "^57.4.5"
+mypy = "^0.942"
+types-PyYAML = "^6.0.11"
+types-setuptools = "^57.4.18"
 
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]

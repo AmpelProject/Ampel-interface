@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/secret/NamedSecret.py
-# License           : BSD-3-Clause
-# Author            : Jakob van Santen <jakob.van.santen@desy.de>
-# Date              : 14.08.2020
-# Last Modified Date: 20.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/secret/NamedSecret.py
+# License:             BSD-3-Clause
+# Author:              Jakob van Santen <jakob.van.santen@desy.de>
+# Date:                14.08.2020
+# Last Modified Date:  30.12.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional
 from ampel.secret.Secret import Secret, T
-from pydantic import BaseModel
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class NamedSecret(Secret[T], BaseModel):
+class NamedSecret(Secret[T], AmpelBaseModel):
 	"""
 	A Secret:
 	- featuring a label used as lookup key during secret resolution
@@ -20,7 +19,7 @@ class NamedSecret(Secret[T], BaseModel):
 	"""
 
 	label: str
-	value: Optional[T] = None
+	value: None | T = None
 
 	def __repr__(self):
 		return '<NamedSecret>'

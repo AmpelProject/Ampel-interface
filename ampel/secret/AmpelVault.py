@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/secret/AmpelVault.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 21.06.2021
-# Last Modified Date: 22.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/secret/AmpelVault.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                21.06.2021
+# Last Modified Date:  22.06.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Optional, overload
+from typing import Any, overload
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
 from ampel.secret.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
@@ -27,11 +27,11 @@ class AmpelVault:
 		return False
 
 	@overload
-	def get_named_secret(self, label: str) -> Optional[NamedSecret[Any]]:
+	def get_named_secret(self, label: str) -> None | NamedSecret[Any]:
 		...
 	
 	@overload
-	def get_named_secret(self, label: str, ValueType: type[T]) -> Optional[NamedSecret[T]]:
+	def get_named_secret(self, label: str, ValueType: type[T]) -> None | NamedSecret[T]:
 		...
 	
 	def get_named_secret(self, label, ValueType=object):

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/setup.py
-# License           : BSD-3-Clause
-# Author            : vb, jvs
-# Date              : Unspecified
-# Last Modified Date: 19.11.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/setup.py
+# License:             BSD-3-Clause
+# Author:              vb, jvs
+# Date:                Unspecified
+# Last Modified Date:  01.08.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from setuptools import setup, find_namespace_packages
 
@@ -20,11 +20,11 @@ extras_require = {
 
 setup(
 	name = 'ampel-interface',
-	version = '0.8.2-alpha.6',
+	version = '0.8.3-alpha.15',
 	description = 'Base classes for the Ampel analysis platform',
 	long_description = '# Ampel-interface\n\n`ampel-interface` provides type-hinted abstract base classes for [Ampel](https://ampelproject.github.io).',
 	author = 'Valery Brinnel',
-	author_email = None,
+	#author_email = None,
 	maintainer = 'Jakob van Santen',
 	maintainer_email = 'jakob.van.santen@desy.de',
 	url = 'https://ampelproject.github.io',
@@ -32,5 +32,5 @@ setup(
 	package_data = {'': ['*']},
 	install_requires = install_requires,
 	extras_require = extras_require,
-	python_requires = '>=3.9,<4.0',
+	python_requires = '>=3.10,<4.0',
 )

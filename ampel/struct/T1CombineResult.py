@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/struct/T1CombineResult.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 04.05.2021
-# Last Modified Date: 17.06.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/struct/T1CombineResult.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                04.05.2021
+# Last Modified Date:  17.06.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Any
+from typing import Any
 from ampel.types import DataPointId
 
 
@@ -21,8 +21,8 @@ class T1CombineResult:
 
 	def __init__(self,
 		dps: list[DataPointId],
-		code: Optional[int] = None,
-		meta: Optional[dict[str, Any]] = None
+		code: None | int = None,
+		meta: None | dict[str, Any] = None
 	) -> None:
 		"""
 		:param dps: ids of the datapoints to combine

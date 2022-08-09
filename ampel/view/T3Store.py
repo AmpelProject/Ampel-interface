@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/view/T3Store.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 01.12.2021
-# Last Modified Date: 10.12.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/view/T3Store.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                01.12.2021
+# Last Modified Date:  16.01.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Optional, Union, Any
 from collections.abc import Container, Iterator, Iterable, Sequence
+from ampel.types import JDict, OneOrMany
 from ampel.view.T3DocView import T3DocView
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.content.T3Document import T3Document
@@ -19,14 +19,25 @@ from ampel.util.hash import build_unsafe_dict_id
 
 class T3Store:
 
-	__slots__ = 'views', 'units', 'session'
-	views: Optional[Sequence[T3DocView]]
-	session: Optional[dict[str, Any]]
+	__slots__ = 'views', 'units', 'session', 'extra'
+
+	# Sequence of T3 views (see T3IncludeDirective.docs and T3Processor.include)
+	views: None | Sequence[T3DocView]
+
+	# Set of unit names of the t3 views contained in this store
 	units: set[str]
+
+	# Read-only dict containing session information available in this store.
+	# (see T3IncludeDirective.session and T3Processor.include)
+	# Note that session infos are saved into 'meta' and therefore must be BSON encodable
+	session: None | JDict
+
+	# Free-form dict (usable for dedicated inter-units communication for example)
+	extra: JDict
 
 
 	@classmethod # Static ctor
-	def of(cls, docs: Optional[Sequence[T3Document]], conf: AmpelConfig) -> "T3Store":
+	def of(cls, docs: None | Sequence[T3Document], conf: AmpelConfig) -> "T3Store":
 		return cls(
 			views = tuple(
 				T3DocView.of(doc, conf)
@@ -35,10 +46,11 @@ class T3Store:
 		)
 
 
-	def __init__(self, views: Optional[Sequence[T3DocView]] = None, session: Optional[dict[str, Any]] = None):
+	def __init__(self, views: None | Sequence[T3DocView] = None, session: None | JDict = None):
 		object.__setattr__(self, 'views', views)
 		object.__setattr__(self, 'session', ReadOnlyDict(session) if session else None)
 		object.__setattr__(self, 'units', set(v.unit for v in views) if views else set())
+		object.__setattr__(self, 'extra', {})
 
 
 	def __setattr__(self, k, v):
@@ -59,35 +71,34 @@ class T3Store:
 			object.__setattr__(self, 'views', (t3v, ))
 
 
-	def add_session_info(self, d: dict[str, Any]) -> None:
+	def add_session_info(self, d: JDict) -> None:
 		if self.session:
 			object.__setattr__(self, 'session', ReadOnlyDict(self.session | d))
 		else:
 			object.__setattr__(self, 'session', ReadOnlyDict(d))
 
 
-	def contains(self, unit: Union[str, Iterable[str]]) -> bool:
+	def contains(self, unit: str | Iterable[str]) -> bool:
 		if isinstance(unit, str):
 			return unit in self.units
 		return bool(len(set(unit) - self.units))
 
 
 	def get_mandatory_view(self,
-		unit: Union[None, str, Container[str]] = None, *,
-		config: Optional[Union[int, dict[str, Any], tuple[Union[int, dict[str, Any]]]]] = None,
-		code: Optional[Union[int]] = None
+		unit: None | str | Container[str] = None, *,
+		config: None | int | JDict = None,
+		code: None | int = None
 	) -> T3DocView:
-		""" really tired of @overload """
 		if (x := self.get_view(unit, config=config, code=code)):
 			return x
 		raise ValueError(f"{unit} results are required")
 
 			
 	def get_view(self,
-		unit: Union[None, str, Container[str]] = None, *,
-		config: Optional[Union[int, dict[str, Any], tuple[Union[int, dict[str, Any]]]]] = None,
-		code: Optional[Union[int]] = None
-	) -> Optional[T3DocView]:
+		unit: None | str | Container[str] = None, *,
+		config: None | int | JDict = None,
+		code: None | int = None
+	) -> None | T3DocView:
 		return next(
 			self.get_views(unit, config, code),
 			None
@@ -95,9 +106,9 @@ class T3Store:
 
 
 	def get_views(self,
-		unit: Union[None, str, Container[str]] = None,
-		config: Optional[Union[int, dict[str, Any], tuple[Union[int, dict[str, Any]]]]] = None,
-		code: Optional[Union[int]] = None,
+		unit: str | Container[str] | None = None,
+		config: None | OneOrMany[int | JDict] = None,
+		code: None | int = None
 	) -> Iterator[T3DocView]:
 		"""
 		Get a subset of T3 documents.
@@ -108,7 +119,7 @@ class T3Store:
 		if not self.views:
 			return None
 
-		units: Optional[Container[str]] = [unit] if isinstance(unit, str) else unit
+		units: None | Container[str] = [unit] if isinstance(unit, str) else unit
 
 		if config is None:
 			configs = None
@@ -116,7 +127,7 @@ class T3Store:
 			configs = [build_unsafe_dict_id(dictify(config))]
 		elif isinstance(config, int):
 			configs = [config]
-		elif isinstance(config, tuple):
+		elif isinstance(config, Sequence):
 			configs = [
 				el if isinstance(el, int) else build_unsafe_dict_id(dictify(el))
 				for el in config

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsT1ComputeUnit.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 13.05.2021
-# Last Modified Date: 13.05.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsT1ComputeUnit.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                13.05.2021
+# Last Modified Date:  13.05.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, Tuple
+from typing import Tuple
 from ampel.types import UBson, StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -19,5 +19,5 @@ from ampel.struct.UnitResult import UnitResult
 class AbsT1ComputeUnit(AmpelABC, LogicalUnit, abstract=True):
 
 	@abstractmethod
-	def compute(self, datapoints: list[DataPoint]) -> tuple[Union[UBson, UnitResult], StockId]:
+	def compute(self, datapoints: list[DataPoint]) -> tuple[UBson | UnitResult, StockId]:
 		...

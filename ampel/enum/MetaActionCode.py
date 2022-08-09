@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/enum/MetaActionCode.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 01.09.2021
-# Last Modified Date: 10.10.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/enum/MetaActionCode.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                01.09.2021
+# Last Modified Date:  10.10.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from enum import IntFlag
 

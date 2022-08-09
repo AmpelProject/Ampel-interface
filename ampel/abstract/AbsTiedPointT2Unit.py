@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/abstract/AbsTiedPointT2Unit.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 16.02.2021
-# Last Modified Date: 28.09.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/abstract/AbsTiedPointT2Unit.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                16.02.2021
+# Last Modified Date:  28.09.2021
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Union
 from collections.abc import Sequence
@@ -28,7 +28,7 @@ class AbsTiedPointT2Unit(AbsTiedT2Unit, abstract=True):
 	"""
 
 	@abstractmethod
-	def process(self, datapoint: DataPoint, t2_views: Sequence[T2DocView]) -> Union[UBson, UnitResult]:
+	def process(self, datapoint: DataPoint, t2_views: Sequence[T2DocView]) -> UBson | UnitResult:
 		"""
 		Returned object should contain computed science results to be saved into the DB.
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : Ampel-interface/ampel/content/EventDocument.py
-# License           : BSD-3-Clause
-# Author            : vb <vbrinnel@physik.hu-berlin.de>
-# Date              : 04.03.2021
-# Last Modified Date: 18.04.2021
-# Last Modified By  : vb <vbrinnel@physik.hu-berlin.de>
+# File:                Ampel-interface/ampel/content/EventDocument.py
+# License:             BSD-3-Clause
+# Author:              valery brinnel <firstname.lastname@gmail.com>
+# Date:                04.03.2021
+# Last Modified Date:  12.07.2022
+# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union, TypedDict, Any, Literal
+from typing import TypedDict, Any, Literal
 from collections.abc import Sequence
 from ampel.enum.EventCode import EventCode
 from ampel.types import ChannelId
@@ -19,7 +19,10 @@ class EventDocument(TypedDict, total=False):
 	"""
 
 	#: Name of the ampel process (may be hashed for performance reasons)
-	process: Union[int, str]
+	process: int | str
+
+	#: Task number (job system)
+	task: int
 
 	#: process version
 	version: int
@@ -27,14 +30,17 @@ class EventDocument(TypedDict, total=False):
 	#: Ever increasing global and unique run identifier
 	run: int
 
+	#: hash of potentially underlying job schema
+	jobid: None | int
+
 	#: Optional identification of the associated execution layer
 	tier: Literal[-1, 0, 1, 2, 3]
 
 	#: clock time duration of the event
-	duration: Union[int, float]
+	duration: int | float
 
 	#: Optional channel(s) associated with the underlying process
-	channel: Union[ChannelId, Sequence[ChannelId]]
+	channel: ChannelId | Sequence[ChannelId]
 
 	#: A member of :class:`~ampel.enum.EventCode.EventCode`
 	code: EventCode
