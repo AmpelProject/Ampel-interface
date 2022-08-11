@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  27.06.2022
+# Last Modified Date:  11.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import textwrap
@@ -66,6 +66,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.examples: list[str] = []
 		self.args_descr: dict[str, str] = {}
 		self._logic_ops_note_added = False
+		self.args_not_required = False
 		self.notations: set[str | tuple[str, str]] = set()
 		self.has_env_conf = False
 		self.groups: dict[str, _ArgumentGroup] = {}
