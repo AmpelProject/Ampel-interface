@@ -82,6 +82,8 @@ def main() -> None:
 	)()
 
 	parser = cli_op.get_parser(sub_op)
+	if ambiguous_help and getattr(parser, 'args_not_required', False):
+		del sys.argv[-1]
 	try:
 		args, unknown_args = parser.parse_known_args()
 	except SystemExit as exc:
