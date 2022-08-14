@@ -56,8 +56,14 @@ def main() -> None:
 		show_help()
 		sys.exit(2)
 
+	fqn = clis[op_name][1]
+	cli_op: AbsCLIOperation = getattr(
+		importlib.import_module(fqn),
+		fqn.split(".")[-1]
+	)()
+
 	# Remove second arg if sub-opeartion (such as 'show' in 'ampel log show')
-	if sys.argv[1][0] == "-":
+	if sys.argv[1][0] == "-" or not cli_op.get_sub_ops():
 		sub_op = None
 	else:
 		sub_op = sys.argv[1]
@@ -73,13 +79,6 @@ def main() -> None:
 	for i in range(len(sys.argv)):
 		if sys.argv[i][0] == '-' and sys.argv[i][1] != '-':
 			sys.argv[i] = "-" + sys.argv[i]
-
-
-	fqn = clis[op_name][1]
-	cli_op: AbsCLIOperation = getattr(
-		importlib.import_module(fqn),
-		fqn.split(".")[-1]
-	)()
 
 	parser = cli_op.get_parser(sub_op)
 	if ambiguous_help and getattr(parser, 'args_not_required', False):
