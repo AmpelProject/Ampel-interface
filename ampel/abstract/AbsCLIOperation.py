@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                16.03.2021
-# Last Modified Date:  22.03.2021
+# Last Modified Date:  14.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any
@@ -19,6 +19,11 @@ class AbsCLIOperation(AmpelABC, abstract=True):
 	"""
 	Implementing subclasses shall be placed in package ampel.cli
 	"""
+
+	@staticmethod
+	@abstractmethod
+	def get_sub_ops() -> None | list[str]:
+		...
 
 	@abstractmethod
 	def get_parser(self, sub_op: None | str = None) -> ArgumentParser | AmpelArgumentParser:
