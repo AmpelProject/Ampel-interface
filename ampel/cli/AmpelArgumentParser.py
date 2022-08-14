@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  11.08.2022
+# Last Modified Date:  14.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import textwrap
@@ -172,13 +172,13 @@ class AmpelArgumentParser(ArgumentParser):
 
 		# Add only the nomemclature elements that are actually used
 		if "const" in kwargs:
-			self.notations.add(("-argument [#]", "Argument with an overridable default value"))
+			self.notations.add(("-option [#]", "Option with an overridable default value"))
 		elif kwargs.get("nargs") == "+":
-			self.notations.add(("-argument # [# ...]", "Argument accepting one or more values"))
+			self.notations.add(("-option # [# ...]", "Option accepting one or more values"))
 		elif isinstance(kwargs.get("action"), str):
-			self.notations.add(("-argument", "Argument without value (flag)"))
+			self.notations.add(("-option", "Option without value (flag)"))
 		else:
-			self.notations.add(("-argument #", "Argument requiring one value"))
+			self.notations.add(("-option #", "Option requiring one value"))
 
 		if name == "config" and group == "required" and self.has_env_conf:
 			self.add_note(
@@ -301,7 +301,7 @@ class AmpelArgumentParser(ArgumentParser):
 			last_args.help = (last_args.help or "") + "\n\n"
 
 		self.notation_add_mutual_exclusivity()
-		self.notations.add(("-argument # # ...", "Argument requiring at least two values"))
+		self.notations.add(("-option # # ...", "Option requiring at least two values"))
 		
 		mux = self.groups[group].add_mutually_exclusive_group(required=required)
 		mux.add_argument(
@@ -403,13 +403,15 @@ class AmpelArgumentParser(ArgumentParser):
 		if show_usage:
 			print("\nUsage:")
 			sub_op = getattr(self, "ampel_sub_op", None) # ex: show
+			remainder = [el.dest for el in self._actions if el.nargs == '...']
+			rs = f"{remainder[0]}, ..." if remainder else ""
 			if self._ampel_op:
 				if sub_op: # "ampel log show"
-					print(f"{self.spacer}ampel {self._ampel_op} {sub_op} <arguments>")
+					print(f"{self.spacer}ampel {self._ampel_op} {sub_op} <options> {rs}")
 				else: # "ampel run" (No sub-op/action defined)
-					print(f"{self.spacer}ampel {self._ampel_op} <arguments>")
+					print(f"{self.spacer}ampel {self._ampel_op} <options> {rs}")
 			else: # "ampel"
-				print(f"{self.spacer}ampel <operation> <arguments>")
+				print(f"{self.spacer}ampel <operation> <options> {rs}")
 
 		# Core (arguments) help section
 		formatter = self._get_formatter()
