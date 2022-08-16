@@ -411,7 +411,7 @@ class AmpelArgumentParser(ArgumentParser):
 				else: # "ampel run" (No sub-op/action defined)
 					print(f"{self.spacer}ampel {self._ampel_op} <options> {rs}")
 			else: # "ampel"
-				print(f"{self.spacer}ampel <operation> <options> {rs}")
+				print(f"{self.spacer}ampel \033[1m\033[36m<operation>\033[0m <options> {rs}")
 
 		# Core (arguments) help section
 		formatter = self._get_formatter()
@@ -494,7 +494,7 @@ class AmpelArgumentParser(ArgumentParser):
 	) -> 'AmpelArgumentParser':
 
 		parser = AmpelArgumentParser(ampel_op=op)
-		parser.set_ampel_sub_op("<action>")
+		parser.set_ampel_sub_op('\033[1m\033[36m<action>\033[0m')
 
 		if description:
 			parser.add_description(description)

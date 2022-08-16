@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  18.03.2021
+# Last Modified Date:  15.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from argparse import RawTextHelpFormatter
@@ -43,6 +43,9 @@ class AmpelHelpFormatter(RawTextHelpFormatter):
 	def _format_action(self, action):
 
 		ret = super()._format_action(action).replace(" --", " -").replace("\n ", "\n")
+
+		if ret.strip()[0] != '-' and "SUPPRESS" not in action.dest:
+			ret = ret.replace(action.dest, '\033[1m\033[36m' + action.dest + '\033[0m')
 
 		try:
 			if ret.startswith("  {"):
