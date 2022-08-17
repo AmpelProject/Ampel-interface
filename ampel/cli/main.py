@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                13.03.2021
-# Last Modified Date:  23.03.2021
+# Last Modified Date:  17.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import importlib, sys, re
@@ -43,7 +43,7 @@ def main() -> None:
 		sys.argv[-1] = "--help"
 
 	elif len(sys.argv) == 3:
-		if not sys.argv[-1].startswith("--"):
+		if not sys.argv[-1].startswith("-"):
 			sys.argv += ["--help"]
 			ambiguous_help = True
 
