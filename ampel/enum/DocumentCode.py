@@ -48,11 +48,11 @@ class DocumentCode(IntEnum):
 	T2_PENDING_DEPENDENCY     = -2001
 	T2_QUEUED                 = -2002
 	T2_EXPORTED               = -2003
-	T2_UNKNOWN_LINK           = -2004 # might be an ingester bugs
+	T2_UNKNOWN_LINK           = -2004 # might be an ingester bugs, or uncommitted updates
 	T2_UNKNOWN_CONFIG         = -2005
-	T2_MISSING_DEPENDENCY     = -2006
+	T2_MISSING_DEPENDENCY     = -2006 # misconfiguration, or uncommitted updates
 	T2_UNEXPECTED_DEPENDENCY  = -2007
-	T2_MISSING_INFO           = -2008
+	T2_MISSING_INFO           = -2008 # ingester bugs, or uncommitted updates
 	T2_OUTDATED_CODE          = -2009
 
 	# T3
