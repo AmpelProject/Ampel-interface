@@ -45,7 +45,7 @@ class AmpelHelpFormatter(RawTextHelpFormatter):
 		ret = super()._format_action(action).replace(" --", " -").replace("\n ", "\n")
 
 		if ret.strip()[0] != '-' and "SUPPRESS" not in action.dest:
-			ret = ret.replace(action.dest, '\033[1m\033[36m' + action.dest + '\033[0m')
+			ret = ret.replace(action.dest, '\033[1m\033[36m' + action.dest + '\033[0m', 1)
 
 		try:
 			if ret.startswith("  {"):
