@@ -7,8 +7,7 @@
 # Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import importlib, sys, re
-from os import environ
+import os, sys, re, importlib
 from pkg_resources import ( # type: ignore[attr-defined]
 	get_distribution, AvailableDistributions
 )
@@ -69,9 +68,9 @@ def main() -> None:
 		sub_op = sys.argv[1]
 		del sys.argv[1]
 
-	if env_opts := environ.get("AMPEL_CLI_OPTS"):
+	if env_opts := os.environ.get("AMPEL_CLI_OPTS"):
 		if "--debug" in sys.argv:
-			print("[DEBUG] Incorperating options defined by env var AMPEL_CLI_OPTS")
+			print("[DEBUG] Incorporating options defined by env var AMPEL_CLI_OPTS")
 		for el in env_opts.split(" "):
 			sys.argv.append(el)
 
