@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  11.08.2022
+# Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any
@@ -40,106 +40,69 @@ class ArgParserBuilder:
 		return self.parsers
 
 
-	def add_group(self, target: str, title: str, **kwargs):
+	def add_group(self, group: str, title: str, sub_ops: str, **kwargs):
 		"""
-		:param target: see add_arg(...) docstring
+		:param sub_ops: see arg(...) docstring
 		"""
-		parsers, group = self.get_targets(target, False)
-		for p in parsers:
+		for p in self.get_parsers(sub_ops):
 			p.groups[group] = p.add_argument_group(group, **kwargs)
 			p.groups[group].title = title
 
 
-	def set_group_defaults(self, target: str, **kwargs):
+	def set_group_defaults(self, group: str, sub_ops: str, **kwargs):
 		"""
-		:param target: see add_arg(...) docstring
+		:param sub_ops: see arg(...) docstring
 		"""
-		parsers, group = self.get_targets(target, True)
-		for p in parsers:
+		for p in self.get_parsers(sub_ops):
 			p.groups[group].set_defaults(**kwargs)
 
 
-	def add_description(self, target: str, descr: None | str | list[str]) -> None:
+	def description(self, descr: None | str | list[str], sub_ops: str) -> None:
 		"""
 		Calls method 'add_description' (see AmpelArgumentParser docstring) for the selected parser(s).
-		:param target: see add_arg(...) docstring
+		:param sub_ops: see arg(...) docstring
 		"""
 
-		parsers, _ = self.get_targets(target, False)
-		for p in parsers:
+		for p in self.get_parsers(sub_ops):
 			p.add_description(descr)
 
 
-	def add_arg(self, target: str, name: str, **kwargs):
+	def opt(self, opt_name: str, sub_ops: str = 'all', **kwargs):
+		return self.arg(opt_name, 'optional', sub_ops, **kwargs)
+
+
+	def req(self, opt_name: str, sub_ops: str = 'all', **kwargs):
+		return self.arg(opt_name, 'required', sub_ops, **kwargs)
+
+
+	def arg(self, opt_name: str, group: str, sub_ops: str = 'all', **kwargs):
 		"""
-		:param target:
-		- str:
-			ex: add_arg('optional', 'verbose')
-			Adds the argument to the provided group ('target' value) of all underlying parsers.
-			For example, if two sub-parsers exist (say one for operation 'show' and one for 'write'),
-			both subparsers will feature the argument 'verbose'
-		- str.str:
-			ex: add_arg('write.required', 'out-file')
-			The first part of the string, delimited by '.', targets a sub-parser by name.
-			The second part targets an argument group (by name) of the specified subparser(s).
-			In the example above, the argument 'out-file' will be added to the group
-			with name 'required' of sub-parser with name 'write'.
-		- all.str:
-			ex: add_arg('all.required', 'out-file'). Same as the first case (str), only explicit
-		- str|str.str:
-			ex: add_arg('write|show|tail.optional', 'to-json')
-			Multiple sub-parsers can be targeted using '|'.
-			In the example above, the argument 'to-json' will be added to the
-			argument group 'optional' of the sub-parser of the 'write', 'show' and 'tail' sub-operations
+		:param name: option name
+		:param group: group name. Multiple sub-parsers can be targeted using '|'.
+		If no is specified, option will be added to all existing subparsers.
+		Ex: arg('to-json', 'show|export|tail')
 		"""
-
-		parsers, group = self.get_targets(target, True)
-		for p in parsers:
-			p.add_arg(name, group, **kwargs)
+		for p in self.get_parsers(sub_ops):
+			p.arg(opt_name, group, **kwargs)
 
 
-	def add_x_args(self, target: str, *args: dict[str, Any]) -> None:
+	def xargs(self, group: str, sub_ops: str, xargs: list[dict[str, Any]]) -> None:
 		"""
-		Calls method 'add_x_args' (see AmpelArgumentParser docstring) for the selected parser(s).
-		:param target: see add_arg(...) docstring
+		Calls method 'x_args' (see AmpelArgumentParser docstring) for the selected parser(s).
+		:param sub_ops: see arg(...) docstring
 		"""
-		parsers, group = self.get_targets(target, True)
-		for p in parsers:
-			p.add_x_args(group, *args)
+		for p in self.get_parsers(sub_ops):
+			p.xargs(group, *xargs)
 
 
-	def get_targets(self, target: str, check_group: bool = True) -> tuple[list[AmpelArgumentParser], str]:
+	def get_parsers(self, sub_ops: str = 'all') -> list[AmpelArgumentParser]:
 		"""
-		:param target: see add_arg(...) docstring
-		"""
-		if "." in target:
-			sp = target.split(".")
-			parsers = self._get_parsers(sp[0])
-			group = sp[1]
-		else:
-			parsers = self._get_parsers("all")
-			group = target
-
-		if check_group:
-			for p in parsers:
-				if group not in p.groups:
-					raise ValueError(
-						f"Group '{group}' unknown in parser with name "
-						f"\'{getattr(p, '_sub_op')}\', please create it first\n"
-					)
-
-		return parsers, group
-
-
-	def _get_parsers(self, arg: str) -> list[AmpelArgumentParser]:
-		"""
-		:param arg: string containing one or more parser names.
-		Multiple parser names mst be separated by the character "|".
-		Unlike parameter 'target' of add_arg(...), not dot ('.') can be used with 'arg'.
+		:param sub_ops: string containing one or more parser names.
+		Multiple parsers can be retrieved using the separating character "|".
 		"""
 
-		if "|" in arg:
-			pp = arg.split("|")
+		if "|" in sub_ops:
+			pp = sub_ops.split("|")
 			for el in pp:
 				if el not in self.parsers:
 					raise ValueError(f"Unknown parser: '{el}', please create it using add_parser")
@@ -149,77 +112,92 @@ class ArgParserBuilder:
 				if k in pp
 			]
 
-		elif arg == "all":
+		elif sub_ops == "all":
 			ret1 = list(self.parsers.values())
 
 		else:
-			if arg not in self.parsers:
-				raise ValueError(f"Unknown parser: '{arg}', please create it using add_parser")
-			ret1 = [self.parsers[arg]]
+			if sub_ops not in self.parsers:
+				raise ValueError(f"Unknown parser: '{sub_ops}', please create it using add_parser")
+			ret1 = [self.parsers[sub_ops]]
 
 		return ret1
 
 
-	def create_logic_args(self,
-		target: str, name: str, descr: str, metavar: str = "#",
-		required: bool = False, pos: None | int = None,
-		ref: None | str = None, excl: bool = False,
+	def logic_args(self,
+		base_name: str,
+		descr: str,
+		group: str,
+		sub_ops: str = 'all',
+		metavar: str = "#",
+		required: bool = False,
+		pos: None | int = None,
+		ref: None | str = None,
+		excl: bool = False,
 		json: bool = True, **kwargs
 	) -> None:
 		"""
 		Calls method 'create_logic_args' (see AmpelArgumentParser docstring) for the selected parser(s).
-		:param target: see add_arg() docstring
+		:param sub_ops: see arg() docstring
 		"""
-		parsers, group = self.get_targets(target, True)
-		for p in parsers:
-			p.create_logic_args(name, group, descr, metavar, required, pos, ref, excl, json)
+		for p in self.get_parsers(sub_ops):
+			p.logic_args(base_name, group, descr, metavar, required, pos, ref, excl, json)
 
 
-	def add_note(self, parsers: str, note: str, pos: None | int = None, ref: None | str = None) -> None:
+	def logic_args_opt(self,
+		base_name: str, descr: str, sub_ops: str = 'all', metavar: str = "#", required: bool = False,
+		pos: None | int = None, ref: None | str = None, excl: bool = False, json: bool = True, **kwargs
+	) -> None:
+		self.logic_args(
+			base_name, descr, "optional", sub_ops, metavar, required,
+			pos, ref, excl, json, **kwargs
+		)
+
+
+	def logic_args_req(self,
+		base_name: str, descr: str, sub_ops: str = 'all', metavar: str = "#", required: bool = False,
+		pos: None | int = None, ref: None | str = None, excl: bool = False, json: bool = True, **kwargs
+	) -> None:
+		self.logic_args(
+			base_name, descr, "required", sub_ops, metavar, required,
+			pos, ref, excl, json, **kwargs
+		)
+
+
+	def note(self,
+		note: str,
+		sub_ops: str = 'all',
+		pos: None | int = None,
+		ref: None | str = None
+	) -> None:
 		"""
-		Calls method 'add_note' (see AmpelArgumentParser docstring) for the selected parser(s).
+		Calls method 'note' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param parsers: see _get_parsers() docstring
 		"""
-		for p in self._get_parsers(parsers):
-			p.add_note(note, pos, ref)
+		for p in self.get_parsers(sub_ops):
+			p.note(note, pos, ref)
 
 
-	def add_all_note(self, note: str, pos: None | int = None, ref: None | str = None) -> None:
-		"""
-		Calls method 'add_note' (see AmpelArgumentParser docstring) of all the underlying parsers.
-		"""
-		for p in self.parsers.values():
-			p.add_note(note, pos, ref)
-
-
-	def add_example(self,
-		parsers: str, ex: str, prepend=None, append="",
+	def example(self,
+		sub_ops: str,
+		ex: str,
+		prepend = None,
+		append="",
 		auto_strip: bool = True, ref: None | str = None
 	) -> None:
 		"""
-		Calls method 'add_example' (see AmpelArgumentParser docstring) for the selected parser(s).
+		Calls method 'example' (see AmpelArgumentParser docstring) for the selected parser(s).
 		:param parsers: see _get_parsers() docstring
 		"""
-		for p in self._get_parsers(parsers):
-			p.add_example(
+		for p in self.get_parsers(sub_ops):
+			p.example(
 				ex,
 				prepend or f"ampel {self._op or ''} {getattr(p, '_sub_op', '')} ",
 				append, auto_strip, ref
 			)
 
 
-	def add_all_example(self,
-		ex: str, prepend="ampel ", append="", auto_strip: bool = True, ref: None | str = None
-	) -> None:
-		"""
-		Calls method 'add_example' (see AmpelArgumentParser docstring) of all the underlying parsers.
-		"""
-		for p in self.parsers.values():
-			p.add_example(ex, prepend, append, auto_strip, ref)
-
-
-	def hint_query_logic(self, parsers: str, pos: None | int = None, ref: None | str = None):
-		for p in self._get_parsers(parsers):
+	def hint_query_logic(self, sub_op: str, pos: None | int = None, ref: None | str = None):
+		for p in self.get_parsers(sub_op):
 			p.hint_query_logic(pos, ref)
 
 
@@ -228,8 +206,8 @@ class ArgParserBuilder:
 			p.hint_query_logic(pos, ref)
 
 
-	def hint_time_format(self, parsers: str, pos: None | int = None, ref: None | str = None):
-		for p in self._get_parsers(parsers):
+	def hint_time_format(self, sub_ops: str, pos: None | int = None, ref: None | str = None):
+		for p in self.get_parsers(sub_ops):
 			p.hint_time_format(pos, ref)
 
 
