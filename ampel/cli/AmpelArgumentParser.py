@@ -4,11 +4,10 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  14.08.2022
+# Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import textwrap
-from os import environ
+import textwrap, os
 from typing import Any
 from ampel.cli.MaybeIntAction import MaybeIntAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
@@ -16,6 +15,7 @@ from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
 from ampel.cli.LoadAllOfAction import LoadAllOfAction
 from argparse import ArgumentParser, _ArgumentGroup
 from ampel.cli.AmpelHelpFormatter import AmpelHelpFormatter
+from ampel.cli.config import get_user_data_config_path
 
 
 class AmpelArgumentParser(ArgumentParser):
@@ -38,9 +38,9 @@ class AmpelArgumentParser(ArgumentParser):
 
 	Note:
 	The parameter -config (path to an ampel config file) is automatically moved from the
-	*required* argument group to the *optional* argument group if the environment variable
-	AMPELCONF exists and points to a valid file. In this case, a note is added and
-	"-config ampel_conf.yaml" is stripped out of added examples automatically (deactivable)
+	*required* argument group to the *optional* argument group if an installed config is present.
+	In this case, a note is added and "-config ampel_conf.yaml" is stripped out
+	of added examples automatically (deactivable via option 'auto_strip_config')
 
 	Conveniences methods:
 	- move_group_up: moves a group up in order
@@ -62,8 +62,8 @@ class AmpelArgumentParser(ArgumentParser):
 	def __init__(self, ampel_op: None | str = None, **kwargs) -> None:
 
 		super().__init__(formatter_class=AmpelHelpFormatter, **kwargs)
-		self.notes: list[str] = []
-		self.examples: list[str] = []
+		self._notes: list[str] = []
+		self._examples: list[str] = []
 		self.args_descr: dict[str, str] = {}
 		self._logic_ops_note_added = False
 		self.args_not_required = False
@@ -81,7 +81,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.ex_close = "|"
 
 
-		# Pop optional group to reorder it, putting required arguments first (really questionable defaults there...)
+		# Pop optional group to reorder it, putting required arguments first
 		optional_group = self._action_groups.pop()
 
 		# Add a reference by name
@@ -100,8 +100,7 @@ class AmpelArgumentParser(ArgumentParser):
 		# Re-insert optional group
 		self._action_groups.append(optional_group)
 
-		# TODO: use better regex matching
-		if "AMPEL_CLI_OPTS" in environ and "config " in environ["AMPEL_CLI_OPTS"]:
+		if os.path.exists(get_user_data_config_path()):
 			self.has_env_conf = True
 
 
@@ -157,15 +156,24 @@ class AmpelArgumentParser(ArgumentParser):
 		return self.groups.get(name)
 
 
-	def add_arg(self,
+	def req(self, name: str, help: None | str = None, **kwargs) -> None:
+		self.arg(name, 'required', help, **kwargs)
+
+
+	# For explicity
+	def opt(self, name: str, help: None | str = None, **kwargs) -> None:
+		self.arg(name, 'optional', help, **kwargs)
+
+
+	def arg(self,
 		name: str, group: str | _ArgumentGroup = "optional",
 		help: None | str = None, **kwargs
 	) -> None:
 		"""
 		:param target:
 		Example:
-			- add_arg("verbose", "optional")
-			- add_arg("out", "required")
+			- arg("verbose")
+			- arg("out", "required")
 		"""
 
 		self._auto_metavar(kwargs)
@@ -181,10 +189,7 @@ class AmpelArgumentParser(ArgumentParser):
 			self.notations.add(("-option #", "Option requiring one value"))
 
 		if name == "config" and group == "required" and self.has_env_conf:
-			self.add_note(
-				"Config file defined by env var AMPEL_CLI_OPTS will be used " +
-				"unless an override using -config is specified"
-			)
+			self.note("Installed config file will be used unless option -config <path> is specified")
 			group = "optional"
 
 		if isinstance(group, str):
@@ -196,7 +201,15 @@ class AmpelArgumentParser(ArgumentParser):
 		)
 
 
-	def add_x_args(self, group: str = "optional", *args: dict[str, Any]):
+	def xargs_req(self, *args: dict[str, Any]):
+		return self.xargs('required', *args)
+
+
+	def xargs_opt(self, *args: dict[str, Any]):
+		return self.xargs('optional', *args)
+
+
+	def xargs(self, group: str = "optional", *args: dict[str, Any]):
 		"""
 		Create a mutually exclusive group, attach it to the group defined in 'target'
 		and add arguments to it according to provided definitions (*args)
@@ -217,7 +230,7 @@ class AmpelArgumentParser(ArgumentParser):
 			pass
 		x = self.groups[group].add_mutually_exclusive_group()
 		for arg in args:
-			self.add_arg(group=x, **arg)
+			self.arg(group=x, **arg)
 
 
 	def _auto_metavar(self, kw: dict) -> None:
@@ -233,7 +246,7 @@ class AmpelArgumentParser(ArgumentParser):
 		self.args_descr = args_descr
 
 
-	def add_note(self, note: str, pos: None | int = None, ref: None | str = None) -> None:
+	def note(self, note: str, pos: None | int = None, ref: None | str = None) -> None:
 		""" Newlines in note are supported and will be properly formatted """
 
 		notes = note.split("\n")
@@ -255,32 +268,35 @@ class AmpelArgumentParser(ArgumentParser):
 			content += el
 
 		if pos is not None:
-			self.notes.insert(pos, content)
+			self._notes.insert(pos, content)
 		else:
-			self.notes.append(content)
+			self._notes.append(content)
 
 
-	def add_notes(self, notes: list[str]) -> None:
+	def notes(self, notes: list[str]) -> None:
 		""" Each note will start with a bullet """
 		for el in notes:
-			self.add_note(el)
+			self.note(el)
 
 
-	def add_example(self,
-		ex: str, prepend="ampel ", append="", auto_strip_config: bool = True,
+	def example(self,
+		ex: str,
+		prepend: str = "ampel ",
+		append: str = "",
+		auto_strip_config: bool = True,
 		ref: None | str = None
 	) -> None:
 		if ref:
 			prepend = f"{self.ex_open}{ref}{self.ex_close} {prepend}"
 		payload = f"{self.spacer}{self.bullet} {prepend}{ex}{append}"
 		if auto_strip_config and self.has_env_conf:
-			self.examples.append(payload.replace(" -config ampel_conf.yaml ", " "))
+			self._examples.append(payload.replace(" -config ampel_conf.yaml ", " "))
 		else:
-			self.examples.append(payload)
+			self._examples.append(payload)
 
 
-	def create_logic_args(self,
-		name: str, group: str, descr: str, metavar: str = "#",
+	def logic_args(self,
+		base_name: str, group: str, descr: str, metavar: str = "#",
 		required: bool = False, pos: None | int = None,
 		ref: None | str = None, excl: bool = False,
 		json: bool = True, **kwargs
@@ -291,7 +307,7 @@ class AmpelArgumentParser(ArgumentParser):
 		"""
 		
 		what = "excluded" if excl else "matched"
-		dest = name.replace("-", "_")
+		dest = base_name.replace("-", "_")
 
 		# Cosmetic
 		if not self._logic_ops_note_added:
@@ -305,19 +321,19 @@ class AmpelArgumentParser(ArgumentParser):
 		
 		mux = self.groups[group].add_mutually_exclusive_group(required=required)
 		mux.add_argument(
-			f"--{name}", metavar=metavar,
+			f"--{base_name}", metavar=metavar,
 			type=str, nargs=1, default=None, action=MaybeIntAction,
 			help=f"{descr} to be {what} (non-exclusively)"
 		)
 
 		mux.add_argument(
-			f"--{name}s-or", dest=dest, action=LoadAnyOfAction,
+			f"--{base_name}s-or", dest=dest, action=LoadAnyOfAction,
 			metavar=metavar, type=str, default=None, nargs="+",
 			help=f"{descr}s to be {what} (OR connected)"
 		)
 
 		mux.add_argument(
-			f"--{name}s-and", dest=dest, action=LoadAllOfAction,
+			f"--{base_name}s-and", dest=dest, action=LoadAllOfAction,
 			metavar=metavar, type=str, default=None, nargs="+",
 			help=f"{descr}s to be {what} (AND connected)" + ("" if json else "\n\n")
 		)
@@ -325,14 +341,14 @@ class AmpelArgumentParser(ArgumentParser):
 		if json:
 			suffix = f"{self.note_open}{ref}{self.note_close}" if ref else ""
 			mux.add_argument(
-				f"--{name}s-json", dest=dest, action=LoadJSONAction,
+				f"--{base_name}s-json", dest=dest, action=LoadJSONAction,
 				metavar=metavar, type=str, default=None,
 				help=f"{descr}s to be {what} {suffix}\n\n"
 			)
 
 			# Add note about JSON arg
 			if not self._logic_ops_note_added:
-				self.add_note(
+				self.note(
 					"Allows the use of logic operators such as:\n" +
 					"Nested logic: \'{\"any_of\": [\"VAL1\", {\"all_of\": [\"VAL2\", \"VAL3\"]}]}\'\n" +
 					"Exclusive match: \'{\"one_of\": [\"VAL1\"]}\'", pos=pos, ref=ref
@@ -366,14 +382,14 @@ class AmpelArgumentParser(ArgumentParser):
 		
 
 	def hint_query_logic(self, pos: None | int = None, ref: None | str = None):
-		self.add_note(
+		self.note(
 			"Matching criteria related to different keys are AND-combined with each other",
 			pos, ref
 		)
 
 
 	def hint_time_format(self, pos: None | int = None, ref: None | str = None):
-		self.add_note(
+		self.note(
 			"Date-time strings are parsed using datetime.fromisoformat(<value>).\n" +
 			"Example of supported formats (unexhaustive): 2011-11-04 or 2011-11-04T00:05:23",
 			pos, ref
@@ -381,7 +397,7 @@ class AmpelArgumentParser(ArgumentParser):
 
 
 	def hint_config_override(self, pos: None | int = None, ref: None | str = None):
-		self.add_note(
+		self.note(
 			"Any existing config parameter can be overriden using -path.to.config.key value\n" +
 			"Example: -mongo.prefix AmpelTest",
 			pos, ref
@@ -424,8 +440,8 @@ class AmpelArgumentParser(ArgumentParser):
 		fh = formatter.format_help()
 
 		# Cosmetic: use numbers for references
-		fh = self._numerate(fh, self.notes, self.note_open, self.note_close)
-		fh = self._numerate(fh, self.examples, self.ex_open, self.ex_open)
+		fh = self._numerate(fh, self._notes, self.note_open, self.note_close)
+		fh = self._numerate(fh, self._examples, self.ex_open, self.ex_open)
 
 		if show_notation and self.notations:
 			cw = getattr(formatter, "_action_max_length", 30) # col width
@@ -443,12 +459,12 @@ class AmpelArgumentParser(ArgumentParser):
 
 		if show_notes and self.notes:
 			# Put numerated notes first
-			print("\nNote%s:" % ("s" if len(self.notes) > 1 else ""))
-			print("\n".join(self._sort(self.notes)))
+			print("\nNote%s:" % ("s" if len(self._notes) > 1 else ""))
+			print("\n".join(self._sort(self._notes)))
 
-		if show_examples and self.examples:
-			print("\nExample%s:" % ("s" if len(self.examples) > 1 else ""))
-			print("\n".join(self._sort(self.examples)) + "\n")
+		if show_examples and self._examples:
+			print("\nExample%s:" % ("s" if len(self._examples) > 1 else ""))
+			print("\n".join(self._sort(self._examples)) + "\n")
 
 		if self.epilog:
 			print(self.epilog.strip())
