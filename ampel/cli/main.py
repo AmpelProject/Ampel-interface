@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                13.03.2021
-# Last Modified Date:  17.08.2022
+# Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import importlib, sys, re
@@ -77,7 +77,7 @@ def main() -> None:
 
 	# Convert "-" to "--" for argparse
 	for i in range(len(sys.argv)):
-		if sys.argv[i][0] == '-' and sys.argv[i][1] != '-':
+		if len(sys.argv[i]) > 2 and sys.argv[i][0] == '-' and sys.argv[i][1] != '-':
 			sys.argv[i] = "-" + sys.argv[i]
 
 	parser = cli_op.get_parser(sub_op)
@@ -193,7 +193,7 @@ def show_help() -> None:
 			keys.insert(0, keys.pop(keys.index(el)))
 	for k in keys:
 		ops.add_argument('\033[1m\033[36m' + k + '\033[0m', help='\033[1;3m' + clis[k][0] + '\033[0m')
-	parser.add_note("Type \033[1;3m'ampel \033[1m\033[36m<operation>\033[0m\033[1;3m help'\033[0m for more info\n(ex: \033[1;3mampel job help\033[0m)")
+	parser.note("Type \033[1;3m'ampel \033[1m\033[36m<operation>\033[0m\033[1;3m help'\033[0m for more info\n(ex: \033[1;3mampel job help\033[0m)")
 	parser.print_help()
 
 def autocolor(txt):
