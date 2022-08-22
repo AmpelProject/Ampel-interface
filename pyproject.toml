@@ -31,7 +31,7 @@ pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 mypy = "^0.942"
 types-PyYAML = "^6.0.11"
-types-setuptools = "^64.0.0"
+types-setuptools = "^64.0.1"
 
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
