@@ -54,7 +54,7 @@
 <span class="kn">from</span> <span class="nn">ampel.abstract.AbsTiedT2Unit</span> <span class="kn">import</span> <span class="n">AbsTiedT2Unit</span>
 <span class="kn">from</span> <span class="nn">ampel.model.StateT2Dependency</span> <span class="kn">import</span> <span class="n">StateT2Dependency</span>
 
-<span class="n">U</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">)</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="AbsTiedCustomStateT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedCustomStateT2Unit</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">AbsTiedT2Unit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
