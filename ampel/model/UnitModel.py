@@ -7,9 +7,9 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Generic, Literal
-from ampel.types import T
+from typing import Any, Generic, TypeVar
 from ampel.base.AmpelGenericModel import AmpelGenericModel
+T = TypeVar("T", bound=str)
 
 
 class UnitModel(AmpelGenericModel, Generic[T]):

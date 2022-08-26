@@ -9,14 +9,14 @@
 
 from typing import Generic
 from collections.abc import Sequence
-from ampel.types import UBson, T
+from ampel.types import UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.view.T2DocView import T2DocView
 from ampel.base.decorator import abstractmethod
 from ampel.content.T1Document import T1Document
 from ampel.content.DataPoint import DataPoint
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
-from ampel.model.StateT2Dependency import StateT2Dependency
+from ampel.model.StateT2Dependency import StateT2Dependency, T
 
 
 class AbsTiedStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):

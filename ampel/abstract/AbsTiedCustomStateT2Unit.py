@@ -18,7 +18,7 @@ from ampel.content.T1Document import T1Document
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
 from ampel.model.StateT2Dependency import StateT2Dependency
 
-U = TypeVar("U")
+U = TypeVar("U", bound=str)
 
 
 class AbsTiedCustomStateT2Unit(Generic[T, U], AbsTiedT2Unit, abstract=True):
