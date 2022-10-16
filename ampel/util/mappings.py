@@ -34,7 +34,7 @@ def get_by_path(
 	]
 
 	for el in path:
-		if el not in mapping:
+		if mapping is None or el not in mapping:
 			return None
 		mapping = mapping[el]
 
