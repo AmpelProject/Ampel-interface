@@ -108,7 +108,7 @@ class T2DocView:
 		return (
 			type(self), (
 				self.stock, self.unit, self.link, self.tag, self.code,
-				self.body, self.meta, self.config, self.t2_type
+				self.t2_type, self.meta, self.config, self.body
 			)
 		)
 
