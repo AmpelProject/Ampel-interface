@@ -4,8 +4,8 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                13.01.2018
-# Last Modified Date:  09.12.2021
-# Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
+# Last Modified Date:  24.11.2022
+# Last Modified By:    simeon reusch
 
 from datetime import datetime
 from typing import Any, Literal, overload
@@ -94,8 +94,8 @@ class SnapView:
 		sa(self, 't0', t0)
 		sa(self, 't1', t1)
 		sa(self, 't2', t2)
-		sa(self, 'extra', extra)
 		sa(self, 'logs', logs)
+		sa(self, 'extra', extra)
 
 
 	def __setattr__(self, k, v):
@@ -111,7 +111,7 @@ class SnapView:
 			type(self),
 			(
 				self.id, self.stock, self.origin, self.t0,
-				self.t1, self.t2, self.extra, self.logs
+				self.t1, self.t2, self.logs, self.extra
 			)
 		)
 
