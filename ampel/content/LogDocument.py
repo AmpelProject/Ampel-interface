@@ -4,15 +4,11 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                14.02.2020
-# Last Modified Date:  16.03.2021
+# Last Modified Date:  15.12.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import sys
-if sys.version_info.minor > 8:
-	from typing import TypedDict
-else:
-	from typing_extensions import TypedDict
-from typing import Any
+from typing import Any, TypedDict
+from typing_extensions import Required
 from collections.abc import Sequence
 from ampel.types import ChannelId, StockId
 
@@ -25,8 +21,8 @@ class ChannelLogEntry(TypedDict):
 	Used to save multiple channel specific messages into a single LogDocument
 	Example of a LogDocument embedding two ChannelLogEntry entries: {
 		"_id" : ObjectId("5be4aa6254048041edbac352"),
-		"s" : NumberLong(1810101032122523),
-		"a" : NumberLong(404105201415015004),
+		"s" : 1810101032122523,
+		"a" : 404105201415015004,
 		"f" : 572784643,
 		"r" : 509,
 		"m" : [
@@ -62,10 +58,10 @@ class LogDocument(TypedDict, total=False):
 	_id: bytes
 
 	#: flag
-	f: int
+	f: Required[int]
 
 	#: run id
-	r: int | Sequence[int]
+	r: Required[int | Sequence[int]]
 
 	#: msg
 	m: str | Sequence[str] | ChannelLogEntry
@@ -76,5 +72,11 @@ class LogDocument(TypedDict, total=False):
 	#: channel
 	c: ChannelId | Sequence[ChannelId]
 
+	#: unit
+	u: str
+
 	#: extra
-	e: dict[str, Any]
+	x: dict[str, Any]
+
+	#: file:line_number (set DBLoggingHanlder.log_provenance to True)
+	p: tuple[str, int]
