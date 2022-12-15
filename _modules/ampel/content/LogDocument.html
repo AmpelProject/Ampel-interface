@@ -41,15 +41,11 @@
 <span class="c1"># License:             BSD-3-Clause</span>
 <span class="c1"># Author:              valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 <span class="c1"># Date:                14.02.2020</span>
-<span class="c1"># Last Modified Date:  16.03.2021</span>
+<span class="c1"># Last Modified Date:  15.12.2022</span>
 <span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-	<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
-<span class="k">else</span><span class="p">:</span>
-	<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypedDict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypedDict</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Required</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">ChannelId</span><span class="p">,</span> <span class="n">StockId</span>
 
@@ -62,8 +58,8 @@
 <span class="sd">	Used to save multiple channel specific messages into a single LogDocument</span>
 <span class="sd">	Example of a LogDocument embedding two ChannelLogEntry entries: {</span>
 <span class="sd">		&quot;_id&quot; : ObjectId(&quot;5be4aa6254048041edbac352&quot;),</span>
-<span class="sd">		&quot;s&quot; : NumberLong(1810101032122523),</span>
-<span class="sd">		&quot;a&quot; : NumberLong(404105201415015004),</span>
+<span class="sd">		&quot;s&quot; : 1810101032122523,</span>
+<span class="sd">		&quot;a&quot; : 404105201415015004,</span>
 <span class="sd">		&quot;f&quot; : 572784643,</span>
 <span class="sd">		&quot;r&quot; : 509,</span>
 <span class="sd">		&quot;m&quot; : [</span>
@@ -99,10 +95,10 @@
 	<span class="n">_id</span><span class="p">:</span> <span class="nb">bytes</span>
 
 	<span class="c1">#: flag</span>
-	<span class="n">f</span><span class="p">:</span> <span class="nb">int</span>
+	<span class="n">f</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 
 	<span class="c1">#: run id</span>
-	<span class="n">r</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+	<span class="n">r</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
 
 	<span class="c1">#: msg</span>
 	<span class="n">m</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">ChannelLogEntry</span>
@@ -113,8 +109,14 @@
 	<span class="c1">#: channel</span>
 	<span class="n">c</span><span class="p">:</span> <span class="n">ChannelId</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChannelId</span><span class="p">]</span>
 
+	<span class="c1">#: unit</span>
+	<span class="n">u</span><span class="p">:</span> <span class="nb">str</span>
+
 	<span class="c1">#: extra</span>
-	<span class="n">e</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
+	<span class="n">x</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+	<span class="c1">#: file:line_number (set DBLoggingHanlder.log_provenance to True)</span>
+	<span class="n">p</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
