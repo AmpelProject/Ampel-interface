@@ -71,7 +71,7 @@ class AuxUnitRegister:
 		...
 
 	@classmethod
-	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T | type[AmpelUnit]]:
+	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T | AmpelUnit]:
 		""" :raises: ValueError if unit is unknown """
 
 		if klass not in cls._defs:

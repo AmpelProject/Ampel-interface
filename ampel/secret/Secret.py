@@ -13,6 +13,7 @@ from ampel.base.AmpelABC import AmpelABC
 
 T = TypeVar('T')
 
+# mypy: disable-error-code = empty-body
 class Secret(Generic[T], AmpelABC, abstract=True):
     """
     A wrapper for a piece of sensitive data, e.g. a password or access token.

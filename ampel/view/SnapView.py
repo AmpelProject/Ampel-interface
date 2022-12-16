@@ -194,7 +194,7 @@ class SnapView:
 	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[T]) -> None | T:
 		...
 	@overload
-	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], *, raise_exc: Literal[True]) -> T:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[T], *, raise_exc: Literal[True]) -> T:
 		...
 	def get_t2_body(self,
 		unit: str | list[str] | tuple[str, ...],
