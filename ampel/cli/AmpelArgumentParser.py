@@ -457,7 +457,7 @@ class AmpelArgumentParser(ArgumentParser):
 		if show_arguments:
 			print("\n" + fh, end="")
 
-		if show_notes and self.notes:
+		if show_notes and self._notes:
 			# Put numerated notes first
 			print("\nNote%s:" % ("s" if len(self._notes) > 1 else ""))
 			print("\n".join(self._sort(self._notes)))
