@@ -12,7 +12,7 @@ from collections.abc import Callable
 
 def walk_and_process_dict(
 	arg: dict | list, callback: Callable,
-	match: None | list[str] = None, path: str = None, **kwargs
+	match: None | list[str] = None, path: None | str = None, **kwargs
 ) -> bool:
 	"""
 	callback is called with 4 arguments:
