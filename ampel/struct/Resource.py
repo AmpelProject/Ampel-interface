@@ -52,7 +52,7 @@ class Resource:
 	def dict(self) -> dict[str, Any]:
 		return {
 			'name': self.name,
-			'value': self.name,
-			'tag': self.name,
-			'extra': self.name
+			'value': self.value,
+			'tag': self.tag,
+			'extra': self.extra
 		}
