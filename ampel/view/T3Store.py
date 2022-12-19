@@ -4,12 +4,13 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                01.12.2021
-# Last Modified Date:  16.01.2022
+# Last Modified Date:  19.12.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Container, Iterator, Iterable, Sequence
 from ampel.types import JDict, OneOrMany
 from ampel.view.T3DocView import T3DocView
+from ampel.struct.Resource import Resource
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 from ampel.content.T3Document import T3Document
 from ampel.config.AmpelConfig import AmpelConfig
@@ -19,7 +20,7 @@ from ampel.util.hash import build_unsafe_dict_id
 
 class T3Store:
 
-	__slots__ = 'views', 'units', 'session', 'extra'
+	__slots__ = 'views', 'units', 'session', 'resources', 'extra'
 
 	# Sequence of T3 views (see T3IncludeDirective.docs and T3Processor.include)
 	views: None | Sequence[T3DocView]
@@ -32,8 +33,11 @@ class T3Store:
 	# Note that session infos are saved into 'meta' and therefore must be BSON encodable
 	session: None | JDict
 
+	# Stores t3 unit instantiated/generated resources for subsequent use (by other process)
+	resources: dict[str, Resource]
+
 	# Free-form dict (usable for dedicated inter-units communication for example)
-	extra: JDict
+	extra: dict
 
 
 	@classmethod # Static ctor
@@ -50,6 +54,7 @@ class T3Store:
 		object.__setattr__(self, 'views', views)
 		object.__setattr__(self, 'session', ReadOnlyDict(session) if session else None)
 		object.__setattr__(self, 'units', set(v.unit for v in views) if views else set())
+		object.__setattr__(self, 'resources', {})
 		object.__setattr__(self, 'extra', {})
 
 
@@ -76,6 +81,15 @@ class T3Store:
 			object.__setattr__(self, 'session', ReadOnlyDict(self.session | d))
 		else:
 			object.__setattr__(self, 'session', ReadOnlyDict(d))
+
+
+	def add_resource(self, resource: Resource, overwrite: bool = False) -> None:
+		if self.resources and not overwrite and resource.name in self.resources:
+			raise ValueError(
+				f"Resource name '{resource.name}' already defined"
+				f"(use overwrite=True to ignore)"
+			)
+		self.resources[resource.name] = resource
 
 
 	def contains(self, unit: str | Iterable[str]) -> bool:
