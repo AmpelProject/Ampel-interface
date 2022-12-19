@@ -11,7 +11,7 @@ from typing import TypeVar, Generic
 from collections.abc import Generator
 from ampel.types import UBson, T3Send
 from ampel.view.SnapView import SnapView
-from ampel.view.T3Store import T3Store
+from ampel.struct.T3Store import T3Store
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit

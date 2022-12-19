@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File:                Ampel-interface/ampel/view/T3Store.py
+# File:                Ampel-interface/ampel/struct/T3Store.py
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                01.12.2021

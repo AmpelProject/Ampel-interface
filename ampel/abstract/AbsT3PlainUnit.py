@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.types import UBson
-from ampel.view.T3Store import T3Store
+from ampel.struct.T3Store import T3Store
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
