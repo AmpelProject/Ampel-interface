@@ -45,15 +45,15 @@ class DocumentCode(IntEnum):
 
 	# T2
 	T2_NEW_PRIO               = -2000  # For now, std ingesters do not support this
-	T2_PENDING_DEPENDENCY     = -2001
+	T2_PENDING_DEPENDENCY     = -2001 # dependency has not yet succeeded, but may do so in the future
 	T2_QUEUED                 = -2002
 	T2_EXPORTED               = -2003
 	T2_UNKNOWN_LINK           = -2004 # might be an ingester bugs, or uncommitted updates
 	T2_UNKNOWN_CONFIG         = -2005
 	T2_MISSING_DEPENDENCY     = -2006 # misconfiguration, or uncommitted updates
-	T2_UNEXPECTED_DEPENDENCY  = -2007
+	T2_UNEXPECTED_DEPENDENCY  = -2007 # misconfigured dependency specification
 	T2_MISSING_INFO           = -2008 # ingester bugs, or uncommitted updates
-	T2_OUTDATED_CODE          = -2009
+	T2_OUTDATED_CODE          = -2009 # unit returned unexpected type
 	T2_FAILED_DEPENDENCY      = -2010 # dependency encountered a permanent error
 
 	# T3
