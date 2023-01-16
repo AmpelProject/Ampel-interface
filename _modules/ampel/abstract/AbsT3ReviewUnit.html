@@ -55,7 +55,7 @@
 
 
 <div class="viewcode-block" id="AbsT3ReviewUnit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsT3ReviewUnit.AbsT3ReviewUnit">[docs]</a><span class="k">class</span> <span class="nc">AbsT3ReviewUnit</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">AmpelABC</span><span class="p">,</span> <span class="n">LogicalUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot; Generic abstract class for T3 units receiving a SnapView generator &quot;&quot;&quot;</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot; Generic abstract class for T3 units receiving a SnapView generator &quot;&quot;&quot;</span>
 
 	<span class="c1"># avoid introspection at run-time</span>
 	<span class="n">_View</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">SnapView</span> <span class="c1"># type: ignore[assignment]</span>
@@ -65,7 +65,7 @@
 		<span class="n">gen</span><span class="p">:</span> <span class="n">Generator</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T3Send</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
 		<span class="n">t3s</span><span class="p">:</span> <span class="n">T3Store</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UBson</span> <span class="o">|</span> <span class="n">UnitResult</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		T3 units receive SnapView instances (or subclasses of) via a generator.</span>
 <span class="sd">		The method gen.send(...) applies a modification to the last view yielded by the generator</span>
 <span class="sd">		unless a stock id is provided via a tuple.</span>
@@ -115,7 +115,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.2.
     </div>
   </body>
 </html>

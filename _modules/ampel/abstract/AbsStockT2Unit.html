@@ -50,13 +50,13 @@
 
 
 <div class="viewcode-block" id="AbsStockT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsStockT2Unit</span><span class="p">(</span><span class="n">AmpelABC</span><span class="p">,</span> <span class="n">LogicalUnit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	A T2 unit bound to a :class:`~ampel.content.StockDocument.StockDocument`</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="AbsStockT2Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsStockT2Unit.AbsStockT2Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
 	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stock_doc</span><span class="p">:</span> <span class="n">StockDocument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UBson</span> <span class="o">|</span> <span class="n">UnitResult</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
 
 <span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
@@ -99,7 +99,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.2.
     </div>
   </body>
 </html>

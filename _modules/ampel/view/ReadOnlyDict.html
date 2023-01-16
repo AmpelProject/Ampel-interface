@@ -43,10 +43,10 @@
 
 
 <div class="viewcode-block" id="ReadOnlyDict"><a class="viewcode-back" href="../../../api.html#ampel.view.ReadOnlyDict.ReadOnlyDict">[docs]</a><span class="k">class</span> <span class="nc">ReadOnlyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;A dict whose items can&#39;t be changed.&quot;&quot;&quot;</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;A dict whose items can&#39;t be changed.&quot;&quot;&quot;</span>
 
 	<span class="k">def</span> <span class="nf">__readonly__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;:raises RuntimeError: whenever called&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;:raises RuntimeError: whenever called&quot;&quot;&quot;</span>
 		<span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot modify ReadOnlyDict&quot;</span><span class="p">)</span>
 
 	<span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">__readonly__</span>
@@ -99,7 +99,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.2.
     </div>
   </body>
 </html>

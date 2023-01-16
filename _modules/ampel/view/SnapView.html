@@ -58,7 +58,7 @@
 
 
 <div class="viewcode-block" id="SnapView"><a class="viewcode-back" href="../../../api.html#ampel.view.SnapView.SnapView">[docs]</a><span class="k">class</span> <span class="nc">SnapView</span><span class="p">:</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	View of a given ampel object (with unique stock id).</span>
 
 <span class="sd">	This class references various instances of objects from</span>
@@ -160,7 +160,7 @@
 		<span class="n">link</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">T2Link</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T2DocView</span><span class="p">]:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a subset of T2 documents.</span>
 
 <span class="sd">		:param unit: limits the returned science record(s) to the one with the provided t2 unit id</span>
@@ -188,7 +188,7 @@
 		<span class="n">link</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">T2Link</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">UBson</span><span class="p">]:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		:param link: restrict to a specific link</span>
 <span class="sd">		:param code: restrict to a specific code</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -205,7 +205,7 @@
 		<span class="n">link</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">T2Link</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UBson</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get latest t2 body element from a given unit.</span>
 
 <span class="sd">		:param unit_id: target unit id</span>
@@ -239,7 +239,7 @@
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get latest t2 body element from a given unit.</span>
 <span class="sd">		:param ret_type: expected body element type. If isinstance check is not fullfied</span>
 <span class="sd">		None will be returned (unless multiple unit are to be matched and another</span>
@@ -260,7 +260,7 @@
 		<span class="n">rtype</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Examples:</span>
 <span class="sd">		get_t2_value((&quot;T2NedSNCosmo&quot;, &quot;T2SNCosmo&quot;), &quot;fit_result&quot;, dict)</span>
 
@@ -294,7 +294,7 @@
 		<span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 		<span class="n">code</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="kc">None</span> <span class="o">|</span> <span class="n">T</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Examples:</span>
 <span class="sd">		get_t2_ntuple(&quot;T2NedTap&quot;, (&quot;ra&quot;, &quot;dec&quot;, &quot;z&quot;, &quot;zunc&quot;), float)</span>
 <span class="sd">		get_t2_ntuple((&quot;T2NedSNCosmo&quot;, &quot;T2SNCosmo&quot;), (&quot;fit_result&quot;, &quot;covariance&quot;), dict)</span>
@@ -315,7 +315,7 @@
 		<span class="n">process_name</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 		<span class="n">filter_func</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">JournalRecord</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">JournalRecord</span><span class="p">]:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a subset of journal entries.</span>
 
 <span class="sd">		:param tier: return only journal entries associated with the given tier</span>
@@ -426,7 +426,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.2.
     </div>
   </body>
 </html>

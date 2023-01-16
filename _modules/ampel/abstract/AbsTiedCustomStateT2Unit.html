@@ -56,7 +56,7 @@
 
 
 <div class="viewcode-block" id="AbsTiedCustomStateT2Unit"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit">[docs]</a><span class="k">class</span> <span class="nc">AbsTiedCustomStateT2Unit</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">AbsTiedT2Unit</span><span class="p">,</span> <span class="n">abstract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	A T2 unit bound to a custom type *constructed* from a :class:`compound &lt;ampel.content.T1Document.T1Document&gt;`,</span>
 <span class="sd">	as well as the results of other T2 units.</span>
 
@@ -71,7 +71,7 @@
 <div class="viewcode-block" id="AbsTiedCustomStateT2Unit.build"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.build">[docs]</a>	<span class="nd">@staticmethod</span>
 	<span class="nd">@abstractmethod</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 	<span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="n">compound</span><span class="p">:</span> <span class="n">T1Document</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">DataPoint</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Create the parametrized type using compound and datapoints.</span>
 <span class="sd">		For example, AbsTiedCustomStateT2Unit[LightCurve] would return a</span>
 <span class="sd">		:class:`~ampel.view.LightCurve.LightCurve` instance.</span>
@@ -80,7 +80,7 @@
 
 <div class="viewcode-block" id="AbsTiedCustomStateT2Unit.process"><a class="viewcode-back" href="../../../api.html#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.process">[docs]</a>	<span class="nd">@abstractmethod</span>
 	<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">t2_views</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T2DocView</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">UBson</span> <span class="o">|</span> <span class="n">UnitResult</span><span class="p">:</span>
-		<span class="sd">&quot;&quot;&quot;</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returned object should contain computed science results to be saved into the DB.</span>
 
 <span class="sd">		.. note:: the returned dict must have only string keys and be BSON-encodable</span>
@@ -123,7 +123,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.2.
     </div>
   </body>
 </html>
