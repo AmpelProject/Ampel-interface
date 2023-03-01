@@ -10,6 +10,7 @@
 import yaml, json
 from typing import Union, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
+from ampel.util.mappings import try_int
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
 UJson = Union[None, str, int, float, bool, list[Any], dict[str, Any]]
@@ -134,7 +135,7 @@ class AmpelConfig:
 		ret = self._config # pointer
 
 		# Integerizes int path elements encoded as str
-		for el in [(el if not el.isdigit() else int(el)) for el in entry]:
+		for el in (try_int(el) for el in entry):
 			if el not in ret:
 				if raise_exc:
 					raise ValueError(f'Config element \'{".".join(entry)}\' not found')

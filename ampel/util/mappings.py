@@ -14,6 +14,13 @@ from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
+def try_int(key: str | int) -> str | int:
+	try:
+		return int(key)
+	except ValueError:
+		return key
+
+
 def get_by_path(
 	mapping: dict, path: str | Sequence[str], delimiter: str = '.'
 ) -> None | UBson:
@@ -30,7 +37,7 @@ def get_by_path(
 
 	# check for int elements encoded as str
 	path: list[int | str] = [ # type: ignore
-		(el if not el.isdigit() else int(el)) for el in path
+		try_int(el) for el in path
 	]
 
 	for el in path:
