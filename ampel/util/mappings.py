@@ -22,7 +22,7 @@ def try_int(key: str | int) -> str | int:
 
 
 def get_by_path(
-	mapping: dict, path: str | Sequence[str], delimiter: str = '.'
+	mapping: dict, path: str | int | Sequence[str | int], delimiter: str = '.'
 ) -> None | UBson:
 	"""
 	Get an item from a nested mapping by path, e.g.
@@ -33,14 +33,13 @@ def get_by_path(
 	"""
 
 	if isinstance(path, str):
-		path = path.split(delimiter)
+		parsed_path: Sequence[int | str] = path.split(delimiter)
+	elif isinstance(path, int):
+		parsed_path = [path]
+	else:
+		parsed_path = path
 
-	# check for int elements encoded as str
-	path: list[int | str] = [ # type: ignore
-		try_int(el) for el in path
-	]
-
-	for el in path:
+	for el in (try_int(el) for el in parsed_path):
 		if mapping is None or el not in mapping:
 			return None
 		mapping = mapping[el]
