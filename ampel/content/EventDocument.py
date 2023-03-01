@@ -4,10 +4,11 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                04.03.2021
-# Last Modified Date:  12.07.2022
+# Last Modified Date:  15.01.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import TypedDict, Any, Literal
+from typing_extensions import Required
 from collections.abc import Sequence
 from ampel.enum.EventCode import EventCode
 from ampel.types import ChannelId
@@ -19,31 +20,31 @@ class EventDocument(TypedDict, total=False):
 	"""
 
 	#: Name of the ampel process (may be hashed for performance reasons)
-	process: int | str
+	process: Required[int | str]
 
 	#: Task number (job system)
 	task: int
 
-	#: process version
+	#: Process version
 	version: int
 
 	#: Ever increasing global and unique run identifier
-	run: int
+	run: Required[int]
 
-	#: hash of potentially underlying job schema
+	#: Hash of potentially underlying job schema
 	jobid: None | int
 
-	#: Optional identification of the associated execution layer
+	#: Identification of the associated execution layer (-1: ops)
 	tier: Literal[-1, 0, 1, 2, 3]
 
-	#: clock time duration of the event
+	#: Clock time event duration
 	duration: int | float
 
-	#: Optional channel(s) associated with the underlying process
+	#: channel(s) associated with the underlying process
 	channel: ChannelId | Sequence[ChannelId]
 
 	#: A member of :class:`~ampel.enum.EventCode.EventCode`
-	code: EventCode
+	code: Required[EventCode]
 
 	#: Optional extras
 	extra: dict[str, Any]
