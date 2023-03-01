@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                10.02.2021
-# Last Modified Date:  01.12.2021
+# Last Modified Date:  01.03.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from datetime import datetime
@@ -15,8 +15,8 @@ from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T2Document import T2Document
 from ampel.config.AmpelConfig import AmpelConfig
 
-TYPE_POINT_T2 = 0 # linked with datapoints, that is with tier 0
-TYPE_STATE_T2 = 1 # linked with compounds, that is with tier 1
+TYPE_POINT_T2 = 0 # linked with datapoints (tier 0)
+TYPE_STATE_T2 = 1 # linked with compounds (tier 1)
 TYPE_STOCK_T2 = 3 # linked with stock document
 
 
@@ -27,10 +27,11 @@ class T2DocView:
 	and provides convenience methods to access it.
 	"""
 
-	__slots__ = 'unit', 'config', 'link', 'stock', 'tag', 'code', 'meta', 't2_type', 'body'
+	__slots__ = 'unit', 'confid', 'config', 'link', 'stock', 'tag', 'code', 'meta', 't2_type', 'body'
 
 	stock: StockId | Sequence[StockId]
 	unit: int | str
+	confid: None | int
 	config: None | dict[str, Any]
 	link: T2Link
 	tag: Sequence[Tag]
@@ -42,9 +43,6 @@ class T2DocView:
 
 	@classmethod # Static ctor
 	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "T2DocView":
-		"""
-		We might want to move this method elsewhere in the future
-		"""
 
 		if conf:
 			t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
@@ -63,6 +61,7 @@ class T2DocView:
 		return cls(
 			stock = doc['stock'],
 			unit = doc['unit'],
+			confid = doc['config'],
 			t2_type = t2_type,
 			link = doc['link'],
 			tag = doc.get('tag', []),
@@ -76,6 +75,7 @@ class T2DocView:
 	def __init__(self,
 		stock: StockId | Sequence[StockId],
 		unit: int | str,
+		confid: None | int,
 		link: T2Link,
 		tag: Sequence[Tag],
 		code: int,
@@ -87,6 +87,7 @@ class T2DocView:
 		sa = object.__setattr__
 		sa(self, 'stock', stock)
 		sa(self, 'unit', unit)
+		sa(self, 'confid', unit)
 		sa(self, 'link', link)
 		sa(self, 'tag', tag)
 		sa(self, 'code', code)
