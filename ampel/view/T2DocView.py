@@ -69,7 +69,7 @@ class T2DocView:
 			code = doc['code'],
 			meta = doc.get('meta', []),
 			body = doc.get('body'),
-			config = conf.get(f'confid.{doc["config"]}', dict) if (conf and doc['config']) else None
+			config = conf.get(('confid', doc["config"]), dict) if (conf and doc['config'] is not None) else None
 		)
 
 
