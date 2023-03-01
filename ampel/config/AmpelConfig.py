@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import yaml, json
-from typing import Union, Literal, Any, TypeVar, overload, get_origin
+from typing import Sequence, Union, Literal, Any, TypeVar, overload, get_origin
 from ampel.util.freeze import recursive_freeze
 from ampel.util.mappings import try_int
 from ampel.view.ReadOnlyDict import ReadOnlyDict
@@ -73,39 +73,39 @@ class AmpelConfig:
 	# Overloads for method call with 'entry' but without return type
 
 	@overload
-	def get(self, entry: str | list[str]) -> UJson:
+	def get(self, entry: str | int | Sequence[str | int]) -> UJson:
 		""" config.get('logging') """
 
 	@overload
-	def get(self, entry: str | list[str], ret_type: None) -> UJson:
+	def get(self, entry: str | int | Sequence[str | int], ret_type: None) -> UJson:
 		""" config.get('logging', None) """
 
 	@overload
-	def get(self, entry: str | list[str], *, raise_exc: bool) -> UJson:
+	def get(self, entry: str | int | Sequence[str | int], *, raise_exc: bool) -> UJson:
 		""" config.get('logging', raise_exc=False/True) """
 
 	@overload
-	def get(self, entry: str | list[str], ret_type: None, *, raise_exc: bool) -> UJson:
+	def get(self, entry: str | int | Sequence[str | int], ret_type: None, *, raise_exc: bool) -> UJson:
 		""" config.get('logging', None, raise_exc=False/True) """
 
 
 	# Overloads for method call with 'entry' and return type
 
 	@overload
-	def get(self, entry: str | list[str], ret_type: type[JT]) -> None | JT:
+	def get(self, entry: str | int | Sequence[str | int], ret_type: type[JT]) -> None | JT:
 		""" config.get('logging', dict) """
 
 	@overload
-	def get(self, entry: str | list[str], ret_type: type[JT], *, raise_exc: Literal[False]) -> None | JT:
+	def get(self, entry: str | int | Sequence[str | int], ret_type: type[JT], *, raise_exc: Literal[False]) -> None | JT:
 		""" config.get('logging', dict, raise_exc=False) """
 
 	@overload
-	def get(self, entry: str | list[str], ret_type: type[JT], *, raise_exc: Literal[True]) -> JT:
+	def get(self, entry: str | int | Sequence[str | int], ret_type: type[JT], *, raise_exc: Literal[True]) -> JT:
 		""" config.get('logging', dict, raise_exc=True) """
 
 
 	def get(self, # type: ignore[misc]
-		entry: None | str | list[str] = None,
+		entry: None | str | int | Sequence[str | int] = None,
 		ret_type: None | type[JT] = None,
 		*, raise_exc: bool = False
 	) -> UJson | None | JT:
@@ -135,10 +135,10 @@ class AmpelConfig:
 		ret = self._config # pointer
 
 		# Integerizes int path elements encoded as str
-		for el in (try_int(el) for el in entry):
+		for el in [entry] if isinstance(entry, int) else (try_int(el) for el in entry):
 			if el not in ret:
 				if raise_exc:
-					raise ValueError(f'Config element \'{".".join(entry)}\' not found')
+					raise ValueError(f'Config element {repr(entry)} not found')
 				return None
 			ret = ret[el]
 

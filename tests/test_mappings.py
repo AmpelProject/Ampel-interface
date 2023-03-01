@@ -3,6 +3,7 @@ import sys
 import pytest
 
 from ampel.util import mappings
+from ampel.config.AmpelConfig import AmpelConfig
 
 
 @pytest.mark.parametrize(
@@ -20,3 +21,24 @@ from ampel.util import mappings
 )
 def test_get_by_path(target, key, value):
     assert mappings.get_by_path(target, key) == value
+
+
+@pytest.mark.parametrize(
+    "target,key,value",
+    [
+        ({1: {"foo": "bar"}}, ["confid", 1], {"foo": "bar"}),
+        ({-1: {"foo": "bar"}}, "confid.-1", {"foo": "bar"}),
+    ],
+)
+def test_AmpelConfig_get_with_path(target, key, value):
+    ac = AmpelConfig({"channel": {}, "confid": target})
+    assert ac.get(key, dict) == value
+    with pytest.raises(ValueError):
+        ac.get(key, int)
+
+
+def test_AmpelConfig_get_raise_exc():
+    with pytest.raises(ValueError):
+        AmpelConfig({"channel": {}, "confid": {1: "foo"}}).get(
+            ["confid", 2], raise_exc=True
+        )
