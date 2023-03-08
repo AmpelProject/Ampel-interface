@@ -76,6 +76,13 @@ class T3DocView:
 		sa(self, 'confid', confid)
 
 
+	def __reduce__(self):
+		return type(self), (
+			self.unit, self.code, self.meta, self.confid, self.tag, self.stock,
+			self.config, self.body,
+		)
+
+
 	def __setattr__(self, k, v):
 		raise ValueError("T3DocView is read only")
 
