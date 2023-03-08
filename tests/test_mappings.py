@@ -1,9 +1,9 @@
+import json
 import sys
 
 import pytest
-
-from ampel.util import mappings
 from ampel.config.AmpelConfig import AmpelConfig
+from ampel.util import mappings
 
 
 @pytest.mark.parametrize(
@@ -46,12 +46,18 @@ def test_AmpelConfig_get_raise_exc():
 
 @pytest.mark.parametrize("key", ["1", "-1_000", str(-sys.maxsize), str(sys.maxsize)])
 @pytest.mark.parametrize("section", ["channel", "confid"])
-def test_AmpelConfig_intify_on_load(key, section):
+def test_AmpelConfig_intify_on_load(key, section, tmp_path):
     """
     stringified dict keys are intified on load
     """
-    ac = AmpelConfig(
-        {"channel": {key: {"channel": "CHAN"}}, "confid": {key: {"foo": 42}}}
+    path = tmp_path / "config.json"
+
+    path.write_text(
+        json.dumps(
+            {"channel": {key: {"channel": "CHAN"}}, "confid": {key: {"foo": 42}}}
+        )
     )
+    ac = AmpelConfig.load(str(path))
     assert ac.get([section, key], dict) is not None
-    assert ac.get([section, str(key)], dict) is not None
+    assert ac.get([section, int(key)], dict) is not None
+    assert ac.get(f"{section}.{key}", dict) is not None

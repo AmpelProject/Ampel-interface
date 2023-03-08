@@ -27,7 +27,12 @@ class AmpelConfig:
 	@classmethod
 	def load(cls, config_file_path: str, freeze: bool = True) -> 'AmpelConfig':
 		with open(config_file_path, "r") as f:
-			return cls(yaml.safe_load(f), freeze)
+			config = yaml.safe_load(f)
+		# Convert potentially stringified int keys (JSON compatibility) back to int
+		for s in ('channel', 'confid'):
+			for k in list(config[s]):
+				config[s][try_int(k)] = config[s].pop(k)
+		return cls(config, freeze)
 
 
 	def __init__(self, config: dict, freeze: bool = False) -> None:
@@ -36,11 +41,6 @@ class AmpelConfig:
 		"""
 		if config is None or not config:
 			raise ValueError("Please provide a config")
-
-		# Convert potentially stringified int keys (JSON compatibility) back to int
-		for s in ('channel', 'confid'):
-			for k in list(config[s]):
-				config[s][try_int(k)] = config[s].pop(k)
 
 		self._config: dict = recursive_freeze(config) if freeze else config
 
