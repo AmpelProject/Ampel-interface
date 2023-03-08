@@ -42,3 +42,16 @@ def test_AmpelConfig_get_raise_exc():
         AmpelConfig({"channel": {}, "confid": {1: "foo"}}).get(
             ["confid", 2], raise_exc=True
         )
+
+
+@pytest.mark.parametrize("key", ["1", "-1_000", str(-sys.maxsize), str(sys.maxsize)])
+@pytest.mark.parametrize("section", ["channel", "confid"])
+def test_AmpelConfig_intify_on_load(key, section):
+    """
+    stringified dict keys are intified on load
+    """
+    ac = AmpelConfig(
+        {"channel": {key: {"channel": "CHAN"}}, "confid": {key: {"foo": 42}}}
+    )
+    assert ac.get([section, key], dict) is not None
+    assert ac.get([section, str(key)], dict) is not None

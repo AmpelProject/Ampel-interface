@@ -39,8 +39,8 @@ class AmpelConfig:
 
 		# Convert potentially stringified int keys (JSON compatibility) back to int
 		for s in ('channel', 'confid'):
-			for k in [el for el in config[s].keys() if isinstance(el, str) and el.isdigit()]:
-				config[s][int(k)] = config[s].pop(k)
+			for k in list(config[s]):
+				config[s][try_int(k)] = config[s].pop(k)
 
 		self._config: dict = recursive_freeze(config) if freeze else config
 
