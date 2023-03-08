@@ -87,7 +87,7 @@ class T2DocView:
 		sa = object.__setattr__
 		sa(self, 'stock', stock)
 		sa(self, 'unit', unit)
-		sa(self, 'confid', unit)
+		sa(self, 'confid', confid)
 		sa(self, 'link', link)
 		sa(self, 'tag', tag)
 		sa(self, 'code', code)
@@ -105,10 +105,11 @@ class T2DocView:
 		raise ValueError("T2DocView is read only")
 
 
+	# NB: custom __reduce__ avoids calling __setattr__ directly on load
 	def __reduce__(self):
 		return (
 			type(self), (
-				self.stock, self.unit, self.link, self.tag, self.code,
+				self.stock, self.unit, self.confid, self.link, self.tag, self.code,
 				self.t2_type, self.meta, self.config, self.body
 			)
 		)
