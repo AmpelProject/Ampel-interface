@@ -58,17 +58,20 @@ class T2DocView:
 		else:
 			t2_type = -1
 
+		dc = doc['config']
 		return cls(
 			stock = doc['stock'],
 			unit = doc['unit'],
-			confid = doc['config'],
+			confid = dc if isinstance(dc, int) else None,
 			t2_type = t2_type,
 			link = doc['link'],
 			tag = doc.get('tag', []),
 			code = doc['code'],
 			meta = doc.get('meta', []),
 			body = doc.get('body'),
-			config = conf.get(('confid', doc["config"]), dict) if (conf and doc['config'] is not None) else None
+			config = dc if isinstance(dc, dict) else (
+				conf.get(('confid', dc), dict) if (conf and dc is not None) else None
+			)
 		)
 
 
