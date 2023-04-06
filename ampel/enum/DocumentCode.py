@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                14.12.2017
-# Last Modified Date:  17.05.2022
+# Last Modified Date:  03.04.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from enum import IntEnum
@@ -38,6 +38,7 @@ class DocumentCode(IntEnum):
 	RUNNING                   = -5
 	RERUN_REQUESTED           = -6
 	TOO_MANY_TRIALS           = -7
+	NOT_SET                     = -8
 
 	# T1
 	T1_NEW_PRIO               = -1000  # For now, std ingesters do not support this
