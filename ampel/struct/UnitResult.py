@@ -7,6 +7,7 @@
 # Last Modified Date:  20.04.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from ampel.model.UnitModel import UnitModel
 from ampel.types import UBson, OneOrMany, Tag
 from ampel.struct.JournalAttributes import JournalAttributes
 
@@ -24,7 +25,7 @@ class UnitResult:
 		tag: None | OneOrMany[Tag] = None,
 		code: None | int = None,
 		journal: None | JournalAttributes = None,
-		adapter: None | str = None
+		adapter: None | str | UnitModel = None
 	) -> None:
 		"""
 		:param body: content for the field 'body' of the associated tier document
@@ -44,3 +45,7 @@ class UnitResult:
 		self.code = code
 		self.journal = journal
 		self.adapter = adapter
+
+	@property
+	def adapter_model(self) -> None | UnitModel:
+		return UnitModel(unit=self.adapter) if isinstance(self.adapter, str) else self.adapter
