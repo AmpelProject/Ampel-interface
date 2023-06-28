@@ -33,16 +33,17 @@ def get_by_path(
 	"""
 
 	if isinstance(path, str):
-		parsed_path: Sequence[int | str] = path.split(delimiter)
+		parsed_path: Sequence[int | str] = [try_int(el) for el in path.split(delimiter)]
 	elif isinstance(path, int):
 		parsed_path = [path]
 	else:
 		parsed_path = path
 
-	for el in (try_int(el) for el in parsed_path):
-		if mapping is None or el not in mapping:
+	for el in parsed_path:
+		try:
+			mapping = mapping[el]
+		except (TypeError, IndexError, KeyError):
 			return None
-		mapping = mapping[el]
 
 	return mapping
 
