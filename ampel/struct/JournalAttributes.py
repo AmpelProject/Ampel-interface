@@ -61,10 +61,10 @@ class JournalAttributes:
 
 	def into(self, prime: JournalRecord) -> JournalRecord:
 
-		if self.code:
+		if self.code is not None:
 			prime['code'] = self.code
 
-		if self.tag:
+		if self.tag is not None:
 			prime['tag'] = self.tag
 
 		if self.extra:
