@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ampel.struct.JournalAttributes &#8212; ampel-interface 0.9.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=0a676766" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=1bc1ca25"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../../_static/documentation_options.js?v=39bb1c6d"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -46,7 +46,9 @@
 <span class="kn">from</span> <span class="nn">ampel.content.JournalRecord</span> <span class="kn">import</span> <span class="n">JournalRecord</span>
 
 
-<div class="viewcode-block" id="JournalAttributes"><a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes">[docs]</a><span class="k">class</span> <span class="nc">JournalAttributes</span><span class="p">:</span>
+<div class="viewcode-block" id="JournalAttributes">
+<a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes">[docs]</a>
+<span class="k">class</span> <span class="nc">JournalAttributes</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Structure potentialy used by Ampel units to customize</span>
 <span class="sd">	the stock journal entry created after a process is run.</span>
@@ -81,7 +83,9 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
 
 
-<div class="viewcode-block" id="JournalAttributes.dict"><a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes.dict">[docs]</a>	<span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JournalRecord</span><span class="p">:</span>
+<div class="viewcode-block" id="JournalAttributes.dict">
+<a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes.dict">[docs]</a>
+	<span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JournalRecord</span><span class="p">:</span>
 		<span class="n">d</span><span class="p">:</span> <span class="n">JournalRecord</span> <span class="o">=</span> <span class="p">{}</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
 			<span class="n">d</span><span class="p">[</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span>
@@ -90,9 +94,12 @@
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
 			<span class="n">d</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span>
 		<span class="k">return</span> <span class="n">d</span></div>
+
 			
 
-<div class="viewcode-block" id="JournalAttributes.into"><a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes.into">[docs]</a>	<span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prime</span><span class="p">:</span> <span class="n">JournalRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JournalRecord</span><span class="p">:</span>
+<div class="viewcode-block" id="JournalAttributes.into">
+<a class="viewcode-back" href="../../../api.html#ampel.struct.JournalAttributes.JournalAttributes.into">[docs]</a>
+	<span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prime</span><span class="p">:</span> <span class="n">JournalRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JournalRecord</span><span class="p">:</span>
 
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">:</span>
 			<span class="n">prime</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span>
@@ -106,7 +113,9 @@
 			<span class="k">else</span><span class="p">:</span>
 				<span class="n">prime</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span>
 
-		<span class="k">return</span> <span class="n">prime</span></div></div>
+		<span class="k">return</span> <span class="n">prime</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
@@ -145,7 +154,7 @@
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.0.
     </div>
   </body>
 </html>
