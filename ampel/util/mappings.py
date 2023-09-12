@@ -17,7 +17,7 @@ from ampel.base.AmpelGenericModel import AmpelGenericModel
 def try_int(key: str | int) -> str | int:
 	try:
 		return int(key)
-	except ValueError:
+	except (ValueError, TypeError):
 		return key
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File:                Ampel-interface/ampel/abstract/AbsT3ReviewUnit.py
+# File:                Ampel-interface/ampel/abstract/AbsT3Unit.py
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                23.02.2018
@@ -20,7 +20,7 @@ from ampel.struct.UnitResult import UnitResult
 T = TypeVar("T", bound=SnapView)
 
 
-class AbsT3ReviewUnit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
+class AbsT3Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
 	""" Generic abstract class for T3 units receiving a SnapView generator """
 
 	# avoid introspection at run-time

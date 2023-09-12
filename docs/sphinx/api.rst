@@ -45,7 +45,7 @@ Processing units
   :show-inheritance:
   :members:
 
-.. autoclass:: ampel.abstract.AbsT3ReviewUnit.AbsT3ReviewUnit
+.. autoclass:: ampel.abstract.AbsT3Unit.AbsT3Unit
   :show-inheritance:
   :members:
 

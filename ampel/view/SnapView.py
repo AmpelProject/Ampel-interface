@@ -34,7 +34,7 @@ class SnapView:
 	The config parameter of a T3 process determines which information are included.
 	Instances of this class (or of subclass such as
 	:class:`~ampel.view.TransientView.TransientView`) are provided to
-	:meth:`AbsT3ReviewUnit.process() <ampel.abstract.AbsT3ReviewUnit.AbsT3ReviewUnit.process>`.
+	:meth:`AbsT3Unit.process() <ampel.abstract.AbsT3Unit.AbsT3Unit.process>`.
 
 	"""
 
