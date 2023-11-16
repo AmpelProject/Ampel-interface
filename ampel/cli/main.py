@@ -74,9 +74,10 @@ def main() -> None:
 		for el in env_opts.split(" "):
 			sys.argv.append(el)
 
-	# Convert "-" to "--" for argparse
+	# Convert elements of the form "-option" to "--option" for argparse, skipping things that
+	# look like integers
 	for i in range(len(sys.argv)):
-		if len(sys.argv[i]) > 2 and sys.argv[i][0] == '-' and sys.argv[i][1] != '-':
+		if len(sys.argv[i]) > 2 and sys.argv[i][0] == '-' and sys.argv[i][1] != '-' and not sys.argv[i][1:].isdigit():
 			sys.argv[i] = "-" + sys.argv[i]
 
 	parser = cli_op.get_parser(sub_op)
