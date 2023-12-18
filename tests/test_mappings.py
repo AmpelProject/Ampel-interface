@@ -17,6 +17,10 @@ from ampel.util import mappings
             ({"foo": {"bar": {k: {1: 58}}}}, f"foo.bar.{k}", {1: 58})
             for k in (85, -sys.maxsize, sys.maxsize)
         ),
+        (["foo", "bar"], [-1], "bar"),
+        ({"foo": {"0", "a"}}, "foo.0", None),
+        ({"foo": {"0", "a"}}, ["foo", 0], None),
+        ({"foo": None}, ["foo", 0], None),
     ],
 )
 def test_get_by_path(target, key, value):
