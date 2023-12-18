@@ -8,6 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
+from datetime import datetime
 from typing import TypedDict
 
 from typing_extensions import Required
@@ -58,3 +59,6 @@ class T2Document(TypedDict, total=False):
 
 	#: value(s) returned by T2 unit execution(s)
 	body: Required[Sequence[UBson]]
+
+	#: Time when this document may be deleted
+	expiry: datetime
