@@ -15,6 +15,9 @@ def get_user_data_config_path() -> str:
 	:returns: full path to yaml ampel conf
 	"""
 
+	if env := environ.get('AMPEL_CONFIG'):
+		return env
+
 	if env := environ.get('CONDA_PREFIX'):
 
 		app_path = path.join(env, 'share')
