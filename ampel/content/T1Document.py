@@ -7,7 +7,8 @@
 # Last Modified Date:  25.06.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal, TypedDict
+from datetime import datetime
+from typing import TypedDict
 from typing_extensions import Required
 from collections.abc import Sequence
 from ampel.types import UBson, StockId, DataPointId, ChannelId, Tag, UnitId
@@ -55,3 +56,6 @@ class T1Document(TypedDict, total=False):
 
 	#: Potential result of AbsT1ComputeUnit subclasses
 	body: Sequence[UBson]
+
+	#: Time when this document may be deleted
+	expiry: datetime
