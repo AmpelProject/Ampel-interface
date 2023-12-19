@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import KeysView
-from pydantic import BaseModel, BaseConfig, Extra
+from pydantic.v1 import BaseModel, BaseConfig, Extra
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """

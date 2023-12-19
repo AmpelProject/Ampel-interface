@@ -12,7 +12,7 @@ from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from pydantic import BaseModel, validate_model, create_model
+from pydantic.v1 import BaseModel, validate_model, create_model
 from typing import Any, Type, Union, get_origin, get_args
 
 ttf = type(Traceless)
