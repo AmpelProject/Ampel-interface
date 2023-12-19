@@ -12,7 +12,7 @@ from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from pydantic.v1 import BaseModel, validate_model, create_model
+from pydantic import BaseModel
 from typing import Any, Type, Union, get_origin, get_args
 
 ttf = type(Traceless)
@@ -115,7 +115,7 @@ class AmpelUnit:
 
 		return create_model(
 			cls.__name__,
-			__config__ = AmpelBaseModel.Config,
+			model_config = AmpelBaseModel.model_config,
 			**kwargs # type: ignore
 		)
 
@@ -123,7 +123,7 @@ class AmpelUnit:
 	@classmethod
 	def validate(cls, value: dict) -> Any:
 		""" Validate kwargs values against fields of cls (except traceless) """
-		values, fields, errors = validate_model(cls._create_model(True), value)
+		values, fields, errors = cls._create_model(True).model_validate(value)
 		if errors:
 			raise TypeError(errors) from None
 		return values
@@ -136,7 +136,7 @@ class AmpelUnit:
 			model = cls._model = cls._create_model()
 		else:
 			model = cls._model
-		values, fields, errors = validate_model(model, value)
+		values, fields, errors = model.model_validate(value)
 		if errors:
 			raise TypeError(errors) from None
 		return values
@@ -154,7 +154,7 @@ class AmpelUnit:
 		if hasattr(cls, '__fields__'):
 			AmpelBaseModel.__init__(self) # type: ignore[arg-type]
 
-		vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
+		vres = cls._model.model_validate(kwargs)
 		self._exclude_unset = self._defaults.keys() - kwargs.keys()
 
 		# pydantic ValidationError

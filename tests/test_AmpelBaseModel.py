@@ -25,7 +25,7 @@ def test_default_override():
         base: int = 1
 
     class Derived(Base):
-        base = 2
+        base: int = 2
 
     assert Derived().base == 2
 

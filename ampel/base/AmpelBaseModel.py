@@ -8,27 +8,28 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import KeysView
-from pydantic.v1 import BaseModel, BaseConfig, Extra
+# from pydantic.v1 import BaseModel, BaseConfig, Extra
+from pydantic import BaseModel, BaseConfig, Extra
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """
 
-	class Config(BaseConfig):
-		arbitrary_types_allowed = True
-		underscore_attrs_are_private = True
-		allow_population_by_field_name = True
-		validate_all = True
-		extra = Extra.forbid
+	model_config = {
+		"arbitrary_types_allowed": True,
+		"populate_by_name": True,
+		"validate_default": True,
+		"extra": "forbid"
+	}
 
 	def __init__(self, **kwargs) -> None:
-		self.__config__.extra = Extra.forbid
+		self.model_config["extra"] = "forbid"
 		try:
 			super().__init__(**kwargs)
 		except Exception as e:
 			raise TypeError(e) from None
-		self.__config__.extra = Extra.allow
+		self.model_config["extra"] = "allow"
 
 
 	@classmethod
 	def get_model_keys(cls) -> KeysView[str]:
-		return cls.__fields__.keys()
+		return cls.model_fields.keys()
