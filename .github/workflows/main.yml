@@ -57,6 +57,8 @@ jobs:
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       shell: bash
       run: poetry install --no-interaction --no-root --all-extras
+    - name: Install root
+      run: poetry run pip install -e . --no-deps
     - run: poetry run pytest --cov=ampel
   
   mypy:
