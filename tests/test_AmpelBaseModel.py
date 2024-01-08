@@ -1,7 +1,10 @@
 import pytest
-from typing import Generic, TypeVar
+from types import UnionType
+from typing import Generic, TypeVar, Union, get_origin
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelUnit import AmpelUnit
 from pydantic import ValidationError
+
 
 def test_dict_view():
     class Base(AmpelBaseModel):
@@ -15,7 +18,7 @@ def test_dict_view():
         Base(**Derived().dict())
 
     # base _can_ be instantiated with a slice of derived
-    base = Base(**Derived(base=42, derived=3).dict(include=Base.get_model_keys()))
+    base = Base(**Derived(base=42, derived=3).dict(include=set(Base.get_model_keys())))
 
     assert base.dict() == Base(base=42).dict()
 
@@ -58,3 +61,22 @@ def test_nested_typevar(value):
         field: Inner | AnyOf[Inner] | AllOf[Inner]
 
     assert Outer(**value).model_dump() == value
+
+
+@pytest.mark.parametrize("base", [AmpelBaseModel, AmpelUnit])
+def test_implicit_default_none(base: type):
+    """
+    Implicit default None is added for both Union (typing.Union[a,b]) and
+    UnionType (a | b) annotations that include None
+    """
+
+    class ImplicitDefault(base):
+        union: None | Union[int, str]
+        union_type: None | int
+
+    assert get_origin(ImplicitDefault.__annotations__['union']) is Union
+    assert get_origin(ImplicitDefault.__annotations__['union_type']) is UnionType
+
+    assert ImplicitDefault().dict() == {"union": None, "union_type": None}
+
+

@@ -8,18 +8,20 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import KeysView
+from types import UnionType
+from typing import TYPE_CHECKING, Union, get_origin, get_args
+
 from pydantic import BaseModel
 
-from typing import TYPE_CHECKING
-
 if TYPE_CHECKING:
-	from typing import AbstractSet, Optional, Union, Mapping, Any
+	from typing import Optional, Mapping, Any
 
 	IntStr = int | str
 	AbstractSetIntStr = set[str] | set[int] | dict[str, Any] | dict[int, Any]
 	DictStrAny = dict[str, Any]
 	MappingIntStrAny = Mapping[IntStr, Any]
 
+NoneType = type(None)
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """
@@ -37,7 +39,7 @@ class AmpelBaseModel(BaseModel):
 			# add implicit None default to unions containing None
 			if (
 				k not in cls.__dict__
-				and get_origin(v) is UnionType
+				and get_origin(v) in (UnionType, Union)
 				and NoneType in get_args(v)
 			):
 				setattr(cls, k, None)
