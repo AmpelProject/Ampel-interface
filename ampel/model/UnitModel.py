@@ -8,11 +8,11 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any, Generic, TypeVar
-from ampel.base.AmpelGenericModel import AmpelGenericModel
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 T = TypeVar("T", bound=str)
 
 
-class UnitModel(AmpelGenericModel, Generic[T]):
+class UnitModel(AmpelBaseModel, Generic[T]):
 	"""
 	Specification of a processing unit.
 	Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal['T2SNCosmo']])

@@ -11,7 +11,6 @@ from typing import Any
 from collections.abc import MutableMapping, Mapping, Iterable, Sequence
 from ampel.types import UBson, strict_iterable, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from ampel.base.AmpelGenericModel import AmpelGenericModel
 
 
 def try_int(key: str | int) -> str | int:
@@ -297,7 +296,7 @@ def dictify(item):
 	"""
 	Recursively dictifies input
 	"""
-	if isinstance(item, (AmpelBaseModel, AmpelGenericModel)):
+	if isinstance(item, AmpelBaseModel):
 		return item.dict()
 
 	if isinstance(item, dict):
