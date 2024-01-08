@@ -8,7 +8,7 @@ def test_mixed_inheritance():
         unit_param: int
     
     class M(AmpelBaseModel):
-        model_param: int
+        basemodel_param: int
     
     class Derived1(U, M):
         ...
@@ -16,8 +16,9 @@ def test_mixed_inheritance():
     class Derived2(M, U):
         ...
 
+    kwargs = {"unit_param": 1, "basemodel_param": 2}
+
     # can derive from AmpelUnit first
-    Derived1(unit_param=1, model_param=2)
-    # but not in reverse
-    with pytest.raises(TypeError):
-        Derived2(unit_param=1, model_param=2)
+    assert Derived1(**kwargs).dict() == kwargs
+    # or from AmpelBaseModel first
+    assert Derived2(**kwargs).dict() == kwargs
