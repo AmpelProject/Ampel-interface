@@ -1,7 +1,7 @@
 import pytest
 from typing import Generic, TypeVar
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-
+from pydantic import ValidationError
 
 def test_dict_view():
     class Base(AmpelBaseModel):
@@ -11,7 +11,7 @@ def test_dict_view():
         derived: int = 2
 
     # base can't be instantiated with dict repr of derived
-    with pytest.raises(TypeError):
+    with pytest.raises(ValidationError):
         Base(**Derived().dict())
 
     # base _can_ be instantiated with a slice of derived
@@ -45,10 +45,10 @@ def test_nested_typevar(value):
 
     T = TypeVar("T")
 
-    class AllOf(Generic[T], AmpelBaseModel):
+    class AllOf(AmpelBaseModel, Generic[T]):
         all_of: list[T]
 
-    class AnyOf(Generic[T], AmpelBaseModel):
+    class AnyOf(AmpelBaseModel, Generic[T]):
         any_of: list[T | AllOf[T]]
 
     class Inner(AmpelBaseModel):
@@ -57,4 +57,4 @@ def test_nested_typevar(value):
     class Outer(AmpelBaseModel):
         field: Inner | AnyOf[Inner] | AllOf[Inner]
 
-    Outer(**value)
+    assert Outer(**value).model_dump() == value

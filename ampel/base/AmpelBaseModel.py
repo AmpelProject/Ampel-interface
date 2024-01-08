@@ -8,8 +8,8 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import KeysView
-# from pydantic.v1 import BaseModel, BaseConfig, Extra
-from pydantic import BaseModel, BaseConfig, Extra
+from pydantic import BaseModel
+
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """
@@ -21,13 +21,17 @@ class AmpelBaseModel(BaseModel):
 		"extra": "forbid"
 	}
 
-	def __init__(self, **kwargs) -> None:
-		self.model_config["extra"] = "forbid"
-		try:
-			super().__init__(**kwargs)
-		except Exception as e:
-			raise TypeError(e) from None
-		self.model_config["extra"] = "allow"
+	@classmethod
+	def __init_subclass__(cls, *args, **kwargs) -> None:
+		for k, v in cls.__annotations__.items():
+			# add implicit None default to unions containing None
+			if (
+				k not in cls.__dict__
+				and get_origin(v) is UnionType
+				and NoneType in get_args(v)
+			):
+				setattr(cls, k, None)
+		super().__init_subclass__(*args, **kwargs)
 
 
 	@classmethod
