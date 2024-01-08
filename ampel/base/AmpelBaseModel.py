@@ -10,6 +10,16 @@
 from collections.abc import KeysView
 from pydantic import BaseModel
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from typing import AbstractSet, Optional, Union, Mapping, Any
+
+	IntStr = int | str
+	AbstractSetIntStr = set[str] | set[int] | dict[str, Any] | dict[int, Any]
+	DictStrAny = dict[str, Any]
+	MappingIntStrAny = Mapping[IntStr, Any]
+
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """
@@ -37,3 +47,24 @@ class AmpelBaseModel(BaseModel):
 	@classmethod
 	def get_model_keys(cls) -> KeysView[str]:
 		return cls.model_fields.keys()
+	
+	# keep a facade of pydantic v1 BaseModel.dict() method
+	def dict(
+        self,
+        *,
+        include: "AbstractSetIntStr | None" = None,
+        exclude: "AbstractSetIntStr | None" = None,
+        by_alias: bool = False,
+        skip_defaults: "Optional[bool]" = None,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+    ) -> 'DictStrAny':
+		return self.model_dump(
+			include=include,
+			exclude=exclude,
+			by_alias=by_alias,
+			exclude_unset=exclude_unset,
+			exclude_defaults=exclude_defaults or (skip_defaults is True),
+			exclude_none=exclude_none
+		)
