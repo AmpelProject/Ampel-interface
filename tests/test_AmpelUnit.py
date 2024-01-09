@@ -33,10 +33,30 @@ def test_embedded_model():
     class Item(AmpelBaseModel):
         a: int = 2
         b: int = 3
-    
+
     class Unit(AmpelUnit):
         item: Item
-    
+
     unit = Unit(item={"a": 1})
-    assert isinstance(unit.item, Item), "item should be an instance of Item (rather than dict)"
+    assert isinstance(
+        unit.item, Item
+    ), "item should be an instance of Item (rather than dict)"
     assert unit.item.a == 1
+
+
+def test_validate():
+    """Validate returns default fields"""
+
+    class Unit(AmpelUnit):
+        required: str
+        thing1: int = 1
+        thing2: None | bool = None
+
+    with pytest.raises(TypeError):
+        Unit.validate({})
+
+    assert Unit.validate({"required": "yes"}) == {
+        "required": "yes",
+        "thing1": 1,
+        "thing2": None,
+    }

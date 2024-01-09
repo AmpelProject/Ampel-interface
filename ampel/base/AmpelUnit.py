@@ -133,7 +133,7 @@ class AmpelUnit:
 			values = cls._create_model(True).model_validate(value)
 		except ValidationError as e:
 			raise TypeError(e) from None
-		return values.model_dump(exclude_unset=True, exclude_defaults=True)
+		return values.model_dump()
 
 
 	@classmethod
@@ -147,7 +147,7 @@ class AmpelUnit:
 			values = model.model_validate(value)
 		except ValidationError as e:
 			raise TypeError(e) from None
-		return values.model_dump(exclude_unset=True, exclude_defaults=True)
+		return values.model_dump()
 
 	
 	def __init__(self, **kwargs) -> None:
