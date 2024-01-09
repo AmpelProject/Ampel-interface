@@ -174,7 +174,7 @@ class AmpelUnit:
 
 		# Save coerced values
 		unset = self._defaults.keys() - kwargs.keys()
-		kwargs.update(values.model_dump())
+		kwargs.update({k: getattr(values, k) for k in cls._model.model_fields})
 
 		if isinstance(self, BaseModel):
 			super().__init__(**kwargs)
