@@ -51,3 +51,17 @@ minversion = "6.0"
 filterwarnings = [
     "error"
 ]
+
+[tool.mypy]
+namespace_packages = true
+show_error_codes = true
+plugins = [
+    "pydantic.mypy"
+]
+
+[tool.pydantic-mypy]
+init_typed = true
+
+[[tool.mypy.overrides]]
+module = "ampel.abstract.*"
+disable_error_code = "empty-body"
