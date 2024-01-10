@@ -7,10 +7,11 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, Callable, ClassVar
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 T = TypeVar("T", bound=str)
 
+from pydantic import model_validator
 
 class UnitModel(AmpelBaseModel, Generic[T]):
 	"""
@@ -31,3 +32,13 @@ class UnitModel(AmpelBaseModel, Generic[T]):
 
 	#: Values to override in the config
 	override: None | dict[str, Any] = None
+
+	# A shim to allow a validator to be configured dynamically
+	# (pydantic.ModelMetaClass picks up validators at class definition time)
+	@model_validator(mode="after")
+	def post_validate(self) -> "UnitModel":
+		if self.post_validate_hook:
+			return self.post_validate_hook(self)
+		return self
+
+	post_validate_hook: ClassVar[None | Callable[["UnitModel"], "UnitModel"]] = None

@@ -36,6 +36,9 @@ types-setuptools = "^65.3.0"
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
 
+[tool.poetry.group.dev.dependencies]
+pytest-mock = "^3.12.0"
+
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.8.0"]
 build-backend = "poetry.core.masonry.api"
