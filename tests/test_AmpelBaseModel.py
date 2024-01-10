@@ -80,3 +80,22 @@ def test_implicit_default_none(base: type):
     assert ImplicitDefault().dict() == {"union": None, "union_type": None}
 
 
+def test_generics():
+
+    T = TypeVar("T")
+
+    class GenericModel(AmpelBaseModel, Generic[T]):
+        field: T
+    
+    class GenericOuter(AmpelBaseModel):
+        inty: None | GenericModel[int]
+    
+    class IntModel(AmpelBaseModel):
+        field: int
+
+    class IntOuter(AmpelBaseModel):
+        inty: IntModel
+    
+    IntOuter(**{"inty": {"field": 1}})
+    GenericOuter(**{"inty": {"field": 1}})
+
