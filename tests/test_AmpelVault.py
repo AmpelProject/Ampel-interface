@@ -1,0 +1,44 @@
+import pytest
+from typing import Any
+
+from ampel.secret.AmpelVault import AmpelVault
+from ampel.abstract.AbsSecretProvider import AbsSecretProvider
+from ampel.secret.NamedSecret import Secret, NamedSecret
+from ampel.base.AmpelBaseModel import AmpelBaseModel
+
+from pydantic import ValidationError
+
+
+class DummySecretProvider(AbsSecretProvider):
+    def __init__(self, contents: dict[str, Any]) -> None:
+        self.contents = contents
+
+    def tell(self, secret: Secret, ValueType: type) -> bool:
+        if isinstance(secret, NamedSecret) and isinstance(
+            value := self.contents.get(secret.label), ValueType
+        ):
+            secret.set(value)
+            return True
+        return False
+
+
+class HasSecret(AmpelBaseModel):
+    secret: NamedSecret[str]
+
+
+def test_secret_validation() -> None:
+    HasSecret(secret=NamedSecret[str](label="foo"))
+    with pytest.raises(ValidationError):
+        HasSecret(secret=NamedSecret(label="foo"))
+
+
+def test_secret_resolution() -> None:
+    vault = AmpelVault([DummySecretProvider({"foo": "bar"})])
+
+    secret = vault.get_named_secret("foo", str)
+    assert secret is not None
+    assert secret.get() == "bar"
+
+    assert (
+        HasSecret(secret=secret).secret.get() == "bar"
+    ), "model can be instantiated with resolved secret"

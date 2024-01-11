@@ -36,7 +36,7 @@ class AmpelVault:
 	
 	def get_named_secret(self, label, ValueType=object):
 		""" Returns a resolved NamedSecret using provided label """
-		ns = NamedSecret(label=label)
+		ns = NamedSecret[ValueType](label=label) # type: ignore[valid-type]
 		if self.resolve_secret(ns, ValueType):
 			return ns
 		return None
