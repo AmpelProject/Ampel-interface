@@ -74,28 +74,38 @@ def test_implicit_default_none(base: type):
         union: None | Union[int, str]
         union_type: None | int
 
-    assert get_origin(ImplicitDefault.__annotations__['union']) is Union
-    assert get_origin(ImplicitDefault.__annotations__['union_type']) is UnionType
+    assert get_origin(ImplicitDefault.__annotations__["union"]) is Union
+    assert get_origin(ImplicitDefault.__annotations__["union_type"]) is UnionType
 
     assert ImplicitDefault().dict() == {"union": None, "union_type": None}
 
 
 def test_generics():
-
     T = TypeVar("T")
 
     class GenericModel(AmpelBaseModel, Generic[T]):
         field: T
-    
+
     class GenericOuter(AmpelBaseModel):
         inty: None | GenericModel[int]
-    
+
     class IntModel(AmpelBaseModel):
         field: int
 
     class IntOuter(AmpelBaseModel):
         inty: IntModel
-    
+
     IntOuter.model_validate({"inty": {"field": 1}})
     GenericOuter.model_validate({"inty": {"field": 1}})
 
+
+def test_generic_args() -> None:
+    T = TypeVar("T")
+
+    class Base(AmpelBaseModel):
+        ...
+
+    class Derived(Base, Generic[T]):
+        ...
+
+    assert Derived[int].get_model_args() == (int,)
