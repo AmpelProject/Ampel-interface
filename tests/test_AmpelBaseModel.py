@@ -96,6 +96,6 @@ def test_generics():
     class IntOuter(AmpelBaseModel):
         inty: IntModel
     
-    IntOuter(**{"inty": {"field": 1}})
-    GenericOuter(**{"inty": {"field": 1}})
+    IntOuter.model_validate({"inty": {"field": 1}})
+    GenericOuter.model_validate({"inty": {"field": 1}})
 

@@ -11,10 +11,10 @@ def test_mixed_inheritance():
     class M(AmpelBaseModel):
         basemodel_param: int
 
-    class Derived1(U, M):
+    class Derived1(U, M): # type: ignore[misc]
         ...
 
-    class Derived2(M, U):
+    class Derived2(M, U): # type: ignore[misc]
         ...
 
     kwargs = {"unit_param": 1, "basemodel_param": 2}

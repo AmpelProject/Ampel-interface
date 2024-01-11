@@ -7,7 +7,7 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any
+from typing import Any, overload
 from collections.abc import MutableMapping, Mapping, Iterable, Sequence
 from ampel.types import UBson, strict_iterable, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -291,8 +291,19 @@ def merge_dict(d1: dict, d2: dict) -> dict:
 		for k in k1.intersection(k2)
 	}
 
+@overload
+def dictify(item: AmpelBaseModel) -> dict[str, UBson]:
+	...
 
-def dictify(item):
+@overload
+def dictify(item: list[Any]) -> list[UBson]:
+	...
+
+@overload
+def dictify(item: dict[str, Any]) -> dict[str, UBson]:
+	...
+
+def dictify(item: AmpelBaseModel | list[Any] | dict[str, Any] | UBson) -> list[UBson] | dict[str, UBson] | UBson:
 	"""
 	Recursively dictifies input
 	"""
