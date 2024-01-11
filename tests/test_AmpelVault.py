@@ -1,3 +1,4 @@
+import warnings
 import pytest
 from typing import Any
 
@@ -42,3 +43,13 @@ def test_secret_resolution() -> None:
     assert (
         HasSecret(secret=secret).secret.get() == "bar"
     ), "model can be instantiated with resolved secret"
+
+
+def test_implicit_generic_args() -> None:
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+        class Foo(AmpelBaseModel):
+            seekrit: NamedSecret[dict] = NamedSecret(label="dict")
+
+    assert Foo.model_fields["seekrit"].annotation.get_model_args() == (dict,)

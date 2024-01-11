@@ -7,14 +7,16 @@
 # Last Modified Date:  05.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+import warnings
 from collections.abc import KeysView
 from types import UnionType
-from typing import TYPE_CHECKING, Union, get_origin, get_args
+from typing import TYPE_CHECKING, Any, Union, get_origin, get_args
 
 from pydantic import BaseModel
 # NB: ModelMetaClass squirrels away generic args in its own
 # __pydantic_model_args__ attribute, so we can't use typing.get_args() here
 from pydantic._internal._generics import get_args as _internal_get_args
+from pydantic._internal._generics import get_origin as _internal_get_origin
 
 if TYPE_CHECKING:
 	from typing import Optional, Mapping, Any
@@ -25,6 +27,13 @@ if TYPE_CHECKING:
 	MappingIntStrAny = Mapping[IntStr, Any]
 
 NoneType = type(None)
+
+def safe_issubclass(cls: Any, class_or_tuple: Union[type, tuple[type, ...]]) -> bool:
+	""" non-throwing issubclass """
+	try:
+		return issubclass(cls, class_or_tuple)
+	except TypeError:
+		return False
 
 class AmpelBaseModel(BaseModel):
 	""" Raises validation errors if extra fields are present """
@@ -46,6 +55,21 @@ class AmpelBaseModel(BaseModel):
 				and NoneType in get_args(v)
 			):
 				setattr(cls, k, None)
+			# add generic args to defaults if missing
+			elif (
+				k in cls.__dict__
+				and safe_issubclass(v, AmpelBaseModel)
+				and v.get_model_origin() is type(cls.__dict__[k])
+				and v.get_model_args() and not cls.__dict__[k].get_model_args()
+			):
+				warnings.warn(
+					DeprecationWarning(
+						f"field {k} declared as {v}, but default has type {type(cls.__dict__[k])}"
+						" Adding generic args to default, but this will be an error in the future."
+					),
+					# stacklevel=1
+				)
+				setattr(cls, k, v.model_validate(cls.__dict__[k].model_dump()))
 		super().__init_subclass__(*args, **kwargs)
 
 	@classmethod
@@ -53,8 +77,10 @@ class AmpelBaseModel(BaseModel):
 		return _internal_get_args(cls)
 
 	@classmethod
-	def get_model_keys(cls) -> KeysView[str]:
-		return cls.model_fields.keys()
+	def get_model_origin(cls) -> None | type:
+		return _internal_get_origin(cls)
+
+	@classmethod
 	
 	# keep a facade of pydantic v1 BaseModel.dict() method
 	def dict(

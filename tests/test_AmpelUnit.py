@@ -1,7 +1,11 @@
+import warnings
+from collections.abc import Sequence
+
 import pytest
 
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.AmpelUnit import AmpelUnit
+from ampel.secret.NamedSecret import NamedSecret
 
 
 def test_mixed_inheritance():
@@ -60,3 +64,15 @@ def test_validate():
         "thing1": 1,
         "thing2": None,
     }
+
+
+def test_secret_without_type():
+    class UnitWithSecret(AmpelUnit):
+        secret: NamedSecret[str] = NamedSecret(label="foo")
+        # a type where isinstance(annotation, type) is True, but
+        # issubclass(annotation, AmpelBaseModel) throws TypeError
+        other: Sequence[int] = [1]
+
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        assert UnitWithSecret().secret.get_model_args() == (str,)

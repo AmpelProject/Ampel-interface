@@ -121,7 +121,7 @@ class AmpelUnit:
 
 		return create_model(
 			cls.__name__,
-			model_config = AmpelBaseModel.model_config,
+			__base__ = AmpelBaseModel,
 			**kwargs # type: ignore
 		)
 
