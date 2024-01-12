@@ -86,7 +86,7 @@ class AmpelABC:
 
 			# Check if method was implemented by child
 			func = getattr(Klass, method_name)
-			if func.__qualname__.split(".")[0] == value[0].__name__:
+			if func.__qualname__.split(".")[-2] == value[0].__name__:
 
 				# default implementation available
 				if hasattr(value[1], "default_method"):
