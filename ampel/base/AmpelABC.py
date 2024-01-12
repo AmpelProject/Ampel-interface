@@ -43,6 +43,11 @@ class AmpelABC:
 		# https://github.com/python/mypy/issues/5887
 		super().__init_subclass__(**kwargs) # type: ignore
 
+		# If class name contains '[', it is parameterization of a subclass of
+		# (AmpelBaseModel, Generic), and not a true subclass. Skip it.
+		if '[' in cls.__name__:
+			return
+
 		# Class is abstract
 		if abstract:
 			setattr(cls, '__new__', _raise_error)
