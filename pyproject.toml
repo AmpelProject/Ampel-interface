@@ -49,7 +49,11 @@ profile = "black"
 [tool.pytest.ini_options]
 minversion = "6.0"
 filterwarnings = [
-    "error"
+    "error",
+    # Expected `list[definition-ref]` but got `tuple` - serialized value may not be as expected
+    "ignore:Pydantic serializer warnings:UserWarning",
+    # UserWarning: Field name "job_sig" shadows an attribute in parent "AbsEventUnit"
+    "ignore:Field name \".*\" shadows an attribute in parent:UserWarning",
 ]
 
 [tool.mypy]
