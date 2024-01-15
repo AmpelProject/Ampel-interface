@@ -1,6 +1,6 @@
 import warnings
 import pytest
-from typing import Any
+from typing import cast, Any
 
 from ampel.secret.AmpelVault import AmpelVault
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
@@ -52,6 +52,5 @@ def test_implicit_generic_args() -> None:
         class Foo(AmpelBaseModel):
             seekrit: NamedSecret[dict] = NamedSecret(label="dict")
 
-    annotation = Foo.model_fields["seekrit"].annotation
-    assert isinstance(annotation, AmpelBaseModel)
+    annotation = cast(type[AmpelBaseModel], Foo.model_fields["seekrit"].annotation)
     assert annotation.get_model_args() == (dict,)

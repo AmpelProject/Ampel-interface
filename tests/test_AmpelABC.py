@@ -19,7 +19,7 @@ def test_check_methods():
     with pytest.raises(TypeError):
 
         class WrongImplementation(Base):
-            def foo(self, arg: int, blarg: str) -> None:
+            def foo(self, arg: int, blarg: str) -> None: # type: ignore[override]
                 ...
 
     class CorrectImplementation(Base):
@@ -34,11 +34,11 @@ def test_generic_with_basemodel():
 
     class Base(AmpelABC, AmpelBaseModel, Generic[T], abstract=True):
         @abstractmethod
-        def foo(self, arg: T) -> None:
+        def foo(self, arg: T) -> T: # type: ignore[empty-body]
             ...
 
     class CorrectImplementation(Base[int]):
-        def foo(self, arg: int) -> None:
-            ...
+        def foo(self, arg: int) -> int:
+            return arg
 
-    assert CorrectImplementation().foo(42) is None
+    assert CorrectImplementation().foo(42) == 42

@@ -109,3 +109,11 @@ def test_generic_args() -> None:
         ...
 
     assert Derived[int].get_model_args() == (int,)
+
+def test_inherit_from_annotated_base():
+
+    class Base(AmpelUnit):
+        base: int = 1
+    
+    class Derived(Base, AmpelBaseModel):
+        ...

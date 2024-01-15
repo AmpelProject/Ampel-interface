@@ -1,5 +1,5 @@
 import pickle
-from typing import Generator, Mapping
+from typing import Generator, Mapping, no_type_check
 
 import pytest
 
@@ -80,7 +80,7 @@ def t3_view(t3_doc: T3Document, config: AmpelConfig):
 def view(request) -> Generator[T2DocView | SnapView | T3DocView, None, None]:
     yield request.getfixturevalue(request.param)
 
-
+@no_type_check
 def serialize(view):
     """Turn a view into a JSON rep for rich comparisons"""
     if hasattr(view, "__slots__"):
