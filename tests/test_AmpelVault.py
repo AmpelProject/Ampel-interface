@@ -52,4 +52,6 @@ def test_implicit_generic_args() -> None:
         class Foo(AmpelBaseModel):
             seekrit: NamedSecret[dict] = NamedSecret(label="dict")
 
-    assert Foo.model_fields["seekrit"].annotation.get_model_args() == (dict,)
+    annotation = Foo.model_fields["seekrit"].annotation
+    assert isinstance(annotation, AmpelBaseModel)
+    assert annotation.get_model_args() == (dict,)

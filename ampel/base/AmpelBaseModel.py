@@ -8,9 +8,8 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import warnings
-from collections.abc import KeysView
 from types import UnionType
-from typing import TYPE_CHECKING, Any, Union, get_origin, get_args
+from typing import TYPE_CHECKING, Any, TypeAlias, Union, get_origin, get_args
 
 from pydantic import BaseModel
 # NB: ModelMetaClass squirrels away generic args in its own
@@ -19,12 +18,7 @@ from pydantic._internal._generics import get_args as _internal_get_args
 from pydantic._internal._generics import get_origin as _internal_get_origin
 
 if TYPE_CHECKING:
-	from typing import Optional, Mapping, Any
-
-	IntStr = int | str
-	AbstractSetIntStr = set[str] | set[int] | dict[str, Any] | dict[int, Any]
-	DictStrAny = dict[str, Any]
-	MappingIntStrAny = Mapping[IntStr, Any]
+	IncEx: TypeAlias = 'set[int] | set[str] | dict[int, Any] | dict[str, Any] | None'
 
 NoneType = type(None)
 
@@ -81,24 +75,26 @@ class AmpelBaseModel(BaseModel):
 		return _internal_get_origin(cls)
 
 	@classmethod
+	def get_model_keys(cls) -> set[str]:
+		return set(cls.model_fields.keys())
 	
-	# keep a facade of pydantic v1 BaseModel.dict() method
+	# keep our own implementation of the (deprecated) BaseModel.dict() for
+	# future compatibility
 	def dict(
-        self,
-        *,
-        include: "AbstractSetIntStr | None" = None,
-        exclude: "AbstractSetIntStr | None" = None,
-        by_alias: bool = False,
-        skip_defaults: "Optional[bool]" = None,
-        exclude_unset: bool = False,
-        exclude_defaults: bool = False,
-        exclude_none: bool = False,
-    ) -> 'DictStrAny':
+		self,
+		*,
+		include: "IncEx" = None,
+		exclude: "IncEx" = None,
+		by_alias: bool = False,
+		exclude_unset: bool = False,
+		exclude_defaults: bool = False,
+		exclude_none: bool = False,
+	) -> dict[str, Any]:
 		return self.model_dump(
 			include=include,
 			exclude=exclude,
 			by_alias=by_alias,
 			exclude_unset=exclude_unset,
-			exclude_defaults=exclude_defaults or (skip_defaults is True),
+			exclude_defaults=exclude_defaults,
 			exclude_none=exclude_none
 		)

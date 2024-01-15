@@ -14,11 +14,13 @@ from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from pydantic import BaseModel, ValidationError, create_model
-from typing import Any, Type, Union, get_origin, get_args
+from typing import Any, Type, Union, get_origin, get_args, TYPE_CHECKING
 
 ttf = type(Traceless)
 NoneType = type(None)
 
+if TYPE_CHECKING:
+	from ampel.base.AmpelBaseModel import IncEx
 
 class AmpelUnit:
 	"""
@@ -209,24 +211,31 @@ class AmpelUnit:
 			)
 		}
 
-
-	# Note: note defining arguments to avoid mypy complains when mixing AmpelUnit with BaseModel
-	def dict(self, **kwargs) -> dict[str, Any]:
+	def dict(
+		self,
+		*,
+		include: "IncEx" = None,
+		exclude: "IncEx" = None,
+		by_alias: bool = False,
+		exclude_unset: bool = False,
+		exclude_defaults: bool = False,
+		exclude_none: bool = False,
+	) -> dict[str, Any]:
 
 		d = self.__dict__
-		incl = self._aks if (x := kwargs.get('include')) is None else x
+		incl = self._aks if include is None else include
 		excl = {
 			k for k, v in self._annots.items()
 			if type(v) is ttf and v.__metadata__[0] == TRACELESS
 		}
 
-		if 'exclude' in kwargs:
-			excl.update(kwargs['exclude'])
+		if exclude is not None:
+			excl.update((v if isinstance(v, str) else str(v) for v in exclude))
 
-		if kwargs.get('exclude_unset'):
+		if exclude_unset:
 			excl.update(self._exclude_unset)
 
-		if kwargs.get('exclude_defaults'):
+		if exclude_defaults:
 			for k in self._defaults:
 				if self.__dict__[k] == self._defaults[k]:
 					excl.add(k)
@@ -252,8 +261,8 @@ class AmpelUnit:
 
 
 	@classmethod
-	def get_model_keys(cls) -> abc.KeysView[str]:
-		return cls._annots.keys()
+	def get_model_keys(cls) -> set[str]:
+		return set(cls._annots.keys())
 
 
 Klass = AmpelUnit

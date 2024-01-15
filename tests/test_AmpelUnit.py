@@ -11,22 +11,31 @@ from ampel.secret.NamedSecret import NamedSecret
 def test_mixed_inheritance():
     class U(AmpelUnit):
         unit_param: int
+        unit_param_with_default: int = 3
 
     class M(AmpelBaseModel):
         basemodel_param: int
+        basemodel_param_with_default: int = 2
 
-    class Derived1(U, M): # type: ignore[misc]
+    class PrivateMixin:
+        """Set a 'private' variable to test whether BaseModel.__setattr__ works"""
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._foo = 1
+
+    class Derived1(PrivateMixin, U, M):
         ...
 
-    class Derived2(M, U): # type: ignore[misc]
+    class Derived2(PrivateMixin, M, U):
         ...
 
     kwargs = {"unit_param": 1, "basemodel_param": 2}
+    defaults = {"unit_param_with_default": 3, "basemodel_param_with_default": 2}
 
     # can derive from AmpelUnit first
-    assert Derived1(**kwargs).dict() == kwargs
+    assert Derived1(**kwargs).dict() == kwargs | defaults
     # or from AmpelBaseModel first
-    assert Derived2(**kwargs).dict() == kwargs
+    assert Derived2(**kwargs).dict() == kwargs | defaults
 
 
 def test_embedded_model():
