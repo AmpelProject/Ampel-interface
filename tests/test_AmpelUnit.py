@@ -6,6 +6,7 @@ import pytest
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.AmpelUnit import AmpelUnit
 from ampel.secret.NamedSecret import NamedSecret
+from ampel.types import Traceless
 
 
 def test_mixed_inheritance():
@@ -110,11 +111,11 @@ def test_slots():
     assert unit.bubblegum == 5
     assert unit.dict() == {"cherry": 3, "banana": 1, "bubblegum": 5}
 
-def test_default_override():
 
+def test_default_override():
     class Base(AmpelUnit):
         a: int = 1
-    
+
     class Derived(Base):
         """override default without providing new annotation"""
         a = 2
@@ -132,3 +133,19 @@ def test_default_override():
         _slot_defaults = {"a": 3}
     
     assert SlotDerived().a == 3
+
+def test_trace_content():
+    class Unit(AmpelUnit):
+        config: int = 1
+        runtime: Traceless[str]
+
+    Unit.validate({}) == {"config": 1}
+    with pytest.raises(TypeError):
+        Unit.validate_all({})
+
+    with pytest.raises(TypeError):
+        Unit()
+
+    assert Unit(runtime="hola")._get_trace_content() == {"config": 1}
+
+    Unit.validate_all({"runtime": "hola"}) == {"config": 1, "runtime": "hola"}
