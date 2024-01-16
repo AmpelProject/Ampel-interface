@@ -147,5 +147,28 @@ def test_trace_content():
         Unit()
 
     assert Unit(runtime="hola")._get_trace_content() == {"config": 1}
+    assert Unit(runtime="hola").dict() == {"config": 1}
 
     Unit.validate_all({"runtime": "hola"}) == {"config": 1, "runtime": "hola"}
+
+
+def test_dict():
+    class Model(AmpelBaseModel):
+        param: int = 1
+
+    class Unit(AmpelUnit):
+        a: list[int] = [1, 2, 3]
+        b: dict[str, int] = {"a": 1}
+        c: Model
+
+    assert Unit(c=Model()).dict() == {"a": [1, 2, 3], "b": {"a": 1}, "c": {"param": 1}}
+    assert Unit(a=[1, 2, 3], c=Model()).dict(exclude_defaults=True) == {
+        "c": {"param": 1}
+    }
+    assert Unit(a=[1, 2, 3], c=Model()).dict(exclude_unset=True) == {
+        "a": [1, 2, 3],
+        "c": {"param": 1},
+    }
+    assert Unit(a=[1, 2, 3], c=Model()).dict(exclude={"a"}, exclude_defaults=True) == {
+        "c": {"param": 1},
+    }
