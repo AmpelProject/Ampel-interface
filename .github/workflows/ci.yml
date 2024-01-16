@@ -1,0 +1,71 @@
+on:
+  workflow_call:
+    secrets:
+      PYPI_API_TOKEN:
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: "Set up environment"
+      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      with:
+        python-version: "3.12"
+        poetry-version: "1.6.1"
+        install-args: --all-extras
+    - name: Install root
+      run: poetry run pip install -e . --no-deps
+    - run: poetry run pytest --cov=ampel
+  
+  mypy:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: "Set up environment"
+      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      with:
+        python-version: "3.12"
+        poetry-version: "1.6.1"
+        install-args: --all-extras
+    - name: Install root
+      run: poetry run pip install -e . --no-deps
+    - run: poetry run mypy -p ampel
+
+  check_version:
+    name: Tag version bump
+    runs-on: ubuntu-22.04
+    # run only on pushes, not PRs
+    if: ${{ github.event_name == 'push' && github.base_ref == null }}
+    needs: [test, mypy]
+    outputs:
+      should_publish: ${{ steps.check.outputs.should_publish }} 
+    steps:
+    - uses: jvansanten/action-tag-poetry-version-bump@v1
+      id: check
+
+  pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-22.04
+    needs: [check_version]
+    # NB: outputs are always strings; explicitly parse to get a boolean
+    if: ${{ fromJSON(needs.check_version.outputs.should_publish) }}
+    
+    steps:
+    - uses: actions/checkout@v3
+    # NB: we don't actually need to install the dependencies, but if we've
+    # gotten this far they're cached anyway
+    - name: "Set up environment"
+      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      with:
+        python-version: "3.12"
+        poetry-version: "1.6.1"
+        install-args: --all-extras
+    - name: Publish
+      run: |
+        poetry publish -n --build
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
