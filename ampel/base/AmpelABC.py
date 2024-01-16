@@ -43,6 +43,11 @@ class AmpelABC:
 		# https://github.com/python/mypy/issues/5887
 		super().__init_subclass__(**kwargs) # type: ignore
 
+		# If class name contains '[', it is parameterization of a subclass of
+		# (AmpelBaseModel, Generic), and not a true subclass. Skip it.
+		if '[' in cls.__name__:
+			return
+
 		# Class is abstract
 		if abstract:
 			setattr(cls, '__new__', _raise_error)
@@ -81,7 +86,7 @@ class AmpelABC:
 
 			# Check if method was implemented by child
 			func = getattr(Klass, method_name)
-			if func.__qualname__.split(".")[0] == value[0].__name__:
+			if func.__qualname__.split(".")[-2] == value[0].__name__:
 
 				# default implementation available
 				if hasattr(value[1], "default_method"):

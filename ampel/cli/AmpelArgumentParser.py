@@ -367,15 +367,15 @@ class AmpelArgumentParser(ArgumentParser):
 		return super().error(message)
 
 
-	def notation_add_note_references(self):
+	def notation_add_note_references(self) -> None:
 		self.notations.add(f"{self.spacer}Note references are marked with [ ]")
 
 
-	def notation_add_example_references(self):
+	def notation_add_example_references(self) -> None:
 		self.notations.add(f"{self.spacer}Example references are marked with | |")
 
 
-	def notation_add_mutual_exclusivity(self):
+	def notation_add_mutual_exclusivity(self) -> None:
 		self.notations.add(
 			f"{self.spacer}Consecutive mutually exclusive arguments are marked with \u22BB"
 		)

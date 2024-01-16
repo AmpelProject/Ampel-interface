@@ -11,7 +11,7 @@ from ampel.secret.Secret import Secret, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class NamedSecret(Secret[T], AmpelBaseModel):
+class NamedSecret(AmpelBaseModel, Secret[T]):
 	"""
 	A Secret:
 	- featuring a label used as lookup key during secret resolution

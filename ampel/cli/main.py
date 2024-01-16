@@ -196,7 +196,7 @@ def show_help() -> None:
 	parser.note("Type \033[1;3m'ampel \033[1m\033[36m<operation>\033[0m\033[1;3m help'\033[0m for more info\n(ex: \033[1;3mampel job help\033[0m)")
 	parser.print_help()
 
-def autocolor(txt):
+def autocolor(txt) -> None:
 
 	idx = 0
 
@@ -218,6 +218,7 @@ def autocolor(txt):
 			print(prev_color + txt[i:-1], end='')
 			break
 		if i >= last_idx - 1:
+			assert prev_main_color is not None
 			print(prev_main_color + '\033[1m' + txt[i], end='')
 			continue
 		elif txt[i] in ('=', '*', '/'):

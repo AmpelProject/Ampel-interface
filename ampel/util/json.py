@@ -35,12 +35,15 @@ class AmpelEncoder(json.JSONEncoder):
 		"""
 		Encode selected types in jsonrpc class-hint notation
 		"""
-		serializer = self.get_serializer(obj)
+		serializer = self.get_serializer(obj) # type: ignore[no-untyped-call]
 		if serializer is not None:
 			if obj.__class__.__module__ == "builtins":
 				module_name = "builtins"
 			else:
-				module_name = inspect.getmodule(obj).__name__
+				if (module := inspect.getmodule(obj)) is None:
+					raise ValueError("Cannot serialize object without module")
+				else:
+					module_name = module.__name__
 			json_class = obj.__class__.__name__
 			if module_name not in ['', '__main__']:
 				json_class = '%s.%s' % (module_name, json_class)
@@ -55,11 +58,11 @@ class AmpelEncoder(json.JSONEncoder):
 				params, attrs = [], rep
 			else:
 				params, attrs = rep, {}
-			return {"__jsonclass__": [json_class] + self.default(params, True), **self.default(attrs, True)}
+			return {"__jsonclass__": [json_class] + self.default(params, True), **self.default(attrs, True)} # type: ignore[no-untyped-call]
 		elif hasattr(obj, 'items'):
-			return {self.default(k, True): self.default(v, True) for k,v in obj.items()}
+			return {self.default(k, True): self.default(v, True) for k,v in obj.items()} # type: ignore[no-untyped-call]
 		elif isinstance(obj, list) or isinstance(obj, set) or isinstance(obj, tuple):
-			return [self.default(k, True) for k in obj]
+			return [self.default(k, True) for k in obj] # type: ignore[no-untyped-call]
 		else:
 			# convert remaining Mongo types
 			try:
@@ -74,7 +77,7 @@ class AmpelEncoder(json.JSONEncoder):
 		"""
 		Serializers for types we want to preserve
 		"""
-		if ((reduce := getattr(type(obj), "__reduce__", None)) != object.__reduce__):
+		if (hasattr(type(obj), "__reduce__") and (reduce := getattr(type(obj), "__reduce__")) != object.__reduce__):
 			return lambda x: (list(reduce(x)[1]), {})
 		elif hasattr(obj, '__dataclass_fields__'):
 			return lambda x: x.__dict__

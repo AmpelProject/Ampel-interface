@@ -71,7 +71,7 @@ class AmpelAlert:
 	def __reduce__(self):
 		return (
 			type(self),
-			(self._id, self._stock, self._datapoints, self._tag, self._extra)
+			(self._id, self._stock, self._datapoints, self._tag, self._extra) # type: ignore[attr-defined]
 		)
 
 	def __setattr__(self, k, v):

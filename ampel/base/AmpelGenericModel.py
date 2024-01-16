@@ -7,27 +7,9 @@
 # Last Modified Date:  05.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import KeysView
-from pydantic import BaseConfig, Extra
-from pydantic.generics import GenericModel
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 
-class AmpelGenericModel(GenericModel):
-	""" Raises validation errors if extra fields are present """
-
-	class Config(BaseConfig):
-		arbitrary_types_allowed = True
-		allow_population_by_field_name = True
-		validate_all = True
-		extra = Extra.forbid
-
-	def __init__(self, **kwargs) -> None:
-		self.__config__.extra = Extra.forbid
-		try:
-			super().__init__(**kwargs)
-		except Exception as e:
-			raise TypeError(e)
-		self.__config__.extra = Extra.allow
-
-	@classmethod
-	def get_model_keys(cls) -> KeysView[str]:
-		return cls.__fields__.keys()
+# pydantic v2 BaseModel supports generics natively
+# NB: need to make this a subclass rather than an alias to keep pydantic.mypy happy
+class AmpelGenericModel(AmpelBaseModel):
+    ...

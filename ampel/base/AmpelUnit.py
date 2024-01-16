@@ -7,17 +7,20 @@
 # Last Modified Date:  09.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from functools import partial
 import collections.abc as abc
 from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
-from pydantic import BaseModel, validate_model, create_model
-from typing import Any, Type, Union, get_origin, get_args
+from pydantic import BaseModel, ValidationError, create_model
+from typing import Any, Type, Union, get_origin, get_args, TYPE_CHECKING
 
 ttf = type(Traceless)
 NoneType = type(None)
 
+if TYPE_CHECKING:
+	from ampel.base.AmpelBaseModel import IncEx
 
 class AmpelUnit:
 	"""
@@ -31,6 +34,7 @@ class AmpelUnit:
 	_slot_defaults: dict[str, Any] = {}
 	_aks: set[str] = set() # annotation keys
 	_sks: set[str] = set() # slots keys
+	_exclude_unset: set[str]
 
 
 	@classmethod
@@ -49,7 +53,7 @@ class AmpelUnit:
 		joined_sks = cls._sks.copy()
 		joined_aks = cls._aks.copy()
 		# Needed for when sub-classes inherit both AmpelUnit and AmpelBaseModel/BaseModel
-		field_keys: Any = getattr(cls, '__fields__', set())
+		field_keys: dict[str, Any] = getattr(cls, 'model_fields', dict())
 
 		for base in reversed(cls.mro()):
 			if ann := getattr(base, '__annotations__', {}):
@@ -73,8 +77,8 @@ class AmpelUnit:
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
 					elif k in field_keys:
-						fields = cls.__fields__ # type: ignore[attr-defined]
-						if fields[k].required is False:
+						fields = cls.model_fields # type: ignore[attr-defined]
+						if fields[k].is_required() is False:
 							joined_defaults[k] = fields[k].default
 
 
@@ -82,6 +86,10 @@ class AmpelUnit:
 			for k, v in getattr(base, '__dict__', {}).items():
 				if k in joined_ann and k not in ann:
 					joined_defaults[k] = v
+
+			# if we inherit from AmpelBaseModel, add model_fields from base class
+			if field_keys:
+				field_keys.update(getattr(base, 'model_fields', dict()))
 
 		if slots := getattr(cls, '__slots__', None):
 			joined_sks.update(slots)
@@ -97,8 +105,8 @@ class AmpelUnit:
 	def _create_model(cls, omit_traceless: bool = False) -> Type[BaseModel]:
 
 		defs = cls._defaults
-		if hasattr(cls, '__fields__'):
-			cls.__fields__.clear() # type: ignore[attr-defined]
+		if hasattr(cls, 'model_fields'):
+			cls.model_fields.clear() # type: ignore[attr-defined]
 
 		if omit_traceless:
 			ttf = type(Traceless)
@@ -115,7 +123,7 @@ class AmpelUnit:
 
 		return create_model(
 			cls.__name__,
-			__config__ = AmpelBaseModel.Config,
+			__base__ = AmpelBaseModel,
 			**kwargs # type: ignore
 		)
 
@@ -123,10 +131,11 @@ class AmpelUnit:
 	@classmethod
 	def validate(cls, value: dict) -> Any:
 		""" Validate kwargs values against fields of cls (except traceless) """
-		values, fields, errors = validate_model(cls._create_model(True), value)
-		if errors:
-			raise TypeError(errors) from None
-		return values
+		try:
+			values = cls._create_model(True).model_validate(value)
+		except ValidationError as e:
+			raise TypeError(e) from None
+		return values.model_dump()
 
 
 	@classmethod
@@ -136,10 +145,11 @@ class AmpelUnit:
 			model = cls._model = cls._create_model()
 		else:
 			model = cls._model
-		values, fields, errors = validate_model(model, value)
-		if errors:
-			raise TypeError(errors) from None
-		return values
+		try:
+			values = model.model_validate(value)
+		except ValidationError as e:
+			raise TypeError(e) from None
+		return values.model_dump()
 
 	
 	def __init__(self, **kwargs) -> None:
@@ -151,14 +161,9 @@ class AmpelUnit:
 			# might be needed in the future due to postponed annotations
 			# cls._model.update_forward_refs()
 
-		if hasattr(cls, '__fields__'):
-			AmpelBaseModel.__init__(self) # type: ignore[arg-type]
-
-		vres = validate_model(cls._model, kwargs) # type: ignore[arg-type]
-		self._exclude_unset = self._defaults.keys() - kwargs.keys()
-
-		# pydantic ValidationError
-		if e := vres[2]:
+		try:
+			values = cls._model.model_validate(kwargs)
+		except ValidationError as e:
 			# https://github.com/samuelcolvin/pydantic/issues/784
 			print("")
 			if kwargs:
@@ -170,15 +175,19 @@ class AmpelUnit:
 			raise TypeError(e) from None
 
 		# Save coerced values
-		kwargs.update(vres[0])
+		unset = self._defaults.keys() - kwargs.keys()
+		kwargs.update({k: getattr(values, k) for k in cls._model.model_fields})
 
-		sa = self.__setattr__
+		if isinstance(self, BaseModel):
+			super().__init__(**kwargs)
+		else:
+			super().__init__()
+
+		sa = partial(object.__setattr__, self)
 		sks = cls._sks
 		aks = cls._aks
 
-		for k, v in cls._slot_defaults.items():
-			if k not in kwargs:
-				sa(k, v)
+		sa("_exclude_unset", unset)
 
 		# Set kwargs attributes
 		for k in kwargs:
@@ -198,26 +207,37 @@ class AmpelUnit:
 			)
 		}
 
+	def dict(
+		self,
+		*,
+		include: "IncEx" = None,
+		exclude: "IncEx" = None,
+		by_alias: bool = False,
+		exclude_unset: bool = False,
+		exclude_defaults: bool = False,
+		exclude_none: bool = False,
+	) -> dict[str, Any]:
 
-	# Note: note defining arguments to avoid mypy complains when mixing AmpelUnit with BaseModel
-	def dict(self, **kwargs) -> dict[str, Any]:
+		if hasattr(self, "__slots__"):
+			d = self.__dict__ | {k: getattr(self, k) for k in self.__slots__}
+		else:
+			d = self.__dict__
 
-		d = self.__dict__
-		incl = self._aks if (x := kwargs.get('include')) is None else x
+		incl = self._aks if include is None else include
 		excl = {
 			k for k, v in self._annots.items()
 			if type(v) is ttf and v.__metadata__[0] == TRACELESS
 		}
 
-		if 'exclude' in kwargs:
-			excl.update(kwargs['exclude'])
+		if exclude is not None:
+			excl.update((v if isinstance(v, str) else str(v) for v in exclude))
 
-		if kwargs.get('exclude_unset'):
+		if exclude_unset:
 			excl.update(self._exclude_unset)
 
-		if kwargs.get('exclude_defaults'):
+		if exclude_defaults:
 			for k in self._defaults:
-				if self.__dict__[k] == self._defaults[k]:
+				if d[k] == self._defaults[k]:
 					excl.add(k)
 
 		return {
@@ -241,8 +261,8 @@ class AmpelUnit:
 
 
 	@classmethod
-	def get_model_keys(cls) -> abc.KeysView[str]:
-		return cls._annots.keys()
+	def get_model_keys(cls) -> set[str]:
+		return set(cls._annots.keys())
 
 
 Klass = AmpelUnit

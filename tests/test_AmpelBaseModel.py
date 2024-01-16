@@ -1,6 +1,9 @@
 import pytest
-from typing import Generic, TypeVar
+from types import UnionType
+from typing import Generic, TypeVar, Union, get_origin
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelUnit import AmpelUnit
+from pydantic import ValidationError
 
 
 def test_dict_view():
@@ -11,11 +14,11 @@ def test_dict_view():
         derived: int = 2
 
     # base can't be instantiated with dict repr of derived
-    with pytest.raises(TypeError):
+    with pytest.raises(ValidationError):
         Base(**Derived().dict())
 
     # base _can_ be instantiated with a slice of derived
-    base = Base(**Derived(base=42, derived=3).dict(include=Base.get_model_keys()))
+    base = Base(**Derived(base=42, derived=3).dict(include=set(Base.get_model_keys())))
 
     assert base.dict() == Base(base=42).dict()
 
@@ -25,7 +28,7 @@ def test_default_override():
         base: int = 1
 
     class Derived(Base):
-        base = 2
+        base: int = 2
 
     assert Derived().base == 2
 
@@ -45,10 +48,10 @@ def test_nested_typevar(value):
 
     T = TypeVar("T")
 
-    class AllOf(Generic[T], AmpelBaseModel):
+    class AllOf(AmpelBaseModel, Generic[T]):
         all_of: list[T]
 
-    class AnyOf(Generic[T], AmpelBaseModel):
+    class AnyOf(AmpelBaseModel, Generic[T]):
         any_of: list[T | AllOf[T]]
 
     class Inner(AmpelBaseModel):
@@ -57,4 +60,60 @@ def test_nested_typevar(value):
     class Outer(AmpelBaseModel):
         field: Inner | AnyOf[Inner] | AllOf[Inner]
 
-    Outer(**value)
+    assert Outer(**value).model_dump() == value
+
+
+@pytest.mark.parametrize("base", [AmpelBaseModel, AmpelUnit])
+def test_implicit_default_none(base: type):
+    """
+    Implicit default None is added for both Union (typing.Union[a,b]) and
+    UnionType (a | b) annotations that include None
+    """
+
+    class ImplicitDefault(base):
+        union: None | Union[int, str]
+        union_type: None | int
+
+    assert get_origin(ImplicitDefault.__annotations__["union"]) is Union
+    assert get_origin(ImplicitDefault.__annotations__["union_type"]) is UnionType
+
+    assert ImplicitDefault().dict() == {"union": None, "union_type": None}
+
+
+def test_generics():
+    T = TypeVar("T")
+
+    class GenericModel(AmpelBaseModel, Generic[T]):
+        field: T
+
+    class GenericOuter(AmpelBaseModel):
+        inty: None | GenericModel[int]
+
+    class IntModel(AmpelBaseModel):
+        field: int
+
+    class IntOuter(AmpelBaseModel):
+        inty: IntModel
+
+    IntOuter.model_validate({"inty": {"field": 1}})
+    GenericOuter.model_validate({"inty": {"field": 1}})
+
+
+def test_generic_args() -> None:
+    T = TypeVar("T")
+
+    class Base(AmpelBaseModel):
+        ...
+
+    class Derived(Base, Generic[T]):
+        ...
+
+    assert Derived[int].get_model_args() == (int,)
+
+def test_inherit_from_annotated_base():
+
+    class Base(AmpelUnit):
+        base: int = 1
+    
+    class Derived(Base, AmpelBaseModel):
+        ...

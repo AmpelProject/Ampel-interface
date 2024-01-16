@@ -196,36 +196,36 @@ class ArgParserBuilder:
 			)
 
 
-	def hint_query_logic(self, sub_op: str, pos: None | int = None, ref: None | str = None):
+	def hint_query_logic(self, sub_op: str, pos: None | int = None, ref: None | str = None) -> None:
 		for p in self.get_parsers(sub_op):
 			p.hint_query_logic(pos, ref)
 
 
-	def hint_all_query_logic(self, pos: None | int = None, ref: None | str = None):
+	def hint_all_query_logic(self, pos: None | int = None, ref: None | str = None) -> None:
 		for p in self.parsers.values():
 			p.hint_query_logic(pos, ref)
 
 
-	def hint_time_format(self, sub_ops: str, pos: None | int = None, ref: None | str = None):
+	def hint_time_format(self, sub_ops: str, pos: None | int = None, ref: None | str = None) -> None:
 		for p in self.get_parsers(sub_ops):
 			p.hint_time_format(pos, ref)
 
 
-	def hint_all_time_format(self, pos: None | int = None, ref: None | str = None):
+	def hint_all_time_format(self, pos: None | int = None, ref: None | str = None) -> None:
 		for p in self.parsers.values():
 			p.hint_time_format(pos, ref)
 
 
-	def hint_all_config_override(self, pos: None | int = None, ref: None | str = None):
+	def hint_all_config_override(self, pos: None | int = None, ref: None | str = None) -> None:
 		for p in self.parsers.values():
 			p.hint_config_override(pos, ref)
 
 
-	def notation_add_note_references(self):
+	def notation_add_note_references(self) -> None:
 		for p in self.parsers.values():
 			p.notation_add_note_references()
 
 
-	def notation_add_example_references(self):
+	def notation_add_example_references(self) -> None:
 		for p in self.parsers.values():
 			p.notation_add_example_references()

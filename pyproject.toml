@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.9.1a1"
+version = "0.10.0a0"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -18,7 +18,7 @@ packages = [{include = "ampel"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^1.9.0"
+pydantic = "^2"
 xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"
@@ -36,9 +36,43 @@ types-setuptools = "^65.3.0"
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
 
+[tool.poetry.group.dev.dependencies]
+pytest-mock = "^3.12.0"
+
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.8.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+filterwarnings = [
+    "error",
+    # Expected `list[definition-ref]` but got `tuple` - serialized value may not be as expected
+    "ignore:Pydantic serializer warnings:UserWarning",
+    # UserWarning: Field name "job_sig" shadows an attribute in parent "AbsEventUnit"
+    "ignore:Field name \".*\" shadows an attribute in parent:UserWarning",
+]
+
+[tool.mypy]
+namespace_packages = true
+show_error_codes = true
+check_untyped_defs = true
+disallow_untyped_calls = true
+plugins = [
+    "pydantic.mypy"
+]
+
+[tool.pydantic-mypy]
+init_typed = true
+
+[[tool.mypy.overrides]]
+module = "ampel.abstract.*"
+disable_error_code = "empty-body"
+
+[[tool.mypy.overrides]]
+module = "bson.*"
+ignore_missing_imports = true
+

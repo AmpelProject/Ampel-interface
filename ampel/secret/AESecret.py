@@ -11,7 +11,7 @@ from ampel.secret.Secret import Secret
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 
-class AESecret(Secret[str], AmpelBaseModel):
+class AESecret(AmpelBaseModel, Secret[str]):
 	"""
 	AES encrypted secret.
 
