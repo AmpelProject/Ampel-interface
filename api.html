@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; ampel-interface 0.9.1a1 documentation</title>
+    <title>API reference &#8212; ampel-interface 0.10.0a0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=d59dc883" />
-    <script src="_static/documentation_options.js?v=be254ed5"></script>
+    <script src="_static/documentation_options.js?v=3f8aba6c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="structure.html" title="Structure"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.9.1a1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.10.0a0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>  
@@ -274,7 +274,7 @@ as well as the results of other T2 units.</p>
 <p>Known subclass: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbsTiedLightCurveT2Unit</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.t2_dependency">
-<span class="sig-name descname"><span class="pre">t2_dependency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">StateT2Dependency[U]</span></code><span class="pre">]</span></em><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.t2_dependency" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">t2_dependency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">StateT2Dependency[~U]</span></code><span class="pre">]</span></em><a class="headerlink" href="#ampel.abstract.AbsTiedCustomStateT2Unit.AbsTiedCustomStateT2Unit.t2_dependency" title="Link to this definition">¶</a></dt>
 <dd><p>Dependencies configuration for the underlying tied t2 unit
 Sub-class can add unit id constraints by parametrizing UnitModel</p>
 </dd></dl>
@@ -1008,7 +1008,7 @@ sorted by timestamp.</p>
 <p>These models are used to parse and validate the configuration of the Ampel system.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ampel.model.UnitModel.UnitModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.model.UnitModel.</span></span><span class="sig-name descname"><span class="pre">UnitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/UnitModel.html#UnitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.UnitModel.UnitModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.model.UnitModel.</span></span><span class="sig-name descname"><span class="pre">UnitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/UnitModel.html#UnitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.UnitModel.UnitModel" title="Link to this definition">¶</a></dt>
 <dd><p>Specification of a processing unit.
 Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Literal[‘T2SNCosmo’]])</p>
 <dl class="py attribute">
@@ -1034,11 +1034,25 @@ Note: generic parametrization allows to constrain unit ids (ex: UnitModel[Litera
 <dd><p>Values to override in the config</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ampel.model.UnitModel.UnitModel.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True,</span> <span class="pre">'extra':</span> <span class="pre">'forbid',</span> <span class="pre">'populate_by_name':</span> <span class="pre">True,</span> <span class="pre">'validate_default':</span> <span class="pre">True}</span></em><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ampel.model.UnitModel.UnitModel.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'config':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">int,</span> <span class="pre">str,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'override':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'secrets':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'unit':</span> <span class="pre">FieldInfo(annotation=~T,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#ampel.model.UnitModel.UnitModel.model_fields" title="Link to this definition">¶</a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ampel.model.StateT2Dependency.StateT2Dependency">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.model.StateT2Dependency.</span></span><span class="sig-name descname"><span class="pre">StateT2Dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/StateT2Dependency.html#StateT2Dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.model.StateT2Dependency.</span></span><span class="sig-name descname"><span class="pre">StateT2Dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/model/StateT2Dependency.html#StateT2Dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#ampel.model.UnitModel.UnitModel" title="ampel.model.UnitModel.UnitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitModel</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
 <p>Used to specify how “tied state t2” units should select the associated required t2 document.</p>
 <p>T2Processor needs to retrieve the T2Records of units tied with this unit.
@@ -1057,11 +1071,25 @@ using the db match query: {unit: &lt;unit_name&gt;, link: &lt;same link as root 
 </ul>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ampel.model.StateT2Dependency.StateT2Dependency.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True,</span> <span class="pre">'extra':</span> <span class="pre">'forbid',</span> <span class="pre">'populate_by_name':</span> <span class="pre">True,</span> <span class="pre">'validate_default':</span> <span class="pre">True}</span></em><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ampel.model.StateT2Dependency.StateT2Dependency.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'config':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">int,</span> <span class="pre">str,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'link_override':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">DPSelection],</span> <span class="pre">required=False),</span> <span class="pre">'override':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'secrets':</span> <span class="pre">FieldInfo(annotation=Union[NoneType,</span> <span class="pre">dict[str,</span> <span class="pre">Any]],</span> <span class="pre">required=False),</span> <span class="pre">'unit':</span> <span class="pre">FieldInfo(annotation=~T,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#ampel.model.StateT2Dependency.StateT2Dependency.model_fields" title="Link to this definition">¶</a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ampel.base.AmpelBaseModel.AmpelBaseModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.base.AmpelBaseModel.</span></span><span class="sig-name descname"><span class="pre">AmpelBaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/base/AmpelBaseModel.html#AmpelBaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.base.AmpelBaseModel.AmpelBaseModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ampel.base.AmpelBaseModel.</span></span><span class="sig-name descname"><span class="pre">AmpelBaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ampel/base/AmpelBaseModel.html#AmpelBaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ampel.base.AmpelBaseModel.AmpelBaseModel" title="Link to this definition">¶</a></dt>
 <dd><p>Raises validation errors if extra fields are present</p>
 </dd></dl>
 
@@ -1106,7 +1134,7 @@ using the db match query: {unit: &lt;unit_name&gt;, link: &lt;same link as root 
         <li class="right" >
           <a href="structure.html" title="Structure"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.9.1a1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ampel-interface 0.10.0a0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API reference</a></li> 
       </ul>
     </div>
