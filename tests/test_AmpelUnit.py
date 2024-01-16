@@ -109,3 +109,26 @@ def test_slots():
     assert unit.banana == 1
     assert unit.bubblegum == 5
     assert unit.dict() == {"cherry": 3, "banana": 1, "bubblegum": 5}
+
+def test_default_override():
+
+    class Base(AmpelUnit):
+        a: int = 1
+    
+    class Derived(Base):
+        """override default without providing new annotation"""
+        a = 2
+
+    with pytest.raises(TypeError):
+        Derived(a="blah")
+
+    assert Derived.get_model_keys() == {"a"}
+
+    assert Derived().a == 2
+
+    class SlotDerived(Base):
+        """appanently you can provide defaults this way too"""
+        a: int
+        _slot_defaults = {"a": 3}
+    
+    assert SlotDerived().a == 3
