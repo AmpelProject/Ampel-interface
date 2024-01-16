@@ -19,6 +19,7 @@ def test_mixed_inheritance():
 
     class PrivateMixin:
         """Set a 'private' variable to test whether BaseModel.__setattr__ works"""
+
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._foo = 1
@@ -85,3 +86,26 @@ def test_secret_without_type():
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         assert UnitWithSecret().secret.get_model_args() == (str,)
+
+
+def test_slots():
+    class Slots:
+        __slots__ = ("cherry", "banana", "bubblegum")
+
+        cherry: int
+        banana: int
+        bubblegum: int
+
+    class SlotMachine(AmpelUnit, Slots):
+        _slot_defaults = {"cherry": 3, "banana": 1}
+
+    assert SlotMachine._sks == set(Slots.__slots__)
+
+    with pytest.raises(TypeError):
+        SlotMachine()
+
+    unit = SlotMachine(bubblegum=5)
+    assert unit.cherry == 3
+    assert unit.banana == 1
+    assert unit.bubblegum == 5
+    assert unit.dict() == {"cherry": 3, "banana": 1, "bubblegum": 5}

@@ -189,10 +189,6 @@ class AmpelUnit:
 
 		sa("_exclude_unset", unset)
 
-		for k, v in cls._slot_defaults.items():
-			if k not in kwargs:
-				sa(k, v)
-
 		# Set kwargs attributes
 		for k in kwargs:
 			if k in sks or k in aks:
@@ -222,7 +218,11 @@ class AmpelUnit:
 		exclude_none: bool = False,
 	) -> dict[str, Any]:
 
-		d = self.__dict__
+		if hasattr(self, "__slots__"):
+			d = self.__dict__ | {k: getattr(self, k) for k in self.__slots__}
+		else:
+			d = self.__dict__
+
 		incl = self._aks if include is None else include
 		excl = {
 			k for k, v in self._annots.items()
@@ -237,7 +237,7 @@ class AmpelUnit:
 
 		if exclude_defaults:
 			for k in self._defaults:
-				if self.__dict__[k] == self._defaults[k]:
+				if d[k] == self._defaults[k]:
 					excl.add(k)
 
 		return {
