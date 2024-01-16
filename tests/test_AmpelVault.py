@@ -44,6 +44,7 @@ def test_secret_resolution() -> None:
         HasSecret(secret=secret).secret.get() == "bar"
     ), "model can be instantiated with resolved secret"
 
+    assert vault.get_named_secret("foo", int) is None
 
 def test_implicit_generic_args() -> None:
     with warnings.catch_warnings():
