@@ -46,6 +46,17 @@ def test_secret_resolution() -> None:
 
     assert vault.get_named_secret("foo", int) is None
 
+
+def test_value_set():
+    secret = NamedSecret(label="foo")
+    with pytest.raises(ValueError):
+        secret.get()
+    secret.set(1)
+    assert secret.get() == 1
+    with pytest.raises(ValueError):
+        secret.set(1)
+
+
 def test_implicit_generic_args() -> None:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
