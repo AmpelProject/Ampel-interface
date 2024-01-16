@@ -6,6 +6,10 @@ on:
         description: start a mongo instance for tests
         type: boolean
         default: false
+      python-version:
+        required: false
+        type: string
+        default: "3.12"
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -24,7 +28,7 @@ jobs:
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
       with:
-        python-version: "3.12"
+        python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
         install-args: --all-extras
     - name: Install root
@@ -41,7 +45,7 @@ jobs:
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
       with:
-        python-version: "3.12"
+        python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
         install-args: --all-extras
     - name: Install root
@@ -74,7 +78,7 @@ jobs:
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
       with:
-        python-version: "3.12"
+        python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
         install-args: --all-extras
     - name: Publish
