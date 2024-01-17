@@ -8,6 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Iterable, Mapping, MutableMapping, Sequence
+from contextlib import suppress
 from typing import Any, overload
 
 from ampel.base.AmpelBaseModel import AmpelBaseModel
@@ -196,11 +197,9 @@ def flatten_dict(
 
 				if sort_lists:
 
-					try:
-						# allow int/str mixed up
+					# allow int/str mixed up
+					with suppress(Exception):
 						v = sorted(v, key=lambda x: str(x))
-					except Exception:
-						pass
 
 					# In []: sorted([{'c': 2}, {'b.f.0': 1, 'b.f.1': 2, 'b.f.2': 3}], key=lambda x: next(iter(x.keys())))
 					# Out[]: [{'b.f.0': 1, 'b.f.1': 2, 'b.f.2': 3}, {'c': 2}]

@@ -48,10 +48,12 @@ def main() -> None:
 	if sys.argv[-1] == 'help':
 		sys.argv[-1] = "--help"
 
-	elif len(sys.argv) == 3:
-		if not sys.argv[-1].startswith("-"):
-			sys.argv += ["--help"]
-			ambiguous_help = True
+	elif (
+		len(sys.argv) == 3
+		and not sys.argv[-1].startswith("-")
+	):
+		sys.argv += ["--help"]
+		ambiguous_help = True
 
 	# Remove first arg (op name such as 'log' or 'run')
 	op_name = sys.argv[1]

@@ -61,9 +61,10 @@ class DPSelection(AmpelBaseModel):
 				lbd = lambda k: k['body'][self.sort]
 			so = lambda l: sorted(l, key=lbd)
 
-		if self.select is None:
-			sl = slice(None)
-		elif self.select == "all":
+		if (
+			self.select is None
+			or self.select == "all"
+		):
 			sl = slice(None)
 		elif self.select == "first":
 			sl = slice(1)

@@ -124,8 +124,7 @@ class T2DocView:
 
 
 	def has_content(self) -> bool:
-		return True if self.body else False
-
+		return bool(self.body)
 
 	def get_payload(self, code: None | int = None) -> UBson:
 		"""
@@ -234,18 +233,19 @@ class T2DocView:
 
 		r = self.get_payload(code)
 
-		if isinstance(r, dict):
-			if r and (sks := r.keys() & key):
+		if (
+			isinstance(r, dict)
+			and r and (sks := r.keys() & key)
+		):
+			if require_all_keys and len(sks) != len(key):
+				return None
 
-				if require_all_keys and len(sks) != len(key):
-					return None
+			t = tuple(
+				r[k] if (k in r and isinstance(r[k], rtype)) else None
+				for k in key
+			)
 
-				t = tuple(
-					r[k] if (k in r and isinstance(r[k], rtype)) else None
-					for k in key
-				)
-
-				return None if (no_none and None in t) else t # type: ignore[return-value]
+			return None if (no_none and None in t) else t # type: ignore[return-value]
 
 		return None
 

@@ -62,7 +62,7 @@ class AmpelEncoder(json.JSONEncoder):
 			return {"__jsonclass__": [json_class] + self.default(params, True), **self.default(attrs, True)} # type: ignore[no-untyped-call]
 		if hasattr(obj, 'items'):
 			return {self.default(k, True): self.default(v, True) for k,v in obj.items()} # type: ignore[no-untyped-call]
-		if isinstance(obj, list) or isinstance(obj, set) or isinstance(obj, tuple):
+		if isinstance(obj, list | set | tuple):
 			return [self.default(k, True) for k in obj] # type: ignore[no-untyped-call]
 		# convert remaining Mongo types
 		try:
@@ -86,7 +86,7 @@ class AmpelEncoder(json.JSONEncoder):
 			return None
 
 		# try to preserve types
-		if isinstance(obj, set) or isinstance(obj, tuple):
+		if isinstance(obj, set | tuple):
 			return lambda x: [list(x)]
 		if isinstance(obj, MappingProxyType):
 			return lambda x: [dict(obj)]

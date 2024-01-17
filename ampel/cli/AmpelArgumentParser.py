@@ -200,7 +200,7 @@ class AmpelArgumentParser(ArgumentParser):
 
 		group.add_argument(
 			f"--{name}", help=help or self.args_descr.get(name),
-			required=True if group == self.groups["required"] else False, **kwargs
+			required=(group == self.groups["required"]), **kwargs
 		)
 
 
@@ -364,9 +364,11 @@ class AmpelArgumentParser(ArgumentParser):
 		""" As for now, there is no better way to do this  """
 		if "-" in message:
 			message = message.replace(" --", " -")
-		if message.startswith("the following arguments are required:"):
-			if len(message.split("-")) == 2:
-				return super().error(message.replace("arguments are", "argument is"))
+		if (
+			message.startswith("the following arguments are required:")
+			and len(message.split("-")) == 2
+		):
+			return super().error(message.replace("arguments are", "argument is"))
 		return super().error(message)
 
 

@@ -21,11 +21,7 @@ class AmpelVault:
 		self.providers = providers
 
 	def resolve_secret(self, secret: Secret, ValueType: type) -> bool:
-
-		for sp in self.providers:
-			if sp.tell(secret, ValueType):
-				return True
-		return False
+		return any(sp.tell(secret, ValueType) for sp in self.providers)
 
 	@overload
 	def get_named_secret(self, label: str) -> None | NamedSecret[Any]:
