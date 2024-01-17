@@ -85,7 +85,7 @@ class AlternativeAmpelBaseModel:
 
 			# allow subclasses to change default value without supplying a new annotation
 			for k, v in getattr(base, '__dict__', {}).items():
-				if k in joined_ann and not k in ann:
+				if k in joined_ann and k not in ann:
 					joined_defaults[k] = v
 
 		# Coercion (models, secrets) and type checking if ampel.types.do_type_check is True
@@ -336,8 +336,6 @@ class AlternativeAmpelBaseModel:
 
 			if cls._debug > 1:
 				print(f"□ {cls.__name__}.{k}: {a}")
-
-			es = None
 
 			# Should be first
 			if k in kwargs:

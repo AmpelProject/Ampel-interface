@@ -53,6 +53,7 @@ class DPSelection(AmpelBaseModel):
 			sub_type = AbsApplicable
 		) if self.filter else None
 
+		# ruff: noqa: E731
 		if self.sort:
 			if self.sort == 'id':
 				lbd = lambda k: k['id']

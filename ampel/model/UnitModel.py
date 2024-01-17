@@ -9,11 +9,12 @@
 
 from typing import Any, Callable, ClassVar, Generic, TypeVar
 
+from pydantic import model_validator
+
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
 T = TypeVar("T", bound=str)
 
-from pydantic import model_validator
 
 
 class UnitModel(AmpelBaseModel, Generic[T]):

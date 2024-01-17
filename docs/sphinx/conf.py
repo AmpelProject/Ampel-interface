@@ -20,6 +20,9 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from pathlib import Path
+
+import tomlkit
 
 # -- General configuration ------------------------------------------------
 
@@ -50,10 +53,6 @@ source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
-
-from pathlib import Path
-
-import tomlkit
 
 with open(Path(__file__).parent.parent.parent / "pyproject.toml") as f:
     poetry = tomlkit.parse(f.read())['tool']['poetry']
