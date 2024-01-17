@@ -43,7 +43,7 @@ def get_by_path(
 	for el in parsed_path:
 		try:
 			mapping = mapping[el]
-		except (TypeError, IndexError, KeyError):
+		except (TypeError, IndexError, KeyError): # noqa: PERF203
 			return None
 
 	return mapping
@@ -276,7 +276,7 @@ def _unflatten_lists(d: dict) -> dict:
 				_unflatten_lists(d[k][kk]) if isinstance(d[k][kk], dict) else d[k][kk]
 				for kk in v
 			]
-		except Exception:
+		except Exception: # noqa: PERF203
 			if isinstance(v, dict):
 				d[k] = _unflatten_lists(v)
 
