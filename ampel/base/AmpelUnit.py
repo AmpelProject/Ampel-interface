@@ -182,13 +182,13 @@ class AmpelUnit:
 			values = cls._model.model_validate(kwargs)
 		except ValidationError as e:
 			# https://github.com/samuelcolvin/pydantic/issues/784
-			print("")
+			print("") # noqa: T201
 			if kwargs:
-				print("#" * 60)
-				print("Offending values:")
+				print("#" * 60) # noqa: T201
+				print("Offending values:") # noqa: T201
 				for k, v in kwargs.items():
-					print(f"{k}: {v}")
-				print("#" * 60)
+					print(f"{k}: {v}") # noqa: T201
+				print("#" * 60) # noqa: T201
 			raise TypeError(e) from None
 
 		# Save coerced values

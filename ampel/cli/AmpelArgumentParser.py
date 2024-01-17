@@ -19,6 +19,7 @@ from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
 from ampel.cli.MaybeIntAction import MaybeIntAction
 
+# ruff: noqa: T201
 
 class AmpelArgumentParser(ArgumentParser):
 	"""

@@ -174,7 +174,7 @@ class AmpelConfig:
 	) -> None:
 
 		out = self.get(entry)
-		print(
+		print( # noqa: T201
 			yaml.dump(out) if format == 'yaml'
 			else json.dumps(out, indent=4)
 		)

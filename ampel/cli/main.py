@@ -29,6 +29,7 @@ clis: dict[str, tuple[str, str]] = {
 
 double_minus = re.compile("--([A-z])")
 
+# ruff: noqa: T201
 def main() -> None:
 
 	# did we implicitly add --help to an otherwise invalid command?
