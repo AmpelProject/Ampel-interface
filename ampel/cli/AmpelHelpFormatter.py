@@ -17,7 +17,7 @@ from ampel.cli.LoadJSONAction import LoadJSONAction
 class AmpelHelpFormatter(RawTextHelpFormatter):
 
 	def __init__(self, prog, indent_increment=2, max_help_position=40, width=None):
-		return super().__init__(
+		super().__init__(
 			prog, indent_increment=indent_increment,
 			max_help_position=max_help_position, width=width
 		)

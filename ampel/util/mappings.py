@@ -78,7 +78,7 @@ def get_by_json_path(d: dict[str, Any], path: str | Sequence[str], delimiter: st
 		for el in path:
 			if el[-1] == ']':
 				splits = el.split("[")
-				el = splits[0]
+				el = splits[0] # noqa: PLW2901
 				idx = int(splits[1][:-1])
 				d = d[el][idx]
 				continue
@@ -358,8 +358,7 @@ def compare_dict_values(d1: dict, d2: dict, keys: Iterable[str]) -> bool:
 					return False
 			else:
 				return False
-		else:
-			if f in d2:
+		elif f in d2:
 				return False
 	return True
 

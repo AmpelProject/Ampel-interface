@@ -98,9 +98,16 @@ select = [
     "RET",
     "SLF",
     "SIM",
+    # "ARG", # sometimes your arguments have to conform to an interface
+    # "ERA", # seems to prohibit all comments, that's bad
+    "PL",
 ]
 ignore = [
     "E741", # ambiguous variable name
     "UP009", # UTF-8 encoding declaration is unnecessary
+    "PLR09", # too many (arguments|branches)
+    "PLR2004", # Magic value used in comparison
 ]
 
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
