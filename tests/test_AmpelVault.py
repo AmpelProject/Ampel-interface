@@ -49,11 +49,11 @@ def test_secret_resolution() -> None:
 
 def test_value_set():
     secret = NamedSecret(label="foo")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Secret not yet resolved"):
         secret.get()
     secret.set(1)
     assert secret.get() == 1
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Secret already resolved"):
         secret.set(1)
 
 

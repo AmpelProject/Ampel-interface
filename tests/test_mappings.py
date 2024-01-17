@@ -8,7 +8,7 @@ from ampel.util import mappings
 
 
 @pytest.mark.parametrize(
-    "target,key,value",
+    ("target","key","value"),
     [
         ({"foo": {"a1": 2}}, "foo.a1", 2),
         ({1000000: {"foo": 1}}, "1_000_000.foo", 1),
@@ -29,7 +29,7 @@ def test_get_by_path(target, key, value):
 
 
 @pytest.mark.parametrize(
-    "target,key,value",
+    ("target","key","value"),
     [
         ({1: {"foo": "bar"}}, ["confid", 1], {"foo": "bar"}),
         ({-1: {"foo": "bar"}}, "confid.-1", {"foo": "bar"}),
@@ -38,12 +38,12 @@ def test_get_by_path(target, key, value):
 def test_AmpelConfig_get_with_path(target, key, value):
     ac = AmpelConfig({"channel": {}, "confid": target})
     assert ac.get(key, dict) == value
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Retrieved value has not the expected type"):
         ac.get(key, int)
 
 
 def test_AmpelConfig_get_raise_exc():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Config element .* not found"):
         AmpelConfig({"channel": {}, "confid": {1: "foo"}}).get(
             ["confid", 2], raise_exc=True
         )
