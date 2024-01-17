@@ -86,12 +86,11 @@ def serialize(view):
     """Turn a view into a JSON rep for rich comparisons"""
     if hasattr(view, "__slots__"):
         return {k: serialize(getattr(view, k)) for k in view.__slots__}
-    elif isinstance(view, strict_iterable):
+    if isinstance(view, strict_iterable):
         return [serialize(item) for item in view]
-    elif isinstance(view, Mapping):
+    if isinstance(view, Mapping):
         return {k: serialize(v) for k, v in view.items()}
-    else:
-        return view
+    return view
 
 
 def test_confid_resolution(t2_doc: T2Document, t2_view: T2DocView, config: AmpelConfig):

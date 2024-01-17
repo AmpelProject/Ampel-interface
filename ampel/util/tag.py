@@ -110,26 +110,24 @@ def merge_tags(
 			if arg2 != arg1:
 				return [arg1, arg2]
 			return arg1 if reduce else [arg1]
-		else:
-			if arg1 in arg2:
-				return arg2 if isinstance(arg2, list) else list(arg2)
-			l = list(arg2)
-			l.append(arg1)
-			return l
+		if arg1 in arg2:
+			return arg2 if isinstance(arg2, list) else list(arg2)
+		l = list(arg2)
+		l.append(arg1)
+		return l
 
 	# arg1 is a sequence (str excluded)
-	else:
-		if isinstance(arg2, int | str):
-			if arg2 in arg1:
-				return arg1 if isinstance(arg1, list) else list(arg1)
-			l = list(arg1)
-			l.append(arg2)
-	
-		# arg1 and arg2 are sequences (str excluded)
-		else:
-			l = list(
-				(arg1 if isinstance(arg1, set) else set(arg1)) |
-				(arg2 if isinstance(arg2, set) else set(arg2))
-			)
+	if isinstance(arg2, int | str):
+		if arg2 in arg1:
+			return arg1 if isinstance(arg1, list) else list(arg1)
+		l = list(arg1)
+		l.append(arg2)
 
-		return l[0] if reduce and len(l) == 1 else l
+	# arg1 and arg2 are sequences (str excluded)
+	else:
+		l = list(
+			(arg1 if isinstance(arg1, set) else set(arg1)) |
+			(arg2 if isinstance(arg2, set) else set(arg2))
+		)
+
+	return l[0] if reduce and len(l) == 1 else l

@@ -267,12 +267,12 @@ class AmpelUnit:
 	def _dictify(self, arg: Any, dict_kwargs={}) -> Any: # noqa: B006
 		if isinstance(arg, list | tuple | set):
 			return [self._dictify(el, dict_kwargs) for el in arg]
-		elif isinstance(arg, dict):
+		if isinstance(arg, dict):
 			return {
 				k: self._dictify(v, dict_kwargs)
 				for k, v in arg.items()
 			}
-		elif isinstance(arg, Klass | BaseModel):
+		if isinstance(arg, Klass | BaseModel):
 			return arg.dict(**dict_kwargs)
 		return arg
 

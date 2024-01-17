@@ -44,8 +44,7 @@ class AmpelEncoder(json.JSONEncoder):
 			else:
 				if (module := inspect.getmodule(obj)) is None:
 					raise ValueError("Cannot serialize object without module")
-				else:
-					module_name = module.__name__
+				module_name = module.__name__
 			json_class = obj.__class__.__name__
 			if module_name not in ['', '__main__']:
 				json_class = f'{module_name}.{json_class}'
@@ -61,19 +60,17 @@ class AmpelEncoder(json.JSONEncoder):
 			else:
 				params, attrs = rep, {}
 			return {"__jsonclass__": [json_class] + self.default(params, True), **self.default(attrs, True)} # type: ignore[no-untyped-call]
-		elif hasattr(obj, 'items'):
+		if hasattr(obj, 'items'):
 			return {self.default(k, True): self.default(v, True) for k,v in obj.items()} # type: ignore[no-untyped-call]
-		elif isinstance(obj, list) or isinstance(obj, set) or isinstance(obj, tuple):
+		if isinstance(obj, list) or isinstance(obj, set) or isinstance(obj, tuple):
 			return [self.default(k, True) for k in obj] # type: ignore[no-untyped-call]
-		else:
-			# convert remaining Mongo types
-			try:
-				return bson.json_util.default(obj, self.bson_options)
-			except TypeError:
-				if fallthrough:
-					return obj
-				else:
-					raise
+		# convert remaining Mongo types
+		try:
+			return bson.json_util.default(obj, self.bson_options)
+		except TypeError:
+			if fallthrough:
+				return obj
+			raise
 
 	def get_serializer(self, obj):
 		"""
@@ -81,20 +78,19 @@ class AmpelEncoder(json.JSONEncoder):
 		"""
 		if (hasattr(type(obj), "__reduce__") and (reduce := getattr(type(obj), "__reduce__")) != object.__reduce__): # noqa: B009
 			return lambda x: (list(reduce(x)[1]), {})
-		elif hasattr(obj, '__dataclass_fields__'):
+		if hasattr(obj, '__dataclass_fields__'):
 			return lambda x: x.__dict__
-		elif isinstance(obj, IntFlag):
+		if isinstance(obj, IntFlag):
 			return lambda x: [int(x)]
-		elif self.lossy:
+		if self.lossy:
 			return None
 
 		# try to preserve types
 		if isinstance(obj, set) or isinstance(obj, tuple):
 			return lambda x: [list(x)]
-		elif isinstance(obj, MappingProxyType):
+		if isinstance(obj, MappingProxyType):
 			return lambda x: [dict(obj)]
-		else:
-			return None
+		return None
 
 def object_hook(
     dct,
@@ -107,7 +103,7 @@ def object_hook(
 	obj = bson.json_util.object_hook(dct, options)
 	if type(obj) != type(dct):
 		return obj
-	elif "__jsonclass__" in dct:
+	if "__jsonclass__" in dct:
 		ctor = dct.pop("__jsonclass__")
 		parts = ctor[0].split('.')
 		try:
@@ -115,12 +111,9 @@ def object_hook(
 		except ModuleNotFoundError:
 			if ignore_missing_modules:
 				return None
-			else:
-				raise
+			raise
 		klass = getattr(mod, parts[-1])
 		# Here we treat the jsonrpc-style attrs as keyword args. This does not
 		# necessarily conform to the 1.0 spec, but it's deprecated anyhow.
-		obj = klass(*ctor[1:], **dct)
-		return obj
-	else:
-		return dct
+		return klass(*ctor[1:], **dct)
+	return dct

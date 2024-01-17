@@ -81,11 +81,10 @@ class AuxUnitRegister:
 					f"Unknown auxiliary unit {klass}:"
 					f"- make sure a context is loaded (requirement)\n"
 				)
-			else:
-				raise ValueError(
-					f"Unknown auxiliary unit {klass}:\n"
-					f"- check your ampel conf to see if the unit is properly registered"
-				)
+			raise ValueError(
+				f"Unknown auxiliary unit {klass}:\n"
+				f"- check your ampel conf to see if the unit is properly registered"
+			)
 
 		fqn = cls._defs[klass]['fqn']
 		ret = getattr(import_module(fqn), klass)

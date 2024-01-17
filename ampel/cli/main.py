@@ -106,7 +106,7 @@ def main() -> None:
 
 	cli_op.run(vars(args), unknown_args, sub_op)
 
-	return
+	return None
 
 
 def show_help() -> None:
@@ -213,7 +213,7 @@ def autocolor(txt) -> None:
 		if txt[i] == '*' and txt[i+1] == '*':
 			prev_color = '\033[1;91m'
 			break
-		elif txt[i] == '/' and txt[i+1] == '/':
+		if txt[i] == '/' and txt[i+1] == '/':
 			prev_color = '\033[1;93m'
 			break
 	idx = i
@@ -228,7 +228,7 @@ def autocolor(txt) -> None:
 			assert prev_main_color is not None
 			print(prev_main_color + '\033[1m' + txt[i], end='')
 			continue
-		elif txt[i] in ('=', '*', '/'):
+		if txt[i] in ('=', '*', '/'):
 			if txt[i] == '*':
 				prev_color = '\033[1;91m'
 			elif txt[i] == '/':
