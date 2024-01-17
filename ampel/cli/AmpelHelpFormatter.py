@@ -34,7 +34,7 @@ class AmpelHelpFormatter(RawTextHelpFormatter):
 		Also, add two spaces to the left column by default
 		for making room for potential mutual exclusivity symbol ("\u22BB")
 		"""
-		if isinstance(action, (LoadAllOfAction, LoadAnyOfAction)):
+		if isinstance(action, LoadAllOfAction | LoadAnyOfAction):
 			return "# # ...  "
 		if isinstance(action, LoadJSONAction):
 			return "'{#}'  "

@@ -7,7 +7,8 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Callable, ClassVar, Generic, TypeVar
+from collections.abc import Callable
+from typing import Any, ClassVar, Generic, TypeVar
 
 from pydantic import model_validator
 

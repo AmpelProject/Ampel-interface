@@ -69,7 +69,7 @@ class DPSelection(AmpelBaseModel):
 			sl = slice(1)
 		elif self.select == "last":
 			sl = slice(-1, -2, -1)
-		elif isinstance(self.select, (list, tuple)) and len(self.select) == 3:
+		elif isinstance(self.select, list | tuple) and len(self.select) == 3:
 			sl = slice(*self.select)
 		else:
 			raise ValueError(

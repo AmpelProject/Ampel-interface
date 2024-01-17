@@ -139,7 +139,7 @@ class AmpelAlert:
 		if isinstance(filters, dict):
 			filters = [filters]
 		else:
-			if filters is None or not isinstance(filters, (list, tuple)):
+			if filters is None or not isinstance(filters, list | tuple):
 				raise ValueError("Parameter 'filters' must be a dict or a sequence of dicts")
 
 		for f in filters:

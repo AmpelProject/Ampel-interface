@@ -7,7 +7,7 @@
 # Last Modified Date:  31.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.LogicalUnit import LogicalUnit

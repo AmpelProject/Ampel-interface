@@ -25,7 +25,7 @@ def walk_and_encode(arg: Any, destructive: bool = True) -> Any:
 	:param destructive: true modifies the input dict(s)
 	"""
 
-	if isinstance(arg, (list, tuple, set)):
+	if isinstance(arg, list | tuple | set):
 		return [walk_and_encode(el, destructive) for el in arg]
 
 	elif isinstance(arg, dict):

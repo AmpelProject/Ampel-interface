@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 NoneType = type(None)
 
-def safe_issubclass(cls: Any, class_or_tuple: Union[type, tuple[type, ...]]) -> bool:
+def safe_issubclass(cls: Any, class_or_tuple: type | tuple[type, ...]) -> bool:
 	""" non-throwing issubclass """
 	try:
 		return issubclass(cls, class_or_tuple)

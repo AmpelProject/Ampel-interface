@@ -73,7 +73,7 @@ def test_implicit_default_none(base: type):
     """
 
     class ImplicitDefault(base):
-        union: None | Union[int, str]
+        union: None | Union[int, str] # noqa: UP007
         union_type: None | int
 
     assert get_origin(ImplicitDefault.__annotations__["union"]) is Union

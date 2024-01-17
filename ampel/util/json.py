@@ -48,7 +48,7 @@ class AmpelEncoder(json.JSONEncoder):
 					module_name = module.__name__
 			json_class = obj.__class__.__name__
 			if module_name not in ['', '__main__']:
-				json_class = '%s.%s' % (module_name, json_class)
+				json_class = f'{module_name}.{json_class}'
 			# mappingproxy lies about its type
 			if type(obj) == MappingProxyType:
 				json_class = 'types.MappingProxyType'

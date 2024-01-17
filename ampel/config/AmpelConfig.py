@@ -8,7 +8,8 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import json
-from typing import Any, Literal, Sequence, TypeVar, Union, get_origin, overload
+from collections.abc import Sequence
+from typing import Any, Literal, TypeVar, Union, get_origin, overload
 
 import yaml
 
@@ -16,7 +17,7 @@ from ampel.util.freeze import recursive_freeze
 from ampel.util.mappings import try_int
 from ampel.view.ReadOnlyDict import ReadOnlyDict
 
-UJson = Union[None, str, int, float, bool, list[Any], dict[str, Any]]
+UJson = Union[None, str, int, float, bool, list[Any], dict[str, Any]] # noqa: UP007
 JT = TypeVar('JT', None, str, int, float, bool, bytes, list[Any], dict[str, Any])
 
 
@@ -29,7 +30,7 @@ class AmpelConfig:
 
 	@classmethod
 	def load(cls, config_file_path: str, freeze: bool = True) -> 'AmpelConfig':
-		with open(config_file_path, "r") as f:
+		with open(config_file_path) as f:
 			config = yaml.safe_load(f)
 		# Convert potentially stringified int keys (JSON compatibility) back to int
 		for s in ('channel', 'confid'):

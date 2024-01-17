@@ -29,6 +29,7 @@ TRACELESS = -1
 T = TypeVar('T')
 Traceless = Annotated[T, TRACELESS]
 
+# ruff: noqa: UP007
 StockId = Union[int, bytes, str]
 ChannelId = Union[int, str]
 DataPointId = int

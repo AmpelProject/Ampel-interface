@@ -59,8 +59,8 @@ with open(Path(__file__).parent.parent.parent / "pyproject.toml") as f:
 
 # General information about the project.
 project = str(poetry['name'])
-copyright = u'2018-2021, Ampel Project'
-author = u'Ampel Project'
+copyright = '2018-2021, Ampel Project'
+author = 'Ampel Project'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -154,8 +154,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Ampel.tex', u'Ampel Documentation',
-     u'Ampel Project', 'manual'),
+    (master_doc, 'Ampel.tex', 'Ampel Documentation',
+     'Ampel Project', 'manual'),
 ]
 
 
@@ -164,7 +164,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'ampel', u'Ampel Documentation',
+    (master_doc, 'ampel', 'Ampel Documentation',
      [author], 1)
 ]
 
@@ -175,7 +175,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Ampel', u'Ampel Documentation',
+    (master_doc, 'Ampel', 'Ampel Documentation',
      author, 'Ampel', 'One line description of project.',
      'Miscellaneous'),
 ]

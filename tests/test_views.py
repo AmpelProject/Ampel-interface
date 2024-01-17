@@ -1,5 +1,6 @@
 import pickle
-from typing import Generator, Mapping, no_type_check
+from collections.abc import Generator, Mapping
+from typing import no_type_check
 
 import pytest
 

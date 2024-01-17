@@ -10,7 +10,7 @@
 import warnings
 from functools import partial
 from types import MemberDescriptorType, UnionType
-from typing import TYPE_CHECKING, Any, Type, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, Union, get_args, get_origin
 
 from pydantic import BaseModel, ValidationError, create_model
 
@@ -30,7 +30,7 @@ class AmpelUnit:
 	Type checking can be deactivated globally by setting ampel.types.do_type_check to False
 	"""
 
-	_model: Type[BaseModel]
+	_model: type[BaseModel]
 	_annots: dict[str, Any] = {}
 	_defaults: dict[str, Any] = {}
 	_slot_defaults: dict[str, Any] = {}
@@ -119,7 +119,7 @@ class AmpelUnit:
 
 
 	@classmethod
-	def _create_model(cls, omit_traceless: bool = False) -> Type[BaseModel]:
+	def _create_model(cls, omit_traceless: bool = False) -> type[BaseModel]:
 
 		defs = cls._defaults
 		if hasattr(cls, 'model_fields'):
@@ -247,7 +247,7 @@ class AmpelUnit:
 		}
 
 		if exclude is not None:
-			excl.update((v if isinstance(v, str) else str(v) for v in exclude))
+			excl.update(v if isinstance(v, str) else str(v) for v in exclude)
 
 		if exclude_unset:
 			excl.update(self._exclude_unset)
@@ -265,14 +265,14 @@ class AmpelUnit:
 
 
 	def _dictify(self, arg: Any, dict_kwargs={}) -> Any:
-		if isinstance(arg, (list, tuple, set)):
+		if isinstance(arg, list | tuple | set):
 			return [self._dictify(el, dict_kwargs) for el in arg]
 		elif isinstance(arg, dict):
 			return {
 				k: self._dictify(v, dict_kwargs)
 				for k, v in arg.items()
 			}
-		elif isinstance(arg, (Klass, BaseModel)):
+		elif isinstance(arg, Klass | BaseModel):
 			return arg.dict(**dict_kwargs)
 		return arg
 

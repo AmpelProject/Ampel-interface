@@ -79,10 +79,21 @@ ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py310"
+exclude = [
+    "ampel/base/AlternativeAmpelBaseModel.py"
+]
 
 [tool.ruff.lint]
 select = [
-    "F401", # unused import
-    "I001", # unsorted imports
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "UP",
+]
+ignore = [
+    "E741", # ambiguous variable name
+    "UP009", # UTF-8 encoding declaration is unnecessary
 ]
 

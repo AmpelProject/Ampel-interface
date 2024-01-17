@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import inspect
-from typing import Callable
+from collections.abc import Callable
 
 
 class AmpelABC:
