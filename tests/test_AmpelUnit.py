@@ -138,7 +138,7 @@ def test_trace_content():
         config: int = 1
         runtime: Traceless[str]
 
-    Unit.validate({}) == {"config": 1}
+    assert Unit.validate({}) == {"config": 1}
     with pytest.raises(TypeError):
         Unit.validate_all({})
 
@@ -148,7 +148,7 @@ def test_trace_content():
     assert Unit(runtime="hola")._get_trace_content() == {"config": 1}
     assert Unit(runtime="hola").dict() == {"config": 1}
 
-    Unit.validate_all({"runtime": "hola"}) == {"config": 1, "runtime": "hola"}
+    assert Unit.validate_all({"runtime": "hola"}) == {"config": 1, "runtime": "hola"}
 
 
 def test_dict():

@@ -50,11 +50,11 @@ class AmpelABC:
 
 		# Class is abstract
 		if abstract:
-			setattr(cls, '__new__', _raise_error)
+			setattr(cls, '__new__', _raise_error) # noqa: B010
 			if cls._abcheck:
 				cls._check_methods(cls, "force_check")
 		else:
-			setattr(cls, '__new__', __std_new__)
+			setattr(cls, '__new__', __std_new__) # noqa: B010
 			for method_name, method in cls.__dict__.items():
 				if hasattr(method, "abstract_method"):
 					raise ValueError(

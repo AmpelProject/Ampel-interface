@@ -22,12 +22,13 @@ class ArgParserBuilder:
 		"""
 		self.parsers: dict[str, AmpelArgumentParser] = {}
 		self._op = op
+		self._sub_op: None | str = None
 
 
 	def add_parser(self, name: str, hlp: dict[str, str]) -> AmpelArgumentParser:
 		parser = AmpelArgumentParser(ampel_op=self._op)
 		parser.set_help_descr(hlp)
-		setattr(parser, '_sub_op', name)
+		self._sub_op = name
 		self.parsers[name] = parser
 		return parser
 
@@ -192,7 +193,7 @@ class ArgParserBuilder:
 		for p in self.get_parsers(sub_ops):
 			p.example(
 				ex,
-				prepend or f"ampel {self._op or ''} {getattr(p, '_sub_op', '')} ",
+				prepend or f"ampel {self._op or ''} {self._sub_op} ",
 				append, auto_strip, ref
 			)
 

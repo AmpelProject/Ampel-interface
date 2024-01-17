@@ -264,7 +264,7 @@ class AmpelUnit:
 		}
 
 
-	def _dictify(self, arg: Any, dict_kwargs={}) -> Any:
+	def _dictify(self, arg: Any, dict_kwargs={}) -> Any: # noqa: B006
 		if isinstance(arg, list | tuple | set):
 			return [self._dictify(el, dict_kwargs) for el in arg]
 		elif isinstance(arg, dict):

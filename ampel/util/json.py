@@ -79,7 +79,7 @@ class AmpelEncoder(json.JSONEncoder):
 		"""
 		Serializers for types we want to preserve
 		"""
-		if (hasattr(type(obj), "__reduce__") and (reduce := getattr(type(obj), "__reduce__")) != object.__reduce__):
+		if (hasattr(type(obj), "__reduce__") and (reduce := getattr(type(obj), "__reduce__")) != object.__reduce__): # noqa: B009
 			return lambda x: (list(reduce(x)[1]), {})
 		elif hasattr(obj, '__dataclass_fields__'):
 			return lambda x: x.__dict__
