@@ -1,4 +1,3 @@
-import warnings
 from collections.abc import Sequence
 
 import pytest

@@ -7,7 +7,7 @@
 # Last Modified Date:  25.06.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal, TypedDict
+from typing import TypedDict
 from typing_extensions import Required
 from collections.abc import Sequence
 from ampel.types import UBson, StockId, DataPointId, ChannelId, Tag, UnitId

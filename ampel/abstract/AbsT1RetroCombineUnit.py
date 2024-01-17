@@ -7,7 +7,6 @@
 # Last Modified Date:  17.06.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Union
 from collections.abc import Iterable
 from ampel.types import ChannelId, DataPointId
 from ampel.base.AmpelABC import AmpelABC

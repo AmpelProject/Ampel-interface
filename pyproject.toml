@@ -38,6 +38,7 @@ docs = ["Sphinx", "sphinx-autodoc-typehints", "tomlkit"]
 
 [tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.12.0"
+ruff = "^0.1.13"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.8.0"]
@@ -75,4 +76,12 @@ disable_error_code = "empty-body"
 [[tool.mypy.overrides]]
 module = "bson.*"
 ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "F401", # unused import
+]
 

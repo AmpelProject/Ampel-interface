@@ -7,7 +7,6 @@
 # Last Modified Date:  13.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Tuple
 from ampel.types import UBson, StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod

@@ -9,7 +9,6 @@
 
 import warnings
 from functools import partial
-import collections.abc as abc
 from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret

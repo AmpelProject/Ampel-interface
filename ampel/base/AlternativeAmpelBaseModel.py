@@ -15,7 +15,7 @@ from types import MemberDescriptorType, GenericAlias, UnionType
 import ampel.types as altypes
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from typing import Any, Type, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
+from typing import Any, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
 
 ttf = type(Traceless)
 NoneType = type(None)

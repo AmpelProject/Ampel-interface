@@ -7,7 +7,7 @@
 # Last Modified Date:  11.06.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.types import Union, UBson
+from ampel.types import UBson
 from ampel.struct.UnitResult import UnitResult
 from ampel.content.StockDocument import StockDocument
 from ampel.base.AmpelABC import AmpelABC
