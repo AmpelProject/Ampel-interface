@@ -71,10 +71,10 @@ class AmpelUnit:
 							if k in cls._slot_defaults:
 								joined_defaults[k] = cls._slot_defaults[k]
 							continue
-						# 
+						# parameterized generic with unparameterized default
 						if (
 							safe_issubclass(v, AmpelBaseModel)
-							and isinstance(defs[k], v.get_model_origin())
+							and v.get_model_origin() is type(defs[k])
 							and v.get_model_args() and not defs[k].get_model_args()
 						):
 							warnings.warn(
@@ -82,7 +82,7 @@ class AmpelUnit:
 									f"field {k} declared as {v}, but default has type {type(defs[k])}"
 									" Adding generic args to default, but this will be an error in the future."
 								),
-								stacklevel=2
+								stacklevel=1
 							)
 							joined_defaults[k] = v.model_validate(defs[k].model_dump())
 						else:

@@ -61,7 +61,7 @@ class AmpelBaseModel(BaseModel):
 						f"field {k} declared as {v}, but default has type {type(cls.__dict__[k])}"
 						" Adding generic args to default, but this will be an error in the future."
 					),
-					stacklevel=2
+					stacklevel=1
 				)
 				setattr(cls, k, v.model_validate(cls.__dict__[k].model_dump()))
 		super().__init_subclass__(*args, **kwargs)
