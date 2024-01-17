@@ -77,6 +77,7 @@ def test_validate():
     }
 
 
+@pytest.mark.filterwarnings("ignore:field .* declared as:DeprecationWarning")
 def test_secret_without_type():
     class UnitWithSecret(AmpelUnit):
         secret: NamedSecret[str] = NamedSecret(label="foo")
@@ -84,9 +85,8 @@ def test_secret_without_type():
         # issubclass(annotation, AmpelBaseModel) throws TypeError
         other: Sequence[int] = [1]
 
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning)
-        assert UnitWithSecret().secret.get_model_args() == (str,)
+    assert UnitWithSecret().secret.get_model_args() == (str,)
+    assert UnitWithSecret._defaults["secret"].get_model_args() == (str,), "parameteized "
 
 
 def test_slots():

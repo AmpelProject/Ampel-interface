@@ -7,12 +7,13 @@
 # Last Modified Date:  09.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+import warnings
 from functools import partial
 import collections.abc as abc
 from types import MemberDescriptorType, UnionType
 from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AmpelBaseModel import AmpelBaseModel, safe_issubclass
 from pydantic import BaseModel, ValidationError, create_model
 from typing import Any, Type, Union, get_origin, get_args, TYPE_CHECKING
 
@@ -70,7 +71,22 @@ class AmpelUnit:
 							if k in cls._slot_defaults:
 								joined_defaults[k] = cls._slot_defaults[k]
 							continue
-						joined_defaults[k] = base.__dict__[k]
+						# 
+						if (
+							safe_issubclass(v, AmpelBaseModel)
+							and isinstance(defs[k], v.get_model_origin())
+							and v.get_model_args() and not defs[k].get_model_args()
+						):
+							warnings.warn(
+								DeprecationWarning(
+									f"field {k} declared as {v}, but default has type {type(defs[k])}"
+									" Adding generic args to default, but this will be an error in the future."
+								),
+								stacklevel=2
+							)
+							joined_defaults[k] = v.model_validate(defs[k].model_dump())
+						else:
+							joined_defaults[k] = base.__dict__[k]
 					# if None |  with no default
 					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
 						joined_defaults[k] = None
