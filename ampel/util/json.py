@@ -59,7 +59,7 @@ class AmpelEncoder(json.JSONEncoder):
 				params, attrs = [], rep
 			else:
 				params, attrs = rep, {}
-			return {"__jsonclass__": [json_class] + self.default(params, True), **self.default(attrs, True)} # type: ignore[no-untyped-call]
+			return {"__jsonclass__": [json_class, *self.default(params, True)], **self.default(attrs, True)} # type: ignore[no-untyped-call]
 		if hasattr(obj, 'items'):
 			return {self.default(k, True): self.default(v, True) for k,v in obj.items()} # type: ignore[no-untyped-call]
 		if isinstance(obj, list | set | tuple):

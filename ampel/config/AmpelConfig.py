@@ -142,7 +142,7 @@ class AmpelConfig:
 		for el in [entry] if isinstance(entry, int) else (try_int(el) for el in entry):
 			if el not in ret:
 				if raise_exc:
-					raise ValueError(f'Config element {repr(entry)} not found')
+					raise ValueError(f'Config element {entry!r} not found')
 				return None
 			ret = ret[el]
 

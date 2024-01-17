@@ -7,7 +7,7 @@ from ampel.base.AmpelUnit import AmpelUnit
 from ampel.secret.NamedSecret import NamedSecret
 from ampel.types import Traceless
 
-# ruff: noqa: SLF001
+# ruff: noqa: SLF001, RUF012
 
 def test_mixed_inheritance():
     class U(AmpelUnit):

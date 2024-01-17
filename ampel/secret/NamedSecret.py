@@ -22,7 +22,7 @@ class NamedSecret(AmpelBaseModel, Secret[T]):
 	value: None | T = None
 
 	def __repr__(self):
-		return f'NamedSecret(label={repr(self.label)})'
+		return f'NamedSecret(label={self.label!r})'
 
 	def get(self) -> T:
 		if self.value is None:

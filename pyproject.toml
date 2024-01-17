@@ -102,6 +102,7 @@ select = [
     # "ERA", # seems to prohibit all comments, that's bad
     "PL",
     "PERF",
+    "RUF",
 ]
 ignore = [
     "E741", # ambiguous variable name

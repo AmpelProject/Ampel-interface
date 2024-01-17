@@ -10,7 +10,6 @@
 from enum import IntFlag
 
 
-# flake8: noqa (E221)
 class JournalActionCode(IntFlag):
 	"""
 	Potential code of field 'action' from :class:`~ampel.content.JournalRecord.JournalRecord` (62 different possible values)

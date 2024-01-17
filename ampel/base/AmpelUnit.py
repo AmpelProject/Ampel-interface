@@ -10,7 +10,7 @@
 import warnings
 from functools import partial
 from types import MemberDescriptorType, UnionType
-from typing import TYPE_CHECKING, Any, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, ClassVar, Union, get_args, get_origin
 
 from pydantic import BaseModel, ValidationError, create_model
 
@@ -31,11 +31,11 @@ class AmpelUnit:
 	"""
 
 	_model: type[BaseModel]
-	_annots: dict[str, Any] = {}
-	_defaults: dict[str, Any] = {}
-	_slot_defaults: dict[str, Any] = {}
-	_aks: set[str] = set() # annotation keys
-	_sks: set[str] = set() # slots keys
+	_annots: ClassVar[dict[str, Any]] = {}
+	_defaults: ClassVar[dict[str, Any]] = {}
+	_slot_defaults: ClassVar[dict[str, Any]] = {}
+	_aks: ClassVar[set[str]] = set() # annotation keys
+	_sks: ClassVar[set[str]] = set() # slots keys
 	_exclude_unset: set[str]
 
 
