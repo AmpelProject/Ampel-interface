@@ -8,7 +8,7 @@
 # Last Modified By:    simeon reusch
 
 from collections.abc import Callable, Container, Iterator, Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
@@ -340,7 +340,7 @@ class SnapView:
 		if output == 'raw':
 			return entry['ts']
 
-		dt = datetime.fromtimestamp(entry['ts'])
+		dt = datetime.fromtimestamp(entry['ts'], tz=timezone.utc)
 
 		if output == 'datetime':
 			return dt

@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
@@ -132,6 +132,6 @@ class T3DocView:
 	def get_time_created(self, to_string: bool = False) -> None | float | str:
 
 		if to_string:
-			return datetime.fromtimestamp(self.meta['ts']).strftime('%d/%m/%Y %H:%M:%S')
+			return datetime.fromtimestamp(self.meta['ts'], tz=timezone.utc).strftime('%d/%m/%Y %H:%M:%S')
 
 		return self.meta['ts']

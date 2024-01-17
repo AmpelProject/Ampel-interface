@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
@@ -261,7 +261,7 @@ class T2DocView:
 		ts = self.meta[0]['ts']
 
 		if to_string:
-			return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
+			return datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%d/%m/%Y %H:%M:%S')
 
 		return ts
 
@@ -279,6 +279,6 @@ class T2DocView:
 
 		ts = self.meta[-1]['ts']
 		if to_string:
-			return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
+			return datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%d/%m/%Y %H:%M:%S')
 
 		return ts
