@@ -7,10 +7,11 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from collections.abc import Iterable, Mapping, MutableMapping, Sequence
 from typing import Any, overload
-from collections.abc import MutableMapping, Mapping, Iterable, Sequence
-from ampel.types import UBson, strict_iterable, T
+
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.types import T, UBson, strict_iterable
 
 
 def try_int(key: str | int) -> str | int:

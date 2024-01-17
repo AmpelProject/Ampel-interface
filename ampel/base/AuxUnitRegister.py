@@ -8,11 +8,12 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from importlib import import_module
-from typing import Any, ClassVar, overload # type: ignore[attr-defined]
-from ampel.types import T, check_class
-from ampel.model.UnitModel import UnitModel
+from typing import Any, ClassVar, overload  # type: ignore[attr-defined]
+
 from ampel.base.AmpelUnit import AmpelUnit
 from ampel.config.AmpelConfig import AmpelConfig
+from ampel.model.UnitModel import UnitModel
+from ampel.types import T, check_class
 
 
 class AuxUnitRegister:

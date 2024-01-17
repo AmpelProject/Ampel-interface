@@ -9,9 +9,10 @@
 
 import warnings
 from types import UnionType
-from typing import TYPE_CHECKING, Any, TypeAlias, Union, get_origin, get_args
+from typing import TYPE_CHECKING, Any, TypeAlias, Union, get_args, get_origin
 
 from pydantic import BaseModel
+
 # NB: ModelMetaClass squirrels away generic args in its own
 # __pydantic_model_args__ attribute, so we can't use typing.get_args() here
 from pydantic._internal._generics import get_args as _internal_get_args

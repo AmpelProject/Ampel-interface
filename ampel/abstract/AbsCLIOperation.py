@@ -7,9 +7,10 @@
 # Last Modified Date:  14.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any
-from collections.abc import Sequence
 from argparse import ArgumentParser
+from collections.abc import Sequence
+from typing import Any
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser

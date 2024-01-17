@@ -7,8 +7,10 @@
 # Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from os import path, environ, makedirs
-from appdirs import user_data_dir # type: ignore[import]
+from os import environ, makedirs, path
+
+from appdirs import user_data_dir  # type: ignore[import]
+
 
 def get_user_data_config_path() -> str:
 	"""

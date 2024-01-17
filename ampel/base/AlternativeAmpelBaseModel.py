@@ -8,14 +8,25 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from __future__ import annotations
+
 import collections.abc as abc
-from ujson import loads, dumps # type: ignore
-from typeguard import check_type # type: ignore
-from types import MemberDescriptorType, GenericAlias, UnionType
+from types import GenericAlias, MemberDescriptorType, UnionType
+from typing import (  # type: ignore[attr-defined]
+	Annotated,
+	Any,
+	Union,
+	_GenericAlias,
+	_UnionGenericAlias,
+	get_args,
+	get_origin,
+)
+
+from typeguard import check_type  # type: ignore
+from ujson import dumps, loads  # type: ignore
+
 import ampel.types as altypes
-from ampel.types import Traceless, TRACELESS
 from ampel.secret.Secret import Secret
-from typing import Any, Union, Annotated, get_origin, get_args, _GenericAlias, _UnionGenericAlias # type: ignore[attr-defined]
+from ampel.types import TRACELESS, Traceless
 
 ttf = type(Traceless)
 NoneType = type(None)

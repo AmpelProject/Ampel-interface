@@ -7,13 +7,14 @@
 # Last Modified Date:  01.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, TypedDict, Literal
-from ampel.types import StockId
-from ampel.content.StockDocument import StockDocument
+from typing import Any, Literal, TypedDict
+
 from ampel.content.DataPoint import DataPoint
+from ampel.content.LogDocument import LogDocument
+from ampel.content.StockDocument import StockDocument
 from ampel.content.T1Document import T1Document
 from ampel.content.T2Document import T2Document
-from ampel.content.LogDocument import LogDocument
+from ampel.types import StockId
 
 # Please update BufferKey on AmpelBuffer udpates
 # There is currently unfortunately no way of extracting a Literal out of a TypedDict

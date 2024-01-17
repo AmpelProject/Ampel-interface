@@ -7,8 +7,11 @@
 # Last Modified Date:  12.07.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import json, xxhash # type: ignore[import]
+import json  # type: ignore[import]
 from typing import TypeVar
+
+import xxhash
+
 from ampel.util.mappings import flatten_dict
 
 HT = TypeVar("HT", int, bytes, str)

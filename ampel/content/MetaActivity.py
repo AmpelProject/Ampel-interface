@@ -7,10 +7,11 @@
 # Last Modified Date:  10.10.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import TypedDict
 from collections.abc import Sequence
-from ampel.types import ChannelId, Tag, DataPointId
+from typing import TypedDict
+
 from ampel.enum.MetaActionCode import MetaActionCode
+from ampel.types import ChannelId, DataPointId, Tag
 
 
 class MetaActivity(TypedDict, total=False):

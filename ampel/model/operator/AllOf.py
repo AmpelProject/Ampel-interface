@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Generic
-from ampel.types import T
+
 from ampel.base.AmpelGenericModel import AmpelGenericModel
+from ampel.types import T
 
 
 class AllOf(AmpelGenericModel, Generic[T]):

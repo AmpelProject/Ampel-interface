@@ -8,9 +8,10 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Sequence
-from ampel.model.UnitModel import UnitModel
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.LogicalUnit import LogicalUnit
+from ampel.model.UnitModel import UnitModel
 
 
 class AbsTiedT2Unit(AmpelABC, LogicalUnit, abstract=True):

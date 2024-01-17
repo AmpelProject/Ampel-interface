@@ -7,15 +7,17 @@
 # Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import textwrap, os
-from typing import Any
-from ampel.cli.MaybeIntAction import MaybeIntAction
-from ampel.cli.LoadJSONAction import LoadJSONAction
-from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
-from ampel.cli.LoadAllOfAction import LoadAllOfAction
+import os
+import textwrap
 from argparse import ArgumentParser, _ArgumentGroup
+from typing import Any
+
 from ampel.cli.AmpelHelpFormatter import AmpelHelpFormatter
 from ampel.cli.config import get_user_data_config_path
+from ampel.cli.LoadAllOfAction import LoadAllOfAction
+from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
+from ampel.cli.LoadJSONAction import LoadJSONAction
+from ampel.cli.MaybeIntAction import MaybeIntAction
 
 
 class AmpelArgumentParser(ArgumentParser):

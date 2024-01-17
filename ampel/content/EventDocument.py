@@ -7,9 +7,11 @@
 # Last Modified Date:  15.01.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import TypedDict, Any, Literal
-from typing_extensions import Required
 from collections.abc import Sequence
+from typing import Any, Literal, TypedDict
+
+from typing_extensions import Required
+
 from ampel.enum.EventCode import EventCode
 from ampel.types import ChannelId
 

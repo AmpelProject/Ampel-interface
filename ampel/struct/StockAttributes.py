@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from ampel.types import Tag
+
 from ampel.struct.JournalAttributes import JournalAttributes
+from ampel.types import Tag
 
 
 class StockAttributes:

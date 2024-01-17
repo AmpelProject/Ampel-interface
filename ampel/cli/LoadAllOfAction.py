@@ -8,7 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from argparse import Action
+
 from ampel.model.operator.AllOf import AllOf
+
 
 class LoadAllOfAction(Action):
 

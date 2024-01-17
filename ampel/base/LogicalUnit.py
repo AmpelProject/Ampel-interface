@@ -8,9 +8,10 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any, ClassVar
-from ampel.types import Traceless
+
 from ampel.base.AmpelUnit import AmpelUnit
 from ampel.protocol.LoggerProtocol import LoggerProtocol
+from ampel.types import Traceless
 
 
 class LogicalUnit(AmpelUnit):

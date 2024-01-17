@@ -7,9 +7,9 @@
 # Last Modified Date:  17.05.2020
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from collections.abc import Callable
 from functools import partial
 from typing import TypeVar, overload
-from collections.abc import Callable
 
 F = TypeVar('F', bound=Callable)
 

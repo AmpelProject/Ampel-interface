@@ -7,13 +7,14 @@
 # Last Modified Date:  01.03.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from collections.abc import Sequence
 from datetime import datetime
 from typing import Any, Literal, overload
-from collections.abc import Sequence
-from ampel.types import StockId, UBson, T2Link, Tag, T
+
+from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T2Document import T2Document
-from ampel.config.AmpelConfig import AmpelConfig
+from ampel.types import StockId, T, T2Link, Tag, UBson
 
 TYPE_POINT_T2 = 0 # linked with datapoints (tier 0)
 TYPE_STATE_T2 = 1 # linked with compounds (tier 1)

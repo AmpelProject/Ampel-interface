@@ -7,10 +7,16 @@
 # Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import os, sys, re, importlib
-from pkg_resources import ( # type: ignore[attr-defined]
-	get_distribution, AvailableDistributions
+import importlib
+import os
+import re
+import sys
+
+from pkg_resources import (  # type: ignore[attr-defined]
+	AvailableDistributions,
+	get_distribution,
 )
+
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 

@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Generic, TypeVar
-from ampel.base.decorator import abstractmethod
+
 from ampel.base.AmpelABC import AmpelABC
+from ampel.base.decorator import abstractmethod
 
 T = TypeVar('T')
 

@@ -1,11 +1,13 @@
 
 import inspect
 import json
-import bson.json_util
-from importlib import import_module
 from enum import IntFlag
-from types import MappingProxyType
 from functools import partial
+from importlib import import_module
+from types import MappingProxyType
+
+import bson.json_util
+
 
 def load(fileobj, ignore_missing_modules=True):
 	for line in fileobj:

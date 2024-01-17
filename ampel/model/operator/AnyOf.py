@@ -9,9 +9,10 @@
 
 import collections
 from typing import Generic
-from ampel.types import T
-from ampel.model.operator.AllOf import AllOf
+
 from ampel.base.AmpelGenericModel import AmpelGenericModel
+from ampel.model.operator.AllOf import AllOf
+from ampel.types import T
 
 
 class AnyOf(AmpelGenericModel, Generic[T]):

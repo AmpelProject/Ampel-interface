@@ -8,13 +8,14 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Iterable
-from ampel.types import UBson
-from ampel.struct.UnitResult import UnitResult
-from ampel.content.T1Document import T1Document
-from ampel.content.DataPoint import DataPoint
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
+from ampel.content.DataPoint import DataPoint
+from ampel.content.T1Document import T1Document
+from ampel.struct.UnitResult import UnitResult
+from ampel.types import UBson
 
 
 class AbsStateT2Unit(AmpelABC, LogicalUnit, abstract=True):

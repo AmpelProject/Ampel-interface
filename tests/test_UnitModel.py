@@ -1,5 +1,6 @@
-from ampel.model.UnitModel import UnitModel
 from pytest_mock import MockerFixture
+
+from ampel.model.UnitModel import UnitModel
 
 
 def test_validation_hook(mocker: MockerFixture):

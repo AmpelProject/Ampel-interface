@@ -7,10 +7,11 @@
 # Last Modified Date:  05.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, TypedDict, Literal
 from collections.abc import Sequence
-from ampel.types import StockId, ChannelId, Tag
+from typing import Any, Literal, TypedDict
+
 from ampel.content.JournalRecord import JournalRecord
+from ampel.types import ChannelId, StockId, Tag
 
 
 class StockDocument(TypedDict, total=False):

@@ -7,14 +7,15 @@
 # Last Modified Date:  03.04.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import Container, Iterator, Iterable, Sequence
-from ampel.types import JDict, OneOrMany
-from ampel.view.T3DocView import T3DocView
-from ampel.view.ReadOnlyDict import ReadOnlyDict
-from ampel.content.T3Document import T3Document
+from collections.abc import Container, Iterable, Iterator, Sequence
+
 from ampel.config.AmpelConfig import AmpelConfig
-from ampel.util.mappings import dictify
+from ampel.content.T3Document import T3Document
+from ampel.types import JDict, OneOrMany
 from ampel.util.hash import build_unsafe_dict_id
+from ampel.util.mappings import dictify
+from ampel.view.ReadOnlyDict import ReadOnlyDict
+from ampel.view.T3DocView import T3DocView
 
 
 class T3Store:

@@ -9,6 +9,7 @@
 
 from enum import IntEnum
 
+
 # flake8: noqa (E221)
 class DocumentCode(IntEnum):
 	"""

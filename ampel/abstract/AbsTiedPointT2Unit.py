@@ -8,12 +8,13 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from ampel.types import UBson
-from ampel.struct.UnitResult import UnitResult
-from ampel.view.T2DocView import T2DocView
-from ampel.content.DataPoint import DataPoint
-from ampel.base.decorator import abstractmethod
+
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
+from ampel.base.decorator import abstractmethod
+from ampel.content.DataPoint import DataPoint
+from ampel.struct.UnitResult import UnitResult
+from ampel.types import UBson
+from ampel.view.T2DocView import T2DocView
 
 
 class AbsTiedPointT2Unit(AbsTiedT2Unit, abstract=True):

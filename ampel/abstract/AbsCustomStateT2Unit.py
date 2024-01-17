@@ -7,15 +7,16 @@
 # Last Modified Date:  03.04.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Generic
 from collections.abc import Iterable
-from ampel.types import T, UBson
-from ampel.struct.UnitResult import UnitResult
-from ampel.content.T1Document import T1Document
-from ampel.content.DataPoint import DataPoint
+from typing import Generic
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
+from ampel.content.DataPoint import DataPoint
+from ampel.content.T1Document import T1Document
+from ampel.struct.UnitResult import UnitResult
+from ampel.types import T, UBson
 
 
 class AbsCustomStateT2Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):

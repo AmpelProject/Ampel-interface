@@ -10,11 +10,13 @@
 import warnings
 from functools import partial
 from types import MemberDescriptorType, UnionType
-from ampel.types import Traceless, TRACELESS
-from ampel.secret.Secret import Secret
-from ampel.base.AmpelBaseModel import AmpelBaseModel, safe_issubclass
+from typing import TYPE_CHECKING, Any, Type, Union, get_args, get_origin
+
 from pydantic import BaseModel, ValidationError, create_model
-from typing import Any, Type, Union, get_origin, get_args, TYPE_CHECKING
+
+from ampel.base.AmpelBaseModel import AmpelBaseModel, safe_issubclass
+from ampel.secret.Secret import Secret
+from ampel.types import TRACELESS, Traceless
 
 ttf = type(Traceless)
 NoneType = type(None)

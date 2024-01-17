@@ -8,9 +8,11 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any
+
 from ampel.base.AmpelABC import AmpelABC
-from ampel.base.decorator import abstractmethod
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.decorator import abstractmethod
+
 
 class AbsApplicable(AmpelABC, AmpelBaseModel, abstract=True):
 

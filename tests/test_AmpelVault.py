@@ -1,13 +1,13 @@
 import warnings
+from typing import Any, cast
+
 import pytest
-from typing import cast, Any
-
-from ampel.secret.AmpelVault import AmpelVault
-from ampel.abstract.AbsSecretProvider import AbsSecretProvider
-from ampel.secret.NamedSecret import Secret, NamedSecret
-from ampel.base.AmpelBaseModel import AmpelBaseModel
-
 from pydantic import ValidationError
+
+from ampel.abstract.AbsSecretProvider import AbsSecretProvider
+from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.secret.AmpelVault import AmpelVault
+from ampel.secret.NamedSecret import NamedSecret, Secret
 
 
 class DummySecretProvider(AbsSecretProvider):

@@ -1,6 +1,8 @@
 
-from ampel.view.ReadOnlyDict import ReadOnlyDict
 import pickle
+
+from ampel.view.ReadOnlyDict import ReadOnlyDict
+
 
 def test_pickle():
 	d = ReadOnlyDict({'a': 1})

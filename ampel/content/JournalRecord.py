@@ -7,8 +7,9 @@
 # Last Modified Date:  05.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal, Any, TypedDict
 from collections.abc import Sequence
+from typing import Any, Literal, TypedDict
+
 from ampel.types import ChannelId, Tag
 
 

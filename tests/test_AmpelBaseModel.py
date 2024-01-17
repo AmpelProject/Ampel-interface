@@ -1,9 +1,11 @@
-import pytest
 from types import UnionType
 from typing import Generic, TypeVar, Union, get_origin
+
+import pytest
+from pydantic import ValidationError
+
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.AmpelUnit import AmpelUnit
-from pydantic import ValidationError
 
 
 def test_dict_view():

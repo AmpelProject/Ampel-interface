@@ -7,8 +7,8 @@
 # Last Modified Date:  30.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.secret.Secret import Secret, T
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.secret.Secret import Secret, T
 
 
 class NamedSecret(AmpelBaseModel, Secret[T]):

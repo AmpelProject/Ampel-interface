@@ -9,8 +9,10 @@
 
 import collections
 from typing import Generic
-from ampel.types import T
+
 from ampel.base.AmpelGenericModel import AmpelGenericModel
+from ampel.types import T
+
 
 class FlatAnyOf(AmpelGenericModel, Generic[T]):
 	"""

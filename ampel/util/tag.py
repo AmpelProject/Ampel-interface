@@ -7,9 +7,10 @@
 # Last Modified Date:  25.11.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.types import Tag
-from typing import Literal, overload
 from collections.abc import Sequence
+from typing import Literal, overload
+
+from ampel.types import Tag
 
 
 @overload

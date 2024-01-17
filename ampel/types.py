@@ -7,8 +7,16 @@
 # Last Modified Date:  31.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import ValuesView, KeysView, Sequence
-from typing import Any, Union, TypeVar, get_origin, TYPE_CHECKING, Annotated, _GenericAlias # type: ignore[attr-defined]
+from collections.abc import KeysView, Sequence, ValuesView
+from typing import (  # type: ignore[attr-defined]
+	TYPE_CHECKING,
+	Annotated,
+	Any,
+	TypeVar,
+	Union,
+	_GenericAlias,
+	get_origin,
+)
 
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import AmpelBaseModel

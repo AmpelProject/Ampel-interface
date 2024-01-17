@@ -50,6 +50,7 @@ jobs:
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
+    - run: poetry run ruff check
     - run: poetry run mypy -p ampel
 
   check_version:

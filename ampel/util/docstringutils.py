@@ -7,7 +7,8 @@
 # Last Modified Date:  11.12.2019
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import inspect, re
+import inspect
+import re
 
 regex_ignore = re.compile(':[ \t]*?ClassVar|[ \t]*?#')
 regex_stop = re.compile('^[ \t]*?@|^[ \t]*?def|^class ')

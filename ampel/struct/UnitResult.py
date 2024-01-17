@@ -8,8 +8,8 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from ampel.model.UnitModel import UnitModel
-from ampel.types import UBson, OneOrMany, Tag
 from ampel.struct.JournalAttributes import JournalAttributes
+from ampel.types import OneOrMany, Tag, UBson
 
 
 class UnitResult:

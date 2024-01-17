@@ -7,16 +7,17 @@
 # Last Modified Date:  28.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Generic, TypeVar
 from collections.abc import Iterable, Sequence
-from ampel.types import T, UBson
-from ampel.struct.UnitResult import UnitResult
-from ampel.view.T2DocView import T2DocView
-from ampel.content.DataPoint import DataPoint
-from ampel.base.decorator import abstractmethod
-from ampel.content.T1Document import T1Document
+from typing import Generic, TypeVar
+
 from ampel.abstract.AbsTiedT2Unit import AbsTiedT2Unit
+from ampel.base.decorator import abstractmethod
+from ampel.content.DataPoint import DataPoint
+from ampel.content.T1Document import T1Document
 from ampel.model.StateT2Dependency import StateT2Dependency
+from ampel.struct.UnitResult import UnitResult
+from ampel.types import T, UBson
+from ampel.view.T2DocView import T2DocView
 
 U = TypeVar("U", bound=str)
 

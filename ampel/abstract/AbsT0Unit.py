@@ -8,11 +8,12 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any
-from ampel.types import StockId
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
+from ampel.types import StockId
 
 
 class AbsT0Unit(AmpelABC, LogicalUnit, abstract=True):

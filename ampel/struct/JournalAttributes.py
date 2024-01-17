@@ -7,10 +7,11 @@
 # Last Modified Date:  12.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any
 from collections.abc import Sequence
-from ampel.types import Tag
+from typing import Any
+
 from ampel.content.JournalRecord import JournalRecord
+from ampel.types import Tag
 
 
 class JournalAttributes:

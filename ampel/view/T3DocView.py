@@ -7,13 +7,14 @@
 # Last Modified Date:  12.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from collections.abc import Sequence
 from datetime import datetime
 from typing import Any, Literal, overload
-from collections.abc import Sequence
-from ampel.types import StockId, UBson, TBson, Tag
+
+from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T3Document import T3Document
-from ampel.config.AmpelConfig import AmpelConfig
+from ampel.types import StockId, Tag, TBson, UBson
 
 
 class T3DocView:

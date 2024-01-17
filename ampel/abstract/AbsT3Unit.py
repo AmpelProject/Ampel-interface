@@ -7,15 +7,16 @@
 # Last Modified Date:  27.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import TypeVar, Generic
 from collections.abc import Generator
-from ampel.types import UBson, T3Send
-from ampel.view.SnapView import SnapView
-from ampel.struct.T3Store import T3Store
+from typing import Generic, TypeVar
+
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
+from ampel.struct.T3Store import T3Store
 from ampel.struct.UnitResult import UnitResult
+from ampel.types import T3Send, UBson
+from ampel.view.SnapView import SnapView
 
 T = TypeVar("T", bound=SnapView)
 

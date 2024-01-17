@@ -2,6 +2,7 @@ import json
 import sys
 
 import pytest
+
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.util import mappings
 

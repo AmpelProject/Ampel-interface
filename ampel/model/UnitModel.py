@@ -7,11 +7,14 @@
 # Last Modified Date:  15.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Generic, TypeVar, Callable, ClassVar
+from typing import Any, Callable, ClassVar, Generic, TypeVar
+
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+
 T = TypeVar("T", bound=str)
 
 from pydantic import model_validator
+
 
 class UnitModel(AmpelBaseModel, Generic[T]):
 	"""

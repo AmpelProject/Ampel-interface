@@ -7,20 +7,20 @@
 # Last Modified Date:  24.11.2022
 # Last Modified By:    simeon reusch
 
+from collections.abc import Callable, Container, Iterator, Sequence
 from datetime import datetime
 from typing import Any, Literal, overload
-from collections.abc import Container, Callable, Iterator, Sequence
 
-from ampel.types import OneOrMany, StockId, T2Link, UBson, T
-from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.DataPoint import DataPoint
-from ampel.content.T1Document import T1Document
-from ampel.view.T2DocView import T2DocView
-from ampel.content.StockDocument import StockDocument
-from ampel.content.LogDocument import LogDocument
 from ampel.content.JournalRecord import JournalRecord
+from ampel.content.LogDocument import LogDocument
+from ampel.content.StockDocument import StockDocument
+from ampel.content.T1Document import T1Document
+from ampel.struct.AmpelBuffer import AmpelBuffer
+from ampel.types import OneOrMany, StockId, T, T2Link, UBson
 from ampel.util.freeze import recursive_freeze as rf
+from ampel.view.T2DocView import T2DocView
 
 
 class SnapView:

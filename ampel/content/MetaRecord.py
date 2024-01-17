@@ -7,10 +7,11 @@
 # Last Modified Date:  07.10.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal, Any, TypedDict
 from collections.abc import Sequence
-from ampel.types import ChannelId, Tag
+from typing import Any, Literal, TypedDict
+
 from ampel.content.MetaActivity import MetaActivity
+from ampel.types import ChannelId, Tag
 
 
 class MetaRecord(TypedDict, total=False):

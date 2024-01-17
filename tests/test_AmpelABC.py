@@ -1,7 +1,9 @@
-import pytest
 from typing import Generic, TypeVar
-from ampel.base.AmpelBaseModel import AmpelBaseModel
+
+import pytest
+
 from ampel.base.AmpelABC import AmpelABC
+from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.decorator import abstractmethod
 
 

@@ -10,6 +10,7 @@
 import json
 from argparse import Action
 
+
 class LoadJSONAction(Action):
 	def __call__(self, parser, namespace, value, option_string=None):
 		setattr(namespace, self.dest, json.loads(value))

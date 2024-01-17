@@ -9,6 +9,7 @@
 
 from bson.binary import Binary
 
+
 def int_to_bindata(int_arg: int) -> Binary:
 	"""
 	converts a python integer number (unlimited length) into a BSON data type 'BinData'.

@@ -7,11 +7,13 @@
 # Last Modified Date:  25.06.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import TypedDict
-from typing_extensions import Required
 from collections.abc import Sequence
-from ampel.types import UBson, ChannelId, StockId, Tag, UnitId, T2Link
+from typing import TypedDict
+
+from typing_extensions import Required
+
 from ampel.content.MetaRecord import MetaRecord
+from ampel.types import ChannelId, StockId, T2Link, Tag, UBson, UnitId
 
 
 class T2Document(TypedDict, total=False):

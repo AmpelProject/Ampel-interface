@@ -83,5 +83,6 @@ target-version = "py310"
 [tool.ruff.lint]
 select = [
     "F401", # unused import
+    "I001", # unsorted imports
 ]
 

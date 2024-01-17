@@ -7,8 +7,11 @@
 # Last Modified Date:  04.08.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import yaml, json
-from typing import Sequence, Union, Literal, Any, TypeVar, overload, get_origin
+import json
+from typing import Any, Literal, Sequence, TypeVar, Union, get_origin, overload
+
+import yaml
+
 from ampel.util.freeze import recursive_freeze
 from ampel.util.mappings import try_int
 from ampel.view.ReadOnlyDict import ReadOnlyDict

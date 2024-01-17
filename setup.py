@@ -7,7 +7,7 @@
 # Last Modified Date:  06.04.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from setuptools import setup, find_namespace_packages
+from setuptools import find_namespace_packages, setup
 
 install_requires = ['PyYAML>=5.4.1,<7.0.0', 'pydantic>=1.8,<2']
 extras_require = {

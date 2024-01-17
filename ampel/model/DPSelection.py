@@ -7,12 +7,13 @@
 # Last Modified Date:  28.09.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Literal
 from collections.abc import Callable
-from ampel.model.UnitModel import UnitModel
-from ampel.base.AuxUnitRegister import AuxUnitRegister
+from typing import Literal
+
 from ampel.abstract.AbsApplicable import AbsApplicable
 from ampel.base.AmpelBaseModel import AmpelBaseModel
+from ampel.base.AuxUnitRegister import AuxUnitRegister
+from ampel.model.UnitModel import UnitModel
 
 
 class DPSelection(AmpelBaseModel):

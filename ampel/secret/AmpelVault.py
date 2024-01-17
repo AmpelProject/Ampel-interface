@@ -8,9 +8,10 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any, overload
+
 from ampel.abstract.AbsSecretProvider import AbsSecretProvider
-from ampel.secret.Secret import Secret, T
 from ampel.secret.NamedSecret import NamedSecret
+from ampel.secret.Secret import Secret, T
 
 
 class AmpelVault:

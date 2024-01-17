@@ -9,6 +9,7 @@
 
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 
+
 # pydantic v2 BaseModel supports generics natively
 # NB: need to make this a subclass rather than an alias to keep pydantic.mypy happy
 class AmpelGenericModel(AmpelBaseModel):

@@ -7,13 +7,13 @@
 # Last Modified Date:  13.05.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.types import UBson, StockId
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
 from ampel.struct.UnitResult import UnitResult
-	
+from ampel.types import StockId, UBson
+
 
 class AbsT1ComputeUnit(AmpelABC, LogicalUnit, abstract=True):
 

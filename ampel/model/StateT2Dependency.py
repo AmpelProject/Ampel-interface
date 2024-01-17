@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Generic
-from ampel.model.UnitModel import UnitModel, T
+
 from ampel.model.DPSelection import DPSelection
+from ampel.model.UnitModel import T, UnitModel
 
 
 class StateT2Dependency(UnitModel[T], Generic[T]):

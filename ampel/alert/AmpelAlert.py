@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import operator
-from typing import Any
 from collections.abc import Callable, Sequence
+from typing import Any
+
 from ampel.types import JDict, StockId, Tag
 
 # Do not enable customizations of operators by sub-classes for now

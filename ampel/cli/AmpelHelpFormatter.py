@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from argparse import RawTextHelpFormatter
-from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
+
 from ampel.cli.LoadAllOfAction import LoadAllOfAction
+from ampel.cli.LoadAnyOfAction import LoadAnyOfAction
 from ampel.cli.LoadJSONAction import LoadJSONAction
 
 

@@ -7,8 +7,8 @@
 # Last Modified Date:  20.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from base64 import b64decode, b64encode
 from typing import Any
-from base64 import b64encode, b64decode
 
 try:
 	from bson import ObjectId
