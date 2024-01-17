@@ -62,7 +62,7 @@ class AmpelHelpFormatter(RawTextHelpFormatter):
 				action.metavar != "@"
 			):
 				for el in x['_mutually_exclusive_groups']:
-					if action in el._group_actions:
+					if action in el._group_actions: # noqa: SLF001
 						insert_pos = len(ret.split('\n')[0])-len(action.help.split('\n')[0]) - 2
 						return ret[0:insert_pos] + "\u22BB" + ret[insert_pos+1:]
 						# return "\u22BB" + ret[1:]

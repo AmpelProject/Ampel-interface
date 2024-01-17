@@ -42,7 +42,7 @@ class T3DocView:
 		if 'config' in doc:
 			config = doc['config']
 		else:
-			config = conf._config['confid'][doc['confid']]
+			config = conf._config['confid'][doc['confid']] # noqa: SLF001
 
 		return cls(
 			unit = doc['unit'],

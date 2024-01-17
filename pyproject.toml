@@ -96,6 +96,7 @@ select = [
     "T20",
     "PT",
     "RET",
+    "SLF",
 ]
 ignore = [
     "E741", # ambiguous variable name
