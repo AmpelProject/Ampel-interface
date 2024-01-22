@@ -10,6 +10,10 @@ on:
         required: false
         type: string
         default: "3.12"
+      ruff:
+        required: false
+        type: boolean
+        default: false
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -50,7 +54,7 @@ jobs:
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
-    - run: poetry run ruff check
+    - run: (! ${{ inputs.ruff }}) || poetry run ruff check
     - run: poetry run mypy -p ampel
 
   check_version:
