@@ -7,6 +7,7 @@
 # Last Modified Date:  25.06.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from datetime import datetime
 from typing import Any, TypedDict
 from typing_extensions import Required
 from collections.abc import Sequence
@@ -22,6 +23,7 @@ class DataPoint(TypedDict, total=False):
 	"""
 
 	id: Required[DataPointId]
+	expiry: datetime
 	stock: StockId | Sequence[StockId]
 	origin: int
 	tag: Sequence[int | str]
