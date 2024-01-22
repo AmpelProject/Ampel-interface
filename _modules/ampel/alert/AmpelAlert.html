@@ -1,15 +1,16 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.alert.AmpelAlert &#8212; ampel-interface 0.10.0a3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=d59dc883" />
-    <script src="../../../_static/documentation_options.js?v=08723006"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>ampel.alert.AmpelAlert &#8212; ampel-interface 0.8.12 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -19,7 +20,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.10.0a3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.alert.AmpelAlert</a></li> 
       </ul>
@@ -41,9 +42,8 @@
 <span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
 <span class="kn">import</span> <span class="nn">operator</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
-
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">ampel.types</span> <span class="kn">import</span> <span class="n">JDict</span><span class="p">,</span> <span class="n">StockId</span><span class="p">,</span> <span class="n">Tag</span>
 
 <span class="c1"># Do not enable customizations of operators by sub-classes for now</span>
@@ -61,9 +61,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="AmpelAlert">
-<a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert">[docs]</a>
-<span class="k">class</span> <span class="nc">AmpelAlert</span><span class="p">:</span>
+<div class="viewcode-block" id="AmpelAlert"><a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert">[docs]</a><span class="k">class</span> <span class="nc">AmpelAlert</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Implements AmpelAlertProtocol</span>
 <span class="sd">	&quot;&quot;&quot;</span>
@@ -107,7 +105,7 @@
 	<span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="p">(</span>
 			<span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-			<span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stock</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapoints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extra</span><span class="p">)</span> <span class="c1"># type: ignore[attr-defined]</span>
+			<span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stock</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapoints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extra</span><span class="p">)</span>
 		<span class="p">)</span>
 
 	<span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
@@ -117,9 +115,7 @@
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;AmpelAlert is read only&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AmpelAlert.get_values">
-<a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_values">[docs]</a>
-	<span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="AmpelAlert.get_values"><a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_values">[docs]</a>	<span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 		<span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 		<span class="n">filters</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">JDict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
@@ -132,10 +128,7 @@
 		<span class="k">return</span> <span class="p">[</span><span class="n">el</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">el</span><span class="p">]</span></div>
 
 
-
-<div class="viewcode-block" id="AmpelAlert.get_tuples">
-<a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_tuples">[docs]</a>
-	<span class="k">def</span> <span class="nf">get_tuples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="AmpelAlert.get_tuples"><a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_tuples">[docs]</a>	<span class="k">def</span> <span class="nf">get_tuples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 		<span class="n">key1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 		<span class="n">filters</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">JDict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
@@ -151,10 +144,7 @@
 		<span class="p">]</span></div>
 
 
-
-<div class="viewcode-block" id="AmpelAlert.get_ntuples">
-<a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_ntuples">[docs]</a>
-	<span class="k">def</span> <span class="nf">get_ntuples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="AmpelAlert.get_ntuples"><a class="viewcode-back" href="../../../api.html#ampel.alert.AmpelAlert.AmpelAlert.get_ntuples">[docs]</a>	<span class="k">def</span> <span class="nf">get_ntuples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 		<span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 		<span class="n">filters</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">JDict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 	<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]:</span>
@@ -170,7 +160,6 @@
 		<span class="p">]</span></div>
 
 
-
 	<span class="k">def</span> <span class="nf">is_new</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
@@ -182,8 +171,9 @@
 
 		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
 			<span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="n">filters</span><span class="p">]</span>
-		<span class="k">elif</span> <span class="n">filters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">):</span>
-			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter &#39;filters&#39; must be a dict or a sequence of dicts&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">filters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter &#39;filters&#39; must be a dict or a sequence of dicts&quot;</span><span class="p">)</span>
 
 		<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
 			<span class="n">attr</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;attribute&#39;</span><span class="p">]</span>
@@ -206,7 +196,6 @@
 			<span class="s1">&#39;datapoints&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">,</span>
 			<span class="s1">&#39;extra&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">,</span>
 		<span class="p">}</span></div>
-
 </pre></div>
 
             <div class="clearer"></div>
@@ -238,14 +227,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.10.0a3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.alert.AmpelAlert</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>
