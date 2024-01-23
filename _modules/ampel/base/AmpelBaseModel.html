@@ -1,16 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ampel.base.AmpelBaseModel &#8212; ampel-interface 0.8.12 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <title>ampel.base.AmpelBaseModel &#8212; ampel-interface 0.10.0a3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../../_static/documentation_options.js?v=08723006"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -20,7 +19,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.12 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.10.0a3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.base.AmpelBaseModel</a></li> 
       </ul>
@@ -41,31 +40,101 @@
 <span class="c1"># Last Modified Date:  05.01.2022</span>
 <span class="c1"># Last Modified By:    valery brinnel &lt;firstname.lastname@gmail.com&gt;</span>
 
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">KeysView</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseConfig</span><span class="p">,</span> <span class="n">Extra</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">UnionType</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeAlias</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">get_origin</span>
 
-<div class="viewcode-block" id="AmpelBaseModel"><a class="viewcode-back" href="../../../api.html#ampel.base.AmpelBaseModel.AmpelBaseModel">[docs]</a><span class="k">class</span> <span class="nc">AmpelBaseModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="c1"># NB: ModelMetaClass squirrels away generic args in its own</span>
+<span class="c1"># __pydantic_model_args__ attribute, so we can&#39;t use typing.get_args() here</span>
+<span class="kn">from</span> <span class="nn">pydantic._internal._generics</span> <span class="kn">import</span> <span class="n">get_args</span> <span class="k">as</span> <span class="n">_internal_get_args</span>
+<span class="kn">from</span> <span class="nn">pydantic._internal._generics</span> <span class="kn">import</span> <span class="n">get_origin</span> <span class="k">as</span> <span class="n">_internal_get_origin</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+	<span class="n">IncEx</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="s1">&#39;set[int] | set[str] | dict[int, Any] | dict[str, Any] | None&#39;</span>
+
+<span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">class_or_tuple</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot; non-throwing issubclass &quot;&quot;&quot;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_or_tuple</span><span class="p">)</span>
+	<span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+		<span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="AmpelBaseModel">
+<a class="viewcode-back" href="../../../api.html#ampel.base.AmpelBaseModel.AmpelBaseModel">[docs]</a>
+<span class="k">class</span> <span class="nc">AmpelBaseModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot; Raises validation errors if extra fields are present &quot;&quot;&quot;</span>
 
-	<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
-		<span class="n">arbitrary_types_allowed</span> <span class="o">=</span> <span class="kc">True</span>
-		<span class="n">underscore_attrs_are_private</span> <span class="o">=</span> <span class="kc">True</span>
-		<span class="n">allow_population_by_field_name</span> <span class="o">=</span> <span class="kc">True</span>
-		<span class="n">validate_all</span> <span class="o">=</span> <span class="kc">True</span>
-		<span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span>
-
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">__config__</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span>
-		<span class="k">try</span><span class="p">:</span>
-			<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">__config__</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">allow</span>
-
+	<span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s2">&quot;arbitrary_types_allowed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+		<span class="s2">&quot;populate_by_name&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+		<span class="s2">&quot;validate_default&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+		<span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;forbid&quot;</span>
+	<span class="p">}</span>
 
 	<span class="nd">@classmethod</span>
-	<span class="k">def</span> <span class="nf">get_model_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeysView</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-		<span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__fields__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+	<span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__annotations__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="c1"># add implicit None default to unions containing None</span>
+			<span class="k">if</span> <span class="p">(</span>
+				<span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span>
+				<span class="ow">and</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">UnionType</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
+				<span class="ow">and</span> <span class="n">NoneType</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+			<span class="p">):</span>
+				<span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+			<span class="c1"># add generic args to defaults if missing</span>
+			<span class="k">elif</span> <span class="p">(</span>
+				<span class="n">k</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span>
+				<span class="ow">and</span> <span class="n">safe_issubclass</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">AmpelBaseModel</span><span class="p">)</span>
+				<span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">get_model_origin</span><span class="p">()</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+				<span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">get_model_args</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">get_model_args</span><span class="p">()</span>
+			<span class="p">):</span>
+				<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+					<span class="ne">DeprecationWarning</span><span class="p">(</span>
+						<span class="sa">f</span><span class="s2">&quot;field </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> declared as </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">, but default has type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+						<span class="s2">&quot; Adding generic args to default, but this will be an error in the future.&quot;</span>
+					<span class="p">),</span>
+					<span class="n">stacklevel</span><span class="o">=</span><span class="mi">1</span>
+				<span class="p">)</span>
+				<span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()))</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">get_model_args</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+		<span class="k">return</span> <span class="n">_internal_get_args</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">get_model_origin</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">type</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">_internal_get_origin</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">get_model_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+		<span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+	
+	<span class="c1"># keep our own implementation of the (deprecated) BaseModel.dict() for</span>
+	<span class="c1"># future compatibility</span>
+	<span class="k">def</span> <span class="nf">dict</span><span class="p">(</span>
+		<span class="bp">self</span><span class="p">,</span>
+		<span class="o">*</span><span class="p">,</span>
+		<span class="n">include</span><span class="p">:</span> <span class="s2">&quot;IncEx&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+		<span class="n">exclude</span><span class="p">:</span> <span class="s2">&quot;IncEx&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+		<span class="n">by_alias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+		<span class="n">exclude_unset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+		<span class="n">exclude_defaults</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+		<span class="n">exclude_none</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+	<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span>
+			<span class="n">include</span><span class="o">=</span><span class="n">include</span><span class="p">,</span>
+			<span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
+			<span class="n">by_alias</span><span class="o">=</span><span class="n">by_alias</span><span class="p">,</span>
+			<span class="n">exclude_unset</span><span class="o">=</span><span class="n">exclude_unset</span><span class="p">,</span>
+			<span class="n">exclude_defaults</span><span class="o">=</span><span class="n">exclude_defaults</span><span class="p">,</span>
+			<span class="n">exclude_none</span><span class="o">=</span><span class="n">exclude_none</span>
+		<span class="p">)</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
@@ -97,14 +166,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.8.12 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ampel-interface 0.10.0a3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">ampel.base.AmpelBaseModel</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2021, Ampel Project.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2018-2021, Ampel Project.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
