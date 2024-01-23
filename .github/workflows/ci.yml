@@ -10,8 +10,14 @@ on:
         required: false
         type: string
         default: "3.12"
-      ruff:
+      lint:
         required: false
+        description: lint with ruff
+        type: boolean
+        default: false
+      format:
+        required: false
+        description: check formatting with ruff
         type: boolean
         default: false
     secrets:
@@ -52,9 +58,12 @@ jobs:
         python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
         install-args: --all-extras
+    - run: poetry run ruff check
+      if: ${{ inputs.lint }}
+    - run: poetry run ruff format --check --diff
+      if: ${{ inputs.format }}
     - name: Install root
       run: poetry run pip install -e . --no-deps
-    - run: (! ${{ inputs.ruff }}) || poetry run ruff check
     - run: poetry run mypy -p ampel
 
   check_version:
