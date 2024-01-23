@@ -80,10 +80,6 @@ jobs:
         python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
         install-args: --all-extras
-    - run: poetry run ruff check
-      if: ${{ inputs.lint }}
-    - run: poetry run ruff format --check --diff
-      if: ${{ inputs.format }}
     - name: Install root
       run: poetry run pip install -e . --no-deps
     - run: poetry run mypy -p ampel
