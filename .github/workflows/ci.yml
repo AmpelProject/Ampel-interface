@@ -25,8 +25,30 @@ on:
         required: true
 
 jobs:
+
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: ruff format
+      uses: chartboost/ruff-action@v1
+      with:
+        version: "0.1.14"
+        args: format --check --diff
+      env:
+        RUFF_FORMAT: github
+      if: ${{ inputs.format }}
+    - name: ruff check
+      uses: chartboost/ruff-action@v1
+      with:
+        version: "0.1.14"
+      env:
+        RUFF_FORMAT: github
+      if: ${{ inputs.lint }}
+
   test:
     runs-on: ubuntu-22.04
+    needs: [lint]
     services:
       mongo:
         # hobo conditional service; see https://github.com/actions/runner/issues/822#issuecomment-1831511432
@@ -49,7 +71,7 @@ jobs:
   
   mypy:
     runs-on: ubuntu-22.04
-
+    needs: [lint]
     steps:
     - uses: actions/checkout@v3
     - name: "Set up environment"
