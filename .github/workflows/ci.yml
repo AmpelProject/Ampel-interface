@@ -9,7 +9,13 @@ on:
       python-version:
         required: false
         type: string
-        default: "3.12"
+        # renovate datasource=conda depName=conda-forge/python
+        default: "3.10"
+      poetry-version:
+        required: false
+        type: string
+        # renovate datasource=pypi depName=poetry
+        default: "1.6"
       lint:
         required: false
         description: lint with ruff
