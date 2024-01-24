@@ -1,4 +1,8 @@
 {
-  "extends": ["github>AmpelProject/renovate-config"],
-  "enabledManagers": ["github-actions", "poetry"]
+  "packageRules": [
+    {
+      "matchPackageNames": ["pydantic"],
+      "allowedVersions": "<2"
+    }
+  ]
 }
