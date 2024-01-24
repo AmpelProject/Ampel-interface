@@ -1,13 +1,9 @@
 {
   "extends": [
     "github>AmpelProject/renovate-config",
-    "github>AmpelProject/renovate-config//regexManagers/githubActionsVersions",
-    "helpers:pinGitHubActionDigests"
+    "github>AmpelProject/renovate-config//regexManagers/githubActionsVersions"
   ],
-  "enabledManagers": ["github-actions", "poetry", "regex"],
   "baseBranches": ["master", "v0.8.x"],
-  "useBaseBranchConfig": "merge",
-  "rangeStrategy": "update-lockfile",
   "packageRules": [
     {
       "matchPackagePatterns": ["^ampel-.*"],
