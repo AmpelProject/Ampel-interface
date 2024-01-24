@@ -4,7 +4,7 @@
     "regexManagers:githubActionsVersions",
     "helpers:pinGitHubActionDigests"
   ],
-  "enabledManagers": ["github-actions", "poetry"],
+  "enabledManagers": ["github-actions", "poetry", "regex"],
   "baseBranches": ["master", "v0.8.x"],
   "customManagers": [
     {
@@ -14,7 +14,7 @@
         "(^|/)action\\.ya?ml$"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?\\s+(?:default|[A-Za-z0-9_]+-version)\\s*:\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
+        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?\\s+(?:default|[A-Za-z0-9_]*-?version)\\s*:\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
       ]
     }
   ]
