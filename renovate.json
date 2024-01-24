@@ -5,5 +5,13 @@
     "helpers:pinGitHubActionDigests"
   ],
   "enabledManagers": ["github-actions", "poetry", "regex"],
-  "baseBranches": ["master", "v0.8.x"]
+  "baseBranches": ["master", "v0.8.x"],
+  "useBaseBranchConfig": "merge",
+  "rangeStrategy": "update-lockfile",
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^ampel-.*"],
+      "allowedVersions": "<0.11"
+    }
+  ]
 }
