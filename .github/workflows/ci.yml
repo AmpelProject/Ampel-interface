@@ -6,16 +6,6 @@ on:
         description: start a mongo instance for tests
         type: boolean
         default: false
-      python-version:
-        required: false
-        type: string
-        # renovate datasource=conda depName=conda-forge/python
-        default: "3.10"
-      poetry-version:
-        required: false
-        type: string
-        # renovate datasource=pypi depName=poetry
-        default: "1.6"
       lint:
         required: false
         description: lint with ruff
@@ -26,6 +16,21 @@ on:
         description: check formatting with ruff
         type: boolean
         default: false
+      python-version:
+        required: false
+        type: string
+        # renovate: datasource=conda depName=conda-forge/python
+        default: "3.10"
+      poetry-version:
+        required: false
+        type: string
+        # renovate: datasource=pypi depName=poetry
+        default: "1.6"
+      ruff-version:
+        required: false
+        type: string
+        # renovate: datasource=pypi depName=ruff
+        default: "0.1.14"
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -39,7 +44,7 @@ jobs:
     - name: ruff format
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
-        version: "0.1.14"
+        version: ${{ inputs.ruff-version }}
         args: format --check --diff
       env:
         RUFF_FORMAT: github
@@ -47,7 +52,7 @@ jobs:
     - name: ruff check
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
-        version: "0.1.14"
+        version: ${{ inputs.poetry-version }}
       env:
         RUFF_FORMAT: github
       if: ${{ inputs.lint }}
@@ -67,7 +72,7 @@ jobs:
       uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
-        poetry-version: "1.6.1"
+        poetry-version: ${{ inputs.poetry-version }}
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
@@ -84,7 +89,7 @@ jobs:
       uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
-        poetry-version: "1.6.1"
+        poetry-version: ${{ inputs.poetry-version }}
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
@@ -117,7 +122,7 @@ jobs:
       uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
-        poetry-version: "1.6.1"
+        poetry-version: ${{ inputs.poetry-version }}
         install-args: --all-extras
     - name: Publish
       run: |
