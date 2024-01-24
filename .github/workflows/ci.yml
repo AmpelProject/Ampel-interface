@@ -20,12 +20,12 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.10"
+        default: "3.12.1"
       poetry-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=poetry versioning=pep440
-        default: "1.6"
+        default: "1.7.1"
       ruff-version:
         required: false
         type: string
