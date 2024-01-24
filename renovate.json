@@ -1,5 +1,9 @@
 {
-  "extends": ["github>AmpelProject/renovate-config"],
+  "extends": [
+    "github>AmpelProject/renovate-config",
+    "regexManagers:githubActionsVersions",
+    "helpers:pinGitHubActionDigests"
+  ],
   "enabledManagers": ["github-actions", "poetry"],
   "baseBranches": ["master", "v0.8.x"]
 }
