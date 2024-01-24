@@ -29,9 +29,9 @@ jobs:
   lint:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     - name: ruff format
-      uses: chartboost/ruff-action@v1
+      uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: "0.1.14"
         args: format --check --diff
@@ -39,7 +39,7 @@ jobs:
         RUFF_FORMAT: github
       if: ${{ inputs.format }}
     - name: ruff check
-      uses: chartboost/ruff-action@v1
+      uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: "0.1.14"
       env:
@@ -56,9 +56,9 @@ jobs:
         ports:
           - 27017:27017
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
@@ -73,9 +73,9 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [lint]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
@@ -93,7 +93,7 @@ jobs:
     outputs:
       should_publish: ${{ steps.check.outputs.should_publish }} 
     steps:
-    - uses: jvansanten/action-tag-poetry-version-bump@v1
+    - uses: jvansanten/action-tag-poetry-version-bump@d73cfa04bb2aed13201290cc066b9d64082434b8 # v1
       id: check
 
   pypi:
@@ -104,11 +104,11 @@ jobs:
     if: ${{ fromJSON(needs.check_version.outputs.should_publish) }}
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     # NB: we don't actually need to install the dependencies, but if we've
     # gotten this far they're cached anyway
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: "1.6.1"
