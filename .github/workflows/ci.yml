@@ -30,7 +30,7 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.1.14"
+        default: "0.1.15"
     secrets:
       PYPI_API_TOKEN:
         required: true
