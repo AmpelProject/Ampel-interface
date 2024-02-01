@@ -3,6 +3,10 @@
     {
       "matchPackageNames": ["pydantic"],
       "allowedVersions": "<2"
+    },
+    {
+      "matchManagers": ["poetry"],
+      "rangeStrategy": "in-range-only"
     }
   ]
 }
