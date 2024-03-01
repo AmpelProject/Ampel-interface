@@ -20,17 +20,17 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.12.1"
+        default: "3.12.2"
       poetry-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=poetry versioning=pep440
-        default: "1.7.1"
+        default: "1.8.1"
       ruff-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.1.15"
+        default: "0.3.0"
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -69,7 +69,7 @@ jobs:
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
@@ -86,7 +86,7 @@ jobs:
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
@@ -119,7 +119,7 @@ jobs:
     # NB: we don't actually need to install the dependencies, but if we've
     # gotten this far they're cached anyway
     - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@a3f2e6ed12462e038bc14270d139e373bf5ac564 # v1.1.0
+      uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
