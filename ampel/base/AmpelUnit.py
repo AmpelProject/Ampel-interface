@@ -128,13 +128,13 @@ class AmpelUnit:
 		if omit_traceless:
 			ttf = type(Traceless)
 			kwargs = {
-				k: (v, defs[k] if k in defs else ...)
+				k: (v, defs.get(k, ...))
 				for k, v in cls._annots.items()
 				if not (type(v) is ttf and v.__metadata__[0] == TRACELESS)
 			}
 		else:
 			kwargs = {
-				k: (v, defs[k] if k in defs else ...)
+				k: (v, defs.get(k, ...))
 				for k, v in cls._annots.items()
 			}
 

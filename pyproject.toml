@@ -103,6 +103,7 @@ ignore = [
     "UP009", # UTF-8 encoding declaration is unnecessary
     "PLR09", # too many (arguments|branches)
     "PLR2004", # Magic value used in comparison
+    "RUF018", # assignment expressions in asserts are fine
 ]
 
 [tool.ruff.lint.flake8-unused-arguments]
