@@ -59,6 +59,9 @@ disallow_untyped_calls = true
 plugins = [
     "pydantic.mypy"
 ]
+packages = [
+    "ampel"
+]
 
 [tool.pydantic-mypy]
 init_typed = true

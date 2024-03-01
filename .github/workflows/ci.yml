@@ -93,7 +93,7 @@ jobs:
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
-    - run: poetry run mypy -p ampel
+    - run: poetry run mypy
 
   check_version:
     name: Tag version bump
