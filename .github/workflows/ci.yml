@@ -25,12 +25,12 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=poetry versioning=pep440
-        default: "1.8.1"
+        default: "1.8.2"
       ruff-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.3.0"
+        default: "0.3.4"
     secrets:
       PYPI_API_TOKEN:
         required: true
