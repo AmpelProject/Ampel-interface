@@ -20,7 +20,7 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.12.2"
+        default: "3.12.3"
       poetry-version:
         required: false
         type: string
@@ -30,7 +30,7 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.3.4"
+        default: "0.4.1"
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -40,7 +40,7 @@ jobs:
   lint:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+    - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
     - name: ruff format
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
@@ -67,7 +67,7 @@ jobs:
         ports:
           - 27017:27017
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+    - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [lint]
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+    - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
@@ -115,7 +115,7 @@ jobs:
     if: ${{ fromJSON(needs.check_version.outputs.should_publish) }}
     
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+    - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
     # NB: we don't actually need to install the dependencies, but if we've
     # gotten this far they're cached anyway
     - name: "Set up environment"
