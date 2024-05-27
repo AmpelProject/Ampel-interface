@@ -47,8 +47,6 @@ filterwarnings = [
     "error",
     # Expected `list[definition-ref]` but got `tuple` - serialized value may not be as expected
     "ignore:Pydantic serializer warnings:UserWarning",
-    # UserWarning: Field name "job_sig" shadows an attribute in parent "AbsEventUnit"
-    "ignore:Field name \".*\" shadows an attribute in parent:UserWarning",
 ]
 
 [tool.mypy]

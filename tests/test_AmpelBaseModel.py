@@ -112,9 +112,13 @@ def test_generic_args() -> None:
 
 
 def test_inherit_from_annotated_base():
-
     class Base(AmpelUnit):
         base: int = 1
-    
-    class Derived(Base, AmpelBaseModel):
-        ...
+
+    with pytest.warns(
+        UserWarning, match='Field name ".*" shadows an attribute in parent'
+    ):
+
+        class Derived(Base, AmpelBaseModel): ...
+
+    assert Base().dict() == {"base": 1}

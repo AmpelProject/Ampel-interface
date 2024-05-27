@@ -1,3 +1,4 @@
+import warnings
 from collections.abc import Sequence
 
 import pytest
@@ -26,11 +27,20 @@ def test_mixed_inheritance():
             super().__init__(**kwargs)
             self._foo = 1
 
-    class Derived1(PrivateMixin, U, M):
-        ...
+    # pydantic BaseModel raises a warning when inheriting from a class that has
+    # annotations, but is not itself a BaseModel (in this case, U). Since
+    # AmpelUnit is going to construct its own model anyhow, we don't care.
+    with pytest.warns(
+        UserWarning, match='Field name ".*" shadows an attribute in parent'
+    ):
 
-    class Derived2(PrivateMixin, M, U):
-        ...
+        class Derived1(PrivateMixin, U, M): ...
+
+    with pytest.warns(
+        UserWarning, match='Field name ".*" shadows an attribute in parent'
+    ):
+
+        class Derived2(PrivateMixin, M, U): ...
 
     kwargs = {"unit_param": 1, "basemodel_param": 2}
     defaults = {"unit_param_with_default": 3, "basemodel_param_with_default": 2}
@@ -39,6 +49,28 @@ def test_mixed_inheritance():
     assert Derived1(**kwargs).dict() == kwargs | defaults
     # or from AmpelBaseModel first
     assert Derived2(**kwargs).dict() == kwargs | defaults
+
+
+def test_bare_inheritance():
+    """
+    AmpelUnit can use annotations from base classes
+    """
+
+    class M:
+        basemodel_param: int
+        basemodel_param_with_default: int = 2
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+
+        class U(M, AmpelUnit):
+            unit_param: int
+            unit_param_with_default: int = 3
+
+    kwargs = {"unit_param": 1, "basemodel_param": 2}
+    defaults = {"unit_param_with_default": 3, "basemodel_param_with_default": 2}
+
+    assert U(**kwargs).dict() == kwargs | defaults
 
 
 def test_embedded_model():
