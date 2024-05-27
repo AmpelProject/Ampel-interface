@@ -45,8 +45,6 @@ profile = "black"
 minversion = "6.0"
 filterwarnings = [
     "error",
-    # Expected `list[definition-ref]` but got `tuple` - serialized value may not be as expected
-    "ignore:Pydantic serializer warnings:UserWarning",
 ]
 
 [tool.mypy]

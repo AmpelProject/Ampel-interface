@@ -90,6 +90,7 @@ class AmpelBaseModel(BaseModel):
 		exclude_unset: bool = False,
 		exclude_defaults: bool = False,
 		exclude_none: bool = False,
+		warnings: bool = True,
 	) -> dict[str, Any]:
 		return self.model_dump(
 			include=include,
@@ -97,5 +98,6 @@ class AmpelBaseModel(BaseModel):
 			by_alias=by_alias,
 			exclude_unset=exclude_unset,
 			exclude_defaults=exclude_defaults,
-			exclude_none=exclude_none
+			exclude_none=exclude_none,
+			warnings=warnings,
 		)
