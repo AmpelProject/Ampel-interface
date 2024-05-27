@@ -9,6 +9,7 @@ from ampel.types import Traceless
 
 # ruff: noqa: SLF001, RUF012
 
+
 def test_mixed_inheritance():
     class U(AmpelUnit):
         unit_param: int
@@ -86,7 +87,9 @@ def test_secret_without_type():
         other: Sequence[int] = [1]
 
     assert UnitWithSecret().secret.get_model_args() == (str,)
-    assert UnitWithSecret._defaults["secret"].get_model_args() == (str,), "parameteized "
+    assert UnitWithSecret._defaults["secret"].get_model_args() == (
+        str,
+    ), "parameteized "
 
 
 def test_slots():
@@ -118,6 +121,7 @@ def test_default_override():
 
     class Derived(Base):
         """override default without providing new annotation"""
+
         a = 2
 
     with pytest.raises(TypeError):
@@ -129,10 +133,12 @@ def test_default_override():
 
     class SlotDerived(Base):
         """appanently you can provide defaults this way too"""
+
         a: int
         _slot_defaults = {"a": 3}
-    
+
     assert SlotDerived().a == 3
+
 
 def test_trace_content():
     class Unit(AmpelUnit):

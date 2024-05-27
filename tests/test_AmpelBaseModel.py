@@ -73,7 +73,7 @@ def test_implicit_default_none(base: type):
     """
 
     class ImplicitDefault(base):
-        union: None | Union[int, str] # noqa: UP007
+        union: None | Union[int, str]  # noqa: UP007
         union_type: None | int
 
     assert get_origin(ImplicitDefault.__annotations__["union"]) is Union
@@ -104,13 +104,12 @@ def test_generics():
 def test_generic_args() -> None:
     T = TypeVar("T")
 
-    class Base(AmpelBaseModel):
-        ...
+    class Base(AmpelBaseModel): ...
 
-    class Derived(Base, Generic[T]):
-        ...
+    class Derived(Base, Generic[T]): ...
 
     assert Derived[int].get_model_args() == (int,)
+
 
 def test_inherit_from_annotated_base():
 

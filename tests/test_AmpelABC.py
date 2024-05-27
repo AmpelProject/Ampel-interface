@@ -10,23 +10,20 @@ from ampel.base.decorator import abstractmethod
 def test_check_methods():
     class Base(AmpelABC, abstract=True):
         @abstractmethod
-        def foo(self, arg: int) -> None:
-            ...
+        def foo(self, arg: int) -> None: ...
 
     with pytest.raises(NotImplementedError):
 
-        class NotImplemented(Base):
-            ...
+        class NotImplemented(Base): ...
 
     with pytest.raises(TypeError):
 
         class WrongImplementation(Base):
-            def foo(self, arg: int, blarg: str) -> None: # type: ignore[override]
+            def foo(self, arg: int, blarg: str) -> None:  # type: ignore[override]
                 ...
 
     class CorrectImplementation(Base):
-        def foo(self, arg: int) -> None:
-            ...
+        def foo(self, arg: int) -> None: ...
 
 
 def test_generic_with_basemodel():
@@ -36,7 +33,7 @@ def test_generic_with_basemodel():
 
     class Base(AmpelABC, AmpelBaseModel, Generic[T], abstract=True):
         @abstractmethod
-        def foo(self, arg: T) -> T: # type: ignore[empty-body]
+        def foo(self, arg: T) -> T:  # type: ignore[empty-body]
             ...
 
     class CorrectImplementation(Base[int]):

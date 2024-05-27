@@ -8,7 +8,7 @@ from ampel.util import mappings
 
 
 @pytest.mark.parametrize(
-    ("target","key","value"),
+    ("target", "key", "value"),
     [
         ({"foo": {"a1": 2}}, "foo.a1", 2),
         ({1000000: {"foo": 1}}, "1_000_000.foo", 1),
@@ -29,7 +29,7 @@ def test_get_by_path(target, key, value):
 
 
 @pytest.mark.parametrize(
-    ("target","key","value"),
+    ("target", "key", "value"),
     [
         ({1: {"foo": "bar"}}, ["confid", 1], {"foo": "bar"}),
         ({-1: {"foo": "bar"}}, "confid.-1", {"foo": "bar"}),

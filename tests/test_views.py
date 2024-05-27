@@ -73,13 +73,16 @@ def t3_doc():
     }
     return doc
 
+
 @pytest.fixture()
 def t3_view(t3_doc: T3Document, config: AmpelConfig):
     return T3DocView.of(t3_doc, config)
 
+
 @pytest.fixture(params=["t2_view", "snap_view", "t3_view"])
 def view(request) -> Generator[T2DocView | SnapView | T3DocView, None, None]:
     return request.getfixturevalue(request.param)
+
 
 @no_type_check
 def serialize(view):
