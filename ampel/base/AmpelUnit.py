@@ -233,6 +233,7 @@ class AmpelUnit:
 		exclude_unset: bool = False,
 		exclude_defaults: bool = False,
 		exclude_none: bool = False,
+		warnings: bool = True,
 	) -> dict[str, Any]:
 
 		if hasattr(self, "__slots__"):

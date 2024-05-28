@@ -31,6 +31,11 @@ on:
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
         default: "0.4.5"
+      mypy-check-files:
+        required: false
+        description: extra files to check with mypy
+        type: string
+        default: ""
     secrets:
       PYPI_API_TOKEN:
         required: true
@@ -94,6 +99,8 @@ jobs:
     - name: Install root
       run: poetry run pip install -e . --no-deps
     - run: poetry run mypy
+    - if: ${{ inputs.mypy-check-files }}
+      run: poetry run mypy ${{ inputs.mypy-check-files }}
 
   check_version:
     name: Tag version bump
