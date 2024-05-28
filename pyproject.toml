@@ -18,7 +18,7 @@ packages = [{include = "ampel"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^2"
+pydantic = "^2.7"
 xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"

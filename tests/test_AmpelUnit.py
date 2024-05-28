@@ -27,20 +27,9 @@ def test_mixed_inheritance():
             super().__init__(**kwargs)
             self._foo = 1
 
-    # pydantic BaseModel raises a warning when inheriting from a class that has
-    # annotations, but is not itself a BaseModel (in this case, U). Since
-    # AmpelUnit is going to construct its own model anyhow, we don't care.
-    with pytest.warns(
-        UserWarning, match='Field name ".*" shadows an attribute in parent'
-    ):
+    class Derived1(PrivateMixin, U, M): ...
 
-        class Derived1(PrivateMixin, U, M): ...
-
-    with pytest.warns(
-        UserWarning, match='Field name ".*" shadows an attribute in parent'
-    ):
-
-        class Derived2(PrivateMixin, M, U): ...
+    class Derived2(PrivateMixin, M, U): ...
 
     kwargs = {"unit_param": 1, "basemodel_param": 2}
     defaults = {"unit_param_with_default": 3, "basemodel_param_with_default": 2}

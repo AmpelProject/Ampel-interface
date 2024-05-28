@@ -117,13 +117,9 @@ def test_inherit_from_annotated_base():
     class Base(AmpelUnit):
         base: int = 1
 
-    with pytest.warns(
-        UserWarning, match='Field name ".*" shadows an attribute in parent'
-    ):
+    class Derived(Base, AmpelBaseModel): ...
 
-        class Derived(Base, AmpelBaseModel): ...
-
-    assert Base().dict() == {"base": 1}
+    assert Derived().dict() == {"base": 1}
 
 
 def test_serialize_sequence_field_with_tuple():
@@ -132,23 +128,4 @@ def test_serialize_sequence_field_with_tuple():
 
     model = M(a=(1,))
     assert model.dict(warnings=False) == {"a": (1,)}
-
-    # We sometimes use `Sequence[T]` as shorthand for `list[T] | tuple[T]`, but
-    # pydantic uses a list serializer for all Sequence types and complains when
-    # it sees a tuple. We suppress these warnings by setting warnings=False by
-    # default, and rely on validators to ensure that our model fields have the
-    # correct types. See https://github.com/pydantic/pydantic-core/issues/133
-    # for a discussion of why pydantic doesn't directly support Sequence.
-    with pytest.warns(
-        UserWarning,
-        match=re.escape(
-            "Pydantic serializer warnings:\n  Expected `list[int]` but got `tuple` - serialized value may not be as expected"
-        ),
-    ):
-        assert model.dict(warnings=True) == {"a": (1,)}
-
-    class M(AmpelBaseModel):
-        a: list[int] | tuple[int, ...]
-
-    model = M(a=(1,))
     assert model.dict(warnings=True) == {"a": (1,)}
