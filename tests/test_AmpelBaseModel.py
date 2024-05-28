@@ -1,4 +1,3 @@
-import re
 from collections.abc import Sequence
 from types import UnionType
 from typing import Generic, TypeVar, Union, get_origin
