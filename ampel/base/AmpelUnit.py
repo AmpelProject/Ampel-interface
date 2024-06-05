@@ -45,7 +45,7 @@ class AmpelUnit:
 		Combines annotations & default values of this class with the one defined in sub-classes.
 		Has similarities with the newly introduced typing.get_type_hints() function.
 		"""
-		super().__init_subclass__(*args, **kwargs) # type: ignore
+		super().__init_subclass__(*args, **kwargs)
 
 		joined_ann = {
 			k: v for k, v in cls._annots.items()
@@ -89,7 +89,7 @@ class AmpelUnit:
 						else:
 							joined_defaults[k] = base.__dict__[k]
 					# if None |  with no default
-					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
+					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults:
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
@@ -123,7 +123,7 @@ class AmpelUnit:
 
 		defs = cls._defaults
 		if hasattr(cls, 'model_fields'):
-			cls.model_fields.clear() # type: ignore[attr-defined]
+			cls.model_fields.clear()
 
 		if omit_traceless:
 			ttf = type(Traceless)
@@ -141,7 +141,7 @@ class AmpelUnit:
 		return create_model(
 			cls.__name__,
 			__base__ = AmpelBaseModel,
-			**kwargs # type: ignore
+			**kwargs # type: ignore[call-overload]
 		)
 
 

@@ -245,7 +245,7 @@ class T2DocView:
 				for k in key
 			)
 
-			return None if (no_none and None in t) else t # type: ignore[return-value]
+			return None if (no_none and None in t) else t
 
 		return None
 

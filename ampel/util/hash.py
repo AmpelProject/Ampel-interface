@@ -7,7 +7,7 @@
 # Last Modified Date:  12.07.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import json  # type: ignore[import]
+import json
 from typing import TypeVar
 
 import xxhash
@@ -48,7 +48,7 @@ def hash_payload(payload: bytes, ret: type[HT] = int, size: int = -64) -> HT: # 
 	x = getattr(xxhash, f'xxh{abs(size)}_{xxfunc[ret]}')(payload)
 
 	# Convert unsigned to signed int if passed 'size' parameter is negative
-	if size < 0 and ret == int and x & (1 << (-size-1)): # type: ignore[operator]
+	if size < 0 and ret == int and x & (1 << (-size-1)):
 		x = x - 2**-size
 
 	return x

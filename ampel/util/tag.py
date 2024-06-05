@@ -103,7 +103,7 @@ def merge_tags(
 	if arg1 is None:
 		if arg2 is None:
 			return None
-		return merge_tags(arg2, arg1, reduce) # type: ignore # no idea, no time
+		return merge_tags(arg2, arg1, reduce) # type: ignore[call-overload] # no idea, no time
 
 	if isinstance(arg1, str | int):
 		if isinstance(arg2, str | int):

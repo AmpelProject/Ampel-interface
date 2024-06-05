@@ -103,7 +103,7 @@ def set_by_path(
 	:returns: False if the key was successfully set, True otherwise
 	"""
 	if isinstance(path, str):
-		path = path.split(delimiter) # type: ignore
+		path = path.split(delimiter)
 	l = len(path) - 1
 	for i, k in enumerate(path):
 		if k not in d:
@@ -121,7 +121,7 @@ def del_by_path(d: dict, path: str | Sequence[str], delimiter: str = '.') -> boo
 	""" :returns: False if the key was successfully deleted, True otherwise """
 
 	if isinstance(path, str):
-		path = path.split(delimiter) # type: ignore
+		path = path.split(delimiter)
 	l = len(path) - 1
 	for i, k in enumerate(path):
 		if k not in d:

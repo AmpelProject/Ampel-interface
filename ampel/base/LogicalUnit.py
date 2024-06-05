@@ -46,7 +46,7 @@ class LogicalUnit(AmpelUnit):
 
 	@classmethod
 	def __init_subclass__(cls, **kwargs) -> None:
-		super().__init_subclass__(**kwargs) # type: ignore
+		super().__init_subclass__(**kwargs)
 		cls.require = tuple(
 			set(getattr(cls, "require", None) or []) | {
 				el for base in cls.__bases__

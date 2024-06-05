@@ -269,7 +269,7 @@ class SnapView:
 		"""
 
 		for t2v in self.get_t2_views(unit):
-			if (x := t2v.get_ntuple( # type: ignore
+			if (x := t2v.get_ntuple( # type: ignore[call-overload]
 				key, rtype, no_none = no_none, require_all_keys = require_all_keys, code = code
 			)):
 				return x

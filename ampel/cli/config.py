@@ -9,7 +9,7 @@
 
 from os import environ, makedirs, path
 
-from appdirs import user_data_dir  # type: ignore[import]
+from platformdirs import user_data_dir
 
 
 def get_user_data_config_path() -> str:

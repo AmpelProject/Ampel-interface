@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.10.1.post0"
+version = "0.10.2a0"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -22,6 +22,7 @@ pydantic = "^2.7"
 xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"
+platformdirs = "^4.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.2.1"
@@ -33,6 +34,7 @@ types-setuptools = "^65.3.0"
 [tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.12.0"
 ruff = "^0.4.0"
+pymongo = "^4.7.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.8.0"]
@@ -52,11 +54,16 @@ namespace_packages = true
 show_error_codes = true
 check_untyped_defs = true
 disallow_untyped_calls = true
+warn_unused_ignores = true
+enable_error_code = "ignore-without-code"
 plugins = [
     "pydantic.mypy"
 ]
 packages = [
     "ampel"
+]
+exclude = [
+    "ampel/base/AlternativeAmpelBaseModel.py"
 ]
 
 [tool.pydantic-mypy]
@@ -65,10 +72,6 @@ init_typed = true
 [[tool.mypy.overrides]]
 module = "ampel.abstract.*"
 disable_error_code = "empty-body"
-
-[[tool.mypy.overrides]]
-module = "bson.*"
-ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py310"

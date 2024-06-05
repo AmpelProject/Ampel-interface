@@ -24,7 +24,7 @@ ops: dict[str, Callable[[str, Any], bool]] = {
 	'is': operator.is_,
 	'is not': operator.is_not,
 	'contains': operator.contains,
-	'exists': None, # type: ignore
+	'exists': None, # type: ignore[dict-item]
 }
 
 
