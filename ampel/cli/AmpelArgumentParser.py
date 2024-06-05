@@ -95,7 +95,8 @@ class AmpelArgumentParser(ArgumentParser):
 		optional_group._group_actions = []
 
 		# Capitalize title
-		optional_group.title = optional_group.title.capitalize() # type: ignore
+		if optional_group.title:
+			optional_group.title = optional_group.title.capitalize()
 
 		# Add required argument group (first pos)
 		self.groups["required"] = self.add_argument_group('Required arguments')

@@ -141,7 +141,7 @@ class AmpelUnit:
 		return create_model(
 			cls.__name__,
 			__base__ = AmpelBaseModel,
-			**kwargs # type: ignore
+			**kwargs # type: ignore[call-overload]
 		)
 
 

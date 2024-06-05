@@ -17,11 +17,11 @@ class ReadOnlyDict(dict):
 
 	__setitem__ = __readonly__
 	__delitem__ = __readonly__
-	pop = __readonly__ # type: ignore
+	pop = __readonly__ # type: ignore[assignment]
 	popitem = __readonly__
 	clear = __readonly__
-	update = __readonly__ # type: ignore
-	setdefault = __readonly__ # type: ignore
+	update = __readonly__ # type: ignore[assignment]
+	setdefault = __readonly__ # type: ignore[assignment]
 
 	del __readonly__
 
