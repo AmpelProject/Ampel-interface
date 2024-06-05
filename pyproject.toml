@@ -22,6 +22,7 @@ pydantic = "^2.7"
 xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"
+platformdirs = "^4.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.2.1"
