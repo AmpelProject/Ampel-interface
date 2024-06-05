@@ -8,7 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from importlib import import_module
-from typing import Any, ClassVar, overload  # type: ignore[attr-defined]
+from typing import Any, ClassVar, overload
 
 from ampel.base.AmpelUnit import AmpelUnit
 from ampel.config.AmpelConfig import AmpelConfig
@@ -51,12 +51,12 @@ class AuxUnitRegister:
 
 		if model.config:
 			if isinstance(model.config, dict):
-				return Klass(**(model.config | kwargs)) # type: ignore[call-arg]
+				return Klass(**(model.config | kwargs))
 			raise ValueError("Auxiliary units cannot use config aliases")
 
-		unit = Klass(**kwargs) # type: ignore[call-arg]
+		unit = Klass(**kwargs)
 		if hasattr(unit, "post_init"):
-			unit.post_init() # type: ignore[union-attr]
+			unit.post_init()
 
 		return unit
 

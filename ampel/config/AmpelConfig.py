@@ -108,7 +108,7 @@ class AmpelConfig:
 		""" config.get('logging', dict, raise_exc=True) """
 
 
-	def get(self, # type: ignore[misc]
+	def get(self,
 		entry: None | str | int | Sequence[str | int] = None,
 		ret_type: None | type[JT] = None,
 		*, raise_exc: bool = False

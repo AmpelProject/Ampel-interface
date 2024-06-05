@@ -53,7 +53,7 @@ class AlternativeAmpelBaseModel:
 		Combines annotations & default values of this class with the one defined in sub-classes.
 		Has similarities with the newly introduced typing.get_type_hints() function.
 		"""
-		super().__init_subclass__(*args, **kwargs) # type: ignore
+		super().__init_subclass__(*args, **kwargs)
 
 		joined_ann = {
 			k: v for k, v in cls._annots.items()
@@ -78,7 +78,7 @@ class AlternativeAmpelBaseModel:
 							continue
 						joined_defaults[k] = base.__dict__[k]
 					# if None |  with no default
-					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults: # type: ignore[misc]
+					elif get_origin(v) in (Union, UnionType) and NoneType in get_args(v) and k not in joined_defaults:
 						joined_defaults[k] = None
 					elif k in cls._slot_defaults:
 						joined_defaults[k] = cls._slot_defaults[k]
@@ -164,7 +164,7 @@ class AlternativeAmpelBaseModel:
 		if cls._debug > 1:
 			print("Checking " + str(annot).replace('collections.abc.', '') + " for nested models")
 
-		if isinstance(annot, _GenericAlias) and hasattr(annot, 'mro') and issubclass(get_origin(annot), Secret): # type: ignore
+		if isinstance(annot, _GenericAlias) and hasattr(annot, 'mro') and issubclass(get_origin(annot), Secret):
 			return True
 
 		for i, el in enumerate(get_args(annot)):
