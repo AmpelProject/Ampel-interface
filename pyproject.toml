@@ -33,6 +33,7 @@ types-setuptools = "^65.3.0"
 [tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.12.0"
 ruff = "^0.4.0"
+pymongo = "^4.7.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.8.0"]
@@ -65,10 +66,6 @@ init_typed = true
 [[tool.mypy.overrides]]
 module = "ampel.abstract.*"
 disable_error_code = "empty-body"
-
-[[tool.mypy.overrides]]
-module = "bson.*"
-ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py310"
