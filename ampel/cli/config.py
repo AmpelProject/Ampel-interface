@@ -20,7 +20,7 @@ def get_user_data_config_path() -> str:
 	if env := environ.get('AMPEL_CONFIG'):
 		return env
 
-	if env := environ.get('CONDA_PREFIX'):
+	if env := (environ.get('CONDA_PREFIX') or environ.get('VIRTUAL_ENV')):
 
 		app_path = path.join(env, 'share')
 		if not path.exists(app_path):
