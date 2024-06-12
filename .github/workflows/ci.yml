@@ -92,7 +92,7 @@ jobs:
         install-args: --all-extras
     - name: Install root
       run: poetry run pip install -e . --no-deps
-    - run: poetry run pytest --cov=ampel -v
+    - run: poetry run pytest
       env:
         MONGO_PORT: ${{ job.services.mongo.ports[27017] }}
         LOCALSTACK_PORT: ${{ job.services.localstack.ports[4566] }}
