@@ -6,11 +6,6 @@ on:
         description: start a mongo instance for tests
         type: boolean
         default: false
-      localstack:
-        required: false
-        description: start a localstack instance for tests
-        type: boolean
-        default: false
       lint:
         required: false
         description: lint with ruff
@@ -76,12 +71,6 @@ jobs:
         image: ${{ (inputs.mongo && 'mongo:7') || '' }}
         ports:
           - 27017:27017
-      localstack:
-        image: ${{ (inputs.localstack && 'localstack/localstack:0.12.19.1') || '' }}
-        env:
-          SERVICES: s3
-        ports:
-          - 4566:4566
     steps:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
     - name: "Set up environment"
@@ -95,7 +84,6 @@ jobs:
     - run: poetry run pytest
       env:
         MONGO_PORT: ${{ job.services.mongo.ports[27017] }}
-        LOCALSTACK_PORT: ${{ job.services.localstack.ports[4566] }}
   
   mypy:
     runs-on: ubuntu-22.04
