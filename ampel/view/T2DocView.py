@@ -145,8 +145,7 @@ class T2DocView:
 			return None
 
 		# A manual/admin $unset: {body: 1} was used to delete bad data
-		if idx > len(self.body) - 1:
-			idx = len(self.body) - 1
+		idx = min(idx, len(self.body) - 1)
 
 		return self.body[idx] if idx >= 0 else None
 

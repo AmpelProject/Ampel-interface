@@ -15,7 +15,7 @@ from ampel.view.T2DocView import T2DocView
 from ampel.view.T3DocView import T3DocView
 
 
-@pytest.fixture()
+@pytest.fixture
 def config():
     return AmpelConfig(
         {
@@ -26,7 +26,7 @@ def config():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def t2_doc():
     doc: T2Document = {
         "unit": "FooUnit",
@@ -42,12 +42,12 @@ def t2_doc():
     return doc
 
 
-@pytest.fixture()
+@pytest.fixture
 def t2_view(t2_doc: T2Document, config: AmpelConfig):
     return T2DocView.of(t2_doc, config)
 
 
-@pytest.fixture()
+@pytest.fixture
 def buffer(t2_doc: T2Document):
     return AmpelBuffer(
         id=0,
@@ -55,12 +55,12 @@ def buffer(t2_doc: T2Document):
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def snap_view(buffer: AmpelBuffer, config: AmpelConfig):
     return SnapView.of(buffer, config)
 
 
-@pytest.fixture()
+@pytest.fixture
 def t3_doc():
     doc: T3Document = {
         "unit": "FooUnit",
@@ -74,7 +74,7 @@ def t3_doc():
     return doc
 
 
-@pytest.fixture()
+@pytest.fixture
 def t3_view(t3_doc: T3Document, config: AmpelConfig):
     return T3DocView.of(t3_doc, config)
 
