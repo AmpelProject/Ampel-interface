@@ -49,7 +49,7 @@ class AmpelEncoder(json.JSONEncoder):
 			if module_name not in ['', '__main__']:
 				json_class = f'{module_name}.{json_class}'
 			# mappingproxy lies about its type
-			if type(obj) == MappingProxyType:
+			if isinstance(obj, MappingProxyType):
 				json_class = 'types.MappingProxyType'
 			rep = serializer(obj)
 			if isinstance(rep, tuple):
@@ -101,7 +101,7 @@ def object_hook(
 	Deserialize an object serialized by AmpelEncoder
 	"""
 	obj = bson.json_util.object_hook(dct, options)
-	if type(obj) != type(dct):
+	if type(obj) is not type(dct):
 		return obj
 	if "__jsonclass__" in dct:
 		ctor = dct.pop("__jsonclass__")

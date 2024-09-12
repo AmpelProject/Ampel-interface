@@ -20,7 +20,7 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.12.4"
+        default: "3.12.6"
       poetry-version:
         required: false
         type: string
@@ -30,7 +30,7 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.4.9"
+        default: "0.6.4"
       mypy-check-files:
         required: false
         description: extra files to check with mypy
