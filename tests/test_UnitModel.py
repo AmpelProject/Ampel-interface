@@ -9,7 +9,7 @@ def test_validation_hook(mocker: MockerFixture):
     # no hook
     UnitModel(unit="T2SNCosmo", config=1)
 
-    hook = mocker.patch("ampel.model.UnitModel.UnitModel.post_validate_hook")
+    hook = mocker.patch("ampel.model.UnitModel.UnitModel.post_validate_hook", side_effect=lambda x: x)
 
     u = UnitModel(unit="T2SNCosmo", config=1)
 
