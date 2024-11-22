@@ -100,7 +100,6 @@ def test_validate():
     }
 
 
-@pytest.mark.filterwarnings("ignore:field .* declared as:DeprecationWarning")
 def test_secret_without_type():
     class UnitWithSecret(AmpelUnit):
         secret: NamedSecret[str] = NamedSecret(label="foo")
@@ -109,9 +108,6 @@ def test_secret_without_type():
         other: Sequence[int] = [1]
 
     assert UnitWithSecret().secret.get_model_args() == (str,)
-    assert UnitWithSecret._defaults["secret"].get_model_args() == (
-        str,
-    ), "parameteized "
 
 
 def test_slots():
