@@ -9,7 +9,7 @@
 
 import warnings
 from types import UnionType
-from typing import TYPE_CHECKING, Any, TypeAlias, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
@@ -19,7 +19,7 @@ from pydantic._internal._generics import get_args as _internal_get_args
 from pydantic._internal._generics import get_origin as _internal_get_origin
 
 if TYPE_CHECKING:
-	IncEx: TypeAlias = 'set[int] | set[str] | dict[int, Any] | dict[str, Any] | None'
+	from pydantic.main import IncEx
 
 NoneType = type(None)
 
@@ -84,8 +84,8 @@ class AmpelBaseModel(BaseModel):
 	def dict(
 		self,
 		*,
-		include: "IncEx" = None,
-		exclude: "IncEx" = None,
+		include: "IncEx | None" = None,
+		exclude: "IncEx | None" = None,
 		by_alias: bool = False,
 		exclude_unset: bool = False,
 		exclude_defaults: bool = False,

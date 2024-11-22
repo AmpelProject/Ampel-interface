@@ -227,8 +227,8 @@ class AmpelUnit:
 	def dict(
 		self,
 		*,
-		include: "IncEx" = None,
-		exclude: "IncEx" = None,
+		include: "IncEx | None" = None,
+		exclude: "IncEx | None" = None,
 		by_alias: bool = False,
 		exclude_unset: bool = False,
 		exclude_defaults: bool = False,
