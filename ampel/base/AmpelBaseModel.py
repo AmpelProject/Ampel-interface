@@ -7,9 +7,8 @@
 # Last Modified Date:  05.01.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import warnings
 from types import UnionType
-from typing import TYPE_CHECKING, Any, TypeAlias, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
@@ -19,7 +18,7 @@ from pydantic._internal._generics import get_args as _internal_get_args
 from pydantic._internal._generics import get_origin as _internal_get_origin
 
 if TYPE_CHECKING:
-	IncEx: TypeAlias = 'set[int] | set[str] | dict[int, Any] | dict[str, Any] | None'
+	from pydantic.main import IncEx
 
 NoneType = type(None)
 
@@ -50,21 +49,6 @@ class AmpelBaseModel(BaseModel):
 				and NoneType in get_args(v)
 			):
 				setattr(cls, k, None)
-			# add generic args to defaults if missing
-			elif (
-				k in cls.__dict__
-				and safe_issubclass(v, AmpelBaseModel)
-				and v.get_model_origin() is type(cls.__dict__[k])
-				and v.get_model_args() and not cls.__dict__[k].get_model_args()
-			):
-				warnings.warn(
-					DeprecationWarning(
-						f"field {k} declared as {v}, but default has type {type(cls.__dict__[k])}"
-						" Adding generic args to default, but this will be an error in the future."
-					),
-					stacklevel=1
-				)
-				setattr(cls, k, v.model_validate(cls.__dict__[k].model_dump()))
 		super().__init_subclass__(*args, **kwargs)
 
 	@classmethod
@@ -84,8 +68,8 @@ class AmpelBaseModel(BaseModel):
 	def dict(
 		self,
 		*,
-		include: "IncEx" = None,
-		exclude: "IncEx" = None,
+		include: "IncEx | None" = None,
+		exclude: "IncEx | None" = None,
 		by_alias: bool = False,
 		exclude_unset: bool = False,
 		exclude_defaults: bool = False,

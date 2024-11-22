@@ -28,9 +28,20 @@ class HasSecret(AmpelBaseModel):
 
 
 def test_secret_validation() -> None:
-    HasSecret(secret=NamedSecret[str](label="foo"))
+    """Secret fields can be initialized with and without type hints, but validate if fields are provided"""
+    secret = HasSecret(secret=NamedSecret[str](label="foo", value="bar")).secret
+    assert HasSecret(secret=NamedSecret(label="foo", value="bar")).secret == secret
+    assert HasSecret(**{"secret": {"label": "foo", "value": "bar"}}).secret == secret  # type: ignore[arg-type]
+    # type parameter defaults to Any
+    NamedSecret(label="foo", value=1)
+    # validation fails with explicit type hint
     with pytest.raises(ValidationError):
-        HasSecret(secret=NamedSecret(label="foo"))
+        NamedSecret[str](label="foo", value=1)  # type: ignore[arg-type]
+    # validation succeeds with correct type hint
+    int_secret = NamedSecret[int](label="foo", value=1)
+    # but passing the value to a model field will fail
+    with pytest.raises(ValidationError):
+        HasSecret(secret=int_secret)  # type: ignore[arg-type]
 
 
 def test_secret_resolution() -> None:
