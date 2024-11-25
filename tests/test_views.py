@@ -118,3 +118,5 @@ class Foo(TypedDict):
 def test_get_payload(t2_view: T2DocView):
     assert t2_view.get_payload() == {"foo": "bar"}
     assert t2_view.get_payload(Foo) == {"foo": "bar"}
+    with pytest.raises(ValueError, match="No content available"):
+        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)

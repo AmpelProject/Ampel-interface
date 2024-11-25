@@ -131,18 +131,29 @@ class T2DocView:
 		...
 
 	@overload
+	def get_payload(self, *, raise_exc: Literal[True], code: None | int=None) -> Mapping[str, Any]:
+		...
+
+	@overload
 	def get_payload(self, rtype: type[TBson], *, code: None | int=None) -> None | TBson:
+		...
+	
+	@overload
+	def get_payload(self, rtype: type[TBson], *, raise_exc: Literal[True], code: None | int=None) ->  TBson:
 		...
 
 	def get_payload(self,
 		rtype: type[TBson]=Mapping,  # type: ignore[assignment]
 		*,
+		raise_exc: bool = False,
 		code: None | int = None,
 	) -> None | TBson | UBson:
 		"""
 		:returns: the content of the last array element of body associated with a meta code >= 0 or equals code arg.
 		"""
 		if not self.body:
+			if raise_exc:
+				raise ValueError("T2 doc has no body")
 			return None
 
 		idx = len(
@@ -154,12 +165,18 @@ class T2DocView:
 		) - 1
 
 		if idx == -1:
+			if raise_exc:
+				raise ValueError("No content available")
 			return None
 
 		# A manual/admin $unset: {body: 1} was used to delete bad data
 		idx = min(idx, len(self.body) - 1)
+		if idx < 0:
+			if raise_exc:
+				raise ValueError("No content available")
+			return None
 
-		return self.body[idx] if idx >= 0 else None
+		return self.body[idx]
 
 
 	def is_point_type(self) -> bool:
