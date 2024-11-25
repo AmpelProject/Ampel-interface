@@ -198,7 +198,7 @@ class SnapView:
 		...
 	def get_t2_body(self,
 		unit: str | list[str] | tuple[str, ...],
-		ret_type: type[TBson] = Mapping[str, Any], # type: ignore[assignment]
+		ret_type: type[TBson] = Mapping, # type: ignore[assignment]
 		*,
 		data_slice: int = -1, # latest
 		link: None | T2Link = None,
@@ -217,6 +217,8 @@ class SnapView:
 				ret = t2v.body[data_slice]
 				if isinstance(ret, ret_type):
 					return ret
+		if raise_exc:
+			raise ValueError("No matching body found")
 		return None
 
 

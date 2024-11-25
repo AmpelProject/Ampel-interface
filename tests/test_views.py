@@ -120,3 +120,9 @@ def test_get_payload(t2_view: T2DocView):
     assert t2_view.get_payload(Foo) == {"foo": "bar"}
     with pytest.raises(ValueError, match="No content available"):
         t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)
+
+def test_get_t2_body(snap_view: SnapView):
+    assert snap_view.get_t2_body("FooUnit") == {"foo": "bar"}
+    assert snap_view.get_t2_body("nonesuch") is None
+    with pytest.raises(ValueError, match="No matching body found"):
+        snap_view.get_t2_body("nonesuch", raise_exc=True)
