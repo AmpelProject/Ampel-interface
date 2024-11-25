@@ -7,14 +7,14 @@
 # Last Modified Date:  01.03.2023
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T2Document import T2Document
-from ampel.types import StockId, T, T2Link, Tag, UBson
+from ampel.types import StockId, T2Link, Tag, TBson, UBson
 
 TYPE_POINT_T2 = 0 # linked with datapoints (tier 0)
 TYPE_STATE_T2 = 1 # linked with compounds (tier 1)
@@ -126,11 +126,34 @@ class T2DocView:
 	def has_content(self) -> bool:
 		return bool(self.body)
 
-	def get_payload(self, code: None | int = None) -> UBson:
+	@overload
+	def get_payload(self, *, code: None | int=None) -> None | Mapping[str, Any]:
+		...
+
+	@overload
+	def get_payload(self, *, raise_exc: Literal[True], code: None | int=None) -> Mapping[str, Any]:
+		...
+
+	@overload
+	def get_payload(self, rtype: type[TBson], *, code: None | int=None) -> None | TBson:
+		...
+	
+	@overload
+	def get_payload(self, rtype: type[TBson], *, raise_exc: Literal[True], code: None | int=None) ->  TBson:
+		...
+
+	def get_payload(self,
+		rtype: type[TBson]=Mapping,  # type: ignore[assignment]
+		*,
+		raise_exc: bool = False,
+		code: None | int = None,
+	) -> None | TBson | UBson:
 		"""
 		:returns: the content of the last array element of body associated with a meta code >= 0 or equals code arg.
 		"""
 		if not self.body:
+			if raise_exc:
+				raise ValueError("T2 doc has no body")
 			return None
 
 		idx = len(
@@ -142,12 +165,18 @@ class T2DocView:
 		) - 1
 
 		if idx == -1:
+			if raise_exc:
+				raise ValueError("No content available")
 			return None
 
 		# A manual/admin $unset: {body: 1} was used to delete bad data
 		idx = min(idx, len(self.body) - 1)
+		if idx < 0:
+			if raise_exc:
+				raise ValueError("No content available")
+			return None
 
-		return self.body[idx] if idx >= 0 else None
+		return self.body[idx]
 
 
 	def is_point_type(self) -> bool:
@@ -164,9 +193,9 @@ class T2DocView:
 
 	def get_value(self,
 		key: str,
-		rtype: type[T], *,
+		rtype: type[TBson], *,
 		code: None | int = None,
-	) -> None | T:
+	) -> None | TBson:
 		"""
 		:returns: the value of a given key from the content of the last array element of body
 		associated with a meta code >= 0 or equals code arg
@@ -174,33 +203,33 @@ class T2DocView:
 		Examples:
 		get_value("fit_result", dict)
 		"""
-		r = self.get_payload(code)
-		if isinstance(r, dict) and key in r:
+		r = self.get_payload(code=code)
+		if isinstance(r, Mapping) and key in r:
 			return r[key]
 		return None
 
 
 	@overload
 	def get_ntuple(self,
-		key: tuple[str, ...], rtype: type[T], *,
+		key: tuple[str, ...], rtype: type[TBson], *,
 		no_none: Literal[True], require_all_keys: bool, code: None | int
-	) -> None | tuple[T, ...]:
+	) -> None | tuple[TBson, ...]:
 		...
 
 	@overload
 	def get_ntuple(self,
-		key: tuple[str, ...], rtype: type[T], *,
+		key: tuple[str, ...], rtype: type[TBson], *,
 		no_none: Literal[False], require_all_keys: bool, code: None | int
-	) -> None | tuple[None | T, ...]:
+	) -> None | tuple[None | TBson, ...]:
 		...
 
 	def get_ntuple(self,
 		key: tuple[str, ...],
-		rtype: type[T], *,
+		rtype: type[TBson], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
 		code: None | int = None,
-	) -> None | tuple[T, ...] | tuple[None | T, ...]:
+	) -> None | tuple[TBson, ...] | tuple[None | TBson, ...]:
 		"""
 		Returns a tuple of n values from the content of the last array element of body
 		associated with a meta code >= 0 or equals code arg
@@ -230,7 +259,7 @@ class T2DocView:
 		Out[]: None
 		"""
 
-		r = self.get_payload(code)
+		r = self.get_payload(code=code)
 
 		if (
 			isinstance(r, dict)

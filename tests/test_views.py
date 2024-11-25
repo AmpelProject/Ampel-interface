@@ -1,6 +1,6 @@
 import pickle
 from collections.abc import Generator, Mapping
-from typing import no_type_check
+from typing import TypedDict, no_type_check
 
 import pytest
 
@@ -36,7 +36,7 @@ def t2_doc():
         "channel": ["CHANCHAN"],
         "code": DocumentCode.OK,
         "tag": ["TAGGERT"],
-        "meta": [{}],
+        "meta": [{"tier": 2, "code": DocumentCode.OK}],
         "body": [{"foo": "bar"}],
     }
     return doc
@@ -111,3 +111,12 @@ def test_pickle(view: T2DocView | SnapView | T3DocView):
 def test_frozen(view: T2DocView | SnapView | T3DocView):
     with pytest.raises(ValueError, match="is read only"):
         view.id = 1
+
+class Foo(TypedDict):
+    foo: str
+
+def test_get_payload(t2_view: T2DocView):
+    assert t2_view.get_payload() == {"foo": "bar"}
+    assert t2_view.get_payload(Foo) == {"foo": "bar"}
+    with pytest.raises(ValueError, match="No content available"):
+        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)
