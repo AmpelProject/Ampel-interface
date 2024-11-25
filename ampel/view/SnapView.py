@@ -191,6 +191,9 @@ class SnapView:
 	def get_t2_body(self, unit: str | list[str] | tuple[str, ...]) -> None | Mapping[str, Any]:
 		...
 	@overload
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], *, raise_exc: Literal[True]) -> Mapping[str, Any]:
+		...
+	@overload
 	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[TBson]) -> None | TBson:
 		...
 	@overload
