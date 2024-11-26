@@ -1,6 +1,6 @@
 import pickle
 from collections.abc import Generator, Mapping
-from typing import TypedDict, no_type_check
+from typing import Any, TypedDict, assert_type, no_type_check
 
 import pytest
 
@@ -112,17 +112,29 @@ def test_frozen(view: T2DocView | SnapView | T3DocView):
     with pytest.raises(ValueError, match="is read only"):
         view.id = 1
 
-class Foo(TypedDict):
+class DictWithKnownSchema(TypedDict):
     foo: str
 
 def test_get_payload(t2_view: T2DocView):
     assert t2_view.get_payload() == {"foo": "bar"}
-    assert t2_view.get_payload(Foo) == {"foo": "bar"}
+    assert t2_view.get_payload(DictWithKnownSchema) == {"foo": "bar"}
     with pytest.raises(ValueError, match="No content available"):
-        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)
+        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)    
+    
+    assert_type(t2_view.get_payload(), Mapping[str, Any] | None)
+    assert_type(t2_view.get_payload(raise_exc=True), Mapping[str, Any])
+    # NB: because get_payload() returns a constrained type, the inferred return
+    # type is exactly one of its members, not the requested subtype
+    assert_type(t2_view.get_payload(DictWithKnownSchema), Mapping[str, Any] | None)
+    assert_type(t2_view.get_payload(DictWithKnownSchema, raise_exc=True), Mapping[str, Any])
+    assert_type(t2_view.get_payload(dict, raise_exc=True), Mapping[str, Any])
 
 def test_get_t2_body(snap_view: SnapView):
     assert snap_view.get_t2_body("FooUnit") == {"foo": "bar"}
     assert snap_view.get_t2_body("nonesuch") is None
     with pytest.raises(ValueError, match="No matching body found"):
         snap_view.get_t2_body("nonesuch", raise_exc=True)
+    
+    assert_type(snap_view.get_t2_body("FooUnit"), Mapping[str, Any] | None)
+    assert_type(snap_view.get_t2_body("FooUnit", dict), Mapping[str, Any] | None)
+    assert_type(snap_view.get_t2_body("FooUnit", int), int | None)

@@ -41,7 +41,7 @@ T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
 UBson = Union[None, str, int, float, bool, bytes, list[Any], Mapping[str, Any]]
-TBson = TypeVar("TBson", str, int, float, bool, bytes, list, Mapping)
+TBson = TypeVar("TBson", str, int, float, bool, bytes, list[Any], Mapping[str, Any])
 ubson = (str, int, float, bool, bytes, list, Mapping)
 StrictIterable = Union[list[T], set[T], tuple[T], frozenset[T], ValuesView[T], KeysView[T]]
 strict_iterable = (list, tuple, set, frozenset, ValuesView, KeysView)
