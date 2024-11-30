@@ -22,24 +22,8 @@ def get_user_data_config_path() -> str:
 
 	if env := (environ.get('CONDA_PREFIX') or environ.get('VIRTUAL_ENV')):
 
-		app_path = path.join(env, 'share')
-		if not path.exists(app_path):
-			raise ValueError('Conda path does not contain a shared folder?')
-
-		app_path = path.join(app_path, 'ampel')
-		if not path.exists(app_path):
-			makedirs(app_path)
-
 		# ex: /Users/hu/miniconda3/envs/myCondaEnv/share/ampel/conf.yml
-		return path.join(app_path, "conf.yml")
+		return path.join(env, 'share', 'ampel', 'conf.yml')
 
-	app_path = user_data_dir("ampel")
-	if not path.exists(app_path):
-		makedirs(app_path)
-
-	app_path = path.join(app_path, "conf")
-	if not path.exists(app_path):
-		makedirs(app_path)
-
-	# ex: /Users/hu/Library/Application Support/ampel/conf.yml
-	return path.join(app_path, "conf.yml")
+	# ex: /Users/hu/Library/Application Support/ampel/conf/conf.yml
+	return path.join(user_data_dir("ampel"), "conf", "conf.yml")
