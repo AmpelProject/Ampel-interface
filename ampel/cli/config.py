@@ -7,7 +7,7 @@
 # Last Modified Date:  20.08.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from os import environ, makedirs, path
+from os import environ, path
 
 from platformdirs import user_data_dir
 
