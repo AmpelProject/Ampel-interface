@@ -20,7 +20,7 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.12.6"
+        default: "3.13.0"
       poetry-version:
         required: false
         type: string

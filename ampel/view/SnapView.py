@@ -7,7 +7,7 @@
 # Last Modified Date:  24.11.2022
 # Last Modified By:    simeon reusch
 
-from collections.abc import Callable, Container, Iterator, Sequence
+from collections.abc import Callable, Container, Iterator, Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
@@ -18,7 +18,7 @@ from ampel.content.LogDocument import LogDocument
 from ampel.content.StockDocument import StockDocument
 from ampel.content.T1Document import T1Document
 from ampel.struct.AmpelBuffer import AmpelBuffer
-from ampel.types import OneOrMany, StockId, T, T2Link, UBson
+from ampel.types import OneOrMany, StockId, T2Link, TBson, UBson
 from ampel.util.freeze import recursive_freeze as rf
 from ampel.view.T2DocView import T2DocView
 
@@ -188,23 +188,26 @@ class SnapView:
 
 
 	@overload
-	def get_t2_body(self, unit: str | list[str] | tuple[str, ...]) -> None | dict[str, Any]:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...]) -> None | Mapping[str, Any]:
 		...
 	@overload
-	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[T]) -> None | T:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], *, raise_exc: Literal[True]) -> Mapping[str, Any]:
 		...
 	@overload
-	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[T], *, raise_exc: Literal[True]) -> T:
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[TBson]) -> None | TBson:
+		...
+	@overload
+	def get_t2_body(self, unit: str | list[str] | tuple[str, ...], ret_type: type[TBson], *, raise_exc: Literal[True]) -> TBson:
 		...
 	def get_t2_body(self,
 		unit: str | list[str] | tuple[str, ...],
-		ret_type: type[T] = dict, # type: ignore[assignment]
+		ret_type: type[TBson] = Mapping, # type: ignore[assignment]
 		*,
 		data_slice: int = -1, # latest
 		link: None | T2Link = None,
 		code: None | int = None,
 		raise_exc: bool = False
-	) -> None | T:
+	) -> None | TBson:
 		"""
 		Get latest t2 body element from a given unit.
 		:param ret_type: expected body element type. If isinstance check is not fullfied
@@ -217,15 +220,17 @@ class SnapView:
 				ret = t2v.body[data_slice]
 				if isinstance(ret, ret_type):
 					return ret
+		if raise_exc:
+			raise ValueError("No matching body found")
 		return None
 
 
 	def get_t2_value(self,
 		unit: str | tuple[str, ...],
 		key: str,
-		rtype: type[T], *,
+		rtype: type[TBson], *,
 		code: None | int = None
-	) -> None | T:
+	) -> None | TBson:
 		"""
 		Examples:
 		get_t2_value(("T2NedSNCosmo", "T2SNCosmo"), "fit_result", dict)
@@ -240,26 +245,26 @@ class SnapView:
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[T], *,
+		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[TBson], *,
 		no_none: Literal[False], require_all_keys: bool = ..., code: None | int = ...
-	) -> None | tuple[None | T, ...]:
+	) -> None | tuple[None | TBson, ...]:
 		...
 
 	@overload
 	def get_t2_ntuple(self,
-		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[T], *,
+		unit: str | tuple[str, ...], key: tuple[str, ...], rtype: type[TBson], *,
 		no_none: Literal[True], require_all_keys: bool = ..., code: None | int = ...
-	) -> None | tuple[T, ...]:
+	) -> None | tuple[TBson, ...]:
 		...
 
 	def get_t2_ntuple(self,
 		unit: str | tuple[str, ...],
 		key: tuple[str, ...],
-		rtype: type[T], *,
+		rtype: type[TBson], *,
 		no_none: bool = False,
 		require_all_keys: bool = True,
 		code: None | int = None
-	) -> None | tuple[T, ...] | tuple[None | T, ...]:
+	) -> None | tuple[TBson, ...] | tuple[None | TBson, ...]:
 		"""
 		Examples:
 		get_t2_ntuple("T2NedTap", ("ra", "dec", "z", "zunc"), float)

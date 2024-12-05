@@ -7,7 +7,7 @@
 # Last Modified Date:  31.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import KeysView, Sequence, ValuesView
+from collections.abc import KeysView, Mapping, Sequence, ValuesView
 from typing import (  # type: ignore[attr-defined]
 	TYPE_CHECKING,
 	Annotated,
@@ -40,9 +40,9 @@ JDict = dict[str, Any] # JSON dict
 T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
-UBson = Union[None, str, int, float, bool, bytes, list[Any], dict[str, Any]]
-TBson = TypeVar("TBson", str, int, float, bool, bytes, list, dict)
-ubson = (str, int, float, bool, bytes, list, dict)
+UBson = Union[None, str, int, float, bool, bytes, list[Any], Mapping[str, Any]]
+TBson = TypeVar("TBson", str, int, float, bool, bytes, list[Any], Mapping[str, Any])
+ubson = (str, int, float, bool, bytes, list, Mapping)
 StrictIterable = Union[list[T], set[T], tuple[T], frozenset[T], ValuesView[T], KeysView[T]]
 strict_iterable = (list, tuple, set, frozenset, ValuesView, KeysView)
 

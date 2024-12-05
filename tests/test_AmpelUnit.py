@@ -1,7 +1,9 @@
 import warnings
 from collections.abc import Sequence
+from typing import Annotated
 
 import pytest
+from annotated_types import MinLen
 
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.base.AmpelUnit import AmpelUnit
@@ -196,3 +198,15 @@ def test_dict():
     assert Unit(a=[1, 2, 3], c=Model()).dict(exclude={"a"}, exclude_defaults=True) == {
         "c": {"param": 1},
     }
+
+
+def test_annotated_fields():
+    """Annotated fields are validated"""
+
+    class Annie(AmpelUnit):
+        a: Annotated[list[int], MinLen(1)]
+
+    with pytest.raises(TypeError):
+        Annie(a=[])
+
+    assert Annie(a=[1]).a == [1]

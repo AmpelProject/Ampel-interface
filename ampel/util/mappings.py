@@ -23,7 +23,7 @@ def try_int(key: str | int) -> str | int:
 
 
 def get_by_path(
-	mapping: dict, path: str | int | Sequence[str | int], delimiter: str = '.'
+	mapping: Mapping, path: str | int | Sequence[str | int], delimiter: str = '.'
 ) -> None | UBson:
 	"""
 	Get an item from a nested mapping by path, e.g.
@@ -49,7 +49,7 @@ def get_by_path(
 	return mapping
 
 
-def get_by_json_path(d: dict[str, Any], path: str | Sequence[str], delimiter: str = '.') -> None | tuple[str, UBson]:
+def get_by_json_path(d: Mapping, path: str | Sequence[str], delimiter: str = '.') -> None | tuple[str, UBson]:
 	"""
 	Lacks robustness, unflexible, fast.
 	Supports only Bracket notation with number (https://cburgmer.github.io/json-path-comparison/)
@@ -94,7 +94,7 @@ def get_by_json_path(d: dict[str, Any], path: str | Sequence[str], delimiter: st
 
 
 def set_by_path(
-	d: dict, path: str | Sequence[str], val: Any,
+	d: MutableMapping, path: str | Sequence[str], val: Any,
 	delimiter: str = '.', create: bool = True
 ) -> bool:
 	"""
@@ -117,7 +117,7 @@ def set_by_path(
 	return True
 
 
-def del_by_path(d: dict, path: str | Sequence[str], delimiter: str = '.') -> bool:
+def del_by_path(d: MutableMapping, path: str | Sequence[str], delimiter: str = '.') -> bool:
 	""" :returns: False if the key was successfully deleted, True otherwise """
 
 	if isinstance(path, str):
