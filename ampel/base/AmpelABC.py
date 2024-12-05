@@ -140,9 +140,9 @@ class AmpelABC:
 
 			if (
 				len(abstract_sig.parameters) != len(impl_sig_keys) or
-				hasattr(value[1], "check_signature") and
+				(hasattr(value[1], "check_signature") and
 				# important cast because odict_keys(['a', 'b']) == odict_keys(['b', 'a']) is True
-				list(abstract_sig.parameters.keys()) != list(impl_sig_keys)
+				list(abstract_sig.parameters.keys()) != list(impl_sig_keys))
 			):
 				raise TypeError(
 					f"Wrong method signature. Please change the arguments of method "

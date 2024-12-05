@@ -191,9 +191,9 @@ class AmpelUnit:
 		sa("_exclude_unset", unset)
 
 		# Set kwargs attributes
-		for k in kwargs:
+		for k, v in kwargs.items():
 			if k in sks or k in aks:
-				sa(k, kwargs[k])
+				sa(k, v)
 
 
 	def _get_trace_content(self) -> dict[str, Any]:
