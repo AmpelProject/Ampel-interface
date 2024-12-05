@@ -354,8 +354,8 @@ class SnapView:
 
 
 	def content_summary(self) -> str:
-		return 'DP: %i, CP: %i, T2: %i' % (
-			len(self.t0) if self.t0 else 0,
-			len(self.t1) if self.t1 else 0,
-			len(self.t2) if self.t2 else 0
+		return (
+			f'DP: {len(self.t0) if self.t0 else 0}'
+			f', CP: {len(self.t1) if self.t1 else 0}'
+			f', T2: {len(self.t2) if self.t2 else 0}'
 		)
