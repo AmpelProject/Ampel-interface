@@ -30,7 +30,7 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.7.4"
+        default: "0.8.1"
       mypy-check-files:
         required: false
         description: extra files to check with mypy
