@@ -9,6 +9,7 @@
 
 import operator
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from typing import Any
 
 from ampel.types import JDict, StockId, Tag
@@ -28,59 +29,17 @@ ops: dict[str, Callable[[str, Any], bool]] = {
 }
 
 
+@dataclass(frozen=True, slots=True)
 class AmpelAlert:
 	"""
 	Implements AmpelAlertProtocol
 	"""
 
-	__slots__ = '_id', '_stock', '_datapoints', '_tag', '_extra'
-
-	def __init__(self,
-		id: int, #: unique identifier for this alert
-		stock: StockId, #: stock this alert belongs to
-		datapoints: Sequence[JDict],
-		tag: None | Tag | list[Tag] = None, #: Optional tag associated with this alert
-		extra: None | JDict = None #: Optional information associated with this alert
-	) -> None:
-		sa = object.__setattr__
-		sa(self, '_id', id)
-		sa(self, '_stock', stock)
-		sa(self, '_datapoints', datapoints)
-		sa(self, '_tag', tag)
-		sa(self, '_extra', extra)
-
-	@property
-	def id(self) -> int:
-		return self._id # type: ignore[attr-defined]
-
-	@property
-	def stock(self) -> StockId:
-		return self._stock # type: ignore[attr-defined]
-
-	@property
-	def datapoints(self) -> Sequence[JDict]:
-		return self._datapoints # type: ignore[attr-defined]
-
-	@property
-	def tag(self) -> None | Tag | list[Tag]:
-		return self._tag # type: ignore[attr-defined]
-
-	@property
-	def extra(self) -> None | JDict:
-		return self._extra # type: ignore[attr-defined]
-
-	def __reduce__(self):
-		return (
-			type(self),
-			(self._id, self._stock, self._datapoints, self._tag, self._extra) # type: ignore[attr-defined]
-		)
-
-	def __setattr__(self, k, v):
-		raise ValueError("AmpelAlert is read only")
-
-	def __delattr__(self, k):
-		raise ValueError("AmpelAlert is read only")
-
+	id: int #: unique identifier for this alert
+	stock: StockId #: stock this alert belongs to
+	datapoints: Sequence[JDict]
+	tag: None | Tag | list[Tag] = None #: Optional tag associated with this alert
+	extra: None | JDict = None #: Optional information associated with this alert
 
 	def get_values(self,
 		key: str,

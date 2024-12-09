@@ -8,23 +8,26 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, overload
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T3Document import T3Document
 from ampel.types import StockId, Tag, TBson, UBson
 
+if TYPE_CHECKING:
+	from typing import Self
 
+
+@dataclass(frozen=True, slots=True)
 class T3DocView:
 	"""
 	View of a given T3Document.
 	A t3 view contains read-only information from a T3Document
 	and provides convenience methods to access it.
 	"""
-
-	__slots__ = 'unit', 'confid', 'config', 'stock', 'tag', 'code', 'meta', 'body'
 
 	stock: None | Sequence[StockId]
 	unit: str
@@ -37,7 +40,7 @@ class T3DocView:
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T3Document, conf: AmpelConfig) -> "T3DocView":
+	def of(cls, doc: T3Document, conf: AmpelConfig) -> "Self":
 
 		if 'config' in doc:
 			config = doc['config']
@@ -54,47 +57,6 @@ class T3DocView:
 			config = config,
 			confid = doc['confid']
 		)
-
-
-	def __init__(self,
-		unit: str,
-		code: int,
-		meta: MetaRecord,
-		confid: int,
-		tag: None | Tag | Sequence[Tag] = None,
-		stock: None | Sequence[StockId] = None,
-		config: None | dict[str, Any] = None,
-		body: UBson = None
-	):
-		sa = object.__setattr__
-		sa(self, 'stock', stock)
-		sa(self, 'unit', unit)
-		sa(self, 'tag', tag)
-		sa(self, 'code', code)
-		sa(self, 'body', body)
-		sa(self, 'meta', meta)
-		sa(self, 'config', config)
-		sa(self, 'confid', confid)
-
-
-	def __reduce__(self):
-		return type(self), (
-			self.unit, self.code, self.meta, self.confid, self.tag, self.stock,
-			self.config, self.body,
-		)
-
-
-	def __setattr__(self, k, v):
-		raise ValueError("T3DocView is read only")
-
-
-	def __delattr__(self, k):
-		raise ValueError("T3DocView is read only")
-
-
-	def serialize(self) -> dict[str, Any]:
-		return {k: getattr(self, k) for k in self.__slots__ if k != '_frozen'}
-
 
 	@overload
 	def get_body(self) -> None | dict[str, Any]:

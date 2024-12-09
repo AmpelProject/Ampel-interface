@@ -1,8 +1,11 @@
 import pickle
+import sys
 from collections.abc import Generator, Mapping
+from dataclasses import dataclass
 from typing import Any, TypedDict, assert_type, no_type_check
 
 import pytest
+from pydantic import TypeAdapter
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.T2Document import T2Document
@@ -32,7 +35,7 @@ def t2_doc():
         "unit": "FooUnit",
         "config": 42,
         "stock": 0,
-        "link": 0,
+        "link": sys.maxsize,
         "channel": ["CHANCHAN"],
         "code": DocumentCode.OK,
         "tag": ["TAGGERT"],
@@ -50,7 +53,7 @@ def t2_view(t2_doc: T2Document, config: AmpelConfig):
 @pytest.fixture
 def buffer(t2_doc: T2Document):
     return AmpelBuffer(
-        id=0,
+        id=-sys.maxsize,
         t2=[t2_doc],
     )
 
@@ -65,7 +68,7 @@ def t3_doc():
     doc: T3Document = {
         "unit": "FooUnit",
         "confid": 42,
-        "stock": [0],
+        "stock": [2 * sys.maxsize],
         "code": DocumentCode.OK,
         "tag": ["TAGGERT"],
         "meta": {},
@@ -108,33 +111,60 @@ def test_pickle(view: T2DocView | SnapView | T3DocView):
     assert serialize(unpickled) == serialize(view)
 
 
+def test_json(view: T2DocView | SnapView | T3DocView):
+    model = TypeAdapter(type(view))
+    dumped = model.validate_json(model.dump_json(view))
+    assert serialize(dumped) == serialize(view)
+
+
 def test_frozen(view: T2DocView | SnapView | T3DocView):
-    with pytest.raises(ValueError, match="is read only"):
-        view.id = 1
+    with pytest.raises(AttributeError, match="cannot assign to field"):
+        view.stock = 1  # type: ignore[misc]
+
 
 class DictWithKnownSchema(TypedDict):
     foo: str
+
 
 def test_get_payload(t2_view: T2DocView):
     assert t2_view.get_payload() == {"foo": "bar"}
     assert t2_view.get_payload(DictWithKnownSchema) == {"foo": "bar"}
     with pytest.raises(ValueError, match="No content available"):
-        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)    
-    
+        t2_view.get_payload(code=DocumentCode.T2_FAILED_DEPENDENCY, raise_exc=True)
+
     assert_type(t2_view.get_payload(), Mapping[str, Any] | None)
     assert_type(t2_view.get_payload(raise_exc=True), Mapping[str, Any])
     # NB: because get_payload() returns a constrained type, the inferred return
     # type is exactly one of its members, not the requested subtype
     assert_type(t2_view.get_payload(DictWithKnownSchema), Mapping[str, Any] | None)
-    assert_type(t2_view.get_payload(DictWithKnownSchema, raise_exc=True), Mapping[str, Any])
+    assert_type(
+        t2_view.get_payload(DictWithKnownSchema, raise_exc=True), Mapping[str, Any]
+    )
     assert_type(t2_view.get_payload(dict, raise_exc=True), Mapping[str, Any])
+
 
 def test_get_t2_body(snap_view: SnapView):
     assert snap_view.get_t2_body("FooUnit") == {"foo": "bar"}
     assert snap_view.get_t2_body("nonesuch") is None
     with pytest.raises(ValueError, match="No matching body found"):
         snap_view.get_t2_body("nonesuch", raise_exc=True)
-    
+
     assert_type(snap_view.get_t2_body("FooUnit"), Mapping[str, Any] | None)
     assert_type(snap_view.get_t2_body("FooUnit", dict), Mapping[str, Any] | None)
     assert_type(snap_view.get_t2_body("FooUnit", int), int | None)
+
+
+def test_snapview_subclass(buffer: AmpelBuffer, config: AmpelConfig):
+    """
+    Subclassing SnapView should add slots to the subclass
+    """
+    @dataclass(frozen=True, slots=True)
+    class SubView(SnapView):
+        extra_thing: int = 2
+
+    assert "id" not in SubView.__slots__
+    assert "extra_thing" in SubView.__slots__
+
+    subview = SubView.of(buffer, config)
+    assert subview.id == buffer["id"]
+    assert subview.extra_thing == 2

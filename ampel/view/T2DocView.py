@@ -8,8 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, overload
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
@@ -20,15 +21,17 @@ TYPE_POINT_T2 = 0 # linked with datapoints (tier 0)
 TYPE_STATE_T2 = 1 # linked with compounds (tier 1)
 TYPE_STOCK_T2 = 3 # linked with stock document
 
+if TYPE_CHECKING:
+	from typing import Self
 
+
+@dataclass(frozen=True, slots=True)
 class T2DocView:
 	"""
 	View of a given T2Document (with unique stock id).
 	A t2 view contains read-only information from a T2Document
 	and provides convenience methods to access it.
 	"""
-
-	__slots__ = 'unit', 'confid', 'config', 'link', 'stock', 'tag', 'code', 'meta', 't2_type', 'body'
 
 	stock: StockId | Sequence[StockId]
 	unit: int | str
@@ -43,7 +46,7 @@ class T2DocView:
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "T2DocView":
+	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "Self":
 
 		if conf:
 			t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
@@ -74,53 +77,6 @@ class T2DocView:
 				conf.get(('confid', dc), dict) if (conf and dc is not None) else None
 			)
 		)
-
-
-	def __init__(self,
-		stock: StockId | Sequence[StockId],
-		unit: int | str,
-		confid: None | int,
-		link: T2Link,
-		tag: Sequence[Tag],
-		code: int,
-		t2_type: int,
-		meta: Sequence[MetaRecord],
-		config: None | dict[str, Any] = None,
-		body: None | Sequence[UBson] = None
-	):
-		sa = object.__setattr__
-		sa(self, 'stock', stock)
-		sa(self, 'unit', unit)
-		sa(self, 'confid', confid)
-		sa(self, 'link', link)
-		sa(self, 'tag', tag)
-		sa(self, 'code', code)
-		sa(self, 'body', body)
-		sa(self, 'meta', meta)
-		sa(self, 'config', config)
-		sa(self, 't2_type', t2_type)
-
-
-	def __setattr__(self, k, v):
-		raise ValueError("T2DocView is read only")
-
-
-	def __delattr__(self, k):
-		raise ValueError("T2DocView is read only")
-
-
-	# NB: custom __reduce__ avoids calling __setattr__ directly on load
-	def __reduce__(self):
-		return (
-			type(self), (
-				self.stock, self.unit, self.confid, self.link, self.tag, self.code,
-				self.t2_type, self.meta, self.config, self.body
-			)
-		)
-
-
-	def serialize(self) -> dict[str, Any]:
-		return {k: getattr(self, k) for k in self.__slots__ if k != '_frozen'}
 
 
 	def has_content(self) -> bool:
