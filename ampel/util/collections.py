@@ -90,6 +90,14 @@ def try_reduce(arg: Any) -> Any:
 	return arg
 
 
+@overload
+def to_set(arg: StrictIterable[T]) -> set[T]:
+	...
+
+@overload
+def to_set(arg: _T) -> set[_T]:
+	...
+
 def to_set(arg) -> set:
 	"""
 	Reminder of python questionable logic:
