@@ -10,7 +10,7 @@
 from collections.abc import Callable, Container, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, overload
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.DataPoint import DataPoint
@@ -22,6 +22,9 @@ from ampel.struct.AmpelBuffer import AmpelBuffer
 from ampel.types import OneOrMany, StockId, T2Link, TBson, UBson
 from ampel.util.freeze import recursive_freeze as rf
 from ampel.view.T2DocView import T2DocView
+
+if TYPE_CHECKING:
+	from typing import Self
 
 
 @dataclass(frozen=True, slots=True)
@@ -53,7 +56,7 @@ class SnapView:
 
 
 	@classmethod
-	def of(cls, ab: AmpelBuffer, conf: None | AmpelConfig = None, freeze: bool = True) -> 'SnapView':
+	def of(cls, ab: AmpelBuffer, conf: None | AmpelConfig = None, freeze: bool = True) -> "Self":
 
 		if freeze:
 			return cls(

@@ -10,12 +10,15 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, overload
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
 from ampel.content.T3Document import T3Document
 from ampel.types import StockId, Tag, TBson, UBson
+
+if TYPE_CHECKING:
+	from typing import Self
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,7 +40,7 @@ class T3DocView:
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T3Document, conf: AmpelConfig) -> "T3DocView":
+	def of(cls, doc: T3Document, conf: AmpelConfig) -> "Self":
 
 		if 'config' in doc:
 			config = doc['config']

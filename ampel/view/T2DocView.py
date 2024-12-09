@@ -10,7 +10,7 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, overload
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.MetaRecord import MetaRecord
@@ -20,6 +20,9 @@ from ampel.types import StockId, T2Link, Tag, TBson, UBson
 TYPE_POINT_T2 = 0 # linked with datapoints (tier 0)
 TYPE_STATE_T2 = 1 # linked with compounds (tier 1)
 TYPE_STOCK_T2 = 3 # linked with stock document
+
+if TYPE_CHECKING:
+	from typing import Self
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,7 +46,7 @@ class T2DocView:
 
 
 	@classmethod # Static ctor
-	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "T2DocView":
+	def of(cls, doc: T2Document, conf: None | AmpelConfig = None) -> "Self":
 
 		if conf:
 			t2_unit_info = conf.get(f'unit.{doc["unit"]}', dict)
