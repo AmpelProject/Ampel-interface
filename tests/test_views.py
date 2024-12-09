@@ -1,6 +1,7 @@
 import pickle
 import sys
 from collections.abc import Generator, Mapping
+from dataclasses import dataclass
 from typing import Any, TypedDict, assert_type, no_type_check
 
 import pytest
@@ -67,7 +68,7 @@ def t3_doc():
     doc: T3Document = {
         "unit": "FooUnit",
         "confid": 42,
-        "stock": [2*sys.maxsize],
+        "stock": [2 * sys.maxsize],
         "code": DocumentCode.OK,
         "tag": ["TAGGERT"],
         "meta": {},
@@ -151,3 +152,19 @@ def test_get_t2_body(snap_view: SnapView):
     assert_type(snap_view.get_t2_body("FooUnit"), Mapping[str, Any] | None)
     assert_type(snap_view.get_t2_body("FooUnit", dict), Mapping[str, Any] | None)
     assert_type(snap_view.get_t2_body("FooUnit", int), int | None)
+
+
+def test_snapview_subclass(buffer: AmpelBuffer, config: AmpelConfig):
+    """
+    Subclassing SnapView should add slots to the subclass
+    """
+    @dataclass(frozen=True, slots=True)
+    class SubView(SnapView):
+        extra_thing: int = 2
+
+    assert "id" not in SubView.__slots__
+    assert "extra_thing" in SubView.__slots__
+
+    subview = SubView.of(buffer, config)
+    assert subview.id == buffer["id"]
+    assert subview.extra_thing == 2
