@@ -8,6 +8,7 @@
 # Last Modified By:    simeon reusch
 
 from collections.abc import Callable, Container, Iterator, Mapping, Sequence
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Literal, overload
 
@@ -23,6 +24,7 @@ from ampel.util.freeze import recursive_freeze as rf
 from ampel.view.T2DocView import T2DocView
 
 
+@dataclass(frozen=True, slots=True)
 class SnapView:
 	"""
 	View of a given ampel object (with unique stock id).
@@ -38,15 +40,15 @@ class SnapView:
 
 	"""
 
-	__slots__ = 'id', 'stock', 'origin', 't0', 't1', 't2', 'logs', 'extra'
-
 	id: StockId
 	stock: None | StockDocument
 	origin: None | OneOrMany[int]
 	t0: None | Sequence[DataPoint]
 	t1: None | Sequence[T1Document]
 	t2: None | Sequence[T2DocView]
+	# Logs, if added by T3 complement stage
 	logs: None | Sequence[LogDocument]
+	# Free-form information addable via instances of AbsBufferComplement
 	extra: None | dict[str, Any]
 
 
@@ -75,50 +77,6 @@ class SnapView:
 			logs = ab.get('logs'),
 			extra = ab.get('extra')
 		)
-
-
-	def __init__(self,
-		id: StockId,
-		stock: None | StockDocument = None,
-		origin: None | OneOrMany[int] = None,
-		t0: None | Sequence[DataPoint] = None,
-		t1: None | Sequence[T1Document] = None,
-		t2: None | Sequence[T2DocView] = None,
-		logs: None | Sequence[LogDocument] = None, # Logs, if added by T3 complement stage
-		extra: None | dict[str, Any] = None # Free-form information addable via instances of AbsBufferComplement
-	):
-		sa = object.__setattr__
-		sa(self, 'id', id)
-		sa(self, 'stock', stock)
-		sa(self, 'origin', origin)
-		sa(self, 't0', t0)
-		sa(self, 't1', t1)
-		sa(self, 't2', t2)
-		sa(self, 'logs', logs)
-		sa(self, 'extra', extra)
-
-
-	def __setattr__(self, k, v):
-		raise ValueError('SnapView is read only')
-
-
-	def __delattr__(self, k):
-		raise ValueError("SnapView is read only")
-
-
-	def __reduce__(self):
-		return (
-			type(self),
-			(
-				self.id, self.stock, self.origin, self.t0,
-				self.t1, self.t2, self.logs, self.extra
-			)
-		)
-
-
-	def serialize(self) -> dict:
-		return {k: getattr(self, k) for k in self.__slots__}
-
 
 	# TODO: add config filter
 	def get_t2_views(self,

@@ -109,8 +109,8 @@ def test_pickle(view: T2DocView | SnapView | T3DocView):
 
 
 def test_frozen(view: T2DocView | SnapView | T3DocView):
-    with pytest.raises(ValueError, match="is read only"):
-        view.id = 1
+    with pytest.raises(AttributeError, match="cannot assign to field"):
+        view.stock = 1  # type: ignore[misc]
 
 class DictWithKnownSchema(TypedDict):
     foo: str
