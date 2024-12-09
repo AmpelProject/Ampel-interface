@@ -26,5 +26,5 @@ class AbsT1CombineUnit(AmpelABC, LogicalUnit, abstract=True):
 	channel: None | ChannelId = None
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> list[DataPointId] | T1CombineResult:
+	def combine(self, datapoints: Iterable[DataPoint]) -> Sequence[DataPointId] | T1CombineResult:
 		...

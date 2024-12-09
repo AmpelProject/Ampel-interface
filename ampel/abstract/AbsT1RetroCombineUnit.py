@@ -7,7 +7,7 @@
 # Last Modified Date:  17.06.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 
 from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
@@ -21,10 +21,10 @@ class AbsT1RetroCombineUnit(AmpelABC, LogicalUnit, abstract=True):
 	""" A unit that combines datapoints """
 
 	debug: bool = False
-	channel: ChannelId
 	access: list[int | str]
 	policy: list[int | str]
+	channel: None | ChannelId = None
 
 	@abstractmethod
-	def combine(self, datapoints: Iterable[DataPoint]) -> list[list[DataPointId]] | list[T1CombineResult]:
+	def combine(self, datapoints: Iterable[DataPoint]) -> Sequence[Sequence[DataPointId]] | Sequence[T1CombineResult]:
 		...
