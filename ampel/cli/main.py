@@ -8,23 +8,19 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import importlib
+import importlib.metadata
 import os
 import re
 import sys
-
-from pkg_resources import (  # type: ignore[attr-defined]
-	AvailableDistributions,
-	get_distribution,
-)
 
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
 
 # key: op name, value: (potential short descr, fqn of corresponding module/class [subclass of AbsCLIOperation])
 clis: dict[str, tuple[str, str]] = {
-	(x := ep.name.replace("_", " ").split(" "))[0]: (" ".join(x[1:]) if len(x) > 1 else "", ep.module_name)
-	for dist_name in AvailableDistributions() if "ampel-" in dist_name
-	for ep in get_distribution(dist_name).get_entry_map().get('cli', {}).values()
+	(x := ep.name.replace("_", " ").split(" "))[0]: (" ".join(x[1:]) if len(x) > 1 else "", ep.module)
+	for dist in importlib.metadata.distributions() if "ampel-" in dist.name
+	for ep in dist.entry_points.select(group='cli')
 }
 
 double_minus = re.compile("--([A-z])")
