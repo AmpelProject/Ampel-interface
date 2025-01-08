@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 	from typing import Self
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
 class T3DocView:
 	"""
 	View of a given T3Document.
@@ -29,14 +29,14 @@ class T3DocView:
 	and provides convenience methods to access it.
 	"""
 
-	stock: None | Sequence[StockId]
+	stock: None | Sequence[StockId] = None
 	unit: str
 	confid: int
-	config: None | dict[str, Any]
-	tag: None | Tag | Sequence[Tag]
+	config: None | dict[str, Any] = None
+	tag: None | Tag | Sequence[Tag] = None
 	code: int
 	meta: MetaRecord
-	body: UBson
+	body: UBson = None
 
 
 	@classmethod # Static ctor

@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 	from typing import Self
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
 class SnapView:
 	"""
 	View of a given ampel object (with unique stock id).
@@ -44,15 +44,15 @@ class SnapView:
 	"""
 
 	id: StockId
-	stock: None | StockDocument
-	origin: None | OneOrMany[int]
-	t0: None | Sequence[DataPoint]
-	t1: None | Sequence[T1Document]
-	t2: None | Sequence[T2DocView]
+	stock: None | StockDocument = None
+	origin: None | OneOrMany[int] = None
+	t0: None | Sequence[DataPoint] = None
+	t1: None | Sequence[T1Document] = None
+	t2: None | Sequence[T2DocView] = None
 	# Logs, if added by T3 complement stage
-	logs: None | Sequence[LogDocument]
+	logs: None | Sequence[LogDocument] = None
 	# Free-form information addable via instances of AbsBufferComplement
-	extra: None | dict[str, Any]
+	extra: None | dict[str, Any] = None
 
 
 	@classmethod

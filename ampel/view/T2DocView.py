@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 	from typing import Self
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
 class T2DocView:
 	"""
 	View of a given T2Document (with unique stock id).
@@ -36,13 +36,13 @@ class T2DocView:
 	stock: StockId | Sequence[StockId]
 	unit: int | str
 	confid: None | int
-	config: None | dict[str, Any]
+	config: None | dict[str, Any] = None
 	link: T2Link
 	tag: Sequence[Tag]
 	code: int
 	t2_type: int
 	meta: Sequence[MetaRecord]
-	body: None | Sequence[UBson]
+	body: None | Sequence[UBson] = None
 
 
 	@classmethod # Static ctor
