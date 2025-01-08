@@ -41,6 +41,9 @@ class AmpelAlert:
 	tag: None | Tag | list[Tag] = None #: Optional tag associated with this alert
 	extra: None | JDict = None #: Optional information associated with this alert
 
+	def __hash__(self) -> int:
+		return id(self)
+
 	def get_values(self,
 		key: str,
 		filters: None | Sequence[JDict] = None
