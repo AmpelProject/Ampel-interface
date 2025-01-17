@@ -98,6 +98,7 @@ select = [
     "PL",
     "PERF",
     "RUF",
+    "TID251",
 ]
 ignore = [
     "E741", # ambiguous variable name
@@ -110,3 +111,6 @@ ignore = [
 
 [tool.ruff.lint.flake8-unused-arguments]
 ignore-variadic-names = true
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"typing.TypedDict".msg = "Use typing_extensions.TypedDict instead."

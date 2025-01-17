@@ -1,5 +1,5 @@
 
-from typing import TypedDict
+from typing_extensions import TypedDict
 
 from ampel.abstract.AbsStateT2Unit import AbsStateT2Unit
 

@@ -8,9 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal
 
-from typing_extensions import Required
+from typing_extensions import Required, TypedDict
 
 from ampel.enum.EventCode import EventCode
 from ampel.types import ChannelId

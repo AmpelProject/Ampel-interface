@@ -2,10 +2,11 @@ import pickle
 import sys
 from collections.abc import Generator, Mapping
 from dataclasses import dataclass
-from typing import Any, TypedDict, assert_type, no_type_check
+from typing import Any, assert_type, no_type_check
 
 import pytest
 from pydantic import TypeAdapter
+from typing_extensions import TypedDict
 
 from ampel.config.AmpelConfig import AmpelConfig
 from ampel.content.T2Document import T2Document

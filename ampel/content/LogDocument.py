@@ -8,9 +8,9 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from typing import Any, TypedDict
+from typing import Any
 
-from typing_extensions import Required
+from typing_extensions import Required, TypedDict
 
 from ampel.types import ChannelId, StockId
 

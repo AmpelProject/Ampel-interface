@@ -7,7 +7,9 @@
 # Last Modified Date:  01.12.2021
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal
+
+from typing_extensions import TypedDict
 
 from ampel.content.DataPoint import DataPoint
 from ampel.content.LogDocument import LogDocument

@@ -9,9 +9,8 @@
 
 from collections.abc import Sequence
 from datetime import datetime
-from typing import TypedDict
 
-from typing_extensions import Required
+from typing_extensions import Required, TypedDict
 
 from ampel.content.MetaRecord import MetaRecord
 from ampel.types import ChannelId, StockId, T2Link, Tag, UBson, UnitId

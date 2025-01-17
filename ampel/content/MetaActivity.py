@@ -8,7 +8,8 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-from typing import TypedDict
+
+from typing_extensions import TypedDict
 
 from ampel.enum.MetaActionCode import MetaActionCode
 from ampel.types import ChannelId, DataPointId, Tag
