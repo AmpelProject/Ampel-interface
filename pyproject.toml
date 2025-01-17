@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.10.4.post1"
+version = "0.10.4.post2"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -19,6 +19,7 @@ packages = [{include = "ampel"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.10"
+typing-extensions = "^4.12"
 xxhash = "^3.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"
@@ -98,6 +99,7 @@ select = [
     "PL",
     "PERF",
     "RUF",
+    "TID251",
 ]
 ignore = [
     "E741", # ambiguous variable name
@@ -110,3 +112,8 @@ ignore = [
 
 [tool.ruff.lint.flake8-unused-arguments]
 ignore-variadic-names = true
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+# pydantic requires typing_extensions.TypedDict on python<3.12. Remove when this
+# becomes the minimum required version.
+"typing.TypedDict".msg = "Use typing_extensions.TypedDict instead."
