@@ -111,7 +111,7 @@ jobs:
     outputs:
       should_publish: ${{ steps.check.outputs.should_publish }} 
     steps:
-    - uses: jvansanten/action-tag-poetry-version-bump@d73cfa04bb2aed13201290cc066b9d64082434b8 # v1
+    - uses: jvansanten/action-tag-poetry-version-bump@45f78f40d22ca43a496a71af75480a435b3dac31 # v1
       id: check
 
   pypi:
