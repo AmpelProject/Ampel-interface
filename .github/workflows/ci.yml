@@ -123,14 +123,25 @@ jobs:
     
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-    # NB: we don't actually need to install the dependencies, but if we've
-    # gotten this far they're cached anyway
-    - name: "Set up environment"
-      uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
+    # bits borrowed from packetcoders/action-setup-cache-python-poetry, in order
+    # to reuse the poetry cache without actually restoring the venv
+    - name: Set up python ${{ inputs.python-version }}
+      id: setup-python
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
-        poetry-version: ${{ inputs.poetry-version }}
-        install-args: --all-extras
+    - name: Load cached Poetry Binary
+      id: cached-poetry-binary
+      uses: actions/cache@v4
+      with:
+        path: ~/.local
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ inputs.poetry-version }}
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: ${{ inputs.poetry-version }}
+        virtualenvs-create: true
+        virtualenvs-in-project: true
     - name: Publish
       run: |
         poetry publish -n --build
