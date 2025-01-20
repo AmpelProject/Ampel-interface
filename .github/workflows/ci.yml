@@ -95,7 +95,7 @@ jobs:
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
-        install-args: --all-extras --sync
+        install-args: --all-extras --compile --sync
     - name: Install root
       run: poetry run pip install -e . --no-deps
     - run: poetry run mypy
