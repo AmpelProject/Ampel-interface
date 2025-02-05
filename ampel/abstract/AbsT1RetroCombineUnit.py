@@ -21,8 +21,8 @@ class AbsT1RetroCombineUnit(AmpelABC, LogicalUnit, abstract=True):
 	""" A unit that combines datapoints """
 
 	debug: bool = False
-	access: list[int | str]
-	policy: list[int | str]
+	access: Sequence[int | str] = []
+	policy: Sequence[int | str] = []
 	channel: None | ChannelId = None
 
 	@abstractmethod
