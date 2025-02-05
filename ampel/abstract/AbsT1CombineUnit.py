@@ -21,8 +21,8 @@ class AbsT1CombineUnit(AmpelABC, LogicalUnit, abstract=True):
 	""" A unit that combines datapoints """
 
 	debug: bool = False
-	access: Sequence[int | str]
-	policy: Sequence[int | str]
+	access: Sequence[int | str] = []
+	policy: Sequence[int | str] = []
 	channel: None | ChannelId = None
 
 	@abstractmethod

@@ -23,6 +23,9 @@ NoneType = type(None)
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import IncEx
 
+def _is_traceless(v: Any) -> bool:
+	return type(v) is ttf and v.__metadata__[0] == TRACELESS
+
 class AmpelUnit:
 	"""
 	This class supports setting slots values through constructor parameters (they will be type checked as well).
@@ -109,18 +112,14 @@ class AmpelUnit:
 		if hasattr(cls, 'model_fields'):
 			cls.model_fields.clear()
 
+		kwargs = {
+			k: (v, defs.get(k, ...))
+			for k, v in cls._annots.items()
+		}
 		if omit_traceless:
-			ttf = type(Traceless)
-			kwargs = {
-				k: (v, defs.get(k, ...))
-				for k, v in cls._annots.items()
-				if not (type(v) is ttf and v.__metadata__[0] == TRACELESS)
-			}
-		else:
-			kwargs = {
-				k: (v, defs.get(k, ...))
-				for k, v in cls._annots.items()
-			}
+			for k, (annotation, _) in kwargs.items():
+				if _is_traceless(annotation):
+					kwargs[k] = (annotation.copy_with((NoneType | annotation.__args__[0],)), None)
 
 		return create_model(
 			cls.__name__,
@@ -136,7 +135,7 @@ class AmpelUnit:
 			values = cls._create_model(True).model_validate(value)
 		except ValidationError as e:
 			raise TypeError(e) from None
-		return values.model_dump()
+		return values.model_dump(exclude={k for k,v in cls._annots.items() if _is_traceless(v)})
 
 
 	@classmethod
