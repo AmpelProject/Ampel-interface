@@ -44,17 +44,17 @@ class AuxUnitRegister:
 	def new_unit(cls, model: UnitModel, *, sub_type: None | type[T] = None, **kwargs) -> T | AmpelUnit:
 		"""	:raises: ValueError is model.config is not of type None | dict """
 
-		if model.unit in cls._dyn:
-			Klass = cls._dyn[model.unit]
-		else:
-			Klass = cls.get_aux_class(klass=model.unit, sub_type=sub_type)
+		Klass = cls.get_aux_class(klass=model.unit, sub_type=sub_type)
 
 		if model.config:
 			if isinstance(model.config, dict):
-				return Klass(**(model.config | kwargs))
-			raise ValueError("Auxiliary units cannot use config aliases")
+				init_kwargs = model.config | kwargs
+			else:
+				raise ValueError("Auxiliary units cannot use config aliases")
+		else:
+			init_kwargs = kwargs
 
-		unit = Klass(**kwargs)
+		unit = Klass(**init_kwargs)
 		if hasattr(unit, "post_init"):
 			unit.post_init()
 
@@ -75,7 +75,12 @@ class AuxUnitRegister:
 	def get_aux_class(cls, klass: str, *, sub_type: None | type[T] = None) -> type[T | AmpelUnit]:
 		""" :raises: ValueError if unit is unknown """
 
-		if klass not in cls._defs:
+		if klass in cls._dyn:
+			ret = cls._dyn[klass]
+		elif klass in cls._defs:
+			fqn = cls._defs[klass]['fqn']
+			ret = getattr(import_module(fqn), klass)
+		else:
 			if not cls._defs:
 				raise ValueError(
 					f"Unknown auxiliary unit {klass}:"
@@ -85,9 +90,6 @@ class AuxUnitRegister:
 				f"Unknown auxiliary unit {klass}:\n"
 				f"- check your ampel conf to see if the unit is properly registered"
 			)
-
-		fqn = cls._defs[klass]['fqn']
-		ret = getattr(import_module(fqn), klass)
 
 		if sub_type:
 			check_class(ret, sub_type)
