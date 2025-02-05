@@ -210,3 +210,27 @@ def test_annotated_fields():
         Annie(a=[])
 
     assert Annie(a=[1]).a == [1]
+
+
+def test_validate_traceless():
+
+    class Unit(AmpelUnit):
+        a: int
+        b: Traceless[str]
+    
+    assert Unit.validate({"a": 1}) == {"a": 1}, "Traceless fields are not required"
+    assert Unit.validate({"a": 1, "b": "foo"}) == {"a": 1}, "Traceless fields are allowed, but omitted from output"
+    assert Unit.validate_all({"a": 1, "b": "foo"}) == {"a": 1, "b": "foo"}, "Traceless fields required for validate_all"
+    with pytest.raises(TypeError):
+        Unit.validate_all({"a": 1})
+
+    # Traceless fields are checked if present
+    with pytest.raises(TypeError):
+        Unit.validate({"a": 1, "b": ["foo"]})
+    
+    # excercise Optional behavior
+    class Strawman(AmpelUnit):
+        a: int
+        b: Traceless[None]
+    
+    assert Strawman.validate({"a": 1, "b": None}) == {"a": 1}
