@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.10.5a1"
+version = "0.10.5a2"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -109,6 +109,9 @@ ignore = [
     "RUF018", # assignment expressions in asserts are fine
     "RUF023", # unsorted __slots__ are fine
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["SLF001"]
 
 [tool.ruff.lint.flake8-unused-arguments]
 ignore-variadic-names = true

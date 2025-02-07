@@ -44,6 +44,18 @@ def test_secret_validation() -> None:
         HasSecret(secret=int_secret)  # type: ignore[arg-type]
 
 
+def test_secret_validation_hook() -> None:
+    class HasSecret(AmpelBaseModel):
+        secret: NamedSecret[str]
+    
+    with NamedSecret.resolve_with(AmpelVault([DummySecretProvider({"foo": "bar"})])):
+        resolved = HasSecret.model_validate({"secret": {"label": "foo"}})
+    unresolved = HasSecret.model_validate({"secret": {"label": "foo"}})
+    assert resolved.secret.get() == "bar"
+    with pytest.raises(ValueError, match="Secret not yet resolved"):
+        unresolved.secret.get()
+
+
 def test_secret_resolution() -> None:
     vault = AmpelVault([DummySecretProvider({"foo": "bar"})])
 
