@@ -48,12 +48,21 @@ def test_secret_validation_hook() -> None:
     class HasSecret(AmpelBaseModel):
         secret: NamedSecret[str]
     
-    with NamedSecret.resolve_with(AmpelVault([DummySecretProvider({"foo": "bar"})])):
+    vault = AmpelVault([DummySecretProvider({"foo": "bar"})])
+
+    with NamedSecret.resolve_with(vault):
         resolved = HasSecret.model_validate({"secret": {"label": "foo"}})
     unresolved = HasSecret.model_validate({"secret": {"label": "foo"}})
     assert resolved.secret.get() == "bar"
     with pytest.raises(ValueError, match="Secret not yet resolved"):
         unresolved.secret.get()
+    
+    # get_named_secret can be used to fetch optional secrets even in a resolving context
+    with NamedSecret.resolve_with(vault):
+        ns = vault.get_named_secret("foo", str)
+        assert ns is not None
+        assert ns.get() == "bar"
+        assert vault.get_named_secret("foo", int) is None
 
 
 def test_secret_resolution() -> None:
