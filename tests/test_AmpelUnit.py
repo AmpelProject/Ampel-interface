@@ -31,8 +31,7 @@ def test_mixed_inheritance():
 
     class Derived1(PrivateMixin, U, M): ...
 
-    # ignore: Definition of "dict" in base class "BaseModel" is incompatible with definition in base class "AmpelUnit"
-    class Derived2(PrivateMixin, M, U): ...  # type: ignore[misc]
+    class Derived2(PrivateMixin, M, U): ...
 
     kwargs = {"unit_param": 1, "basemodel_param": 2}
     defaults = {"unit_param_with_default": 3, "basemodel_param_with_default": 2}
