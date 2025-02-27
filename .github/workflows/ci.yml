@@ -20,17 +20,17 @@ on:
         required: false
         type: string
         # renovate: datasource=conda depName=conda-forge/python
-        default: "3.13.1"
+        default: "3.13.2"
       poetry-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=poetry versioning=pep440
-        default: "2.0.1"
+        default: "2.1.1"
       ruff-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.9.3"
+        default: "0.9.7"
       mypy-check-files:
         required: false
         description: extra files to check with mypy
@@ -132,7 +132,7 @@ jobs:
         python-version: ${{ inputs.python-version }}
     - name: Load cached Poetry Binary
       id: cached-poetry-binary
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
+      uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4
       with:
         path: ~/.local
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ inputs.poetry-version }}
