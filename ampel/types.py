@@ -29,14 +29,14 @@ TRACELESS = -1
 T = TypeVar('T')
 Traceless = Annotated[T, TRACELESS]
 
-# ruff: noqa: UP007
-StockId = Union[int, bytes, str]
-ChannelId = Union[int, str]
+StockId = int | bytes | str
+ChannelId = int | str
 DataPointId = int
-Tag = Union[int, str]
+Tag = int | str
 UnitId = str
 JDict = dict[str, Any] # JSON dict
 
+# ruff: noqa: UP007
 T2Link = Union[StockId, DataPointId, int]
 T3Send = Union['JournalAttributes', 'StockAttributes', tuple[StockId, 'StockAttributes']]
 
