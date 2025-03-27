@@ -30,7 +30,7 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff versioning=pep440
-        default: "0.9.7"
+        default: "0.11.2"
       mypy-check-files:
         required: false
         description: extra files to check with mypy
@@ -127,12 +127,12 @@ jobs:
     # to reuse the poetry cache without actually restoring the venv
     - name: Set up python ${{ inputs.python-version }}
       id: setup-python
-      uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
+      uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5
       with:
         python-version: ${{ inputs.python-version }}
     - name: Load cached Poetry Binary
       id: cached-poetry-binary
-      uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
       with:
         path: ~/.local
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ inputs.poetry-version }}
