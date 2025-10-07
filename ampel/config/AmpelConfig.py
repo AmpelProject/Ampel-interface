@@ -151,7 +151,7 @@ class AmpelConfig:
 			if origin := get_origin(ret_type):
 				ret_type = origin
 
-			if not isinstance(ret, ret_type): # type: ignore[arg-type]
+			if not isinstance(ret, ret_type):
 				raise ValueError(
 					f"Retrieved value has not the expected type.\n"
 					f"Expected: {ret_type}\n"
