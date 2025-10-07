@@ -48,20 +48,37 @@ jobs:
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: ruff format
+      id: format
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: ${{ inputs.ruff-version }}
-        args: format --check --diff
+        args: format
       env:
         RUFF_FORMAT: github
       if: ${{ inputs.format }}
     - name: ruff check
+      id: check
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: ${{ inputs.ruff-version }}
+        args: check . --fix
       env:
         RUFF_FORMAT: github
-      if: ${{ inputs.lint }}
+      if: always() && ${{ inputs.lint }}
+    - name: check for changes
+      uses: tj-actions/verify-changed-files@v20
+      id: verify-changed-files
+      if: always() && (steps.format.outcome != 'skipped' || steps.check.outcome != 'skipped')
+      with:
+        # Fail if files were changed (this indicates there are linting errors to fix)
+        fail-if-changed: 'true'
+    - name: suggest changes
+      uses: parkerbxyz/suggest-changes@v3.0.0
+      if: failure() && steps.verify-changed-files.outcome == 'failure' && github.event_name == 'pull_request'
+      with:
+        event: REQUEST_CHANGES
+        message: |
+          The following changes were automatically suggested by [ruff ${{ inputs.ruff-version }}](https://github.com/astral-sh/ruff).
 
   test:
     runs-on: ubuntu-24.04
