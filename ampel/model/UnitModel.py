@@ -42,8 +42,8 @@ class UnitModel(AmpelBaseModel, Generic[T]):
 	# (pydantic.ModelMetaClass picks up validators at class definition time)
 	@model_validator(mode="after")
 	def post_validate(self) -> "UnitModel":
-		if self.post_validate_hook:
-			return self.post_validate_hook(self)
+		if UnitModel.post_validate_hook:
+			return UnitModel.post_validate_hook(self)
 		return self
 
 	post_validate_hook: ClassVar[None | Callable[["UnitModel"], "UnitModel"]] = None
