@@ -77,7 +77,7 @@ jobs:
       if: failure() && steps.verify-changed-files.outcome == 'failure' && github.event_name == 'pull_request'
       with:
         event: REQUEST_CHANGES
-        message: |
+        comment: |
           The following changes were automatically suggested by [ruff ${{ inputs.ruff-version }}](https://github.com/astral-sh/ruff).
 
   test:
