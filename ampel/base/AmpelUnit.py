@@ -244,7 +244,7 @@ class AmpelUnit:
 		return {
 			k: self._dictify(v)
 			for k, v in d.items()
-			if k in incl and not (k in excl or isinstance(d[k], Secret))
+			if k in incl and not (k in excl or isinstance(v, Secret))
 		}
 
 
