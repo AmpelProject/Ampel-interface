@@ -27,7 +27,7 @@ platformdirs = "^4.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.3"
-pytest-cov = "^6.0.0"
+pytest-cov = "^7.0.0"
 mypy = "^1.11.2"
 types-PyYAML = "^6.0.12"
 types-setuptools = "^65.3.0"
