@@ -38,7 +38,8 @@ on:
         default: ""
     secrets:
       PYPI_API_TOKEN:
-        required: true
+        description: PyPI API token with permission to publish. Required for tags and pushes to main branch, but not for PRs.
+        required: false
 
 jobs:
 
