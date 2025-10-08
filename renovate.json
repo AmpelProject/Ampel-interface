@@ -3,7 +3,7 @@
     "github>AmpelProject/renovate-config",
     "github>AmpelProject/renovate-config//regexManagers/githubActionsVersions"
   ],
-  "baseBranches": [
+  "baseBranchPatterns": [
     "master",
     "v0.8.x"
   ],
