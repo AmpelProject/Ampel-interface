@@ -48,36 +48,20 @@ jobs:
     steps:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
     - name: ruff format
-      id: format
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: ${{ inputs.ruff-version }}
-        args: format
+        args: format --check --diff
       env:
         RUFF_FORMAT: github
       if: ${{ inputs.format }}
     - name: ruff check
-      id: check
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
         version: ${{ inputs.ruff-version }}
-        args: check . --fix
       env:
         RUFF_FORMAT: github
-      if: always() && ${{ inputs.lint }}
-    - name: suggest changes
-      uses: parkerbxyz/suggest-changes@v3.0.0
-      with:
-        event: REQUEST_CHANGES
-        comment: |
-          The following changes were automatically suggested by [ruff ${{ inputs.ruff-version }}](https://github.com/astral-sh/ruff).
-    - name: check for changes
-      uses: tj-actions/verify-changed-files@v20
-      id: verify-changed-files
-      if: always() && (steps.format.outcome != 'skipped' || steps.check.outcome != 'skipped')
-      with:
-        # Fail if files were changed (this indicates there are linting errors to fix)
-        fail-if-changed: 'true'
+      if: ${{ inputs.lint }}
 
   test:
     runs-on: ubuntu-24.04
