@@ -19,17 +19,17 @@ on:
       python-version:
         required: false
         type: string
-        # renovate: datasource=conda depName=conda-forge/python
+        # renovate: datasource=python-version depName=python
         default: "3.13.3"
       poetry-version:
         required: false
         type: string
-        # renovate: datasource=pypi depName=poetry versioning=pep440
+        # renovate: datasource=pypi depName=poetry depType=dev versioning=pep440
         default: "2.2.1"
       ruff-version:
         required: false
         type: string
-        # renovate: datasource=pypi depName=ruff versioning=pep440
+        # renovate: datasource=pypi depName=ruff depType=dev versioning=pep440
         default: "0.14.0"
       mypy-check-files:
         required: false
