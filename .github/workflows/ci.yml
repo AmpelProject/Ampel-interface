@@ -20,7 +20,7 @@ on:
         required: false
         type: string
         # renovate: datasource=python-version depName=python
-        default: "3.13.3"
+        default: "3.14.0"
       poetry-version:
         required: false
         type: string
