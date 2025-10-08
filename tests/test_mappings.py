@@ -43,7 +43,7 @@ def test_AmpelConfig_get_with_path(target, key, value):
 
 
 def test_AmpelConfig_get_raise_exc():
-    with pytest.raises(ValueError, match="Config element .* not found"):
+    with pytest.raises(ValueError, match=r"Config element .* not found"):
         AmpelConfig({"channel": {}, "confid": {1: "foo"}}).get(
             ["confid", 2], raise_exc=True
         )

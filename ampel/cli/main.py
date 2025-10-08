@@ -12,6 +12,7 @@ import importlib.metadata
 import os
 import re
 import sys
+from random import random
 
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
@@ -108,8 +109,6 @@ def main() -> None:
 
 
 def show_help() -> None:
-
-	from random import random
 
 	if random() < 0.7:
 		print("                                                                                      ")
