@@ -9,7 +9,7 @@
 
 from functools import partial
 from types import MemberDescriptorType, UnionType
-from typing import TYPE_CHECKING, Any, ClassVar, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, ClassVar, TypeAlias, Union, get_args, get_origin
 
 from pydantic import BaseModel, ValidationError, create_model
 
@@ -19,6 +19,7 @@ from ampel.types import TRACELESS, Traceless
 
 ttf = type(Traceless)
 NoneType = type(None)
+DictStrAny: TypeAlias = dict[str, Any]
 
 if TYPE_CHECKING:
 	from ampel.base.AmpelBaseModel import IncEx
@@ -33,9 +34,9 @@ class AmpelUnit:
 	"""
 
 	_model: type[BaseModel]
-	_annots: ClassVar[dict[str, Any]] = {}
-	_defaults: ClassVar[dict[str, Any]] = {}
-	_slot_defaults: ClassVar[dict[str, Any]] = {}
+	_annots: ClassVar[DictStrAny] = {}
+	_defaults: ClassVar[DictStrAny] = {}
+	_slot_defaults: ClassVar[DictStrAny] = {}
 	_aks: ClassVar[set[str]] = set() # annotation keys
 	_sks: ClassVar[set[str]] = set() # slots keys
 	_exclude_unset: set[str]
