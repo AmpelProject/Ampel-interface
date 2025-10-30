@@ -7,11 +7,11 @@
 # Last Modified Date:  10.09.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
+from itertools import islice
 from collections.abc import Generator, Iterable
 from collections.abc import Iterable as iterable
 from collections.abc import Sequence as sequence
 from collections.abc import Sized as sized
-from itertools import islice
 from typing import Any, TypeVar, overload
 
 from ampel.types import StrictIterable, T, strict_iterable
@@ -56,16 +56,16 @@ def get_chunks(seq: Iterable[T], n: int) -> Generator[list[T], None, None]:
 			break
 
 
-def get_chunk_sizes(total_size: int, interval_len: int) -> list[int]:
+def get_chunk_sizes(total_size: int, split_nbr: int) -> list[int]:
 	"""
 	In []: get_chunk_sizes(123, 10)
 	Out[]: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 3]
 	"""
-	if total_size < interval_len:
-		raise ValueError()
-	l = [(total_size // interval_len)] * interval_len
-	if (total_size % interval_len):
-		l.append(total_size % interval_len)
+	if total_size < split_nbr:
+		raise ValueError(f"total_size ({total_size}) < split_nbr ({split_nbr})")
+	l = [(total_size // split_nbr)] * split_nbr
+	if (total_size % split_nbr):
+		l.append(total_size % split_nbr)
 	return l
 
 
