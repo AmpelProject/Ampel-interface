@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  20.08.2022
+# Last Modified Date:  30.10.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from typing import Any
@@ -22,13 +22,12 @@ class ArgParserBuilder:
 		"""
 		self.parsers: dict[str, AmpelArgumentParser] = {}
 		self._op = op
-		self._sub_op: None | str = None
 
 
 	def add_parser(self, name: str, hlp: dict[str, str]) -> AmpelArgumentParser:
 		parser = AmpelArgumentParser(ampel_op=self._op)
 		parser.set_help_descr(hlp)
-		self._sub_op = name
+		parser.set_ampel_sub_op(name)
 		self.parsers[name] = parser
 		return parser
 
@@ -193,7 +192,7 @@ class ArgParserBuilder:
 		for p in self.get_parsers(sub_ops):
 			p.example(
 				ex,
-				prepend or f"ampel {self._op or ''} {self._sub_op} ",
+				prepend or f"ampel {self._op or ''} {p.ampel_sub_op} ",
 				append, auto_strip, ref
 			)
 
