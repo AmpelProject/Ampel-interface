@@ -10,7 +10,6 @@
 import importlib
 import importlib.metadata
 import os
-import re
 import sys
 from random import random
 
@@ -23,8 +22,6 @@ clis: dict[str, tuple[str, str]] = {
 	for dist in importlib.metadata.distributions() if "ampel-" in dist.name
 	for ep in dist.entry_points.select(group='cli')
 }
-
-double_minus = re.compile("--([A-z])")
 
 # ruff: noqa: T201, SLF001
 def main() -> None:
