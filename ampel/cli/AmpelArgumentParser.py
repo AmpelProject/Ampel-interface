@@ -4,11 +4,10 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                17.03.2021
-# Last Modified Date:  20.08.2022
+# Last Modified Date:  30.10.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import os
-import textwrap
+import os, re, textwrap
 from argparse import ArgumentParser, _ArgumentGroup
 from typing import Any
 
@@ -450,7 +449,9 @@ class AmpelArgumentParser(ArgumentParser):
 		fh = self._numerate(fh, self._examples, self.ex_open, self.ex_open)
 
 		if show_notation and self.notations:
-			cw = getattr(formatter, "_action_max_length", 30) # col width
+			cw = getattr(formatter, "_custom_action_max_length", getattr(formatter, "action_max_length", 30))+2
+			if (re.compile(r'\x1b\[[0-9;]*m').search(fh)):
+				cw+=2
 			print("\nNotation:")
 			if (x := sorted([v for v in self.notations if isinstance(v, str)], key=lambda x: len(x))):
 				print("\n".join(x) + "\n")
