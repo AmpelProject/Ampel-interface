@@ -4,13 +4,11 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                28.12.2019
-# Last Modified Date:  03.04.2021
+# Last Modified Date:  02.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from collections.abc import Iterable
 from typing import Generic
-
-from ampel.base.AmpelABC import AmpelABC
+from collections.abc import Iterable
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
@@ -19,7 +17,7 @@ from ampel.struct.UnitResult import UnitResult
 from ampel.types import T, UBson
 
 
-class AbsCustomStateT2Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
+class AbsCustomStateT2Unit(LogicalUnit, Generic[T], abstract=True):
 	"""
 	A T2 unit bound to a custom type *constructed* from a :class:`compound <ampel.content.T1Document.T1Document>`
 

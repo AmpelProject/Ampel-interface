@@ -4,13 +4,12 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                23.02.2018
-# Last Modified Date:  27.12.2021
+# Last Modified Date:  01.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Generator
 from typing import Generic, TypeVar
 
-from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.struct.T3Store import T3Store
@@ -21,7 +20,7 @@ from ampel.view.SnapView import SnapView
 T = TypeVar("T", bound=SnapView)
 
 
-class AbsT3Unit(Generic[T], AmpelABC, LogicalUnit, abstract=True):
+class AbsT3Unit(LogicalUnit, Generic[T], abstract=True):
 	""" Generic abstract class for T3 units receiving a SnapView generator """
 
 	# avoid introspection at run-time

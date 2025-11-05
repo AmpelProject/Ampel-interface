@@ -4,17 +4,15 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                06.02.2021
-# Last Modified Date:  31.05.2021
+# Last Modified Date:  02.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
-
-from ampel.base.AmpelABC import AmpelABC
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.model.UnitModel import UnitModel
 
 
-class AbsTiedT2Unit(AmpelABC, LogicalUnit, abstract=True):
+class AbsTiedT2Unit(LogicalUnit, abstract=True):
 	"""
 	A T2 unit that depends on the results of other T2 units.
 	"""

@@ -4,17 +4,16 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                03.04.2023
-# Last Modified Date:  03.04.2023
+# Last Modified Date:  01.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.base.AmpelABC import AmpelABC
+from ampel.types import UBson
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.struct.UnitResult import UnitResult
-from ampel.types import UBson
 
 
-class AbsT4Unit(AmpelABC, LogicalUnit, abstract=True):
+class AbsT4Unit(LogicalUnit, abstract=True):
 	""" Abstract class for logical T4 units """
 
 	@abstractmethod

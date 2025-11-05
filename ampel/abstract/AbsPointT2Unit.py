@@ -4,10 +4,9 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                28.12.2019
-# Last Modified Date:  28.09.2021
+# Last Modified Date:  02.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
@@ -15,7 +14,7 @@ from ampel.struct.UnitResult import UnitResult
 from ampel.types import UBson
 
 
-class AbsPointT2Unit(AmpelABC, LogicalUnit, abstract=True):
+class AbsPointT2Unit(LogicalUnit, abstract=True):
 	"""
 	A T2 unit bound to a :class:`~ampel.content.DataPoint.DataPoint`
 

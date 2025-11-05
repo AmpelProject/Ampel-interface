@@ -9,7 +9,6 @@
 
 from collections.abc import Iterable, Sequence
 
-from ampel.base.AmpelABC import AmpelABC
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
@@ -17,7 +16,7 @@ from ampel.struct.T1CombineResult import T1CombineResult
 from ampel.types import ChannelId, DataPointId
 
 
-class AbsT1CombineUnit(AmpelABC, LogicalUnit, abstract=True):
+class AbsT1CombineUnit(LogicalUnit, abstract=True):
 	""" A unit that combines datapoints """
 
 	debug: bool = False
