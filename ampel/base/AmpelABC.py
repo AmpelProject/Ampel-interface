@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                27.12.2017
-# Last Modified Date:  17.02.2021
+# Last Modified Date:  02.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import inspect
@@ -13,16 +13,19 @@ from collections.abc import Callable
 
 class AmpelABC:
 	"""
-	This class resembles python's standart ABC module (Abstract Base Class) but can additionaly
-	check method signatures. As a consequence, a subclass that inherits AmpelABC, will not be able to
-	implement methods declared as abstract by the parent class using different method arguments.
+	This class resembles Python's standard `ABC` module (Abstract Base Class) but additionally
+	enforces method signature checks. As a result, any subclass inheriting from `AmpelABC`
+	cannot implement abstract methods with differing argument signatures.
+
 	Notes:
-	- Multi-level and multiple inheritance are supported.
-	- Overriding abstractmethod is supported (if subclass itself is abstract)
-	- This class relies on the module 'inspect'
-	- Setting AmpelABC._abcheck = False deactivates all checks
-	- If a sub-classes implements __init_subclass__ for some reason, \
-		super().__init_subclass__(**kwargs) must be called within the (class) method.
+	- Supports multi-level and multiple inheritance.
+	- Allows overriding abstract methods if the subclass is itself abstract.
+	- Relies on the `inspect` module.
+	- Set `AmpelABC._abcheck = False` to disable all checks.
+	- If a subclass defines `__init_subclass__`, it must call
+	  `super().__init_subclass__(**kwargs)` within that method.
+	- By convention, abstract classes that enforce methods are prefixed with `Abs`,
+	  while structural ones intended only for inheritance can omit the prefix.
 	"""
 
 	_abcheck = True
@@ -34,8 +37,8 @@ class AmpelABC:
 		Note: all checks can be deactivated by setting AmpelABC._abcheck = False
 
 		:raises NotImplementedError: if an abstract method is not implemented by the child class
-		:raises TypeError: if decorator flag check_signature was set for an abstract method but \
-		the corresponding method signatures differ implementation by the sub class \
+		:raises TypeError: if subclasses implement marked abstract method with a different signature \
+		than the one defined in the abstract class. \
 		:raises ValueError: if decorator flag check_super_call was set and the corresponding method \
 		omits to call to the super method.
 		"""
@@ -140,7 +143,7 @@ class AmpelABC:
 
 			if (
 				len(abstract_sig.parameters) != len(impl_sig_keys) or
-				(hasattr(value[1], "check_signature") and
+				(hasattr(value[1], "strict_names") and
 				# important cast because odict_keys(['a', 'b']) == odict_keys(['b', 'a']) is True
 				list(abstract_sig.parameters.keys()) != list(impl_sig_keys))
 			):
