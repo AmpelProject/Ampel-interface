@@ -15,7 +15,7 @@ from ampel.base.decorator import abstractmethod
 T = TypeVar('T')
 
 # mypy: disable-error-code = empty-body
-class Secret(Generic[T], AmpelABC, abstract=True):
+class Secret(AmpelABC, Generic[T], abstract=True):
     """
     A wrapper for a piece of sensitive data, e.g. a password or access token.
     """

@@ -22,7 +22,7 @@ from ampel.view.T2DocView import T2DocView
 U = TypeVar("U", bound=str)
 
 
-class AbsTiedCustomStateT2Unit(Generic[T, U], AbsTiedT2Unit, abstract=True):
+class AbsTiedCustomStateT2Unit(AbsTiedT2Unit, Generic[T, U], abstract=True):
 	"""
 	A T2 unit bound to a custom type *constructed* from a :class:`compound <ampel.content.T1Document.T1Document>`,
 	as well as the results of other T2 units.

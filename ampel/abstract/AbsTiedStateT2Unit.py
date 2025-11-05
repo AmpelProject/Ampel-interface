@@ -20,7 +20,7 @@ from ampel.types import UBson
 from ampel.view.T2DocView import T2DocView
 
 
-class AbsTiedStateT2Unit(Generic[T], AbsTiedT2Unit, abstract=True):
+class AbsTiedStateT2Unit(AbsTiedT2Unit, Generic[T], abstract=True):
 	"""
 	A T2 unit bound to a :class:`~ampel.content.T1Document.T1Document` (state of a stock),
 	as well as the results of other T2 units
