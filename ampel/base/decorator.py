@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                27.12.2017
-# Last Modified Date:  17.05.2020
+# Last Modified Date:  04.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Callable
@@ -19,23 +19,23 @@ def abstractmethod(func: F) -> F:
 	...
 
 @overload
-def abstractmethod(*, check_signature: bool = False, force: bool = False, var_args: bool = False) -> Callable[[F], F]:
+def abstractmethod(*, strict_names: bool = False, force: bool = False, var_args: bool = False) -> Callable[[F], F]:
 	...
 
-def abstractmethod(func=None, check_signature=False, force=False, var_args: bool = False):
+def abstractmethod(func=None, strict_names=False, force=False, var_args: bool = False):
 	"""
-	:param check_signature: checks method signature (parameter names must equal)
+	:param strict_names: if True, requires exact parameter name match in the implementing method
 	:param force: whether implementation of methods must be checked even if the subclass is abstract as well
 	:param var_args: allow variables arguments (default behavior in native python abc)
 	"""
 
 	if func is None:
 		return partial(
-			abstractmethod, check_signature=check_signature, force=force, var_args=var_args
+			abstractmethod, strict_names=strict_names, force=force, var_args=var_args
 		)
 
-	if check_signature:
-		func.check_signature = True
+	if strict_names:
+		func.strict_names = True
 
 	if force:
 		func.force_check = True
@@ -54,21 +54,21 @@ def defaultmethod(func: F) -> F:
 	...
 
 @overload
-def defaultmethod(*, check_signature: bool = False, check_super_call: bool = False) -> Callable[[F], F]:
+def defaultmethod(*, strict_names: bool = False, check_super_call: bool = False) -> Callable[[F], F]:
 	...
 
-def defaultmethod(func=None, check_signature=False, check_super_call=False):
+def defaultmethod(func=None, strict_names=False, check_super_call=False):
 
 	if func is None:
 		return partial(
-			defaultmethod, check_signature=check_signature,
+			defaultmethod, strict_names=strict_names,
 			check_super_call=check_super_call
 		)
 
 	func.default_method = True
 
-	if check_signature:
-		func.check_signature = True
+	if strict_names:
+		func.strict_names = True
 
 	if check_super_call:
 		func.check_super_call = True
