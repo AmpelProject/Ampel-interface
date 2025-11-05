@@ -27,10 +27,35 @@ if TYPE_CHECKING:
 def _is_traceless(v: Any) -> bool:
 	return type(v) is ttf and v.__metadata__[0] == TRACELESS
 
+
 class AmpelUnit:
 	"""
-	This class supports setting slots values through constructor parameters (they will be type checked as well).
-	Type checking can be deactivated globally by setting ampel.types.do_type_check to False
+	Base class for Ampel units that supports dynamic field validation and attribute assignment
+	using Pydantic models. Designed to work with both slot-based and standard Python classes.
+
+	Features:
+	- Automatically merges annotations and default values across subclasses.
+	- Supports type-checked initialization via constructor parameters.
+	- Dynamically generates a Pydantic model for validation and coercion.
+	- Handles optional fields, traceless annotations, and slot-based attributes.
+	- Automatically assigns `None` as the default for fields annotated with `Optional[...]` or
+	 `Union[..., None]` if no default is explicitly provided in the class body.
+	- Provides methods for partial and full validation (`validate`, `validate_all`).
+	- Offers a customizable `dict()` method for controlled serialization.
+	- Supports global toggle for type checking via `ampel.types.do_type_check`.
+
+	Internal Attributes:
+	- _model: Cached Pydantic model for validation.
+	- _annots: Merged annotations from class and its ancestors.
+	- _defaults: Default values for annotated fields.
+	- _slot_defaults: Defaults for slot-based fields.
+	- _aks: Set of annotation keys (field names).
+	- _sks: Set of slot keys.
+	- _exclude_unset: Tracks fields not explicitly set during initialization.
+
+	Usage:
+	Subclasses can define annotated fields and slots. Upon instantiation, values are validated
+	and assigned to attributes. Traceless fields and secrets are excluded from trace and dict output.
 	"""
 
 	_model: type[BaseModel]
