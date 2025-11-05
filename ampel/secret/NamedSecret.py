@@ -9,16 +9,13 @@
 
 import contextlib
 from typing import TYPE_CHECKING, ClassVar
-
-from pydantic import model_validator
-
+from pydantic import model_validator, Field
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.secret.Secret import Secret, T
 
 if TYPE_CHECKING:
 	from collections.abc import Generator
 	from typing import Self
-
 	from ampel.secret.AmpelVault import AmpelVault
 
 class NamedSecret(AmpelBaseModel, Secret[T]):
@@ -29,7 +26,7 @@ class NamedSecret(AmpelBaseModel, Secret[T]):
 	"""
 
 	label: str
-	value: None | T = None
+	value: None | T = Field(default=None, exclude=True) # Exclude from model_dump
 
 	def __repr__(self):
 		return f'NamedSecret(label={self.label!r})'
