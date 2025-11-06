@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 @runtime_checkable
 class LoggerProtocol(Protocol):
 
+	verbose: int
+	level: int
+	handlers: list
+
 	def error(self, msg: str | dict[str, Any], *args,
 		exc_info: None | Exception = None,
 		extra: None | dict[str, Any] = None,
