@@ -20,10 +20,13 @@ def get_user_data_config_path() -> str:
 	if env := environ.get('AMPEL_CONFIG'):
 		return env
 
-	if env := (environ.get('CONDA_PREFIX') or environ.get('VIRTUAL_ENV')):
-
-		# ex: /Users/hu/miniconda3/envs/myCondaEnv/share/ampel/conf.yml
-		return path.join(env, 'share', 'ampel', 'conf.yml')
+	for prefix in 'CONDA_PREFIX', 'VIRTUAL_ENV':
+		if (
+			(env := environ.get(prefix)) and
+			path.exists(conf := path.join(env, 'share', 'ampel', 'conf.yml'))
+		):
+			# ex: /Users/hu/miniconda3/envs/myCondaEnv/share/ampel/conf.yml
+			return conf
 
 	# ex: /Users/hu/Library/Application Support/ampel/conf/conf.yml
 	return path.join(user_data_dir("ampel"), "conf", "conf.yml")
