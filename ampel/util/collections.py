@@ -1,33 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File:                Ampel-core/ampel/util/collections.py
+# File:                Ampel-interface/ampel/util/collections.py
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                07.06.2018
-# Last Modified Date:  10.09.2022
+# Last Modified Date:  06.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from itertools import islice
-from collections.abc import Generator, Iterable
-from collections.abc import Iterable as iterable
-from collections.abc import Sequence as sequence
-from collections.abc import Sized as sized
-from typing import Any, TypeVar, overload
+from collections.abc import Generator, Iterable, Sequence, Sized
+from typing import Any, overload
 
-from ampel.types import StrictIterable, T, strict_iterable
-
-_T = TypeVar("_T")
-_NotIterable = TypeVar("_NotIterable", None, str, int, bytes, bytearray)
+from ampel.types import T, NotIterable, StrictIterable, strict_iterable
 
 @overload
-def ampel_iter(arg: _NotIterable) -> list[_NotIterable]:
+def ampel_iter(arg: NotIterable) -> list[NotIterable]:
 	...
 
 @overload
-def ampel_iter(arg: _T) -> _T:
+def ampel_iter(arg: T) -> T:
 	...
 
-def ampel_iter(arg: _NotIterable | _T) -> list[_NotIterable] | _T:
+def ampel_iter(arg: NotIterable | T) -> list[NotIterable] | T:
 	"""
 	-> suppresses python3 treatment of str as iterable (a questionable choice)
 	-> Makes None iterable
@@ -82,8 +76,8 @@ def try_reduce(arg: Any) -> Any:
 	try_reduce(dict(a=1, b=1).keys()) -> returns dict_keys(['a', 'b'])
 	"""
 
-	if isinstance(arg, sized) and len(arg) == 1:
-		if isinstance(arg, sequence):
+	if isinstance(arg, Sized) and len(arg) == 1:
+		if isinstance(arg, Sequence):
 			return arg[0]
 		return next(iter(arg)) # type: ignore[call-overload]
 
@@ -118,7 +112,7 @@ def to_list(arg: int | str | bytes | bytearray | list | Iterable) -> list:
 		return [arg]
 	if isinstance(arg, list):
 		return arg
-	if isinstance(arg, iterable):
+	if isinstance(arg, Iterable):
 		return list(arg)
 
 	raise ValueError(f"Unsupported argument type ({type(arg)})")
@@ -147,11 +141,11 @@ def check_seq_inner_type(
 	"""
 
 	# Wrong input
-	if not isinstance(seq, sequence) or isinstance(seq, str):
+	if not isinstance(seq, Sequence) or isinstance(seq, str):
 		return False
 
 	# monotype
-	if not isinstance(types, sequence):
+	if not isinstance(types, Sequence):
 		return all(isinstance(el, types) for el in seq)
 
 	# different types accepted ('or' connected)
