@@ -7,11 +7,11 @@
 # Last Modified Date:  10.09.2022
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from itertools import islice
 from collections.abc import Generator, Iterable
 from collections.abc import Iterable as iterable
 from collections.abc import Sequence as sequence
 from collections.abc import Sized as sized
+from itertools import islice
 from typing import Any, TypeVar, overload
 
 from ampel.types import StrictIterable, T, strict_iterable

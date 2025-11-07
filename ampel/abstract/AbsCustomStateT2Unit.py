@@ -7,8 +7,9 @@
 # Last Modified Date:  02.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from typing import Generic
 from collections.abc import Iterable
+from typing import Generic
+
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
