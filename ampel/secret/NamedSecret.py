@@ -9,13 +9,16 @@
 
 import contextlib
 from typing import TYPE_CHECKING, ClassVar
-from pydantic import model_validator, Field
+
+from pydantic import Field, model_validator
+
 from ampel.base.AmpelBaseModel import AmpelBaseModel
 from ampel.secret.Secret import Secret, T
 
 if TYPE_CHECKING:
 	from collections.abc import Generator
 	from typing import Self
+
 	from ampel.secret.AmpelVault import AmpelVault
 
 class NamedSecret(AmpelBaseModel, Secret[T]):

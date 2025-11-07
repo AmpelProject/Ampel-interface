@@ -8,6 +8,7 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Sequence
+
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.model.UnitModel import UnitModel
 

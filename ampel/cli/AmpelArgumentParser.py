@@ -7,7 +7,9 @@
 # Last Modified Date:  30.10.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-import os, re, textwrap
+import os
+import re
+import textwrap
 from argparse import ArgumentParser, _ArgumentGroup
 from typing import Any
 

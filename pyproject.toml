@@ -100,8 +100,6 @@ select = [
     "TID251",
 ]
 ignore = [
-	"E401", # Multiple imports on one line
-	"I001", # Import block is un-sorted or un-formatted
     "E741", # ambiguous variable name
     "UP009", # UTF-8 encoding declaration is unnecessary
     "PLR09", # too many (arguments|branches)

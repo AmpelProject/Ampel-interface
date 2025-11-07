@@ -7,11 +7,11 @@
 # Last Modified Date:  01.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
-from ampel.types import StockId, UBson
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
 from ampel.struct.UnitResult import UnitResult
+from ampel.types import StockId, UBson
 
 
 class AbsT1ComputeUnit(LogicalUnit, abstract=True):

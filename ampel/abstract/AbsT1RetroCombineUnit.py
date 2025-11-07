@@ -8,11 +8,12 @@
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 from collections.abc import Iterable, Sequence
-from ampel.types import ChannelId, DataPointId
+
 from ampel.base.decorator import abstractmethod
 from ampel.base.LogicalUnit import LogicalUnit
 from ampel.content.DataPoint import DataPoint
 from ampel.struct.T1CombineResult import T1CombineResult
+from ampel.types import ChannelId, DataPointId
 
 
 class AbsT1RetroCombineUnit(LogicalUnit, abstract=True):
