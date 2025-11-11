@@ -92,6 +92,10 @@ def main() -> None:
 		# intercept ArgumentParser.exit if we added --help ourselves
 		sys.exit(exc.code or (2 if ambiguous_help else 0))
 
+	if '--no-color' in unknown_args:
+		unknown_args.remove('--no-color')
+		os.environ["NOCOLOR"] = "true"
+
 	#if not args.config:
 	#	return
 
