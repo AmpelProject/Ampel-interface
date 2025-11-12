@@ -4,7 +4,7 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                22.10.2019
-# Last Modified Date:  04.08.2021
+# Last Modified Date:  12.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import json
@@ -161,7 +161,7 @@ class AmpelConfig:
 		return ret
 
 
-	def get_conf_id(self, conf_id: int) -> dict[str, Any]:
+	def get_conf_by_id(self, conf_id: int) -> dict[str, Any]:
 
 		if conf_id not in self._config['confid']:
 			raise ValueError(f"Config with id {conf_id} not found")
