@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ampel-interface"
-version = "0.10.5a7"
+version = "0.10.5a8"
 description = "Base classes for the Ampel analysis platform"
 authors = ["Valery Brinnel"]
 maintainers = ["Jakob van Santen <jakob.van.santen@desy.de>"]
@@ -56,7 +56,6 @@ ignore_missing_imports = true
 enable_error_code = "ignore-without-code"
 plugins = ["pydantic.mypy"]
 packages = ["ampel"]
-exclude = ["ampel/base/AlternativeAmpelBaseModel.py"]
 
 [tool.pydantic-mypy]
 init_typed = true
