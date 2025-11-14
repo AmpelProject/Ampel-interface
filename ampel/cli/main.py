@@ -4,17 +4,22 @@
 # License:             BSD-3-Clause
 # Author:              valery brinnel <firstname.lastname@gmail.com>
 # Date:                13.03.2021
-# Last Modified Date:  20.08.2022
+# Last Modified Date:  13.11.2025
 # Last Modified By:    valery brinnel <firstname.lastname@gmail.com>
 
 import importlib
 import importlib.metadata
 import os
 import sys
+import signal
 from random import random
+
+from rich.console import Console
 
 from ampel.abstract.AbsCLIOperation import AbsCLIOperation
 from ampel.cli.AmpelArgumentParser import AmpelArgumentParser
+
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 # key: op name, value: (potential short descr, fqn of corresponding module/class [subclass of AbsCLIOperation])
 clis: dict[str, tuple[str, str]] = {
@@ -104,9 +109,25 @@ def main() -> None:
 		for k, v in vars(args).items():
 			print(f"  {k}: {v}")
 
-	cli_op.run(vars(args), unknown_args, sub_op)
+	try:
+		cli_op.run(vars(args), unknown_args, sub_op)
+	except KeyboardInterrupt:
+		exit_on_keyboard_interrupt()
 
 	return None
+
+
+def exit_on_keyboard_interrupt() -> None:
+
+	console = Console(force_terminal=True, color_system="truecolor")
+	console.print("\n[red bold]Interrupted (Ctrl-C)[/]\n")
+
+	import sys # noqa
+	sys.stdout.flush()
+	sys.stderr.flush()
+
+	sys.exit(130)  # conventional exit code for SIGINT
+
 
 
 def show_help() -> None:
