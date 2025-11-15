@@ -6,12 +6,20 @@ on:
       - master
       - renovate/*
       - dev/*
+      - feature/*
+      - fix/*
+      - refactor/*
     tags:
       - v*
   pull_request:
     branches:
       - master
       - v0.8.x
+      - stable/*
+      - dev/*
+      - feature/*
+      - fix/*
+      - refactor/*
 
 jobs:
   ci:
