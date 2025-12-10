@@ -36,10 +36,10 @@ on:
         description: extra files to check with mypy
         type: string
         default: ""
-    secrets:
-      PYPI_API_TOKEN:
-        description: PyPI API token with permission to publish. Required for tags and pushes to main branch, but not for PRs.
-        required: false
+    outputs:
+      should_publish:
+        description: "Should we publish a new version to PyPI?"
+        value: ${{ jobs.check_version.outputs.should_publish }}
 
 jobs:
 
@@ -69,7 +69,7 @@ jobs:
     services:
       mongo:
         # hobo conditional service; see https://github.com/actions/runner/issues/822#issuecomment-1831511432
-        image: ${{ (inputs.mongo && 'mongo:7') || '' }}
+        image: ${{ (inputs.mongo && 'mongo:8') || '' }}
         ports:
           - 27017:27017
     steps:
@@ -103,48 +103,21 @@ jobs:
     - if: ${{ inputs.mypy-check-files }}
       run: poetry run mypy ${{ inputs.mypy-check-files }}
 
+  build:
+    runs-on: ubuntu-24.04
+    needs: [test, mypy]
+    steps:
+    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+    - uses: hynek/build-and-inspect-python-package@v2
+
   check_version:
     name: Tag version bump
     runs-on: ubuntu-24.04
     # run only on pushes, not PRs
     if: ${{ github.event_name == 'push' && github.base_ref == null }}
-    needs: [test, mypy]
+    needs: build
     outputs:
       should_publish: ${{ steps.check.outputs.should_publish }} 
     steps:
-    - uses: jvansanten/action-tag-poetry-version-bump@45f78f40d22ca43a496a71af75480a435b3dac31 # v1
+    - uses: jvansanten/action-tag-poetry-version-bump@4b414cab984b5cf6507593525a1dea5789f886de # v1.1
       id: check
-
-  pypi:
-    name: Publish to PyPI
-    runs-on: ubuntu-24.04
-    needs: [check_version]
-    # NB: outputs are always strings; explicitly parse to get a boolean
-    if: ${{ fromJSON(needs.check_version.outputs.should_publish) }}
-    
-    steps:
-    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
-    # bits borrowed from packetcoders/action-setup-cache-python-poetry, in order
-    # to reuse the poetry cache without actually restoring the venv
-    - name: Set up python ${{ inputs.python-version }}
-      id: setup-python
-      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6
-      with:
-        python-version: ${{ inputs.python-version }}
-    - name: Load cached Poetry Binary
-      id: cached-poetry-binary
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-      with:
-        path: ~/.local
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ inputs.poetry-version }}
-    - name: Install Poetry
-      uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a # v1
-      with:
-        version: ${{ inputs.poetry-version }}
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-    - name: Publish
-      run: |
-        poetry publish -n --build
-      env:
-        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
