@@ -39,7 +39,7 @@ class DocumentCode(IntEnum):
 	RUNNING                   = -5
 	RERUN_REQUESTED           = -6
 	TOO_MANY_TRIALS           = -7
-	NOT_SET                     = -8
+	NOT_SET                   = -8
 
 	# T1
 	T1_NEW_PRIO               = -1000  # For now, std ingesters do not support this
