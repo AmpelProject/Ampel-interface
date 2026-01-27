@@ -57,6 +57,7 @@ class DocumentCode(IntEnum):
 	T2_MISSING_INFO           = -2008 # ingester bugs, or uncommitted updates
 	T2_OUTDATED_CODE          = -2009 # unit returned unexpected type
 	T2_FAILED_DEPENDENCY      = -2010 # dependency encountered a permanent error
+	T2_INADEQUATE_DEPENDENCY  = -2011 # dependency does not meet the unit's criteria
 
 	# T3
 	T3_CONTEXT_ERROR          = -3000 # error occured in context stage
