@@ -25,12 +25,12 @@ on:
         required: false
         type: string
         # renovate: datasource=pypi depName=poetry depType=dev versioning=pep440
-        default: "2.2.1"
+        default: "2.3.1"
       ruff-version:
         required: false
         type: string
         # renovate: datasource=pypi depName=ruff depType=dev versioning=pep440
-        default: "0.14.10"
+        default: "0.14.14"
       mypy-check-files:
         required: false
         description: extra files to check with mypy
