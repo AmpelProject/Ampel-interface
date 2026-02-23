@@ -29,18 +29,19 @@ clis: dict[str, tuple[str, str]] = {
 }
 
 # ruff: noqa: T201, SLF001
-def main() -> None:
+def main() -> str | int | None:
 
 	# did we implicitly add --help to an otherwise invalid command?
 	ambiguous_help = False
 
 	if len(sys.argv) == 1:
 		show_help()
-		sys.exit(2)
+		return 2
 
-	elif len(sys.argv) == 2:
+	if len(sys.argv) == 2:
 		if sys.argv[1] in ("-h", "--help", "help"):
-			return show_help()
+			show_help()
+			return 0
 		sys.argv += ["--help"]
 		ambiguous_help = True
 
@@ -61,7 +62,7 @@ def main() -> None:
 	# Check if operation is known
 	if op_name not in clis:
 		show_help()
-		sys.exit(2)
+		return 2
 
 	fqn = clis[op_name][1]
 	cli_op: AbsCLIOperation = getattr(
@@ -95,7 +96,7 @@ def main() -> None:
 		args, unknown_args = parser.parse_known_args()
 	except SystemExit as exc:
 		# intercept ArgumentParser.exit if we added --help ourselves
-		sys.exit(exc.code or (2 if ambiguous_help else 0))
+		return exc.code or (2 if ambiguous_help else 0)
 
 	if '--no-color' in unknown_args:
 		unknown_args.remove('--no-color')
@@ -109,12 +110,17 @@ def main() -> None:
 		for k, v in vars(args).items():
 			print(f"  {k}: {v}")
 
+	console = Console(force_terminal=True, color_system="truecolor")
 	try:
 		cli_op.run(vars(args), unknown_args, sub_op)
 	except KeyboardInterrupt:
-		exit_on_keyboard_interrupt()
+		console.print("\n[red bold]Interrupted (Ctrl-C)[/]\n")
+		return 130 # conventional exit code for SIGINT
+	except BaseException:
+		console.print_exception(show_locals=True)
+		return 1
 
-	return None
+	return 0
 
 
 def exit_on_keyboard_interrupt() -> None:
