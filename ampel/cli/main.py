@@ -116,9 +116,9 @@ def main() -> str | int | None:
 	except KeyboardInterrupt:
 		console.print("\n[red bold]Interrupted (Ctrl-C)[/]\n")
 		return 130 # conventional exit code for SIGINT
-	except BaseException:
-		console.print_exception(show_locals=True)
-		return 1
+	# except BaseException:
+	# 	console.print_exception(show_locals=True)
+	# 	return 1
 
 	return 0
 
