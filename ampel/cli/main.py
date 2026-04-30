@@ -110,15 +110,27 @@ def main() -> str | int | None:
 		for k, v in vars(args).items():
 			print(f"  {k}: {v}")
 
+	if ('-no-print-locals' in unknown_args) or args.__getattribute__("no_print_locals"):
+		show_locals = False
+	else:
+		show_locals = True
+
+	if ('-no-catch' in unknown_args) or args.__getattribute__("no_catch"):
+		raise_exc = True
+	else:
+		raise_exc = False
+
 	console = Console(force_terminal=True, color_system="truecolor")
 	try:
 		cli_op.run(vars(args), unknown_args, sub_op)
 	except KeyboardInterrupt:
 		console.print("\n[red bold]Interrupted (Ctrl-C)[/]\n")
 		return 130 # conventional exit code for SIGINT
-	# except BaseException:
-	# 	console.print_exception(show_locals=True)
-	# 	return 1
+	except BaseException:
+		if raise_exc:
+			raise
+		console.print_exception(show_locals=show_locals)
+		return 1
 
 	return 0
 
