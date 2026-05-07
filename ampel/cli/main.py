@@ -10,8 +10,8 @@
 import importlib
 import importlib.metadata
 import os
-import sys
 import signal
+import sys
 from random import random
 
 from rich.console import Console
@@ -110,12 +110,12 @@ def main() -> str | int | None:
 		for k, v in vars(args).items():
 			print(f"  {k}: {v}")
 
-	if ('-no-print-locals' in unknown_args) or args.__getattribute__("no_print_locals"):
+	if ('-no-print-locals' in unknown_args) or (hasattr(args, "no_print_locals") and args.no_print_locals):
 		show_locals = False
 	else:
 		show_locals = True
 
-	if ('-no-catch' in unknown_args) or args.__getattribute__("no_catch"):
+	if ('-no-catch' in unknown_args) or (hasattr(args, "no_catch") and args.no_catch):
 		raise_exc = True
 	else:
 		raise_exc = False
