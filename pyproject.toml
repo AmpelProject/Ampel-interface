@@ -29,7 +29,7 @@ rich = "*"
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.3"
 pytest-cov = "^7.1.0"
-mypy = "^1.20.2"
+mypy = "^2.1.0"
 types-PyYAML = "^6.0.12"
 types-setuptools = "^65.3.0"
 pytest-mock = "^3.15.1"
