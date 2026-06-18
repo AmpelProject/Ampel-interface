@@ -46,7 +46,7 @@ jobs:
   lint:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
     - name: ruff format
       uses: chartboost/ruff-action@e18ae971ccee1b2d7bbef113930f00c670b78da4 # v1
       with:
@@ -73,7 +73,7 @@ jobs:
         ports:
           - 27017:27017
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [lint]
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
     - name: "Set up environment"
       uses: packetcoders/action-setup-cache-python-poetry@0d0be5577b30d85f3fa2d93a4beeda149520f120 # v1.2.0
       with:
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [test, mypy]
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
     - uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df # v2
 
   check_version:
