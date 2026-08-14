@@ -20,7 +20,7 @@ packages = [{include = "ampel"}]
 python = "^3.10"
 pydantic = "^2.10"
 typing-extensions = "^4.12"
-xxhash = "^3.0.0"
+xxhash = "^4.0.0"
 PyYAML = "^6.0.0"
 ujson = "^5.1.0"
 platformdirs = "^4.2.2"
