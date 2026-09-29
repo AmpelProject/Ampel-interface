@@ -31,5 +31,5 @@ class AbsCLIOperation(AmpelABC, abstract=True):
 		...
 
 	@abstractmethod
-	def run(self, args: dict[str, Any], unknown_args: Sequence[str], sub_op: None | str = None) -> None:
+	def run(self, args: dict[str, Any], unknown_args: Sequence[str], sub_op: None | str = None) -> int | None:
 		...
