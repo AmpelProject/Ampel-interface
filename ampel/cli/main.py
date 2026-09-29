@@ -122,7 +122,7 @@ def main() -> str | int | None:
 
 	console = Console(force_terminal=True, color_system="truecolor")
 	try:
-		cli_op.run(vars(args), unknown_args, sub_op)
+		return cli_op.run(vars(args), unknown_args, sub_op) or 0
 	except KeyboardInterrupt:
 		console.print("\n[red bold]Interrupted (Ctrl-C)[/]\n")
 		return 130 # conventional exit code for SIGINT
@@ -131,8 +131,6 @@ def main() -> str | int | None:
 			raise
 		console.print_exception(show_locals=show_locals)
 		return 1
-
-	return 0
 
 
 def exit_on_keyboard_interrupt() -> None:
