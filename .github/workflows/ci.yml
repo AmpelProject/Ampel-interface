@@ -44,7 +44,7 @@ on:
 jobs:
 
   lint:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - name: ruff format
@@ -64,7 +64,7 @@ jobs:
       if: ${{ inputs.lint }}
 
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: [lint]
     services:
       mongo:
@@ -87,7 +87,7 @@ jobs:
         MONGO_PORT: ${{ job.services.mongo.ports[27017] }}
   
   mypy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: [lint]
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -104,7 +104,7 @@ jobs:
       run: poetry run mypy ${{ inputs.mypy-check-files }}
 
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: [test, mypy]
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -112,7 +112,7 @@ jobs:
 
   check_version:
     name: Tag version bump
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     # run only on pushes, not PRs
     if: ${{ github.event_name == 'push' && github.base_ref == null }}
     needs: build
